@@ -1,0 +1,11 @@
+.idea/*
+target/*
+.gradle/*
+build/
+gradle/
+distributions/
+my-libs/
+.DS_STORE
+docs/
+openapi.yaml
+src/main/resources/spec/schemas.yml
