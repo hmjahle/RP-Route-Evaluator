@@ -1,8 +1,8 @@
-package com.visma.of.rp.routeevaluator.searchGraph;
+package com.visma.of.rp.routeevaluator.solver.searchGraph;
 
 import java.util.Set;
 
-public class DistanceSet {
+ public class DistanceSet {
     private Edge[][] edgesNodeToNode;
 
     public DistanceSet(int nodesCapacity) {

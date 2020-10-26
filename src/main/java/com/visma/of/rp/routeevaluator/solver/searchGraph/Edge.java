@@ -1,8 +1,8 @@
-package com.visma.of.rp.routeevaluator.searchGraph;
+package com.visma.of.rp.routeevaluator.solver.searchGraph;
 
 import com.visma.of.rp.routeevaluator.transportInfo.TravelInfo;
 
-public class Edge {
+  public class Edge {
     private int id;
     private TravelInfo travelInfo;
     private Node fromNode;

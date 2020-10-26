@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator.searchGraph;
+package com.visma.of.rp.routeevaluator.solver.searchGraph;
 
 
 import com.visma.of.rp.routeevaluator.Interfaces.IDistanceMatrix;
@@ -9,7 +9,7 @@ import com.visma.of.rp.routeevaluator.transportInfo.TravelInfo;
 
 import java.util.*;
 
- public class SearchGraph {
+  public class SearchGraph {
 
     private List<Node> nodes;
     private Map<ITask, Node> nodesToTask;

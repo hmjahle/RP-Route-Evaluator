@@ -1,8 +1,8 @@
 package com.visma.of.rp.routeevaluator;
 
 import com.visma.of.rp.routeevaluator.costFunctions.CostFunction;
-import com.visma.of.rp.routeevaluator.labellingAlgorithm.Label;
-import com.visma.of.rp.routeevaluator.labellingAlgorithm.ResourceTwoElements;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Label;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ResourceTwoElements;
 import org.junit.Assert;
 
 import org.junit.Test;

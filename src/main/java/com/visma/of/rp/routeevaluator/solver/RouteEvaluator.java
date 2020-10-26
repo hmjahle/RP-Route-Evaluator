@@ -1,15 +1,15 @@
-package com.visma.of.rp.routeevaluator;
+package com.visma.of.rp.routeevaluator.solver;
 
 import com.visma.of.rp.routeevaluator.Interfaces.IDistanceMatrix;
 import com.visma.of.rp.routeevaluator.Interfaces.IPosition;
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
-import com.visma.of.rp.routeevaluator.labellingAlgorithm.LabellingAlgorithm;
-import com.visma.of.rp.routeevaluator.labellingAlgorithm.NodeExtendInfoOneElement;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.LabellingAlgorithm;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ExtendInfoOneElement;
 import com.visma.of.rp.routeevaluator.routeResult.RouteSimulatorResult;
-import com.visma.of.rp.routeevaluator.searchGraph.Node;
-import com.visma.of.rp.routeevaluator.searchGraph.NodeList;
-import com.visma.of.rp.routeevaluator.searchGraph.SearchGraph;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.NodeList;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 import com.visma.of.rp.routeevaluator.transportInfo.TransportModes;
 
 
@@ -52,7 +52,7 @@ public class RouteEvaluator {
 
     public Double simulateRouteCost(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
         updateFirstTaskList(tasks, syncedTasksStartTime);
-        NodeExtendInfoOneElement nodeExtendInfoOneElement = new NodeExtendInfoOneElement();
+        ExtendInfoOneElement nodeExtendInfoOneElement = new ExtendInfoOneElement();
         nodeExtendInfoOneElement.update(firstNodeList);
         return algorithm.solveFitness(nodeExtendInfoOneElement, syncedNodesStartTime, syncedNodesLatestStartTime, employeeWorkShift);
     }
@@ -67,7 +67,7 @@ public class RouteEvaluator {
      */
     public RouteSimulatorResult simulateRouteByTheOrderOfTasks(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
         updateFirstTaskList(tasks, syncedTasksStartTime);
-        NodeExtendInfoOneElement nodeExtendInfoOneElement = new NodeExtendInfoOneElement();
+        ExtendInfoOneElement nodeExtendInfoOneElement = new ExtendInfoOneElement();
         nodeExtendInfoOneElement.update(firstNodeList);
         return algorithm.solveRouteSimulatorResult(nodeExtendInfoOneElement, syncedNodesStartTime, syncedNodesLatestStartTime, employeeWorkShift);
     }

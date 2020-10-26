@@ -1,11 +1,11 @@
-package com.visma.of.rp.routeevaluator.searchGraph;
+package com.visma.of.rp.routeevaluator.solver.searchGraph;
 
 
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 
 import java.util.List;
 
- public class NodeList {
+  public class NodeList {
     private Node[] nodes;
     private int nodesCnt;
 

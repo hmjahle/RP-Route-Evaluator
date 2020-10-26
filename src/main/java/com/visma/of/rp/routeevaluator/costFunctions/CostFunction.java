@@ -1,7 +1,7 @@
 package com.visma.of.rp.routeevaluator.costFunctions;
 
-import com.visma.of.rp.routeevaluator.searchGraph.Node;
-import com.visma.of.rp.routeevaluator.labellingAlgorithm.SearchInfo;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.SearchInfo;
 
 //Calculates fitness values and test whether one costFunction dominates the other.
 public class CostFunction {

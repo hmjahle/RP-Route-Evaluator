@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator.searchGraph;
+package com.visma.of.rp.routeevaluator.solver.searchGraph;
 
 import java.util.Arrays;
 import java.util.Set;

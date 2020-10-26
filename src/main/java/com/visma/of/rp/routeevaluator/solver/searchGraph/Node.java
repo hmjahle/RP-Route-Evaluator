@@ -1,10 +1,10 @@
-package com.visma.of.rp.routeevaluator.searchGraph;
+package com.visma.of.rp.routeevaluator.solver.searchGraph;
 
 import com.visma.of.rp.routeevaluator.Interfaces.IPosition;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 
 
-  public class Node {
+   public class Node {
     private ITask task;
     private IPosition address;
     private int id;
