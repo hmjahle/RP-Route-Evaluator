@@ -1,6 +1,10 @@
 package com.visma.of.rp.routeevaluator;
 
-import com.visma.of.rp.routeevaluator.RoutesimulatorGraphSolver.*;
+import com.visma.of.rp.routeevaluator.costFunctions.CostFunction;
+import com.visma.of.rp.routeevaluator.labellingAlgorithm.Label;
+import com.visma.of.rp.routeevaluator.labellingAlgorithm.LabelLists;
+import com.visma.of.rp.routeevaluator.labellingAlgorithm.ResourceTwoElements;
+import com.visma.of.rp.routeevaluator.searchGraph.Node;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -23,7 +27,7 @@ public class LabelListsTest {
         Label labelD = createLabel(costB, resourcesB);
 
         LabelLists list = new LabelLists(10, 10);
-        Node node = new Node(1, null, null, null);
+        Node node = new Node(1, null, null);
 
         List<Label> labels = new ArrayList<>();
         labels.add(labelD);
@@ -68,28 +72,28 @@ public class LabelListsTest {
         Label labelH = createLabel(cost4, resourcesH);
 
         LabelLists list = new LabelLists(10, 4);
-        Node node = new Node(1, null, null, null);
-        Assert.assertEquals("List length wrong",0, list.size(node));
-        Assert.assertEquals("List capacity wrong",4, list.getLabelCapacity(node));
+        Node node = new Node(1, null, null);
+        Assert.assertEquals("List length wrong", 0, list.size(node));
+        Assert.assertEquals("List capacity wrong", 4, list.getLabelCapacity(node));
 
         list.addAndReturnTrueIfAdded(node, labelA);
         list.addAndReturnTrueIfAdded(node, labelB);
-        Assert.assertEquals("List length wrong",2, list.size(node));
-        Assert.assertEquals("List capacity wrong",4, list.getLabelCapacity(node));
+        Assert.assertEquals("List length wrong", 2, list.size(node));
+        Assert.assertEquals("List capacity wrong", 4, list.getLabelCapacity(node));
 
         list.addAndReturnTrueIfAdded(node, labelC);
-        Assert.assertEquals("List length wrong",3, list.size(node));
-        Assert.assertEquals("List capacity wrong",8, list.getLabelCapacity(node));
+        Assert.assertEquals("List length wrong", 3, list.size(node));
+        Assert.assertEquals("List capacity wrong", 8, list.getLabelCapacity(node));
         list.addAndReturnTrueIfAdded(node, labelD);
         list.addAndReturnTrueIfAdded(node, labelE);
-        Assert.assertEquals("List length wrong",5, list.size(node));
-        Assert.assertEquals("List capacity wrong",16, list.getLabelCapacity(node));
+        Assert.assertEquals("List length wrong", 5, list.size(node));
+        Assert.assertEquals("List capacity wrong", 16, list.getLabelCapacity(node));
 
         list.addAndReturnTrueIfAdded(node, labelF);
         list.addAndReturnTrueIfAdded(node, labelG);
         list.addAndReturnTrueIfAdded(node, labelH);
-        Assert.assertEquals("List length wrong",8, list.size(node));
-        Assert.assertEquals("List capacity wrong",16, list.getLabelCapacity(node));
+        Assert.assertEquals("List length wrong", 8, list.size(node));
+        Assert.assertEquals("List capacity wrong", 16, list.getLabelCapacity(node));
 
         list.addAndReturnTrueIfAdded(node, labelA);
         list.addAndReturnTrueIfAdded(node, labelB);
@@ -99,13 +103,13 @@ public class LabelListsTest {
         list.addAndReturnTrueIfAdded(node, labelF);
         list.addAndReturnTrueIfAdded(node, labelG);
         list.addAndReturnTrueIfAdded(node, labelH);
-        Assert.assertEquals("List length wrong",8, list.size(node));
-        Assert.assertEquals("List capacity wrong",16, list.getLabelCapacity(node));
+        Assert.assertEquals("List length wrong", 8, list.size(node));
+        Assert.assertEquals("List capacity wrong", 16, list.getLabelCapacity(node));
     }
 
     private Label createLabel(CostFunction cost1, ResourceTwoElements resourcesA) {
         return new Label(null, null, null, null, null,
-                cost1, 3, 2, resourcesA,0);
+                cost1, 3, 2, resourcesA, 0);
     }
 
 }
