@@ -1,7 +1,9 @@
-package com.visma.of.rp.routeevaluator.labellingAlgorithm;
+package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
-import com.visma.of.rp.routeevaluator.searchGraph.Node;
-import com.visma.of.rp.routeevaluator.searchGraph.NodeList;
+
+
+import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.NodeList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,16 +11,16 @@ import java.util.List;
 /**
  * This class implement the INodeExtendSets, it has two elements.
  */
-public class NodeExtendInfoTwoElements implements NodeExtendInfoInterface {
+public class ExtendInfoTwoElements implements IExtendInfo {
     NodeList nodeListOne;
     NodeList nodeListTwo;
     List<ExtendToInfo> extendToInfo;
 
-    NodeExtendInfoTwoElements() {
+    ExtendInfoTwoElements() {
         extendToInfo = new ArrayList<>();
     }
 
-    NodeExtendInfoTwoElements(NodeList nodeListOne, NodeList nodeListTwo) {
+    ExtendInfoTwoElements(NodeList nodeListOne, NodeList nodeListTwo) {
         extendToInfo = new ArrayList<>();
         update(nodeListOne, nodeListTwo);
     }

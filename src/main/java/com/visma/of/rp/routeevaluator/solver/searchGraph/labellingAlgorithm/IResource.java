@@ -1,10 +1,10 @@
-package com.visma.of.rp.routeevaluator.labellingAlgorithm;
+package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
 /**
  * The ResourceInterface is used when extending labels. It must be able to dominated another resource of the same
  * implementation.
  */
- public interface IResource {
+public interface IResource {
 
     /**
      * The dominate function returns: -1 if this dominates other, 0 if equal, 1 if other dominates this and

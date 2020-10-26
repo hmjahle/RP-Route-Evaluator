@@ -1,6 +1,7 @@
-package com.visma.of.rp.routeevaluator.labellingAlgorithm;
+package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
-import com.visma.of.rp.routeevaluator.searchGraph.Node;
+
+import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
 
 /**
  * This class holds info about the node that should be extended to (toNode) and

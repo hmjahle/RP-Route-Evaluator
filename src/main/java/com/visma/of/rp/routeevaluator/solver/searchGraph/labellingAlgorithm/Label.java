@@ -1,9 +1,9 @@
-package com.visma.of.rp.routeevaluator.labellingAlgorithm;
+package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
+import com.visma.of.rp.routeevaluator.solver.searchGraph.Edge;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
 import com.visma.of.rp.routeevaluator.transportInfo.TravelInfo;
 import com.visma.of.rp.routeevaluator.costFunctions.CostFunction;
-import com.visma.of.rp.routeevaluator.searchGraph.Node;
-import com.visma.of.rp.routeevaluator.searchGraph.Edge;
 
 
 public class Label implements Comparable<Label> {
@@ -20,7 +20,7 @@ public class Label implements Comparable<Label> {
     private long robustTimeSeconds;
     private long actualRobustTimeSeconds;
 
-    public Label(SearchInfo searchInfo, Label previous, Node currentNode, Node physicalPosition, Edge edge, CostFunction cost, long currentTime, long extraDrivingTime, IResource resources, long robustTimeSeconds) {
+     public Label(SearchInfo searchInfo, Label previous, Node currentNode, Node physicalPosition, Edge edge, CostFunction cost, long currentTime, long extraDrivingTime, IResource resources, long robustTimeSeconds) {
         this.previous = previous;
         this.edge = edge;
         this.node = currentNode;

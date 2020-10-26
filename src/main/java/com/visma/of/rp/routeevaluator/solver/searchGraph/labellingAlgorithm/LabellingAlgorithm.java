@@ -1,8 +1,8 @@
-package com.visma.of.rp.routeevaluator.labellingAlgorithm;
+package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
 import com.visma.of.rp.routeevaluator.hardConstraints.HardConstraintsIncremental;
-import com.visma.of.rp.routeevaluator.searchGraph.SearchGraph;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 import com.visma.of.rp.routeevaluator.transportInfo.TransportModes;
 import com.visma.of.rp.routeevaluator.transportInfo.TravelInfo;
 import com.visma.of.rp.routeevaluator.costFunctions.CostFunction;
@@ -25,7 +25,7 @@ public class LabellingAlgorithm {
     private PriorityQueue<Label> labelsOnDestinationNode;
     private LabelLists labelLists;
     private SearchInfo searchInfo;
-    private NodeExtendInfoInterface nodeExtendInfo;
+    private IExtendInfo nodeExtendInfo;
     private long robustnessTimeSeconds;
 
     public LabellingAlgorithm(SearchGraph graph) {
@@ -52,7 +52,7 @@ public class LabellingAlgorithm {
      * @param employeeWorkShift    Employee to simulate route for.
      * @return Total fitness value.
      */
-    public Double solveFitness(NodeExtendInfoInterface nodeExtendInfo, long[] syncedNodesStartTime, long[] syncedNodesLatestStartTime, IShift employeeWorkShift) {
+    public Double solveFitness(IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime, long[] syncedNodesLatestStartTime, IShift employeeWorkShift) {
         return runAlgorithm(nodeExtendInfo, syncedNodesStartTime, syncedNodesLatestStartTime, employeeWorkShift);
     }
 
@@ -64,7 +64,7 @@ public class LabellingAlgorithm {
      * @param employeeWorkShift    Employee to simulate route for.
      * @return RouteSimulatorResult or null if route is infeasible.
      */
-    public RouteSimulatorResult solveRouteSimulatorResult(NodeExtendInfoInterface nodeExtendInfo, long[] syncedNodesStartTime,
+    public RouteSimulatorResult solveRouteSimulatorResult(IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime,
                                                           long[] syncedNodesLatestStartTime,
                                                           IShift employeeWorkShift) {
         Double totalFitness = solveFitness(nodeExtendInfo, syncedNodesStartTime, syncedNodesLatestStartTime, employeeWorkShift);
@@ -90,14 +90,14 @@ public class LabellingAlgorithm {
     /**
      * @return null if infeasible otherwise the fitness value
      */
-    private Double runAlgorithm(NodeExtendInfoInterface nodeExtendInfo, long[] syncedNodesStartTime, long[] syncedNodesLatestStartTime, IShift employeeWorkShift) {
+    private Double runAlgorithm(IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime, long[] syncedNodesLatestStartTime, IShift employeeWorkShift) {
         long employeeShiftStartTime = employeeWorkShift.getStartTime();
         IResource emptyResource = nodeExtendInfo.createEmptyResource();
         Label currentLabel = createStartLabel(employeeShiftStartTime, emptyResource);
         return runAlgorithmWithStartLabel(nodeExtendInfo, syncedNodesStartTime, syncedNodesLatestStartTime, employeeWorkShift, currentLabel);
     }
 
-    private Double runAlgorithmWithStartLabel(NodeExtendInfoInterface nodeExtendInfo, long[] syncedNodesStartTime,
+    private Double runAlgorithmWithStartLabel(IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime,
                                               long[] syncedNodesLatestStartTime, IShift employeeWorkShift, Label startLabel) {
         TransportModes employeeTransportModes = employeeWorkShift.getTransport();
         long employeeShiftEndTime = employeeWorkShift.getEndTime();

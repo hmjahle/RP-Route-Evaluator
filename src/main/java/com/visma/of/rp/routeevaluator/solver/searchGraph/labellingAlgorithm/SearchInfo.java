@@ -1,15 +1,15 @@
-package com.visma.of.rp.routeevaluator.labellingAlgorithm;
+package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 import com.visma.of.rp.routeevaluator.costFunctions.IncrementalCostHandler;
 import com.visma.of.rp.routeevaluator.costFunctions.IncrementalCostInfo;
 import com.visma.of.rp.routeevaluator.hardConstraints.HardConstraintsIncremental;
-import com.visma.of.rp.routeevaluator.searchGraph.Node;
-import com.visma.of.rp.routeevaluator.searchGraph.SearchGraph;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 
 
-public class SearchInfo {
+ public class SearchInfo {
     private SearchGraph graph;
     private IncrementalCostHandler incrementalCostHandler;
     private HardConstraintsIncremental hardConstraintsEvaluator;
