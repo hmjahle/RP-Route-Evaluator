@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator.RoutesimulatorGraphSolver.hardConstraints;
+package com.visma.of.rp.routeevaluator.hardConstraints;
 
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 

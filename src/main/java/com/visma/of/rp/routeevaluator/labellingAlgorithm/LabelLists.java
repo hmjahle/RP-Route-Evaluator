@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator.searchGraph.labellingAlgorithm;
+package com.visma.of.rp.routeevaluator.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.searchGraph.Node;
 
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class LabelLists {
+ public class LabelLists {
     private Label[][] elements;
     private int[] elementCnt;
     private int[] labelCapacity;

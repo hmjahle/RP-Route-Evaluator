@@ -1,13 +1,13 @@
-package com.visma.of.rp.routeevaluator.searchGraph.labellingAlgorithm;
+package com.visma.of.rp.routeevaluator.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
+import com.visma.of.rp.routeevaluator.hardConstraints.HardConstraintsIncremental;
+import com.visma.of.rp.routeevaluator.searchGraph.SearchGraph;
 import com.visma.of.rp.routeevaluator.transportInfo.TransportModes;
 import com.visma.of.rp.routeevaluator.transportInfo.TravelInfo;
 import com.visma.of.rp.routeevaluator.costFunctions.CostFunction;
-import com.visma.of.rp.routeevaluator.hardConstraints.HardConstraintsIncremental;
 import com.visma.of.rp.routeevaluator.routeResult.RouteSimulatorResult;
 import com.visma.of.rp.routeevaluator.routeResult.Visit;
-import com.visma.of.rp.routeevaluator.searchGraph.SearchGraph;
 
 
 import java.util.PriorityQueue;
@@ -92,7 +92,7 @@ public class LabellingAlgorithm {
      */
     private Double runAlgorithm(NodeExtendInfoInterface nodeExtendInfo, long[] syncedNodesStartTime, long[] syncedNodesLatestStartTime, IShift employeeWorkShift) {
         long employeeShiftStartTime = employeeWorkShift.getStartTime();
-        ResourceInterface emptyResource = nodeExtendInfo.createEmptyResource();
+        IResource emptyResource = nodeExtendInfo.createEmptyResource();
         Label currentLabel = createStartLabel(employeeShiftStartTime, emptyResource);
         return runAlgorithmWithStartLabel(nodeExtendInfo, syncedNodesStartTime, syncedNodesLatestStartTime, employeeWorkShift, currentLabel);
     }
@@ -123,7 +123,7 @@ public class LabellingAlgorithm {
         }
     }
 
-    private Label createStartLabel(long startTime, ResourceInterface emptyResource) {
+    private Label createStartLabel(long startTime, IResource emptyResource) {
         return new Label(searchInfo, null, graph.getOffice(), graph.getOffice(), null,
                 new CostFunction(0.0), startTime, 0, emptyResource, graph.getRobustTimeSeconds());
     }

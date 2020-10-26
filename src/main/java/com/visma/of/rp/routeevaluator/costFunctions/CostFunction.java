@@ -1,4 +1,7 @@
-package com.visma.of.rp.routeevaluator.RoutesimulatorGraphSolver;
+package com.visma.of.rp.routeevaluator.costFunctions;
+
+import com.visma.of.rp.routeevaluator.searchGraph.Node;
+import com.visma.of.rp.routeevaluator.labellingAlgorithm.SearchInfo;
 
 //Calculates fitness values and test whether one costFunction dominates the other.
 public class CostFunction {
@@ -8,9 +11,9 @@ public class CostFunction {
         this.fitness = fitness;
     }
 
-    CostFunction extend(SearchInfo searchInfo, Node toNode, long travelTimeWithParking, long arrivalTime,
-                        long officeArrivalTime,
-                        long syncedTaskLatestStartTime) {
+    public CostFunction extend(SearchInfo searchInfo, Node toNode, long travelTimeWithParking, long arrivalTime,
+                               long officeArrivalTime,
+                               long syncedTaskLatestStartTime) {
         if (toNode.getTask() == null) {
             return createCostFunctionToOffice(searchInfo, travelTimeWithParking, officeArrivalTime);
         } else {

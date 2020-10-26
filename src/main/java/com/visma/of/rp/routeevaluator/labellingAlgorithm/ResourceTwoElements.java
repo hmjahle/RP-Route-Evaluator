@@ -1,9 +1,9 @@
-package com.visma.of.rp.routeevaluator.searchGraph.labellingAlgorithm;
+package com.visma.of.rp.routeevaluator.labellingAlgorithm;
 
 /**
  * This class implement IResource, and has two elements. This should be used by INodeExtendSets with to elements.
  */
-public class ResourceTwoElements implements ResourceInterface {
+public class ResourceTwoElements implements IResource {
     private int elementOneCount;
     private int elementTwoCount;
 
@@ -31,7 +31,7 @@ public class ResourceTwoElements implements ResourceInterface {
     }
 
     @Override
-    public int dominates(ResourceInterface resourceInterface) {
+    public int dominates(IResource resourceInterface) {
         ResourceTwoElements other = (ResourceTwoElements) resourceInterface;
         if (other == null)
             return 2;

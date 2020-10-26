@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator.searchGraph.labellingAlgorithm;
+package com.visma.of.rp.routeevaluator.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
@@ -49,7 +49,7 @@ public class SearchInfo {
     }
 
     public double calculateCost(double travelTime, ITask task,
-                         double arrivalTime, double syncedLatestStartTime) {
+                                double arrivalTime, double syncedLatestStartTime) {
         double visitEnd = task != null ? arrivalTime + task.getDurationSeconds() : 0;
         IncrementalCostInfo costInfo = new IncrementalCostInfo(travelTime, task, visitEnd, arrivalTime, syncedLatestStartTime, endOfShift);
         return incrementalCostHandler.calculateIncrementalCost(costInfo);

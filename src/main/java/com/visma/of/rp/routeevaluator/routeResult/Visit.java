@@ -1,10 +1,6 @@
-package com.visma.of.rp.routeevaluator.problemInstance.entities;
+package com.visma.of.rp.routeevaluator.routeResult;
 
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
-
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Visit {
 
@@ -58,17 +54,6 @@ public class Visit {
     public long getRobustnessTimeSeconds() {
         return robustnessTimeSeconds;
     }
-
-//    @Override
-//    public String toString() {
-//        SimpleDateFormat jdf2 = new SimpleDateFormat("mm.ss");
-//        Date travelTimeFromPrevious = new Date((travelTimeWithParking + robustnessTimeSeconds) * 1000L);
-//        DateHandler dateHandler = DateHandler.defaultConstuctor();
-//        return "[Strict=" + task.isStrict() +", Synced=" + task.isSynced() + ", Appearance=" + task.getRequirePhysicalAppearance() +", addressEntity=" + makeStringSize(task.getAddressEntity().getId() + "", 5) + "\t"
-//                + jdf2.format(travelTimeFromPrevious) + " -> " + dateHandler.getTimeStringFromSeconds(this.start) + "-" + dateHandler.getTimeStringFromSeconds(this.end) + "(" + dateHandler.getTimeStringFromSeconds(task.getStartTime()) + "-" + dateHandler.getTimeStringFromSeconds(task.getEndTime()) + ")" + "]"
-//                + "\tTaskId=: " + task.getTaskId();
-//
-//    }
 
     private static String makeStringSize(String id, int size) {
         // only for printout

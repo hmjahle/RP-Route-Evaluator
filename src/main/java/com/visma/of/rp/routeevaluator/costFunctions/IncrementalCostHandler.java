@@ -1,7 +1,6 @@
-package com.visma.of.rp.routeevaluator;
+package com.visma.of.rp.routeevaluator.costFunctions;
 
 import com.visma.of.rp.routeevaluator.Interfaces.ICostIntraShift;
-import com.visma.of.rp.routeevaluator.RoutesimulatorGraphSolver.IncrementalCostInfo;
 
 
 import java.util.ArrayList;

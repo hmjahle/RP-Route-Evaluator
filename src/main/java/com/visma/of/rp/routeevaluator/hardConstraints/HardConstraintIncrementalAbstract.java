@@ -1,6 +1,4 @@
-package com.visma.of.rp.routeevaluator.RoutesimulatorGraphSolver.hardConstraints;
-
-//import probleminstance.entities.timeinterval.task.Task;
+package com.visma.of.rp.routeevaluator.hardConstraints;
 
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 

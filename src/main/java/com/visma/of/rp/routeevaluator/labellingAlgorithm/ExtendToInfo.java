@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator.searchGraph.labellingAlgorithm;
+package com.visma.of.rp.routeevaluator.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.searchGraph.Node;
 
@@ -7,20 +7,21 @@ import com.visma.of.rp.routeevaluator.searchGraph.Node;
  * which nodeSet it belongs to (extendNodeSetNo) a value of "0" indicates that it does not belong to a set.
  * This would be the destination node.
  */
-public class ExtendToInfo {
+ class ExtendToInfo {
+
     private Node toNode;
     private int extendNodeSetNumber;
 
-    public ExtendToInfo(Node toNode, int extendNodeSetNumber) {
+    protected ExtendToInfo(Node toNode, int extendNodeSetNumber) {
         this.toNode = toNode;
         this.extendNodeSetNumber = extendNodeSetNumber;
     }
 
-    public Node getToNode() {
+    protected Node getToNode() {
         return toNode;
     }
 
-    public int getExtendNodeSetNumber() {
+    protected int getExtendNodeSetNumber() {
         return extendNodeSetNumber;
     }
 }

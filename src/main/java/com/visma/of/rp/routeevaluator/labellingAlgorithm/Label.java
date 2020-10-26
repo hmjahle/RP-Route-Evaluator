@@ -1,12 +1,12 @@
-package com.visma.of.rp.routeevaluator.searchGraph.labellingAlgorithm;
+package com.visma.of.rp.routeevaluator.labellingAlgorithm;
 
-import com.sun.javafx.geom.Edge;
-import com.visma.of.rp.routeevaluator.searchGraph.Node;
 import com.visma.of.rp.routeevaluator.transportInfo.TravelInfo;
 import com.visma.of.rp.routeevaluator.costFunctions.CostFunction;
+import com.visma.of.rp.routeevaluator.searchGraph.Node;
+import com.visma.of.rp.routeevaluator.searchGraph.Edge;
 
 
- class Label implements Comparable<Label> {
+public class Label implements Comparable<Label> {
     private Label previous;
     private Node node;
     private Node physicalPosition;
@@ -14,13 +14,13 @@ import com.visma.of.rp.routeevaluator.costFunctions.CostFunction;
     private Edge edge;
     private long currentTime;
     private long extraDrivingTime;
-    private ResourceInterface resources;
+    private IResource resources;
     private SearchInfo searchInfo;
     private boolean closed;
     private long robustTimeSeconds;
     private long actualRobustTimeSeconds;
 
-    public Label(SearchInfo searchInfo, Label previous, Node currentNode, Node physicalPosition, Edge edge, CostFunction cost, long currentTime, long extraDrivingTime, ResourceInterface resources, long robustTimeSeconds) {
+    public Label(SearchInfo searchInfo, Label previous, Node currentNode, Node physicalPosition, Edge edge, CostFunction cost, long currentTime, long extraDrivingTime, IResource resources, long robustTimeSeconds) {
         this.previous = previous;
         this.edge = edge;
         this.node = currentNode;
@@ -96,7 +96,7 @@ import com.visma.of.rp.routeevaluator.costFunctions.CostFunction;
         CostFunction cost = this.cost.extend(this.searchInfo, toNode, travelTimeWithParking,
                 serviceStartTime, officeArrivalTime, syncedLatestStart);
 
-        ResourceInterface resources = this.resources.extend(extendToInfo);
+        IResource resources = this.resources.extend(extendToInfo);
 
         return new Label(this.searchInfo, this, toNode, physicalPosition, travelledEdge, cost,
                 arrivalTime, extraDrivingTime, resources, robustTimeSeconds);
@@ -126,7 +126,7 @@ import com.visma.of.rp.routeevaluator.costFunctions.CostFunction;
 
     private TravelInfo getTravelInfo(Edge edge) {
         if (shouldNotTravel(edge)) {
-            return new TravelInfo( 0, 0);
+            return new TravelInfo(0, 0);
         } else if (physicallyAtCurrentNode(this.physicalPosition, this.node)) {
             return edge.getTravelInfo();
         } else {
@@ -174,7 +174,7 @@ import com.visma.of.rp.routeevaluator.costFunctions.CostFunction;
         return currentTime;
     }
 
-    public ResourceInterface getResources() {
+    public IResource getResources() {
         return resources;
     }
 

@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator.RoutesimulatorGraphSolver.hardConstraints;
+package com.visma.of.rp.routeevaluator.hardConstraints;
 
 
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
@@ -8,7 +8,7 @@ import java.util.List;
 
 public class HardConstraintsIncremental {
 
-    private List<HardConstraintIncrementalAbstract> hardConstraints;
+    List<HardConstraintIncrementalAbstract> hardConstraints;
 
     public HardConstraintsIncremental() {
         hardConstraints = new ArrayList<>();
@@ -23,7 +23,7 @@ public class HardConstraintsIncremental {
         return true;
     }
 
-    public void addHardConstraint(HardConstraintIncrementalAbstract constraint) {
+    void addHardConstraint(HardConstraintIncrementalAbstract constraint) {
         hardConstraints.add(constraint);
     }
 }

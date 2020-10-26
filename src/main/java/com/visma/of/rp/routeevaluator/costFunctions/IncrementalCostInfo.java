@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator.RoutesimulatorGraphSolver;
+package com.visma.of.rp.routeevaluator.costFunctions;
 
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 

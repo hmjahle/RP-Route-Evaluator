@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator.searchGraph.labellingAlgorithm;
+package com.visma.of.rp.routeevaluator.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.searchGraph.Node;
 import com.visma.of.rp.routeevaluator.searchGraph.NodeList;
@@ -44,7 +44,7 @@ public class NodeExtendInfoTwoElements implements NodeExtendInfoInterface {
         return extendToInfo;
     }
 
-    public ResourceInterface createEmptyResource() {
+    public IResource createEmptyResource() {
         return new ResourceTwoElements(0, 0);
     }
 }
