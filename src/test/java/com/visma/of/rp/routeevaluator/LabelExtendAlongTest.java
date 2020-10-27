@@ -24,7 +24,7 @@ public class LabelExtendAlongTest extends JUnitTestAbstract {
         Collection<ITask> tasks = new ArrayList<>();
         tasks.add(task);
 
-        TestDistanceMatrix distanceMatrix = new TestDistanceMatrix();
+        TestTravelTimeMatrix distanceMatrix = new TestTravelTimeMatrix();
         distanceMatrix.addUndirectedConnection(office, task.getLocation(), 1);
         SearchGraph graph = buildGraph(office, tasks, distanceMatrix);
         SearchInfo searchInfo = new SearchInfo(graph);

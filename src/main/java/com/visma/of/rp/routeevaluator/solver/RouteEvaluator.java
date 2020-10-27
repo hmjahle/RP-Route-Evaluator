@@ -1,6 +1,6 @@
 package com.visma.of.rp.routeevaluator.solver;
 
-import com.visma.of.rp.routeevaluator.Interfaces.IDistanceMatrix;
+import com.visma.of.rp.routeevaluator.Interfaces.ITravelTimeMatrix;
 import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
@@ -39,7 +39,7 @@ public class RouteEvaluator {
         return graph;
     }
 
-    public RouteEvaluator(long robustTimeSeconds, Map<TransportMode, IDistanceMatrix> distanceMatrixMatrices, Collection<ITask> tasks, ILocation officePosition) {
+    public RouteEvaluator(long robustTimeSeconds, Map<TransportMode, ITravelTimeMatrix> distanceMatrixMatrices, Collection<ITask> tasks, ILocation officePosition) {
         this.graph = new SearchGraph(distanceMatrixMatrices, tasks, officePosition, robustTimeSeconds);
         this.algorithm = new LabellingAlgorithm(graph);
         this.firstNodeList = new NodeList(graph.getNodes().size());

@@ -1,14 +1,14 @@
 package com.visma.of.rp.routeevaluator.Interfaces;
 
 /**
- * The distance matrix describes the "distance" between any two locations.
- * Note that the distance matrix might be directed, hence the from / to order matters.
+ * The travelTime matrix describes the "travelTime" between any two locations.
+ * Note that the travelTime matrix might be directed, hence the from / to order matters.
  */
-public interface IDistanceMatrix {
+public interface ITravelTimeMatrix {
 
     /**
      * Describe if the two locations is connected. Which means that it is possible to move between them.
-     * If this is the case a distance between the two locations MUST exist in the distance matrix.
+     * If this is the case a travelTime between the two locations MUST exist in the travelTime matrix.
      * @param from Location where travel starts.
      * @param to Location where travel ends.
      * @return True if they are connected otherwise false.
@@ -16,11 +16,11 @@ public interface IDistanceMatrix {
     boolean connected(ILocation from, ILocation to);
 
     /**
-     * Gets the distance between two points.
+     * Gets the travelTime between two points.
      * Un-described behaviour if the two points are not connected.
      * @param from Location where travel starts.
      * @param to Location where travel ends.
-     * @return Distance between the two points.
+     * @return TravelTime between the two points.
      */
-    long getDistance(ILocation from, ILocation to);
+    long getTravelTime(ILocation from, ILocation to);
 }
