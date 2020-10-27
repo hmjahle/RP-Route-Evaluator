@@ -2,7 +2,6 @@ package com.visma.of.rp.routeevaluator.Interfaces;
 
 public interface ITask {
 
-    int DEFAULT_SKILL_LEVEL = 1;
 
     long getDurationSeconds();
 

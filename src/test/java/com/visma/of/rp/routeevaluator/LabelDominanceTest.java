@@ -25,7 +25,6 @@ public class LabelDominanceTest  {
         Label labelC = new Label(null, null, null, null, null, costA, 3, 2, resourcesB, 0);
         Label labelD = new Label(null, null, null, null, null, costB, 3, 2, resourcesB, 0);
 
-
         Assert.assertEquals("1", 0, labelTest(labelA, labelA));
         Assert.assertEquals("2", 0, labelTest(labelB, labelB));
         Assert.assertEquals("3", 0, labelTest(labelC, labelC));
@@ -204,8 +203,8 @@ public class LabelDominanceTest  {
     }
 
     public int labelTest(Label a, Label b) {
-        Label labelA = new Label(null, a.getPrevious(), a.getNode(), a.getPhysicalPosition(), a.getEdge(), a.getCost(), a.getCurrentTime(), a.getExtraDrivingTime(), a.getResources(), 0);
-        Label labelB = new Label(null, b.getPrevious(), b.getNode(), b.getPhysicalPosition(), b.getEdge(), b.getCost(), b.getCurrentTime(), b.getExtraDrivingTime(), b.getResources(), 0);
+        Label labelA = new Label(null, a.getPrevious(), a.getNode(), a.getPhysicalPosition(), a.getEdge(), a.getCostFunction(), a.getCurrentTime(), a.getExtraDrivingTime(), a.getResources(), 0);
+        Label labelB = new Label(null, b.getPrevious(), b.getNode(), b.getPhysicalPosition(), b.getEdge(), b.getCostFunction(), b.getCurrentTime(), b.getExtraDrivingTime(), b.getResources(), 0);
         return labelA.dominates(labelB);
     }
 }

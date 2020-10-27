@@ -1,12 +1,12 @@
 package com.visma.of.rp.routeevaluator.Interfaces;
 
-import com.visma.of.rp.routeevaluator.transportInfo.TransportModes;
+import com.visma.of.rp.routeevaluator.transportInfo.TransportMode;
 
 public interface IShift {
 
     long getDurationSeconds();
 
-    TransportModes getTransport();
+    TransportMode getTransport();
 
     long getStartTime();
 

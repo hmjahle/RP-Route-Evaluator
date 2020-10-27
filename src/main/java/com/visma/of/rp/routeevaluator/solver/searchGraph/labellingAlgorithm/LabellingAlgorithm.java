@@ -1,14 +1,13 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
-import com.visma.of.rp.routeevaluator.hardConstraints.HardConstraintsIncremental;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
-import com.visma.of.rp.routeevaluator.transportInfo.TransportModes;
-import com.visma.of.rp.routeevaluator.transportInfo.TravelInfo;
 import com.visma.of.rp.routeevaluator.costFunctions.CostFunction;
+import com.visma.of.rp.routeevaluator.hardConstraints.HardConstraintsIncremental;
 import com.visma.of.rp.routeevaluator.routeResult.RouteSimulatorResult;
 import com.visma.of.rp.routeevaluator.routeResult.Visit;
-
+import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
+import com.visma.of.rp.routeevaluator.transportInfo.TransportMode;
+import com.visma.of.rp.routeevaluator.transportInfo.TravelInfo;
 
 import java.util.PriorityQueue;
 
@@ -99,15 +98,15 @@ public class LabellingAlgorithm {
 
     private Double runAlgorithmWithStartLabel(IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime,
                                               long[] syncedNodesLatestStartTime, IShift employeeWorkShift, Label startLabel) {
-        TransportModes employeeTransportModes = employeeWorkShift.getTransport();
+        TransportMode employeeTransportMode = employeeWorkShift.getTransport();
         long employeeShiftEndTime = employeeWorkShift.getEndTime();
         this.nodeExtendInfo = nodeExtendInfo;
-        graph.setEdgesTransportMode(employeeTransportModes);
+        graph.setEdgesTransportMode(employeeTransportMode);
         searchInfo.update(syncedNodesStartTime, syncedNodesLatestStartTime, employeeShiftEndTime, employeeWorkShift);
         labelLists.clear();
         solveLabellingAlgorithm(startLabel);
         Label bestLabel = labelsOnDestinationNode.peek();
-        return bestLabel == null ? null : bestLabel.getCost().getFitness();
+        return bestLabel == null ? null : bestLabel.getCostFunction().getCost();
     }
 
     private void solveLabellingAlgorithm(Label currentLabel) {
@@ -130,7 +129,7 @@ public class LabellingAlgorithm {
 
     private boolean optimalSolutionFound(Label currentLabel) {
         return labelsOnDestinationNode.peek() != null && currentLabel != null &&
-                labelsOnDestinationNode.peek().getCost().getFitness() < currentLabel.getCost().getFitness();
+                labelsOnDestinationNode.peek().getCostFunction().getCost() < currentLabel.getCostFunction().getCost();
     }
 
     private int extractVisitsAndSyncedStartTime(TravelInfo travelInfo, Label bestLabel, RouteSimulatorResult result, long[] syncedNodesStartTime) {

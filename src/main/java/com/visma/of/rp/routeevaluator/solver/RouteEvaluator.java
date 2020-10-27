@@ -4,14 +4,13 @@ import com.visma.of.rp.routeevaluator.Interfaces.IDistanceMatrix;
 import com.visma.of.rp.routeevaluator.Interfaces.IPosition;
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.LabellingAlgorithm;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ExtendInfoOneElement;
 import com.visma.of.rp.routeevaluator.routeResult.RouteSimulatorResult;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.NodeList;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
-import com.visma.of.rp.routeevaluator.transportInfo.TransportModes;
-
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ExtendInfoOneElement;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.LabellingAlgorithm;
+import com.visma.of.rp.routeevaluator.transportInfo.TransportMode;
 
 import java.util.Collection;
 import java.util.List;
@@ -40,7 +39,7 @@ public class RouteEvaluator {
         return graph;
     }
 
-    public RouteEvaluator(long robustTimeSeconds, Map<TransportModes, IDistanceMatrix> distanceMatrixMatrices, Collection<ITask> tasks, IPosition officePosition) {
+    public RouteEvaluator(long robustTimeSeconds, Map<TransportMode, IDistanceMatrix> distanceMatrixMatrices, Collection<ITask> tasks, IPosition officePosition) {
         this.graph = new SearchGraph(distanceMatrixMatrices, tasks, officePosition, robustTimeSeconds);
         this.algorithm = new LabellingAlgorithm(graph);
         this.firstNodeList = new NodeList(graph.getNodes().size());
