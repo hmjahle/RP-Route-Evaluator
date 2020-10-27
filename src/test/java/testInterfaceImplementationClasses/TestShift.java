@@ -21,7 +21,7 @@ public class TestShift implements IShift {
     }
 
     @Override
-    public long getDurationSeconds() {
+    public long getDuration() {
         return duration;
     }
 

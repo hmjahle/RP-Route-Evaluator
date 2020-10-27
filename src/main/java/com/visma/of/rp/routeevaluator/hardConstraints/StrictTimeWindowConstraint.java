@@ -17,6 +17,6 @@ public class StrictTimeWindowConstraint extends HardConstraintIncrementalAbstrac
                                            ITask task, long serviceStartTime, long syncedStartTime) {
         if (task == null || !task.isStrict()) //Task is office or is not strict.
             return true;
-        return serviceStartTime + task.getDurationSeconds() <= task.getEndTime() + threshold;
+        return serviceStartTime + task.getDuration() <= task.getEndTime() + threshold;
     }
 }

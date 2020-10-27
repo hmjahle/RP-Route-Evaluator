@@ -1,16 +1,16 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph;
 
-import com.visma.of.rp.routeevaluator.Interfaces.IPosition;
+import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 
 
    public class Node {
     private ITask task;
-    private IPosition address;
+    private ILocation address;
     private int id;
     private boolean isSynced;
 
-    public Node(int id, ITask task, IPosition address) {
+    public Node(int id, ITask task, ILocation address) {
         this.id = id;
         this.task = task;
         this.address = address;
@@ -23,7 +23,7 @@ import com.visma.of.rp.routeevaluator.Interfaces.ITask;
     }
 
     public long getDurationSeconds() {
-        return task == null ? 0 : task.getDurationSeconds();
+        return task == null ? 0 : task.getDuration();
     }
 
     public long getStartTime() {
@@ -57,7 +57,7 @@ import com.visma.of.rp.routeevaluator.Interfaces.ITask;
         return Integer.toString(id);
     }
 
-    public IPosition getAddress() {
+    public ILocation getAddress() {
         return address;
     }
 

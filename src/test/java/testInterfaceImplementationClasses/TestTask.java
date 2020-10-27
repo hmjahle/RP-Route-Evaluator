@@ -1,6 +1,6 @@
 package testInterfaceImplementationClasses;
 
-import com.visma.of.rp.routeevaluator.Interfaces.IPosition;
+import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 
 /**
@@ -16,9 +16,9 @@ public class TestTask implements ITask {
     boolean requirePhysicalAppearance;
     int requiredSkillLevel;
     long syncedWithIntervalDiffSeconds;
-    IPosition position;
+    ILocation location;
 
-    public TestTask(long duration, long startTime, long endTime, boolean isStrict, boolean isSynced, boolean requirePhysicalAppearance, int requiredSkillLevel, long     syncedWithIntervalDiffSeconds, IPosition position) {
+    public TestTask(long duration, long startTime, long endTime, boolean isStrict, boolean isSynced, boolean requirePhysicalAppearance, int requiredSkillLevel, long     syncedWithIntervalDiffSeconds, ILocation location) {
         this.duration = duration;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -27,11 +27,11 @@ public class TestTask implements ITask {
         this.requirePhysicalAppearance = requirePhysicalAppearance;
         this.requiredSkillLevel = requiredSkillLevel;
         this.syncedWithIntervalDiffSeconds = syncedWithIntervalDiffSeconds;
-        this.position = position;
+        this.location = location;
     }
 
     @Override
-    public long getDurationSeconds() {
+    public long getDuration() {
         return duration;
     }
 
@@ -66,12 +66,12 @@ public class TestTask implements ITask {
     }
 
     @Override
-    public long getSyncedWithIntervalDiffSeconds() {
+    public long getSyncedWithIntervalDiff() {
         return syncedWithIntervalDiffSeconds;
     }
 
     @Override
-    public IPosition getPosition() {
-        return position;
+    public ILocation getLocation() {
+        return location;
     }
 }

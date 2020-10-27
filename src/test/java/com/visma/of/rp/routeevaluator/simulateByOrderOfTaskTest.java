@@ -1,7 +1,7 @@
 package com.visma.of.rp.routeevaluator;
 
-import com.visma.of.rp.routeevaluator.Interfaces.IDistanceMatrix;
-import com.visma.of.rp.routeevaluator.Interfaces.IPosition;
+import com.visma.of.rp.routeevaluator.Interfaces.ITravelTimeMatrix;
+import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 import com.visma.of.rp.routeevaluator.routeResult.RouteSimulatorResult;
@@ -20,11 +20,11 @@ public class simulateByOrderOfTaskTest extends JUnitTestAbstract {
     @Test
     public void simpleFiveTaskEvaluation() {
 
-        IPosition office = createOffice();
+        ILocation office = createOffice();
         List<ITask> tasks = createTasks();
-        Map<TransportMode, IDistanceMatrix> distanceMatrices = createIDistanceMatrix(office, tasks);
+        Map<TransportMode, ITravelTimeMatrix> travelTimeMatrices = createTravelTimeMatrix(office, tasks);
 
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, distanceMatrices, tasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrices, tasks, office);
         IShift shift = new TestShift(100, 0, 100, TransportMode.DRIVE);
 
         RouteSimulatorResult result = routeEvaluator.simulateRouteByTheOrderOfTasks(tasks, null, shift);
@@ -38,17 +38,17 @@ public class simulateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
     }
 
-    private Map<TransportMode, IDistanceMatrix> createIDistanceMatrix(IPosition office, Collection<ITask> tasks) {
-        TestDistanceMatrix distanceMatrix = new TestDistanceMatrix();
+    private Map<TransportMode, ITravelTimeMatrix> createTravelTimeMatrix(ILocation office, Collection<ITask> tasks) {
+        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
         for (ITask taskA : tasks) {
-            distanceMatrix.addUndirectedConnection(office, taskA.getPosition(), 2);
+            travelTimeMatrix.addUndirectedConnection(office, taskA.getLocation(), 2);
             for (ITask taskB : tasks)
                 if (taskA != taskB)
-                    distanceMatrix.addUndirectedConnection(taskA.getPosition(), taskB.getPosition(), 1);
+                    travelTimeMatrix.addUndirectedConnection(taskA.getLocation(), taskB.getLocation(), 1);
         }
-        Map<TransportMode, IDistanceMatrix> distanceMatrices = new HashMap<>();
-        distanceMatrices.put(TransportMode.DRIVE, distanceMatrix);
-        return distanceMatrices;
+        Map<TransportMode, ITravelTimeMatrix> travelTimeMatrices = new HashMap<>();
+        travelTimeMatrices.put(TransportMode.DRIVE, travelTimeMatrix);
+        return travelTimeMatrices;
     }
 
     private List<ITask> createTasks() {

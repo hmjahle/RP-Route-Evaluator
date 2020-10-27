@@ -1,8 +1,8 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph;
 
 
-import com.visma.of.rp.routeevaluator.Interfaces.IDistanceMatrix;
-import com.visma.of.rp.routeevaluator.Interfaces.IPosition;
+import com.visma.of.rp.routeevaluator.Interfaces.ITravelTimeMatrix;
+import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 import com.visma.of.rp.routeevaluator.transportInfo.TransportMode;
 import com.visma.of.rp.routeevaluator.transportInfo.TravelInfo;
@@ -15,14 +15,14 @@ public class SearchGraph {
     private Map<ITask, Node> nodesToTask;
     private Node office;
     private Set<Edge> edgesAll;
-    private DistanceSet edgesNodeToNode;
+    private TravelTimeSet edgesNodeToNode;
     private Map<Edge, Map<TransportMode, TravelInfo>> edgeTravelInfo;
     private int nodeId;
     private int edgeId;
     private TransportMode currentTransportMode;
     private long robustTimeSeconds;
 
-    public SearchGraph(Map<TransportMode, IDistanceMatrix> distanceMatrixMatrices, Collection<ITask> tasks, IPosition officePosition, long robustTimeSeconds) {
+    public SearchGraph(Map<TransportMode, ITravelTimeMatrix> travelTimeMatrixMatrices, Collection<ITask> tasks, ILocation officePosition, long robustTimeSeconds) {
         this.robustTimeSeconds = robustTimeSeconds;
         this.nodes = new ArrayList<>();
         this.edgesAll = new HashSet<>();
@@ -30,15 +30,14 @@ public class SearchGraph {
         this.edgeTravelInfo = new HashMap<>();
         this.nodeId = 0;
         this.edgeId = 0;
-        this.populateGraph(distanceMatrixMatrices, tasks, officePosition);
+        this.populateGraph(travelTimeMatrixMatrices, tasks, officePosition);
     }
-
 
     public List<Node> getNodes() {
         return nodes;
     }
 
-    public DistanceSet getEdgesNodeToNode() {
+    public TravelTimeSet getEdgesNodeToNode() {
         return edgesNodeToNode;
     }
 
@@ -50,9 +49,9 @@ public class SearchGraph {
         return edgeId++;
     }
 
-    private void populateGraph(Map<TransportMode, IDistanceMatrix> distanceMatrixMatrices, Collection<ITask> tasks, IPosition officePosition) {
+    private void populateGraph(Map<TransportMode, ITravelTimeMatrix> travelTimeMatrixMatrices, Collection<ITask> tasks, ILocation officePosition) {
         addNodesToGraph(tasks, officePosition);
-        addTravelInfo(distanceMatrixMatrices);
+        addTravelInfo(travelTimeMatrixMatrices);
         addEdges();
     }
 
@@ -66,38 +65,38 @@ public class SearchGraph {
     }
 
     private void addEdges() {
-        edgesNodeToNode = new DistanceSet(nodes.size());
+        edgesNodeToNode = new TravelTimeSet(nodes.size());
         edgesNodeToNode.update(edgesAll);
     }
 
-    private void addTravelInfo(Map<TransportMode, IDistanceMatrix> distanceMatrixMatrices) {
+    private void addTravelInfo(Map<TransportMode, ITravelTimeMatrix> travelTimeMatrixMatrices) {
         for (Node node1 : nodes) {
             for (Node node2 : nodes) {
                 if (node1 != node2) {
-                    addEdge(distanceMatrixMatrices, node1, node2);
+                    addEdge(travelTimeMatrixMatrices, node1, node2);
                 }
             }
         }
     }
 
-    private void addNodesToGraph(Collection<ITask> tasks, IPosition officePosition) {
+    private void addNodesToGraph(Collection<ITask> tasks, ILocation officePosition) {
         office = new Node(getNewNodeId(), null, officePosition);
         nodes.add(office);
         for (ITask task : tasks) {
-            Node node = new Node(getNewNodeId(), task, task.getPosition());
+            Node node = new Node(getNewNodeId(), task, task.getLocation());
             nodes.add(node);
             nodesToTask.put(task, node);
         }
     }
 
-    private void addEdge(Map<TransportMode, IDistanceMatrix> distanceMatrixMatrices, Node node1, Node node2) {
+    private void addEdge(Map<TransportMode, ITravelTimeMatrix> travelTimeMatrixMatrices, Node node1, Node node2) {
         Map<TransportMode, TravelInfo> eligibleTransportModes = new HashMap<>();
-        for (TransportMode transportMode : distanceMatrixMatrices.keySet()) {
-            if (distanceMatrixMatrices.get(transportMode).travelIsPossible(node1.getAddress(), node2.getAddress())) {
+        for (TransportMode transportMode : travelTimeMatrixMatrices.keySet()) {
+            if (travelTimeMatrixMatrices.get(transportMode).connected(node1.getAddress(), node2.getAddress())) {
                 if (!node1.getRequirePhysicalAppearance() || !node2.getRequirePhysicalAppearance()) {
                     eligibleTransportModes.put(transportMode, new TravelInfo(0, 0));
                 } else {
-                    eligibleTransportModes.put(transportMode, getTravelInfo(distanceMatrixMatrices, transportMode, node1, node2));
+                    eligibleTransportModes.put(transportMode, getTravelInfo(travelTimeMatrixMatrices, transportMode, node1, node2));
                 }
             }
         }
@@ -107,10 +106,10 @@ public class SearchGraph {
     }
 
 
-    private TravelInfo getTravelInfo(Map<TransportMode, IDistanceMatrix> distanceMatrixMatrices, TransportMode transportMode, Node from, Node to) {
+    private TravelInfo getTravelInfo(Map<TransportMode, ITravelTimeMatrix> travelTimeMatrixMatrices, TransportMode transportMode, Node from, Node to) {
         return new TravelInfo(
-                distanceMatrixMatrices.get(transportMode).getTravelTimeWithParking(from.getAddress(), to.getAddress()),
-                distanceMatrixMatrices.get(transportMode).getTravelTime(from.getAddress(), to.getAddress()));
+                travelTimeMatrixMatrices.get(transportMode).getTravelTime(from.getAddress(), to.getAddress()),
+                travelTimeMatrixMatrices.get(transportMode).getTravelTime(from.getAddress(), to.getAddress()));
     }
 
     public void updateNodeType(ITask task) {
