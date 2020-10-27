@@ -2,8 +2,8 @@ package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
-import com.visma.of.rp.routeevaluator.costFunctions.IncrementalCostHandler;
-import com.visma.of.rp.routeevaluator.costFunctions.IncrementalCostInfo;
+import com.visma.of.rp.routeevaluator.objectives.IncrementalObjectivesHandler;
+import com.visma.of.rp.routeevaluator.objectives.IncrementalObjectiveInfo;
 import com.visma.of.rp.routeevaluator.hardConstraints.HardConstraintsIncremental;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
@@ -11,7 +11,7 @@ import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 
  public class SearchInfo {
     private SearchGraph graph;
-    private IncrementalCostHandler incrementalCostHandler;
+    private IncrementalObjectivesHandler incrementalObjectivesHandler;
     private HardConstraintsIncremental hardConstraintsEvaluator;
     private long[] syncedNodesStartTime;
     private long[] syncedNodesLatestStartTime;
@@ -20,7 +20,7 @@ import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 
     public SearchInfo(SearchGraph graph) {
         this.graph = graph;
-        this.incrementalCostHandler = new IncrementalCostHandler();
+        this.incrementalObjectivesHandler = new IncrementalObjectivesHandler();
         this.hardConstraintsEvaluator = new HardConstraintsIncremental();
     }
 
@@ -48,11 +48,11 @@ import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
         this.employeeWorkShift = employeeWorkShift;
     }
 
-    public double calculateCost(double travelTime, ITask task,
-                                double arrivalTime, double syncedLatestStartTime) {
+    public double calculateObjectiveValue(double travelTime, ITask task,
+                                          double arrivalTime, double syncedLatestStartTime) {
         double visitEnd = task != null ? arrivalTime + task.getDurationSeconds() : 0;
-        IncrementalCostInfo costInfo = new IncrementalCostInfo(travelTime, task, visitEnd, arrivalTime, syncedLatestStartTime, endOfShift);
-        return incrementalCostHandler.calculateIncrementalCost(costInfo);
+        IncrementalObjectiveInfo costInfo = new IncrementalObjectiveInfo(travelTime, task, visitEnd, arrivalTime, syncedLatestStartTime, endOfShift);
+        return incrementalObjectivesHandler.calculateIncrementalObjectiveValue(costInfo);
     }
 
     long[] getSyncedNodesStartTime() {

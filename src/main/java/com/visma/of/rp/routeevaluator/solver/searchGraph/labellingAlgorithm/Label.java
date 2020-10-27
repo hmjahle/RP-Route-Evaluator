@@ -3,14 +3,14 @@ package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Edge;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
 import com.visma.of.rp.routeevaluator.transportInfo.TravelInfo;
-import com.visma.of.rp.routeevaluator.costFunctions.CostFunction;
+import com.visma.of.rp.routeevaluator.objectives.Objective;
 
 
 public class Label implements Comparable<Label> {
     private Label previous;
     private Node node;
     private Node physicalPosition;
-    private CostFunction cost;
+    private Objective objective;
     private Edge edge;
     private long currentTime;
     private long extraDrivingTime;
@@ -20,12 +20,12 @@ public class Label implements Comparable<Label> {
     private long robustTimeSeconds;
     private long actualRobustTimeSeconds;
 
-     public Label(SearchInfo searchInfo, Label previous, Node currentNode, Node physicalPosition, Edge edge, CostFunction cost, long currentTime, long extraDrivingTime, IResource resources, long robustTimeSeconds) {
+     public Label(SearchInfo searchInfo, Label previous, Node currentNode, Node physicalPosition, Edge edge, Objective objective, long currentTime, long extraDrivingTime, IResource resources, long robustTimeSeconds) {
         this.previous = previous;
         this.edge = edge;
         this.node = currentNode;
         this.physicalPosition = physicalPosition;
-        this.cost = cost;
+        this.objective = objective;
         this.currentTime = currentTime;
         this.extraDrivingTime = extraDrivingTime;
         this.resources = resources;
@@ -40,23 +40,23 @@ public class Label implements Comparable<Label> {
     public int dominates(Label other) {
         long currentTime = Long.compare(this.currentTime, other.currentTime);
         long extraDrivingTime = Long.compare(-this.extraDrivingTime, -other.extraDrivingTime);
-        int fitness = this.cost.dominates(other.cost);
+        int objective = this.objective.dominates(other.objective);
         int resources = this.resources.dominates(other.resources);
 
         if (resources == 2)
             return 2;
-        else if (currentTime == 0 && fitness == 0 && resources == 0 && extraDrivingTime == 0)
+        else if (currentTime == 0 && objective == 0 && resources == 0 && extraDrivingTime == 0)
             return 0;
-        else if (currentTime <= 0 && fitness <= 0 && resources <= 0 && extraDrivingTime <= 0)
+        else if (currentTime <= 0 && objective <= 0 && resources <= 0 && extraDrivingTime <= 0)
             return -1;
-        else if (currentTime >= 0 && fitness >= 0 && resources >= 0 && extraDrivingTime >= 0)
+        else if (currentTime >= 0 && objective >= 0 && resources >= 0 && extraDrivingTime >= 0)
             return 1;
         else
             return 2;
     }
 
     public int compareTo(Label other) {
-        return Double.compare(cost.getCost(), other.cost.getCost());
+        return Double.compare(objective.getObjectiveValue(), other.objective.getObjectiveValue());
     }
 
     public Label extendAlong(ExtendToInfo extendToInfo) {
@@ -93,12 +93,12 @@ public class Label implements Comparable<Label> {
         if (!searchInfo.isFeasible(earliestPossibleReturnToOfficeTime, toNode.getTask(), serviceStartTime, syncedLatestStart))
             return null;
 
-        CostFunction cost = this.cost.extend(this.searchInfo, toNode, travelTimeWithParking,
+        Objective objective = this.objective.extend(this.searchInfo, toNode, travelTimeWithParking,
                 serviceStartTime, officeArrivalTime, syncedLatestStart);
 
         IResource resources = this.resources.extend(extendToInfo);
 
-        return new Label(this.searchInfo, this, toNode, physicalPosition, travelledEdge, cost,
+        return new Label(this.searchInfo, this, toNode, physicalPosition, travelledEdge, objective,
                 arrivalTime, extraDrivingTime, resources, robustTimeSeconds);
     }
 
@@ -147,7 +147,7 @@ public class Label implements Comparable<Label> {
     }
 
     public String toString() {
-        return node.getId() + ", " + cost + ", " + resources;
+        return node.getId() + ", " + objective + ", " + resources;
     }
 
     public Label getPrevious() {
@@ -166,8 +166,8 @@ public class Label implements Comparable<Label> {
         return closed;
     }
 
-    public CostFunction getCostFunction() {
-        return cost;
+    public Objective getObjective() {
+        return objective;
     }
 
     public long getCurrentTime() {

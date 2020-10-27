@@ -1,6 +1,6 @@
 package com.visma.of.rp.routeevaluator;
 
-import com.visma.of.rp.routeevaluator.costFunctions.CostFunction;
+import com.visma.of.rp.routeevaluator.objectives.Objective;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Label;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.LabelLists;
@@ -14,9 +14,9 @@ import java.util.List;
 public class LabelListsTest {
 
     @Test
-    public void labelDominanceResourceAndFitness() {
-        CostFunction costA = new CostFunction(0);
-        CostFunction costB = new CostFunction(1);
+    public void labelDominanceResourceAndObjectiveValue() {
+        Objective costA = new Objective(0);
+        Objective costB = new Objective(1);
 
         ResourceTwoElements resourcesA = new ResourceTwoElements(2, 2);
         ResourceTwoElements resourcesB = new ResourceTwoElements(1, 2);
@@ -48,10 +48,10 @@ public class LabelListsTest {
 
     @Test
     public void labelsOutOfBound() {
-        CostFunction cost1 = new CostFunction(0);
-        CostFunction cost2 = new CostFunction(1);
-        CostFunction cost3 = new CostFunction(2);
-        CostFunction cost4 = new CostFunction(3);
+        Objective cost1 = new Objective(0);
+        Objective cost2 = new Objective(1);
+        Objective cost3 = new Objective(2);
+        Objective cost4 = new Objective(3);
 
         ResourceTwoElements resourcesA = new ResourceTwoElements(0, 1);
         ResourceTwoElements resourcesB = new ResourceTwoElements(0, 2);
@@ -107,7 +107,7 @@ public class LabelListsTest {
         Assert.assertEquals("List capacity wrong", 16, list.getLabelCapacity(node));
     }
 
-    private Label createLabel(CostFunction cost1, ResourceTwoElements resourcesA) {
+    private Label createLabel(Objective cost1, ResourceTwoElements resourcesA) {
         return new Label(null, null, null, null, null,
                 cost1, 3, 2, resourcesA, 0);
     }

@@ -49,11 +49,11 @@ public class RouteEvaluator {
     }
 
 
-    public Double simulateRouteCost(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
+    public Double evaluateRouteObjective(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
         updateFirstTaskList(tasks, syncedTasksStartTime);
         ExtendInfoOneElement nodeExtendInfoOneElement = new ExtendInfoOneElement();
         nodeExtendInfoOneElement.update(firstNodeList);
-        return algorithm.solveFitness(nodeExtendInfoOneElement, syncedNodesStartTime, syncedNodesLatestStartTime, employeeWorkShift);
+        return algorithm.solve(nodeExtendInfoOneElement, syncedNodesStartTime, syncedNodesLatestStartTime, employeeWorkShift);
     }
 
 

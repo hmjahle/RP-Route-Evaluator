@@ -3,7 +3,7 @@ package testSupport;
 import com.visma.of.rp.routeevaluator.Interfaces.IDistanceMatrix;
 import com.visma.of.rp.routeevaluator.Interfaces.IPosition;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
-import com.visma.of.rp.routeevaluator.costFunctions.CostFunction;
+import com.visma.of.rp.routeevaluator.objectives.Objective;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Label;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ResourceOneElement;
@@ -18,7 +18,7 @@ import java.util.Map;
 public abstract class JUnitTestAbstract {
 
     protected Label createStartLabel(SearchGraph graph, SearchInfo searchInfo) {
-        return new Label(searchInfo, null, graph.getOffice(), graph.getOffice(), null, new CostFunction(0), 0, 0, new ResourceOneElement(0), 0);
+        return new Label(searchInfo, null, graph.getOffice(), graph.getOffice(), null, new Objective(0), 0, 0, new ResourceOneElement(0), 0);
     }
 
     protected IPosition createOffice() {
