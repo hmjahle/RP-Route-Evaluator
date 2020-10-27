@@ -2,10 +2,10 @@ package com.visma.of.rp.routeevaluator.solver.searchGraph;
 
 import java.util.Set;
 
- public class DistanceSet {
+ public class TravelTimeSet {
     private Edge[][] edgesNodeToNode;
 
-    public DistanceSet(int nodesCapacity) {
+    public TravelTimeSet(int nodesCapacity) {
         edgesNodeToNode = new Edge[nodesCapacity][nodesCapacity];
     }
 

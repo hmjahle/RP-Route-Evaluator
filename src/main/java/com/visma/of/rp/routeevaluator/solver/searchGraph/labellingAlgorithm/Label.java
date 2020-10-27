@@ -9,7 +9,7 @@ import com.visma.of.rp.routeevaluator.objectives.Objective;
 public class Label implements Comparable<Label> {
     private Label previous;
     private Node node;
-    private Node physicalPosition;
+    private Node physicalLocation;
     private Objective objective;
     private Edge edge;
     private long currentTime;
@@ -20,11 +20,11 @@ public class Label implements Comparable<Label> {
     private long robustTimeSeconds;
     private long actualRobustTimeSeconds;
 
-     public Label(SearchInfo searchInfo, Label previous, Node currentNode, Node physicalPosition, Edge edge, Objective objective, long currentTime, long extraDrivingTime, IResource resources, long robustTimeSeconds) {
+     public Label(SearchInfo searchInfo, Label previous, Node currentNode, Node physicalLocation, Edge edge, Objective objective, long currentTime, long extraDrivingTime, IResource resources, long robustTimeSeconds) {
         this.previous = previous;
         this.edge = edge;
         this.node = currentNode;
-        this.physicalPosition = physicalPosition;
+        this.physicalLocation = physicalLocation;
         this.objective = objective;
         this.currentTime = currentTime;
         this.extraDrivingTime = extraDrivingTime;
@@ -66,7 +66,7 @@ public class Label implements Comparable<Label> {
             travelledEdge = getEdgeToNextNode(extendToInfo.getToNode());
             newPhysicalPosition = extendToInfo.getToNode();
         } else {
-            newPhysicalPosition = physicalPosition;
+            newPhysicalPosition = physicalLocation;
         }
         TravelInfo travelInfo = getTravelInfo(travelledEdge);
         long travelTimeWithParking = travelInfo != null ? travelInfo.getTravelTimeWithParking() : 0;
@@ -127,7 +127,7 @@ public class Label implements Comparable<Label> {
     private TravelInfo getTravelInfo(Edge edge) {
         if (shouldNotTravel(edge)) {
             return new TravelInfo(0, 0);
-        } else if (physicallyAtCurrentNode(this.physicalPosition, this.node)) {
+        } else if (physicallyAtCurrentNode(this.physicalLocation, this.node)) {
             return edge.getTravelInfo();
         } else {
             return getEdgeToNextNode(edge.getToNode()).getTravelInfo();
@@ -135,7 +135,7 @@ public class Label implements Comparable<Label> {
     }
 
     private Edge getEdgeToNextNode(Node toNode) {
-        return searchInfo.getGraph().getEdgesNodeToNode().getEdge(this.physicalPosition, toNode);
+        return searchInfo.getGraph().getEdgesNodeToNode().getEdge(this.physicalLocation, toNode);
     }
 
     private boolean physicallyAtCurrentNode(Node physicalPosition, Node currentNode) {
@@ -143,7 +143,7 @@ public class Label implements Comparable<Label> {
     }
 
     private boolean shouldNotTravel(Edge edge) {
-        return edge == null || this.physicalPosition.equals(edge.getToNode());
+        return edge == null || this.physicalLocation.equals(edge.getToNode());
     }
 
     public String toString() {
@@ -182,8 +182,8 @@ public class Label implements Comparable<Label> {
         closed = close;
     }
 
-    public Node getPhysicalPosition() {
-        return physicalPosition;
+    public Node getPhysicalLocation() {
+        return physicalLocation;
     }
 
     public long getExtraDrivingTime() {

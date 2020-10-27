@@ -127,7 +127,7 @@ public class RouteSimulatorResult {
     }
 
     public Long calculateAndGetTotalFreeTime() {
-        long workShiftDuration = employeeWorkShift.getDurationSeconds();
+        long workShiftDuration = employeeWorkShift.getDuration();
         return Math.max(0, workShiftDuration - totalTimeToPatients - totalTimeInOffice - totalTravelTimeIncludingParkingAndRobustness);
     }
 
