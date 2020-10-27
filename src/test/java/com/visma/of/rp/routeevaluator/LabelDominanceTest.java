@@ -1,23 +1,21 @@
 package com.visma.of.rp.routeevaluator;
 
-import com.visma.of.rp.routeevaluator.costFunctions.CostFunction;
+import com.visma.of.rp.routeevaluator.objectives.Objective;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Label;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ResourceTwoElements;
 import org.junit.Assert;
-
 import org.junit.Test;
 
-
-public class LabelDominanceTest  {
-
-
-    //Tests whether the labelling dominance rules are implemented correctly.
+/**
+ * Tests whether the labelling dominance rules are implemented correctly.
+ */
+public class LabelDominanceTest {
 
 
     @Test
-    public void labelDominanceTestResourceAndFitness() {
-        CostFunction costA = new CostFunction(0);
-        CostFunction costB = new CostFunction(1);
+    public void labelDominanceTestResourceAndObjectiveValue() {
+        Objective costA = new Objective(0);
+        Objective costB = new Objective(1);
         ResourceTwoElements resourcesA = new ResourceTwoElements(2, 2);
         ResourceTwoElements resourcesB = new ResourceTwoElements(1, 2);
         Label labelA = new Label(null, null, null, null, null, costA, 3, 2, resourcesA, 0);
@@ -55,7 +53,7 @@ public class LabelDominanceTest  {
 
     @Test
     public void labelDominanceTestCurrentTimeAndDrivingTime() {
-        CostFunction costA = new CostFunction(0);
+        Objective costA = new Objective(0);
         ResourceTwoElements resources = new ResourceTwoElements(0, 0);
 
         Label labelA = new Label(null, null, null, null, null, costA, 1, 3, resources, 0);
@@ -92,9 +90,9 @@ public class LabelDominanceTest  {
     }
 
     @Test
-    public void labelDominanceTestCurrentTimeAndDrivingTimeAndFitness() {
-        CostFunction costA = new CostFunction(0);
-        CostFunction costB = new CostFunction(1);
+    public void labelDominanceTestCurrentTimeAndDrivingTimeAndObjectiveValue() {
+        Objective costA = new Objective(0);
+        Objective costB = new Objective(1);
         ResourceTwoElements resources = new ResourceTwoElements(0, 0);
 
         Label labelA = new Label(null, null, null, null, null, costA, 1, 2, resources, 0);
@@ -125,9 +123,9 @@ public class LabelDominanceTest  {
     }
 
     @Test
-    public void labelDominanceTestCurrentTimeAndDrivingTimeAndFitnessAndResources() {
-        CostFunction costA = new CostFunction(0);
-        CostFunction costB = new CostFunction(1);
+    public void labelDominanceTestCurrentTimeAndDrivingTimeAndObjectiveValueAndResources() {
+        Objective costA = new Objective(0);
+        Objective costB = new Objective(1);
         ResourceTwoElements resourcesA = new ResourceTwoElements(0, 1);
         ResourceTwoElements resourcesB = new ResourceTwoElements(1, 0);
 
@@ -164,9 +162,9 @@ public class LabelDominanceTest  {
     }
 
     @Test
-    public void labelDominanceTestFitnessAndResources() {
-        CostFunction costA = new CostFunction(0);
-        CostFunction costB = new CostFunction(1);
+    public void labelDominanceTestObjectiveValueAndResources() {
+        Objective costA = new Objective(0);
+        Objective costB = new Objective(1);
         ResourceTwoElements resourcesA = new ResourceTwoElements(1, 1);
         ResourceTwoElements resourcesB = new ResourceTwoElements(1, 2);
 
@@ -203,8 +201,8 @@ public class LabelDominanceTest  {
     }
 
     public int labelTest(Label a, Label b) {
-        Label labelA = new Label(null, a.getPrevious(), a.getNode(), a.getPhysicalPosition(), a.getEdge(), a.getCostFunction(), a.getCurrentTime(), a.getExtraDrivingTime(), a.getResources(), 0);
-        Label labelB = new Label(null, b.getPrevious(), b.getNode(), b.getPhysicalPosition(), b.getEdge(), b.getCostFunction(), b.getCurrentTime(), b.getExtraDrivingTime(), b.getResources(), 0);
+        Label labelA = new Label(null, a.getPrevious(), a.getNode(), a.getPhysicalPosition(), a.getEdge(), a.getObjective(), a.getCurrentTime(), a.getExtraDrivingTime(), a.getResources(), 0);
+        Label labelB = new Label(null, b.getPrevious(), b.getNode(), b.getPhysicalPosition(), b.getEdge(), b.getObjective(), b.getCurrentTime(), b.getExtraDrivingTime(), b.getResources(), 0);
         return labelA.dominates(labelB);
     }
 }

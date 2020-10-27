@@ -35,7 +35,7 @@ public class simulateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Start time should be: ", 40, result.getVisitSolution().get(3).getStart());
         Assert.assertEquals("Start time should be: ", 50, result.getVisitSolution().get(4).getStart());
         Assert.assertEquals("Office return should be: ", 53, result.getTimeOfOfficeReturn().longValue());
-        Assert.assertEquals("Cost should be: ", 0.0, result.getTotalFitness(), 1E-6);
+        Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
     }
 
     private Map<TransportMode, IDistanceMatrix> createIDistanceMatrix(IPosition office, Collection<ITask> tasks) {

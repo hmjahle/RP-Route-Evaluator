@@ -20,7 +20,7 @@ public class RouteSimulatorResult {
     private Long totalTimeToPatients;
     private Long totalTimeInOffice;
     private Long timeOfOfficeReturn;
-    private double totalFitness;
+    private double objectiveValue;
 
     public RouteSimulatorResult(IShift employeeWorkShift) {
         this.employeeWorkShift = employeeWorkShift;
@@ -40,7 +40,7 @@ public class RouteSimulatorResult {
         this.totalTimeToPatients = copy.totalTimeToPatients;
         this.totalTimeInOffice = copy.totalTimeInOffice;
         this.timeOfOfficeReturn = copy.timeOfOfficeReturn;
-        this.totalFitness = copy.totalFitness;
+        this.objectiveValue = copy.objectiveValue;
     }
 
     private void resetDataStructureForEmployee() {
@@ -48,7 +48,7 @@ public class RouteSimulatorResult {
         totalTravelTimeIncludingParkingAndRobustness = 0L;
         totalTimeToPatients = 0L;
         totalTimeInOffice = 0L;
-        totalFitness = 0;
+        objectiveValue = 0;
     }
 
     public void addVisits(Visit[] visits, int visitsCnt, TravelInfo travelInfo) {
@@ -66,8 +66,8 @@ public class RouteSimulatorResult {
         return syncedTaskToChromosomeStartTime.get(task);
     }
 
-    public void setTotalFitness(double totalFitness) {
-        this.totalFitness = totalFitness;
+    public void setObjectiveValue(double objectiveValue) {
+        this.objectiveValue = objectiveValue;
     }
 
     public void updateTimeOfOfficeReturn(Long timeOfOfficeReturn) {
@@ -114,8 +114,8 @@ public class RouteSimulatorResult {
         return totalTimeInOffice;
     }
 
-    public double getTotalFitness() {
-        return totalFitness;
+    public double getObjectiveValue() {
+        return objectiveValue;
     }
 
     public Long getTotalTravelTimeIncludingParkingAndRobustness() {
