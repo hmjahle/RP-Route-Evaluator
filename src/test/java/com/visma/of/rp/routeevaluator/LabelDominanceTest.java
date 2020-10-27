@@ -1,22 +1,18 @@
 package com.visma.of.rp.routeevaluator;
 
-import junit.JunitTest;
+import com.visma.of.rp.routeevaluator.costFunctions.CostFunction;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Label;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ResourceTwoElements;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import other.helpers.ResetAndInsertChromosome;
-import routeplanner.solvers.fitness.RoutesimulatorGraphSolver.*;
-import routeplanner.solvers.fitness.RoutesimulatorGraphSolver.ResourceTwoElements;
 
-public class LabelDominanceTest extends JunitTest {
+import org.junit.Test;
+
+
+public class LabelDominanceTest  {
 
 
     //Tests whether the labelling dominance rules are implemented correctly.
 
-    @Before
-    public void createProblemInstance() {
-        ResetAndInsertChromosome.setConfiguration(configuration);
-    }
 
     @Test
     public void labelDominanceTestResourceAndFitness() {
