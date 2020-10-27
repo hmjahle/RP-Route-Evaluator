@@ -23,7 +23,7 @@ import com.visma.of.rp.routeevaluator.Interfaces.ITask;
     }
 
     public long getDurationSeconds() {
-        return task == null ? 0 : task.getDurationSeconds();
+        return task == null ? 0 : task.getDuration();
     }
 
     public long getStartTime() {

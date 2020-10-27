@@ -31,7 +31,7 @@ public class TestTask implements ITask {
     }
 
     @Override
-    public long getDurationSeconds() {
+    public long getDuration() {
         return duration;
     }
 
@@ -66,7 +66,7 @@ public class TestTask implements ITask {
     }
 
     @Override
-    public long getSyncedWithIntervalDiffSeconds() {
+    public long getSyncedWithIntervalDiff() {
         return syncedWithIntervalDiffSeconds;
     }
 

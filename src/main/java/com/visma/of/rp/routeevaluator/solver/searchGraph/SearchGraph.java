@@ -33,7 +33,6 @@ public class SearchGraph {
         this.populateGraph(distanceMatrixMatrices, tasks, officePosition);
     }
 
-
     public List<Node> getNodes() {
         return nodes;
     }
@@ -93,7 +92,7 @@ public class SearchGraph {
     private void addEdge(Map<TransportMode, IDistanceMatrix> distanceMatrixMatrices, Node node1, Node node2) {
         Map<TransportMode, TravelInfo> eligibleTransportModes = new HashMap<>();
         for (TransportMode transportMode : distanceMatrixMatrices.keySet()) {
-            if (distanceMatrixMatrices.get(transportMode).travelIsPossible(node1.getAddress(), node2.getAddress())) {
+            if (distanceMatrixMatrices.get(transportMode).connected(node1.getAddress(), node2.getAddress())) {
                 if (!node1.getRequirePhysicalAppearance() || !node2.getRequirePhysicalAppearance()) {
                     eligibleTransportModes.put(transportMode, new TravelInfo(0, 0));
                 } else {
@@ -109,8 +108,8 @@ public class SearchGraph {
 
     private TravelInfo getTravelInfo(Map<TransportMode, IDistanceMatrix> distanceMatrixMatrices, TransportMode transportMode, Node from, Node to) {
         return new TravelInfo(
-                distanceMatrixMatrices.get(transportMode).getTravelTimeWithParking(from.getAddress(), to.getAddress()),
-                distanceMatrixMatrices.get(transportMode).getTravelTime(from.getAddress(), to.getAddress()));
+                distanceMatrixMatrices.get(transportMode).getDistance(from.getAddress(), to.getAddress()),
+                distanceMatrixMatrices.get(transportMode).getDistance(from.getAddress(), to.getAddress()));
     }
 
     public void updateNodeType(ITask task) {

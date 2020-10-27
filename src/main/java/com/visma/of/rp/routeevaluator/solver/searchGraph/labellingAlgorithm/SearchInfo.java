@@ -50,7 +50,7 @@ import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 
     public double calculateObjectiveValue(double travelTime, ITask task,
                                           double arrivalTime, double syncedLatestStartTime) {
-        double visitEnd = task != null ? arrivalTime + task.getDurationSeconds() : 0;
+        double visitEnd = task != null ? arrivalTime + task.getDuration() : 0;
         IncrementalObjectiveInfo costInfo = new IncrementalObjectiveInfo(travelTime, task, visitEnd, arrivalTime, syncedLatestStartTime, endOfShift);
         return incrementalObjectivesHandler.calculateIncrementalObjectiveValue(costInfo);
     }

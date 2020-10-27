@@ -18,19 +18,13 @@ public class TestDistanceMatrix implements IDistanceMatrix {
     }
 
     @Override
-    public boolean travelIsPossible(IPosition positionA, IPosition positionB) {
-        return distances.containsKey(positionA) && distances.get(positionA).containsKey(positionB);
+    public boolean connected(IPosition from, IPosition to) {
+        return distances.containsKey(from) && distances.get(from).containsKey(to);
     }
 
     @Override
-    public long getTravelTimeWithParking(IPosition positionA, IPosition positionB) {
-
-        return distances.get(positionA).get(positionB);
-    }
-
-    @Override
-    public long getTravelTime(IPosition positionA, IPosition positionB) {
-        return distances.get(positionA).get(positionB);
+    public long getDistance(IPosition from, IPosition to) {
+        return distances.get(from).get(to);
     }
 
     public void addUndirectedConnection(IPosition positionA, IPosition positionB, long distance) {

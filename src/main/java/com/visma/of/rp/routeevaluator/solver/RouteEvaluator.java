@@ -112,6 +112,6 @@ public class RouteEvaluator {
         graph.updateNodeType(task);
         Node node = graph.getNode(task);
         syncedNodesStartTime[node.getId()] = startTime;
-        syncedNodesLatestStartTime[node.getId()] = startTime + task.getSyncedWithIntervalDiffSeconds();
+        syncedNodesLatestStartTime[node.getId()] = startTime + task.getSyncedWithIntervalDiff();
     }
 }
