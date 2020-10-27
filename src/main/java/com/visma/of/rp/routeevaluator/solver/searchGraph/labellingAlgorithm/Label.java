@@ -56,7 +56,7 @@ public class Label implements Comparable<Label> {
     }
 
     public int compareTo(Label other) {
-        return Double.compare(cost.getFitness(), other.cost.getFitness());
+        return Double.compare(cost.getCost(), other.cost.getCost());
     }
 
     public Label extendAlong(ExtendToInfo extendToInfo) {
@@ -166,7 +166,7 @@ public class Label implements Comparable<Label> {
         return closed;
     }
 
-    public CostFunction getCost() {
+    public CostFunction getCostFunction() {
         return cost;
     }
 

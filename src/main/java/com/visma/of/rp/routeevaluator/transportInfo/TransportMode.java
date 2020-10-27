@@ -1,6 +1,6 @@
 package com.visma.of.rp.routeevaluator.transportInfo;
 
-public enum TransportModes {
+public enum TransportMode {
 
     WALK("Walk", "walking"),
 
@@ -11,7 +11,7 @@ public enum TransportModes {
     private String name;
     private String googleName;
 
-    TransportModes(String name, String googleName){
+    TransportMode(String name, String googleName){
         this.name = name;
         this.googleName = googleName;
     }

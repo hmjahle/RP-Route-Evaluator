@@ -4,25 +4,25 @@ package com.visma.of.rp.routeevaluator.solver.searchGraph;
 import com.visma.of.rp.routeevaluator.Interfaces.IDistanceMatrix;
 import com.visma.of.rp.routeevaluator.Interfaces.IPosition;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
-import com.visma.of.rp.routeevaluator.transportInfo.TransportModes;
+import com.visma.of.rp.routeevaluator.transportInfo.TransportMode;
 import com.visma.of.rp.routeevaluator.transportInfo.TravelInfo;
 
 import java.util.*;
 
-  public class SearchGraph {
+public class SearchGraph {
 
     private List<Node> nodes;
     private Map<ITask, Node> nodesToTask;
     private Node office;
     private Set<Edge> edgesAll;
     private DistanceSet edgesNodeToNode;
-    private Map<Edge, Map<TransportModes, TravelInfo>> edgeTravelInfo;
+    private Map<Edge, Map<TransportMode, TravelInfo>> edgeTravelInfo;
     private int nodeId;
     private int edgeId;
-    private TransportModes currentTransportMode;
+    private TransportMode currentTransportMode;
     private long robustTimeSeconds;
 
-    public SearchGraph(Map<TransportModes, IDistanceMatrix> distanceMatrixMatrices, Collection<ITask> tasks, IPosition officePosition, long robustTimeSeconds) {
+    public SearchGraph(Map<TransportMode, IDistanceMatrix> distanceMatrixMatrices, Collection<ITask> tasks, IPosition officePosition, long robustTimeSeconds) {
         this.robustTimeSeconds = robustTimeSeconds;
         this.nodes = new ArrayList<>();
         this.edgesAll = new HashSet<>();
@@ -50,13 +50,13 @@ import java.util.*;
         return edgeId++;
     }
 
-    private void populateGraph(Map<TransportModes, IDistanceMatrix> distanceMatrixMatrices, Collection<ITask> tasks, IPosition officePosition) {
+    private void populateGraph(Map<TransportMode, IDistanceMatrix> distanceMatrixMatrices, Collection<ITask> tasks, IPosition officePosition) {
         addNodesToGraph(tasks, officePosition);
         addTravelInfo(distanceMatrixMatrices);
         addEdges();
     }
 
-    public void setEdgesTransportMode(TransportModes transportMode) {
+    public void setEdgesTransportMode(TransportMode transportMode) {
         if (transportMode != currentTransportMode) {
             currentTransportMode = transportMode;
             for (Edge edge : edgeTravelInfo.keySet()) {
@@ -70,11 +70,11 @@ import java.util.*;
         edgesNodeToNode.update(edgesAll);
     }
 
-    private void addTravelInfo(Map<TransportModes, IDistanceMatrix> distanceMatrixMatrices) {
+    private void addTravelInfo(Map<TransportMode, IDistanceMatrix> distanceMatrixMatrices) {
         for (Node node1 : nodes) {
             for (Node node2 : nodes) {
                 if (node1 != node2) {
-                    addEdge(distanceMatrixMatrices, TransportModes.values(), node1, node2);
+                    addEdge(distanceMatrixMatrices, node1, node2);
                 }
             }
         }
@@ -90,9 +90,9 @@ import java.util.*;
         }
     }
 
-    private void addEdge(Map<TransportModes, IDistanceMatrix> distanceMatrixMatrices, TransportModes[] transportModes, Node node1, Node node2) {
-        HashMap<TransportModes, TravelInfo> eligibleTransportModes = new HashMap<>();
-        for (TransportModes transportMode : transportModes) {
+    private void addEdge(Map<TransportMode, IDistanceMatrix> distanceMatrixMatrices, Node node1, Node node2) {
+        Map<TransportMode, TravelInfo> eligibleTransportModes = new HashMap<>();
+        for (TransportMode transportMode : distanceMatrixMatrices.keySet()) {
             if (distanceMatrixMatrices.get(transportMode).travelIsPossible(node1.getAddress(), node2.getAddress())) {
                 if (!node1.getRequirePhysicalAppearance() || !node2.getRequirePhysicalAppearance()) {
                     eligibleTransportModes.put(transportMode, new TravelInfo(0, 0));
@@ -104,14 +104,13 @@ import java.util.*;
         Edge edge = new Edge(getNewEdgeId(), node1, node2);
         edgeTravelInfo.put(edge, eligibleTransportModes);
         edgesAll.add(edge);
-
     }
 
 
-    private TravelInfo getTravelInfo(Map<TransportModes, IDistanceMatrix> distanceMatrixMatrices, TransportModes transportModes, Node from, Node to) {
+    private TravelInfo getTravelInfo(Map<TransportMode, IDistanceMatrix> distanceMatrixMatrices, TransportMode transportMode, Node from, Node to) {
         return new TravelInfo(
-                distanceMatrixMatrices.get(transportModes).getTravelTimeWithParking(from.getAddress(), to.getAddress()),
-                distanceMatrixMatrices.get(transportModes).getTravelTime(from.getAddress(), to.getAddress()));
+                distanceMatrixMatrices.get(transportMode).getTravelTimeWithParking(from.getAddress(), to.getAddress()),
+                distanceMatrixMatrices.get(transportMode).getTravelTime(from.getAddress(), to.getAddress()));
     }
 
     public void updateNodeType(ITask task) {

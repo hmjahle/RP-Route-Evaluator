@@ -1,7 +1,6 @@
 package com.visma.of.rp.routeevaluator;
 
 import com.visma.of.rp.routeevaluator.costFunctions.CostFunction;
-
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Label;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.LabelLists;
@@ -15,7 +14,7 @@ import java.util.List;
 public class LabelListsTest {
 
     @Test
-    public void labelDominanceResourceAndFitnessTest() {
+    public void labelDominanceResourceAndFitness() {
         CostFunction costA = new CostFunction(0);
         CostFunction costB = new CostFunction(1);
 
@@ -48,7 +47,7 @@ public class LabelListsTest {
     }
 
     @Test
-    public void labelsOutOfBoundTest() {
+    public void labelsOutOfBound() {
         CostFunction cost1 = new CostFunction(0);
         CostFunction cost2 = new CostFunction(1);
         CostFunction cost3 = new CostFunction(2);

@@ -8,12 +8,12 @@ import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
  * which nodeSet it belongs to (extendNodeSetNo) a value of "0" indicates that it does not belong to a set.
  * This would be the destination node.
  */
- class ExtendToInfo {
+public class ExtendToInfo {
 
     private Node toNode;
     private int extendNodeSetNumber;
 
-    protected ExtendToInfo(Node toNode, int extendNodeSetNumber) {
+    public ExtendToInfo(Node toNode, int extendNodeSetNumber) {
         this.toNode = toNode;
         this.extendNodeSetNumber = extendNodeSetNumber;
     }

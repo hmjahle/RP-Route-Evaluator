@@ -5,10 +5,10 @@ import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Sear
 
 //Calculates fitness values and test whether one costFunction dominates the other.
 public class CostFunction {
-    private double fitness;
+    private double cost;
 
-    public CostFunction(double fitness) {
-        this.fitness = fitness;
+    public CostFunction(double cost) {
+        this.cost = cost;
     }
 
     public CostFunction extend(SearchInfo searchInfo, Node toNode, long travelTimeWithParking, long arrivalTime,
@@ -23,22 +23,22 @@ public class CostFunction {
 
     private CostFunction createCostFunctionFor(SearchInfo searchInfo, Node toNode, long travelTimeWithParking, long arrivalTime, long syncedTaskLatestStartTime) {
         double newFitness = searchInfo.calculateCost(travelTimeWithParking, toNode.getTask(), arrivalTime, syncedTaskLatestStartTime);
-        return new CostFunction(this.fitness + newFitness);
+        return new CostFunction(this.cost + newFitness);
     }
 
     private CostFunction createCostFunctionToOffice(SearchInfo searchInfo, long travelTimeWithParking, long officeArrivalTime) {
         double newFitness = searchInfo.calculateCost(travelTimeWithParking, null, officeArrivalTime, Double.MAX_VALUE);
-        return new CostFunction(this.fitness + newFitness);
+        return new CostFunction(this.cost + newFitness);
     }
 
-    public double getFitness() {
-        return fitness;
+    public double getCost() {
+        return cost;
     }
 
     public int dominates(CostFunction cost) {
-        if (this.fitness < cost.fitness)
+        if (this.cost < cost.cost)
             return -1;
-        else if (this.fitness > cost.fitness)
+        else if (this.cost > cost.cost)
             return 1;
         else
             return 0;
@@ -46,6 +46,6 @@ public class CostFunction {
 
     @Override
     public String toString() {
-        return Double.toString(fitness);
+        return Double.toString(cost);
     }
 }
