@@ -1,7 +1,7 @@
 package testInterfaceImplementationClasses;
 
 import com.visma.of.rp.routeevaluator.Interfaces.IDistanceMatrix;
-import com.visma.of.rp.routeevaluator.Interfaces.IPosition;
+import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,28 +11,28 @@ import java.util.Map;
  */
 public class TestDistanceMatrix implements IDistanceMatrix {
 
-    private Map<IPosition, Map<IPosition, Long>> distances;
+    private Map<ILocation, Map<ILocation, Long>> distances;
 
     public TestDistanceMatrix() {
         this.distances = new HashMap<>();
     }
 
     @Override
-    public boolean connected(IPosition from, IPosition to) {
+    public boolean connected(ILocation from, ILocation to) {
         return distances.containsKey(from) && distances.get(from).containsKey(to);
     }
 
     @Override
-    public long getDistance(IPosition from, IPosition to) {
+    public long getDistance(ILocation from, ILocation to) {
         return distances.get(from).get(to);
     }
 
-    public void addUndirectedConnection(IPosition positionA, IPosition positionB, long distance) {
+    public void addUndirectedConnection(ILocation positionA, ILocation positionB, long distance) {
         addDirectedConnection(positionA, positionB, distance);
         addDirectedConnection(positionB, positionA, distance);
     }
 
-    private void addDirectedConnection(IPosition positionA, IPosition positionB, long distance) {
+    private void addDirectedConnection(ILocation positionA, ILocation positionB, long distance) {
         distances.putIfAbsent(positionA, new HashMap<>());
         distances.get(positionA).put(positionB, distance);
     }

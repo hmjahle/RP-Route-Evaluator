@@ -2,7 +2,7 @@ package com.visma.of.rp.routeevaluator.solver.searchGraph;
 
 
 import com.visma.of.rp.routeevaluator.Interfaces.IDistanceMatrix;
-import com.visma.of.rp.routeevaluator.Interfaces.IPosition;
+import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 import com.visma.of.rp.routeevaluator.transportInfo.TransportMode;
 import com.visma.of.rp.routeevaluator.transportInfo.TravelInfo;
@@ -22,7 +22,7 @@ public class SearchGraph {
     private TransportMode currentTransportMode;
     private long robustTimeSeconds;
 
-    public SearchGraph(Map<TransportMode, IDistanceMatrix> distanceMatrixMatrices, Collection<ITask> tasks, IPosition officePosition, long robustTimeSeconds) {
+    public SearchGraph(Map<TransportMode, IDistanceMatrix> distanceMatrixMatrices, Collection<ITask> tasks, ILocation officePosition, long robustTimeSeconds) {
         this.robustTimeSeconds = robustTimeSeconds;
         this.nodes = new ArrayList<>();
         this.edgesAll = new HashSet<>();
@@ -49,7 +49,7 @@ public class SearchGraph {
         return edgeId++;
     }
 
-    private void populateGraph(Map<TransportMode, IDistanceMatrix> distanceMatrixMatrices, Collection<ITask> tasks, IPosition officePosition) {
+    private void populateGraph(Map<TransportMode, IDistanceMatrix> distanceMatrixMatrices, Collection<ITask> tasks, ILocation officePosition) {
         addNodesToGraph(tasks, officePosition);
         addTravelInfo(distanceMatrixMatrices);
         addEdges();
@@ -79,11 +79,11 @@ public class SearchGraph {
         }
     }
 
-    private void addNodesToGraph(Collection<ITask> tasks, IPosition officePosition) {
+    private void addNodesToGraph(Collection<ITask> tasks, ILocation officePosition) {
         office = new Node(getNewNodeId(), null, officePosition);
         nodes.add(office);
         for (ITask task : tasks) {
-            Node node = new Node(getNewNodeId(), task, task.getPosition());
+            Node node = new Node(getNewNodeId(), task, task.getLocation());
             nodes.add(node);
             nodesToTask.put(task, node);
         }

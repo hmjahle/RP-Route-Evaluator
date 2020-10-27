@@ -56,9 +56,9 @@ public interface ITask {
     long getSyncedWithIntervalDiff();
 
     /**
-     * The position where the task has to be performed.
-     * @return The tasks position or @null if the task has no physical appearance.
+     * The location where the task has to be performed.
+     * @return The tasks location or @null if the task has no physical appearance.
      */
-    IPosition getPosition();
+    ILocation getLocation();
 
 }

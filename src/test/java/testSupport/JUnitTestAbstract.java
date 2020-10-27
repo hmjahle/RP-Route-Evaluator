@@ -1,7 +1,7 @@
 package testSupport;
 
 import com.visma.of.rp.routeevaluator.Interfaces.IDistanceMatrix;
-import com.visma.of.rp.routeevaluator.Interfaces.IPosition;
+import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 import com.visma.of.rp.routeevaluator.objectives.Objective;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
@@ -21,11 +21,11 @@ public abstract class JUnitTestAbstract {
         return new Label(searchInfo, null, graph.getOffice(), graph.getOffice(), null, new Objective(0), 0, 0, new ResourceOneElement(0), 0);
     }
 
-    protected IPosition createOffice() {
-        return new TestPosition(true);
+    protected ILocation createOffice() {
+        return new TestLocation(true);
     }
 
-    protected SearchGraph buildGraph(IPosition office, Collection<ITask> tasks, IDistanceMatrix distanceMatrix) {
+    protected SearchGraph buildGraph(ILocation office, Collection<ITask> tasks, IDistanceMatrix distanceMatrix) {
         Map<TransportMode, IDistanceMatrix> distanceMatrices = new HashMap<>();
         distanceMatrices.put(TransportMode.DRIVE, distanceMatrix);
         SearchGraph graph = new SearchGraph(distanceMatrices, tasks, office, 0);
@@ -34,6 +34,6 @@ public abstract class JUnitTestAbstract {
     }
 
     protected ITask createStandardTask(long duration, long startTime, long endTime) {
-        return new TestTask(duration, startTime, endTime, false, false, true, 0, 0, new TestPosition(false));
+        return new TestTask(duration, startTime, endTime, false, false, true, 0, 0, new TestLocation(false));
     }
 }

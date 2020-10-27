@@ -1,6 +1,6 @@
 package com.visma.of.rp.routeevaluator;
 
-import com.visma.of.rp.routeevaluator.Interfaces.IPosition;
+import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ExtendToInfo;
@@ -18,14 +18,14 @@ public class LabelExtendAlongTest extends JUnitTestAbstract {
 
     @Test
     public void singleTask() {
-        IPosition office = createOffice();
+        ILocation office = createOffice();
         ITask task = createStandardTask(1, 2, 5);
 
         Collection<ITask> tasks = new ArrayList<>();
         tasks.add(task);
 
         TestDistanceMatrix distanceMatrix = new TestDistanceMatrix();
-        distanceMatrix.addUndirectedConnection(office, task.getPosition(), 1);
+        distanceMatrix.addUndirectedConnection(office, task.getLocation(), 1);
         SearchGraph graph = buildGraph(office, tasks, distanceMatrix);
         SearchInfo searchInfo = new SearchInfo(graph);
 
@@ -33,7 +33,7 @@ public class LabelExtendAlongTest extends JUnitTestAbstract {
         Label newLabel = label.extendAlong(new ExtendToInfo(graph.getNode(task), 1));
 
         Assert.assertNotNull(newLabel);
-        Assert.assertEquals("Position should be node: ", "1", newLabel.getPhysicalPosition().toString());
+        Assert.assertEquals("Position should be node: ", "1", newLabel.getPhysicalLocation().toString());
         Assert.assertEquals("Current time should be: ", 2, newLabel.getCurrentTime());
         Assert.assertEquals("Cost should be: ", 0.0, newLabel.getObjective().getObjectiveValue(), 1E-6);
     }

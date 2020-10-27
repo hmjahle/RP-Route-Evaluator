@@ -1,7 +1,7 @@
 package com.visma.of.rp.routeevaluator;
 
 import com.visma.of.rp.routeevaluator.Interfaces.IDistanceMatrix;
-import com.visma.of.rp.routeevaluator.Interfaces.IPosition;
+import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 import com.visma.of.rp.routeevaluator.routeResult.RouteSimulatorResult;
@@ -20,7 +20,7 @@ public class simulateByOrderOfTaskTest extends JUnitTestAbstract {
     @Test
     public void simpleFiveTaskEvaluation() {
 
-        IPosition office = createOffice();
+        ILocation office = createOffice();
         List<ITask> tasks = createTasks();
         Map<TransportMode, IDistanceMatrix> distanceMatrices = createIDistanceMatrix(office, tasks);
 
@@ -38,13 +38,13 @@ public class simulateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
     }
 
-    private Map<TransportMode, IDistanceMatrix> createIDistanceMatrix(IPosition office, Collection<ITask> tasks) {
+    private Map<TransportMode, IDistanceMatrix> createIDistanceMatrix(ILocation office, Collection<ITask> tasks) {
         TestDistanceMatrix distanceMatrix = new TestDistanceMatrix();
         for (ITask taskA : tasks) {
-            distanceMatrix.addUndirectedConnection(office, taskA.getPosition(), 2);
+            distanceMatrix.addUndirectedConnection(office, taskA.getLocation(), 2);
             for (ITask taskB : tasks)
                 if (taskA != taskB)
-                    distanceMatrix.addUndirectedConnection(taskA.getPosition(), taskB.getPosition(), 1);
+                    distanceMatrix.addUndirectedConnection(taskA.getLocation(), taskB.getLocation(), 1);
         }
         Map<TransportMode, IDistanceMatrix> distanceMatrices = new HashMap<>();
         distanceMatrices.put(TransportMode.DRIVE, distanceMatrix);
