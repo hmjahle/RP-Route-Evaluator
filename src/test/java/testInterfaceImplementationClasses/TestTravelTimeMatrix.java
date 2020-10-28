@@ -27,13 +27,13 @@ public class TestTravelTimeMatrix implements ITravelTimeMatrix {
         return travelTimes.get(from).get(to);
     }
 
-    public void addUndirectedConnection(ILocation positionA, ILocation positionB, long distance) {
-        addDirectedConnection(positionA, positionB, distance);
-        addDirectedConnection(positionB, positionA, distance);
+    public void addUndirectedConnection(ILocation locationA, ILocation locationB, long distance) {
+        addDirectedConnection(locationA, locationB, distance);
+        addDirectedConnection(locationB, locationA, distance);
     }
 
-    private void addDirectedConnection(ILocation positionA, ILocation positionB, long distance) {
-        travelTimes.putIfAbsent(positionA, new HashMap<>());
-        travelTimes.get(positionA).put(positionB, distance);
+    public void addDirectedConnection(ILocation locationA, ILocation locationB, long distance) {
+        travelTimes.putIfAbsent(locationA, new HashMap<>());
+        travelTimes.get(locationA).put(locationB, distance);
     }
 }
