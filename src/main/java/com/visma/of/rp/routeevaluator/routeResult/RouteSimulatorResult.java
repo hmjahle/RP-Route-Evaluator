@@ -3,7 +3,6 @@ package com.visma.of.rp.routeevaluator.routeResult;
 
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
-import com.visma.of.rp.routeevaluator.transportInfo.TravelInfo;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,7 +15,6 @@ public class RouteSimulatorResult {
     private Map<ITask, Visit> taskToAssignedVisit;
     private Map<ITask, Long> syncedTaskToChromosomeStartTime;
     private Long totalTravelTime;
-    private Long totalTravelTimeIncludingParkingAndRobustness;
     private Long totalTimeToPatients;
     private Long totalTimeInOffice;
     private Long timeOfOfficeReturn;
@@ -36,7 +34,6 @@ public class RouteSimulatorResult {
         this.taskToAssignedVisit = new HashMap<>(copy.taskToAssignedVisit);
         this.syncedTaskToChromosomeStartTime = new HashMap<>(copy.syncedTaskToChromosomeStartTime);
         this.totalTravelTime = copy.totalTravelTime;
-        this.totalTravelTimeIncludingParkingAndRobustness = copy.totalTravelTimeIncludingParkingAndRobustness;
         this.totalTimeToPatients = copy.totalTimeToPatients;
         this.totalTimeInOffice = copy.totalTimeInOffice;
         this.timeOfOfficeReturn = copy.timeOfOfficeReturn;
@@ -45,17 +42,19 @@ public class RouteSimulatorResult {
 
     private void resetDataStructureForEmployee() {
         totalTravelTime = 0L;
-        totalTravelTimeIncludingParkingAndRobustness = 0L;
         totalTimeToPatients = 0L;
         totalTimeInOffice = 0L;
         objectiveValue = 0;
     }
 
-    public void addVisits(Visit[] visits, int visitsCnt, TravelInfo travelInfo) {
+    public void updateTotalTravelTime(long totalTravelTime) {
+        this.totalTravelTime = totalTravelTime;
+    }
+
+    public void addVisits(Visit[] visits, int visitsCnt) {
         for (int i = 0; i < visitsCnt; i++) {
             addVisitToVisitSolution(visits[i]);
         }
-        updateTravelTimes(travelInfo);
     }
 
     public void addChromosomeStartTime(ITask task, long startTime) {
@@ -74,23 +73,13 @@ public class RouteSimulatorResult {
         this.timeOfOfficeReturn = timeOfOfficeReturn;
     }
 
-    public void updateTimeOfOfficeReturn(Long timeOfOfficeReturn, TravelInfo travelInfo) {
-        updateTravelTimes(travelInfo);
-        this.timeOfOfficeReturn = timeOfOfficeReturn;
-    }
 
     private void addVisitToVisitSolution(Visit visit) {
         visitSolution.add(visit);
         taskToAssignedVisit.put(visit.getTask(), visit);
     }
 
-    private void updateTravelTimes(TravelInfo travelInfo) {
-        totalTravelTime += travelInfo.getRawTravelTime();
-        totalTravelTimeIncludingParkingAndRobustness += travelInfo.getTravelTimeWithParking();
-    }
-
-
-    public IShift getEmployeeWorkShift(){
+    public IShift getEmployeeWorkShift() {
         return employeeWorkShift;
     }
 
@@ -118,9 +107,6 @@ public class RouteSimulatorResult {
         return objectiveValue;
     }
 
-    public Long getTotalTravelTimeIncludingParkingAndRobustness() {
-        return totalTravelTimeIncludingParkingAndRobustness;
-    }
 
     public Long getTimeOfOfficeReturn() {
         return timeOfOfficeReturn;
@@ -128,7 +114,7 @@ public class RouteSimulatorResult {
 
     public Long calculateAndGetTotalFreeTime() {
         long workShiftDuration = employeeWorkShift.getDuration();
-        return Math.max(0, workShiftDuration - totalTimeToPatients - totalTimeInOffice - totalTravelTimeIncludingParkingAndRobustness);
+        return Math.max(0, workShiftDuration - totalTimeToPatients - totalTimeInOffice - totalTravelTime);
     }
 
     public List<ITask> extractEmployeeRoute() {

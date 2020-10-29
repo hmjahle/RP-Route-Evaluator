@@ -1,19 +1,17 @@
 package testSupport;
 
-import com.visma.of.rp.routeevaluator.Interfaces.ITravelTimeMatrix;
 import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
+import com.visma.of.rp.routeevaluator.Interfaces.ITravelTimeMatrix;
 import com.visma.of.rp.routeevaluator.objectives.Objective;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Label;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ResourceOneElement;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.SearchInfo;
-import com.visma.of.rp.routeevaluator.transportInfo.TransportMode;
-import testInterfaceImplementationClasses.*;
+import testInterfaceImplementationClasses.TestLocation;
+import testInterfaceImplementationClasses.TestTask;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 public abstract class JUnitTestAbstract {
 
@@ -26,11 +24,7 @@ public abstract class JUnitTestAbstract {
     }
 
     protected SearchGraph buildGraph(ILocation office, Collection<ITask> tasks, ITravelTimeMatrix distanceMatrix) {
-        Map<TransportMode, ITravelTimeMatrix> distanceMatrices = new HashMap<>();
-        distanceMatrices.put(TransportMode.DRIVE, distanceMatrix);
-        SearchGraph graph = new SearchGraph(distanceMatrices, tasks, office, 0);
-        graph.setEdgesTransportMode(TransportMode.DRIVE);
-        return graph;
+        return new SearchGraph(distanceMatrix, tasks, office, 0);
     }
 
     protected ITask createStandardTask(long duration, long startTime, long endTime) {

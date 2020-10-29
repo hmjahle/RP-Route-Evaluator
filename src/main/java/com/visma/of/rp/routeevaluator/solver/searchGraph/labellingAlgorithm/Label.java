@@ -1,9 +1,8 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
+import com.visma.of.rp.routeevaluator.objectives.Objective;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Edge;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
-import com.visma.of.rp.routeevaluator.transportInfo.TravelInfo;
-import com.visma.of.rp.routeevaluator.objectives.Objective;
 
 
 public class Label implements Comparable<Label> {
@@ -20,7 +19,7 @@ public class Label implements Comparable<Label> {
     private long robustTimeSeconds;
     private long actualRobustTimeSeconds;
 
-     public Label(SearchInfo searchInfo, Label previous, Node currentNode, Node physicalLocation, Edge edge, Objective objective, long currentTime, long extraDrivingTime, IResource resources, long robustTimeSeconds) {
+    public Label(SearchInfo searchInfo, Label previous, Node currentNode, Node physicalLocation, Edge edge, Objective objective, long currentTime, long extraDrivingTime, IResource resources, long robustTimeSeconds) {
         this.previous = previous;
         this.edge = edge;
         this.node = currentNode;
@@ -68,15 +67,14 @@ public class Label implements Comparable<Label> {
         } else {
             newPhysicalPosition = physicalLocation;
         }
-        TravelInfo travelInfo = getTravelInfo(travelledEdge);
-        long travelTimeWithParking = travelInfo != null ? travelInfo.getTravelTimeWithParking() : 0;
-        long savedTravelTimeDueToNonPhysicalTasks = Math.min(travelTimeWithParking, extraDrivingTime);
+        long travelTime = getTravelTime(travelledEdge);
+        long savedTravelTimeDueToNonPhysicalTasks = Math.min(travelTime, extraDrivingTime);
         long baseTime = currentTime - savedTravelTimeDueToNonPhysicalTasks + node.getDurationSeconds();
-        long arrivalTimeNextTask = baseTime + travelTimeWithParking + actualRobustTimeSeconds;
+        long arrivalTimeNextTask = baseTime + travelTime + actualRobustTimeSeconds;
         long earliestStartTime = getEarliestStartTime(extendToInfo.getToNode());
 
         return generateLabel(extendToInfo, newPhysicalPosition, travelledEdge,
-                travelTimeWithParking, baseTime + travelTimeWithParking,
+                travelTime, baseTime + travelTime,
                 Math.max(arrivalTimeNextTask, earliestStartTime),
                 getExtraDrivingTime(extendToInfo.getToNode(), earliestStartTime, savedTravelTimeDueToNonPhysicalTasks, arrivalTimeNextTask));
     }
@@ -124,13 +122,17 @@ public class Label implements Comparable<Label> {
         return earliestStartTime;
     }
 
-    private TravelInfo getTravelInfo(Edge edge) {
+    private long getTravelTime(Edge edge) {
         if (shouldNotTravel(edge)) {
-            return new TravelInfo(0, 0);
+            return 0;
         } else if (physicallyAtCurrentNode(this.physicalLocation, this.node)) {
-            return edge.getTravelInfo();
+            System.out.println(edge);
+            return edge.
+                    getTravelTime();
         } else {
-            return getEdgeToNextNode(edge.getToNode()).getTravelInfo();
+            return getEdgeToNextNode(edge.
+                    getToNode()).
+                    getTravelTime();
         }
     }
 

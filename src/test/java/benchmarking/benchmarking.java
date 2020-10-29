@@ -3,11 +3,9 @@ package benchmarking;
 import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
-import com.visma.of.rp.routeevaluator.Interfaces.ITravelTimeMatrix;
 import com.visma.of.rp.routeevaluator.routeResult.RouteSimulatorResult;
 import com.visma.of.rp.routeevaluator.routeResult.Visit;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
-import com.visma.of.rp.routeevaluator.transportInfo.TransportMode;
 import testInterfaceImplementationClasses.TestLocation;
 import testInterfaceImplementationClasses.TestShift;
 import testInterfaceImplementationClasses.TestTask;
@@ -15,7 +13,10 @@ import testInterfaceImplementationClasses.TestTravelTimeMatrix;
 import testSupport.JUnitTestAbstract;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
 
 import static java.lang.Math.*;
 
@@ -48,14 +49,9 @@ public class benchmarking extends JUnitTestAbstract {
         TestLocation office = addOffice(locations, officeLong, officeLat);
         List<ITask> tasks = createTasks(locations);
         List<TestTravelTimeMatrix> travelTimeMatrices = getTestTravelTimeMatrices(locations);
-
-        Map<TransportMode, ITravelTimeMatrix> travelTimes = new HashMap<>();
-        travelTimes.put(TransportMode.DRIVE, travelTimeMatrices.get(0));
-        RouteEvaluator routeEvaluator1 = new RouteEvaluator(0, travelTimes, tasks, office);
-        travelTimes.put(TransportMode.DRIVE, travelTimeMatrices.get(1));
-        RouteEvaluator routeEvaluator2 = new RouteEvaluator(0, travelTimes, tasks, office);
-        travelTimes.put(TransportMode.DRIVE, travelTimeMatrices.get(2));
-        RouteEvaluator routeEvaluator3 = new RouteEvaluator(0, travelTimes, tasks, office);
+        RouteEvaluator routeEvaluator1 = new RouteEvaluator(0, travelTimeMatrices.get(0), tasks, office);
+        RouteEvaluator routeEvaluator2 = new RouteEvaluator(0, travelTimeMatrices.get(1), tasks, office);
+        RouteEvaluator routeEvaluator3 = new RouteEvaluator(0, travelTimeMatrices.get(2), tasks, office);
         List<ITask> newTasks = new ArrayList<>();
 
         TestTask testTask = (TestTask) tasks.get(125);
@@ -74,7 +70,7 @@ public class benchmarking extends JUnitTestAbstract {
         newTasks.add(tasks.get(155));
         newTasks.add(tasks.get(77));
 
-        IShift shift = new TestShift(3600 * 8, 3600 * 8, 3600 * 16, TransportMode.DRIVE);
+        IShift shift = new TestShift(3600 * 8, 3600 * 8, 3600 * 16);
         for (int i = 0; i < 1000000; i++) {
 
             RouteSimulatorResult result1 = routeEvaluator1.simulateRouteByTheOrderOfTasks(newTasks, null, shift);
