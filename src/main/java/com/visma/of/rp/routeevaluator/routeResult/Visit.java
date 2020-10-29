@@ -55,15 +55,4 @@ public class Visit {
         return robustnessTimeSeconds;
     }
 
-    private static String makeStringSize(String id, int size) {
-        // only for printout
-        int length = id.length();
-        StringBuilder ret = new StringBuilder(id);
-        for (int i = 0; i < size - length; i++) {
-            ret.append(" ");
-        }
-        return ret.toString();
-    }
-
-
 }

@@ -61,4 +61,10 @@ public interface ITask {
      */
     ILocation getLocation();
 
+    /**
+     * Unique task id.
+     * @return Task id as string.
+     */
+    String getId();
+
 }
