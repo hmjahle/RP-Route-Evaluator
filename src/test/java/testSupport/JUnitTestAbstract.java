@@ -34,6 +34,6 @@ public abstract class JUnitTestAbstract {
     }
 
     protected ITask createStandardTask(long duration, long startTime, long endTime) {
-        return new TestTask(duration, startTime, endTime, false, false, true, 0, 0, new TestLocation(false),-1);
+        return new TestTask(duration, startTime, endTime, false, false, true, 0, 0, new TestLocation(false),"x");
     }
 }

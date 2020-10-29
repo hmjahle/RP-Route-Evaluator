@@ -62,9 +62,9 @@ public interface ITask {
     ILocation getLocation();
 
     /**
-     * Task unique id number
-     * @return Integer task id.
+     * Unique task id.
+     * @return Task id as string.
      */
-    int getId();
+    String getId();
 
 }

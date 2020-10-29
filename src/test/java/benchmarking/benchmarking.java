@@ -33,12 +33,12 @@ public class benchmarking extends JUnitTestAbstract {
         List<TestLocation> locationsGridCircle = createLocationsGridCircle(numberOfTasks, locationsCircle, locationsGrid);
 
 
-        test(locationsCircle,0,0);
-        test(locationsGrid,0,0);
-        test(locationsGridCircle,0,0);
+        test(locationsCircle, 0, 0);
+        test(locationsGrid, 0, 0);
+        test(locationsGridCircle, 0, 0);
     }
 
-    private static void test(List<TestLocation> locations,long officeLong, long officeLat) {
+    private static void test(List<TestLocation> locations, long officeLong, long officeLat) {
 
         TestLocation office = addOffice(locations, officeLong, officeLat);
         List<ITask> tasks = createTasks(locations);
@@ -95,7 +95,7 @@ public class benchmarking extends JUnitTestAbstract {
         List<ITask> tasks = new ArrayList<>();
         int taskId = 0;
         for (ILocation location : locations)
-            tasks.add(new TestTask(duration, startTime, endTime, false, false, true, 0, 0, location, taskId++));
+            tasks.add(new TestTask(duration, startTime, endTime, false, false, true, 0, 0, location, "t-" + (taskId++)));
         return tasks;
     }
 

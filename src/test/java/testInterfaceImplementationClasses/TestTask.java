@@ -17,10 +17,9 @@ public class TestTask implements ITask {
     int requiredSkillLevel;
     long syncedWithIntervalDiffSeconds;
     ILocation location;
+    String id;
 
-    int id;
-
-    public TestTask(long duration, long startTime, long endTime, boolean isStrict, boolean isSynced, boolean requirePhysicalAppearance, int requiredSkillLevel, long syncedWithIntervalDiffSeconds, ILocation location, int id) {
+    public TestTask(long duration, long startTime, long endTime, boolean isStrict, boolean isSynced, boolean requirePhysicalAppearance, int requiredSkillLevel, long syncedWithIntervalDiffSeconds, ILocation location, String id) {
         this.duration = duration;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -79,7 +78,7 @@ public class TestTask implements ITask {
     }
 
     @Override
-    public int getId() {
+    public String getId() {
         return id;
     }
 
