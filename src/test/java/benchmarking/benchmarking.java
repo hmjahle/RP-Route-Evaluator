@@ -23,7 +23,7 @@ public class benchmarking extends JUnitTestAbstract {
 
     public static void main(String[] args) {
 
-        int numberOfTasks = 100;
+        int numberOfTasks = 200;
         int gridMaxDistanceWidth = 500;
         int minDistanceToCenter = 100;
         int maxDistanceToCenter = 500;
@@ -31,7 +31,6 @@ public class benchmarking extends JUnitTestAbstract {
         List<TestLocation> locationsCircle = createLocationsOnCircle(numberOfTasks, minDistanceToCenter, maxDistanceToCenter);
         List<TestLocation> locationsGrid = createGridLocations(numberOfTasks, gridMaxDistanceWidth);
         List<TestLocation> locationsGridCircle = createLocationsGridCircle(numberOfTasks, locationsCircle, locationsGrid);
-
 
         test(locationsCircle, 0, 0);
         test(locationsGrid, 0, 0);
@@ -43,7 +42,6 @@ public class benchmarking extends JUnitTestAbstract {
         TestLocation office = addOffice(locations, officeLong, officeLat);
         List<ITask> tasks = createTasks(locations);
         List<TestTravelTimeMatrix> travelTimeMatrices = getTestTravelTimeMatrices(locations);
-
 
         Map<TransportMode, ITravelTimeMatrix> travelTimes = new HashMap<>();
         travelTimes.put(TransportMode.DRIVE, travelTimeMatrices.get(0));
@@ -79,12 +77,21 @@ public class benchmarking extends JUnitTestAbstract {
 
     private static List<TestLocation> createGridLocations(int numberOfTasks, int gridMaxDistanceWidth) {
         List<TestLocation> locations = new ArrayList<>();
-        long diff = numberOfTasks / 2;
-        for (int lon = 0; lon <= gridMaxDistanceWidth; lon += gridMaxDistanceWidth / diff)
-            for (int lat = 0; lat <= gridMaxDistanceWidth; lat += gridMaxDistanceWidth / diff) {
+        long diff = (long) Math.sqrt(numberOfTasks);
+        long increment = gridMaxDistanceWidth / diff;
+        int i = 0;
+        int lat = 0;
+        while (i < numberOfTasks) {
+            for (int lon = 0; lon < gridMaxDistanceWidth; lon += increment) {
                 TestLocation location = new TestLocation(false, lon, lat);
                 locations.add(location);
+                lat += increment;
+                i++;
+                if (i >= numberOfTasks)
+                    break;
             }
+        }
+
         return locations;
     }
 
@@ -106,12 +113,12 @@ public class benchmarking extends JUnitTestAbstract {
     }
 
     private static void printResult(RouteSimulatorResult result) {
-        String visitString = "";
+        String visitString = "Visits: " + result.getVisitSolution().size() + "\n";
         for (Visit visit : result.getVisitSolution()) {
             visitString += "\t" + printVisit(visit, 0);
             visitString += "\n";
         }
-        System.out.println("\n" + visitString + "\n");
+        System.out.println("\n" + visitString);
     }
 
 
@@ -155,7 +162,6 @@ public class benchmarking extends JUnitTestAbstract {
                 double angle = degree * PI / 180;
                 initialStraightLineToOffice += straightLineToOfficeIncrease;
                 TestLocation location = createTestLocationOnCircle(0, 0, initialStraightLineToOffice, angle);
-                System.out.println(location);
                 locations.add(location);
                 if (i >= numberOfLocations)
                     break;
