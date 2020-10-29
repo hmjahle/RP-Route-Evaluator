@@ -126,7 +126,6 @@ public class Label implements Comparable<Label> {
         if (shouldNotTravel(edge)) {
             return 0;
         } else if (physicallyAtCurrentNode(this.physicalLocation, this.node)) {
-            System.out.println(edge);
             return edge.
                     getTravelTime();
         } else {
