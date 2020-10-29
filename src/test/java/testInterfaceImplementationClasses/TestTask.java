@@ -13,6 +13,11 @@ public class TestTask implements ITask {
     long endTime;
     boolean isStrict;
     boolean isSynced;
+
+    public void setRequirePhysicalAppearance(boolean requirePhysicalAppearance) {
+        this.requirePhysicalAppearance = requirePhysicalAppearance;
+    }
+
     boolean requirePhysicalAppearance;
     int requiredSkillLevel;
     long syncedWithIntervalDiffSeconds;
