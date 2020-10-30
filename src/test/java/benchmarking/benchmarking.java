@@ -32,9 +32,15 @@ public class benchmarking extends JUnitTestAbstract {
         List<TestLocation> locationsGrid = createGridLocations(numberOfTasks, gridMaxDistanceWidth);
         List<TestLocation> locationsGridCircle = createLocationsGridCircle(numberOfTasks, locationsCircle, locationsGrid);
 
+        long startTime = System.currentTimeMillis();
         test(locationsCircle, 0, 0);
         test(locationsGrid, 0, 0);
         test(locationsGridCircle, 0, 0);
+        test(locationsCircle, -200, -300);
+        test(locationsGrid, -400, 0);
+        test(locationsGridCircle, 200, 200);
+        long endTime = System.currentTimeMillis();
+        System.out.println("Runtime: " + (endTime - startTime));
     }
 
     private static void test(List<TestLocation> locations, long officeLong, long officeLat) {
@@ -51,17 +57,33 @@ public class benchmarking extends JUnitTestAbstract {
         travelTimes.put(TransportMode.DRIVE, travelTimeMatrices.get(2));
         RouteEvaluator routeEvaluator3 = new RouteEvaluator(0, travelTimes, tasks, office);
         List<ITask> newTasks = new ArrayList<>();
+
+        TestTask testTask = (TestTask) tasks.get(125);
+        testTask.setRequirePhysicalAppearance(false);
+        testTask = (TestTask) tasks.get(155);
+        testTask.setRequirePhysicalAppearance(false);
         newTasks.add(tasks.get(1));
-        newTasks.add(tasks.get(5));
-        newTasks.add(tasks.get(7));
+        newTasks.add(tasks.get(85));
+        newTasks.add(tasks.get(125));
+        newTasks.add(tasks.get(195));
+        newTasks.add(tasks.get(2));
+        newTasks.add(tasks.get(133));
+        newTasks.add(tasks.get(111));
+        newTasks.add(tasks.get(39));
+        newTasks.add(tasks.get(45));
+        newTasks.add(tasks.get(155));
+        newTasks.add(tasks.get(77));
 
         IShift shift = new TestShift(3600 * 8, 3600 * 8, 3600 * 16, TransportMode.DRIVE);
-        RouteSimulatorResult result1 = routeEvaluator1.simulateRouteByTheOrderOfTasks(newTasks, null, shift);
-        RouteSimulatorResult result2 = routeEvaluator2.simulateRouteByTheOrderOfTasks(newTasks, null, shift);
-        RouteSimulatorResult result3 = routeEvaluator3.simulateRouteByTheOrderOfTasks(newTasks, null, shift);
-        printResult(result1);
-        printResult(result2);
-        printResult(result3);
+        for (int i = 0; i < 1000000; i++) {
+
+            RouteSimulatorResult result1 = routeEvaluator1.simulateRouteByTheOrderOfTasks(newTasks, null, shift);
+            RouteSimulatorResult result2 = routeEvaluator2.simulateRouteByTheOrderOfTasks(newTasks, null, shift);
+            RouteSimulatorResult result3 = routeEvaluator3.simulateRouteByTheOrderOfTasks(newTasks, null, shift);
+        }
+//        printResult(result1);
+//        printResult(result2);
+//        printResult(result3);
     }
 
     private static List<TestLocation> createLocationsGridCircle(int numberOfTasks, List<TestLocation> locationsCircle, List<TestLocation> locationsGrid) {
