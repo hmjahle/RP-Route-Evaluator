@@ -3,7 +3,7 @@ package benchmarking;
 import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
-import com.visma.of.rp.routeevaluator.routeResult.RouteSimulatorResult;
+import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.routeResult.Visit;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
 import testInterfaceImplementationClasses.TestLocation;
@@ -73,9 +73,9 @@ public class benchmarking extends JUnitTestAbstract {
         IShift shift = new TestShift(3600 * 8, 3600 * 8, 3600 * 16);
         for (int i = 0; i < 1000000; i++) {
 
-            RouteSimulatorResult result1 = routeEvaluator1.simulateRouteByTheOrderOfTasks(newTasks, null, shift);
-            RouteSimulatorResult result2 = routeEvaluator2.simulateRouteByTheOrderOfTasks(newTasks, null, shift);
-            RouteSimulatorResult result3 = routeEvaluator3.simulateRouteByTheOrderOfTasks(newTasks, null, shift);
+            RouteEvaluatorResult result1 = routeEvaluator1.evaluateRouteByTheOrderOfTasks(newTasks, null, shift);
+            RouteEvaluatorResult result2 = routeEvaluator2.evaluateRouteByTheOrderOfTasks(newTasks, null, shift);
+            RouteEvaluatorResult result3 = routeEvaluator3.evaluateRouteByTheOrderOfTasks(newTasks, null, shift);
         }
 //        printResult(result1);
 //        printResult(result2);
@@ -130,7 +130,7 @@ public class benchmarking extends JUnitTestAbstract {
         return office;
     }
 
-    public static void printResult(RouteSimulatorResult result) {
+    public static void printResult(RouteEvaluatorResult result) {
         String visitString = "Visits: " + result.getVisitSolution().size() + "\n";
         for (Visit visit : result.getVisitSolution()) {
             visitString += "\t" + printVisit(visit, 0);

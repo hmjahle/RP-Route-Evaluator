@@ -4,7 +4,7 @@ import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 import com.visma.of.rp.routeevaluator.Interfaces.ITravelTimeMatrix;
-import com.visma.of.rp.routeevaluator.routeResult.RouteSimulatorResult;
+import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,7 +29,7 @@ public class SimulateByOrderOfTaskTest extends JUnitTestAbstract {
         IShift shift = new TestShift(14400, 1516176000, 1516147200);
 
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        RouteSimulatorResult result = routeEvaluator.simulateRouteByTheOrderOfTasks(tasks, null, shift);
+        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, null, shift);
         Assert.assertEquals("Must return at correct time!", 1516176124, result.getTimeOfOfficeReturn().longValue());
     }
 
@@ -43,7 +43,7 @@ public class SimulateByOrderOfTaskTest extends JUnitTestAbstract {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
         IShift shift = new TestShift(100, 0, 100);
 
-        RouteSimulatorResult result = routeEvaluator.simulateRouteByTheOrderOfTasks(tasks, null, shift);
+        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, null, shift);
         Assert.assertEquals("Number of visits should be: ", 5, result.getVisitSolution().size());
         Assert.assertEquals("Start time should be: ", 10, result.getVisitSolution().get(0).getStart());
         Assert.assertEquals("Start time should be: ", 20, result.getVisitSolution().get(1).getStart());

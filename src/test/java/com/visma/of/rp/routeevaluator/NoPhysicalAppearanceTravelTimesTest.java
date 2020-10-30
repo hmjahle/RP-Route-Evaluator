@@ -3,7 +3,7 @@ package com.visma.of.rp.routeevaluator;
 import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
-import com.visma.of.rp.routeevaluator.routeResult.RouteSimulatorResult;
+import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
 import org.junit.Assert;
 import org.junit.Before;
@@ -45,7 +45,7 @@ public class NoPhysicalAppearanceTravelTimesTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(1));
         tasks.add(allTasks.get(2));
 
-        RouteSimulatorResult result = evaluateRoute(tasks);
+        RouteEvaluatorResult result = evaluateRoute(tasks);
 
         Assert.assertEquals(getTime(0, 6, 28), getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
@@ -60,7 +60,7 @@ public class NoPhysicalAppearanceTravelTimesTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(1));
         tasks.add(allTasks.get(4));
 
-        RouteSimulatorResult result = evaluateRoute(tasks);
+        RouteEvaluatorResult result = evaluateRoute(tasks);
 
         Assert.assertEquals(getTime(0, 6, 28), getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
@@ -76,7 +76,7 @@ public class NoPhysicalAppearanceTravelTimesTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(1));
         tasks.add(allTasks.get(4));
 
-        RouteSimulatorResult result = evaluateRoute(tasks);
+        RouteEvaluatorResult result = evaluateRoute(tasks);
 
         Assert.assertEquals(getTime(0, 6, 28), getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
@@ -91,7 +91,7 @@ public class NoPhysicalAppearanceTravelTimesTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(1));
         tasks.add(allTasks.get(2));
 
-        RouteSimulatorResult result = evaluateRoute(tasks);
+        RouteEvaluatorResult result = evaluateRoute(tasks);
 
         Assert.assertEquals(getTime(0, 6, 28), getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
@@ -106,7 +106,7 @@ public class NoPhysicalAppearanceTravelTimesTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(1));
         tasks.add(allTasks.get(6));
 
-        RouteSimulatorResult result = evaluateRoute(tasks);
+        RouteEvaluatorResult result = evaluateRoute(tasks);
 
         Assert.assertEquals(getTime(0, 6, 28), getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
@@ -157,8 +157,8 @@ public class NoPhysicalAppearanceTravelTimesTest extends JUnitTestAbstract {
         return travelTimeMatrix;
     }
 
-    private RouteSimulatorResult evaluateRoute(List<ITask> tasks) {
+    private RouteEvaluatorResult evaluateRoute(List<ITask> tasks) {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        return routeEvaluator.simulateRouteByTheOrderOfTasks(tasks, null, shift);
+        return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, null, shift);
     }
 }

@@ -3,7 +3,7 @@ package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
 import com.visma.of.rp.routeevaluator.hardConstraints.HardConstraintsIncremental;
 import com.visma.of.rp.routeevaluator.objectives.Objective;
-import com.visma.of.rp.routeevaluator.routeResult.RouteSimulatorResult;
+import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.routeResult.Visit;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 
@@ -59,9 +59,9 @@ public class LabellingAlgorithm {
      * @param nodeExtendInfo       Information on how to extend labels and which resources to use.
      * @param syncedNodesStartTime Intended start time of synced tasks.
      * @param employeeWorkShift    Employee to simulate route for.
-     * @return RouteSimulatorResult or null if route is infeasible.
+     * @return RouteEvaluatorResult or null if route is infeasible.
      */
-    public RouteSimulatorResult solveRouteSimulatorResult(IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime,
+    public RouteEvaluatorResult solveRouteSimulatorResult(IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime,
                                                           long[] syncedNodesLatestStartTime,
                                                           IShift employeeWorkShift) {
         Double totalFitness = solve(nodeExtendInfo, syncedNodesStartTime, syncedNodesLatestStartTime, employeeWorkShift);
@@ -70,12 +70,12 @@ public class LabellingAlgorithm {
         return createRouteSimulatorResult(totalFitness, employeeWorkShift, syncedNodesStartTime);
     }
 
-    private RouteSimulatorResult createRouteSimulatorResult(double totalFitness, IShift employeeWorkShift, long[] syncedNodesStartTime) {
+    private RouteEvaluatorResult createRouteSimulatorResult(double totalFitness, IShift employeeWorkShift, long[] syncedNodesStartTime) {
 
         Label bestLabel = labelsOnDestinationNode.peek();
         if (bestLabel == null)
             return null;
-        RouteSimulatorResult simulatorResult = new RouteSimulatorResult(employeeWorkShift);
+        RouteEvaluatorResult simulatorResult = new RouteEvaluatorResult(employeeWorkShift);
         int visitCnt = extractVisitsAndSyncedStartTime(bestLabel, simulatorResult, syncedNodesStartTime);
         simulatorResult.setObjectiveValue(totalFitness);
         simulatorResult.addVisits(visits, visitCnt);
@@ -127,7 +127,7 @@ public class LabellingAlgorithm {
                 labelsOnDestinationNode.peek().getObjective().getObjectiveValue() < currentLabel.getObjective().getObjectiveValue();
     }
 
-    private int extractVisitsAndSyncedStartTime(Label bestLabel, RouteSimulatorResult result, long[] syncedNodesStartTime) {
+    private int extractVisitsAndSyncedStartTime(Label bestLabel, RouteEvaluatorResult result, long[] syncedNodesStartTime) {
         int labelCnt = collectLabels(bestLabel);
         long totalTravelTime = 0;
         int visitCnt = 0;

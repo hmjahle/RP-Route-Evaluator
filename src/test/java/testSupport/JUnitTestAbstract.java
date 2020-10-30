@@ -4,7 +4,7 @@ import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 import com.visma.of.rp.routeevaluator.Interfaces.ITravelTimeMatrix;
 import com.visma.of.rp.routeevaluator.objectives.Objective;
-import com.visma.of.rp.routeevaluator.routeResult.RouteSimulatorResult;
+import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.routeResult.Visit;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Label;
@@ -46,7 +46,7 @@ public abstract class JUnitTestAbstract {
     }
 
 
-    protected long getVisitTravelTime(RouteSimulatorResult result, int visitNo) {
+    protected long getVisitTravelTime(RouteEvaluatorResult result, int visitNo) {
         Visit visitTask1 = result.getVisitSolution().get(visitNo);
         return visitTask1.getTravelTimeWithParking();
     }
