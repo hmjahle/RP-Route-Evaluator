@@ -8,31 +8,25 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class RouteSimulatorResult {
+public class RouteEvaluatorResult {
 
     private IShift employeeWorkShift;
     private List<Visit> visitSolution;
-    private Map<ITask, Visit> taskToAssignedVisit;
-    private Map<ITask, Long> syncedTaskToChromosomeStartTime;
     private Long totalTravelTime;
     private Long totalTimeToPatients;
     private Long totalTimeInOffice;
     private Long timeOfOfficeReturn;
     private double objectiveValue;
 
-    public RouteSimulatorResult(IShift employeeWorkShift) {
+    public RouteEvaluatorResult(IShift employeeWorkShift) {
         this.employeeWorkShift = employeeWorkShift;
         this.visitSolution = new ArrayList<>();
-        this.taskToAssignedVisit = new HashMap<>();
-        this.syncedTaskToChromosomeStartTime = new HashMap<>();
         resetDataStructureForEmployee();
     }
 
-    RouteSimulatorResult(RouteSimulatorResult copy) {
+    RouteEvaluatorResult(RouteEvaluatorResult copy) {
         this.employeeWorkShift = copy.employeeWorkShift;
         this.visitSolution = new ArrayList<>(copy.visitSolution);
-        this.taskToAssignedVisit = new HashMap<>(copy.taskToAssignedVisit);
-        this.syncedTaskToChromosomeStartTime = new HashMap<>(copy.syncedTaskToChromosomeStartTime);
         this.totalTravelTime = copy.totalTravelTime;
         this.totalTimeToPatients = copy.totalTimeToPatients;
         this.totalTimeInOffice = copy.totalTimeInOffice;
@@ -57,14 +51,6 @@ public class RouteSimulatorResult {
         }
     }
 
-    public void addChromosomeStartTime(ITask task, long startTime) {
-        syncedTaskToChromosomeStartTime.put(task, startTime);
-    }
-
-    public long getChromosomeStartTime(ITask task) {
-        return syncedTaskToChromosomeStartTime.get(task);
-    }
-
     public void setObjectiveValue(double objectiveValue) {
         this.objectiveValue = objectiveValue;
     }
@@ -76,7 +62,6 @@ public class RouteSimulatorResult {
 
     private void addVisitToVisitSolution(Visit visit) {
         visitSolution.add(visit);
-        taskToAssignedVisit.put(visit.getTask(), visit);
     }
 
     public IShift getEmployeeWorkShift() {
@@ -85,10 +70,6 @@ public class RouteSimulatorResult {
 
     public List<Visit> getVisitSolution() {
         return visitSolution;
-    }
-
-    public Map<ITask, Visit> getTaskToAssignedVisit() {
-        return taskToAssignedVisit;
     }
 
     public Long getTotalTravelTime() {
