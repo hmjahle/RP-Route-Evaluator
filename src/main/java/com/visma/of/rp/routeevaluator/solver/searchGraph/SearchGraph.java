@@ -14,7 +14,7 @@ public class SearchGraph {
     private Node office;
     private Set<Edge> edgesAll;
     private TravelTimeSet edgesNodeToNode;
-    private Map<Edge,Long> edgeTravelTime;
+    private Map<Edge, Long> edgeTravelTime;
     private int nodeId;
     private int edgeId;
     private long robustTimeSeconds;
@@ -79,10 +79,12 @@ public class SearchGraph {
     }
 
     private void addEdge(ITravelTimeMatrix travelTimeMatrix, Node node1, Node node2) {
+        if (!travelTimeMatrix.connected(node1.getAddress(), node2.getAddress()))
+            return;
         Edge edge = new Edge(getNewEdgeId(), node1, node2);
-        Long travelTime = travelTimeMatrix.getTravelTime(node1.getAddress(),node2.getAddress());
+        Long travelTime = travelTimeMatrix.getTravelTime(node1.getAddress(), node2.getAddress());
         edge.setTravelTime(travelTime);
-        edgeTravelTime.put(edge,travelTime);
+        edgeTravelTime.put(edge, travelTime);
         edgesAll.add(edge);
     }
 
