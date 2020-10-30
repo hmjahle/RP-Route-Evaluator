@@ -2,14 +2,15 @@ package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
-import com.visma.of.rp.routeevaluator.objectives.IncrementalObjectivesHandler;
-import com.visma.of.rp.routeevaluator.objectives.IncrementalObjectiveInfo;
 import com.visma.of.rp.routeevaluator.hardConstraints.HardConstraintsIncremental;
+import com.visma.of.rp.routeevaluator.objectives.IncrementalObjectiveInfo;
+import com.visma.of.rp.routeevaluator.objectives.IncrementalObjectivesHandler;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.Edge;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 
 
- public class SearchInfo {
+public class SearchInfo {
     private SearchGraph graph;
     private IncrementalObjectivesHandler incrementalObjectivesHandler;
     private HardConstraintsIncremental hardConstraintsEvaluator;
@@ -32,12 +33,19 @@ import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
         return hardConstraintsEvaluator.isFeasible(endOfShift, earliestPossibleReturnToOfficeTime, task, serviceStartTime, syncedStartTime);
     }
 
-    public long getTravelTimeToOffice(Node toNode) {
-        if (toNode == graph.getOffice())
+    /**
+     * The travel time back to the office. If the node has the same address as the office 0 is returned.
+     * IF the node is not connected to the office 0 is returned!
+     *
+     * @param node Node from which the travel time to the office is calculated.
+     * @return Travel time in seconds.
+     */
+    public long getTravelTimeToOffice(Node node) {
+        if (node.getAddress() == graph.getOffice().getAddress())
             return 0;
-        return graph.getEdgesNodeToNode()
-                .getEdge(toNode, graph.getOffice())
-                .getTravelTime();
+        Edge edge = graph.getEdgesNodeToNode()
+                .getEdge(node, graph.getOffice());
+        return edge == null ? 0 : edge.getTravelTime();
     }
 
     public void update(long[] syncedNodesStartTime, long[] syncedNodesLatestStartTime, long endOfShift, IShift employeeWorkShift) {
