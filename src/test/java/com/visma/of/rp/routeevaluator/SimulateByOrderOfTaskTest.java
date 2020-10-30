@@ -21,16 +21,16 @@ public class SimulateByOrderOfTaskTest extends JUnitTestAbstract {
     @Test
     public void returnToOffice() {
         List<ITask> tasks = new ArrayList<>();
-        tasks.add(createStandardTask(0, 0, 10));
+        tasks.add(createStandardTask(10, 0, 10));
 
         ILocation office = createOffice();
         TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
         travelTimeMatrix.addUndirectedConnection(office, tasks.get(0).getLocation(), 62);
-        IShift shift = new TestShift(14400, 1516176000, 1516147200);
+        IShift shift = new TestShift(300, 0, 300);
 
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, null, shift);
-        Assert.assertEquals("Must return at correct time!", 1516176124, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return at correct time!", 134, result.getTimeOfOfficeReturn().longValue());
     }
 
     @Test

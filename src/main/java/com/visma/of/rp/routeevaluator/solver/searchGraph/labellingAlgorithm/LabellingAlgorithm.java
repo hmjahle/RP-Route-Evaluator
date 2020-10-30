@@ -134,8 +134,6 @@ public class LabellingAlgorithm {
         for (int i = labelCnt - 1; i > 0; i--) {
             bestLabel = labels[i];
             visitCnt = addVisit(visitCnt, bestLabel);
-            if (bestLabel.getNode().isSynced())
-                result.addChromosomeStartTime(bestLabel.getNode().getTask(), syncedNodesStartTime[bestLabel.getNode().getId()]);
             totalTravelTime += getLabelTravelTime(bestLabel);
         }
         totalTravelTime += getLabelTravelTime(labels[0]);
