@@ -1,10 +1,8 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph;
 
-import com.visma.of.rp.routeevaluator.transportInfo.TravelInfo;
-
-  public class Edge {
+public class Edge {
     private int id;
-    private TravelInfo travelInfo;
+    private Long travelTime;
     private Node fromNode;
     private Node toNode;
 
@@ -14,12 +12,12 @@ import com.visma.of.rp.routeevaluator.transportInfo.TravelInfo;
         this.toNode = to;
     }
 
-    public void setTravelInfo(TravelInfo travelInfo) {
-        this.travelInfo = travelInfo;
+    public void setTravelTime(Long travelTime) {
+        this.travelTime = travelTime;
     }
 
-    public TravelInfo getTravelInfo() {
-        return travelInfo;
+    public Long getTravelTime() {
+        return travelTime;
     }
 
     public Node getFromNode() {

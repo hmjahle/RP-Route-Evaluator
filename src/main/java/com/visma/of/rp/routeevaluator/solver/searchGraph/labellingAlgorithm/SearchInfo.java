@@ -37,8 +37,7 @@ import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
             return 0;
         return graph.getEdgesNodeToNode()
                 .getEdge(toNode, graph.getOffice())
-                .getTravelInfo()
-                .getTravelTimeWithParking();
+                .getTravelTime();
     }
 
     public void update(long[] syncedNodesStartTime, long[] syncedNodesLatestStartTime, long endOfShift, IShift employeeWorkShift) {

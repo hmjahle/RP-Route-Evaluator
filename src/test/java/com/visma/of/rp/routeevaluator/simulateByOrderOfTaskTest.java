@@ -1,18 +1,20 @@
 package com.visma.of.rp.routeevaluator;
 
-import com.visma.of.rp.routeevaluator.Interfaces.ITravelTimeMatrix;
 import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
+import com.visma.of.rp.routeevaluator.Interfaces.ITravelTimeMatrix;
 import com.visma.of.rp.routeevaluator.routeResult.RouteSimulatorResult;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
-import com.visma.of.rp.routeevaluator.transportInfo.TransportMode;
 import org.junit.Assert;
 import org.junit.Test;
+import testInterfaceImplementationClasses.TestShift;
+import testInterfaceImplementationClasses.TestTravelTimeMatrix;
 import testSupport.JUnitTestAbstract;
-import testInterfaceImplementationClasses.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class simulateByOrderOfTaskTest extends JUnitTestAbstract {
 
@@ -22,10 +24,10 @@ public class simulateByOrderOfTaskTest extends JUnitTestAbstract {
 
         ILocation office = createOffice();
         List<ITask> tasks = createTasks();
-        Map<TransportMode, ITravelTimeMatrix> travelTimeMatrices = createTravelTimeMatrix(office, tasks);
+        ITravelTimeMatrix travelTimeMatrix = createTravelTimeMatrix(office, tasks);
 
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrices, tasks, office);
-        IShift shift = new TestShift(100, 0, 100, TransportMode.DRIVE);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
+        IShift shift = new TestShift(100, 0, 100);
 
         RouteSimulatorResult result = routeEvaluator.simulateRouteByTheOrderOfTasks(tasks, null, shift);
         Assert.assertEquals("Number of visits should be: ", 5, result.getVisitSolution().size());
@@ -38,7 +40,7 @@ public class simulateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
     }
 
-    private Map<TransportMode, ITravelTimeMatrix> createTravelTimeMatrix(ILocation office, Collection<ITask> tasks) {
+    private ITravelTimeMatrix createTravelTimeMatrix(ILocation office, Collection<ITask> tasks) {
         TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
         for (ITask taskA : tasks) {
             travelTimeMatrix.addUndirectedConnection(office, taskA.getLocation(), 2);
@@ -46,9 +48,7 @@ public class simulateByOrderOfTaskTest extends JUnitTestAbstract {
                 if (taskA != taskB)
                     travelTimeMatrix.addUndirectedConnection(taskA.getLocation(), taskB.getLocation(), 1);
         }
-        Map<TransportMode, ITravelTimeMatrix> travelTimeMatrices = new HashMap<>();
-        travelTimeMatrices.put(TransportMode.DRIVE, travelTimeMatrix);
-        return travelTimeMatrices;
+        return travelTimeMatrix;
     }
 
     private List<ITask> createTasks() {

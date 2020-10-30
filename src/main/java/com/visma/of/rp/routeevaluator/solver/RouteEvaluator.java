@@ -10,7 +10,6 @@ import com.visma.of.rp.routeevaluator.solver.searchGraph.NodeList;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ExtendInfoOneElement;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.LabellingAlgorithm;
-import com.visma.of.rp.routeevaluator.transportInfo.TransportMode;
 
 import java.util.Collection;
 import java.util.List;
@@ -39,8 +38,8 @@ public class RouteEvaluator {
         return graph;
     }
 
-    public RouteEvaluator(long robustTimeSeconds, Map<TransportMode, ITravelTimeMatrix> distanceMatrixMatrices, Collection<ITask> tasks, ILocation officePosition) {
-        this.graph = new SearchGraph(distanceMatrixMatrices, tasks, officePosition, robustTimeSeconds);
+    public RouteEvaluator(long robustTimeSeconds, ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks, ILocation officePosition) {
+        this.graph = new SearchGraph(distanceMatrixMatrix, tasks, officePosition, robustTimeSeconds);
         this.algorithm = new LabellingAlgorithm(graph);
         this.firstNodeList = new NodeList(graph.getNodes().size());
         this.secondNodeList = new NodeList(graph.getNodes().size());

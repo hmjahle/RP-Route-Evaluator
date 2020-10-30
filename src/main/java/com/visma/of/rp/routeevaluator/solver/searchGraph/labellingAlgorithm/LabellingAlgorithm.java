@@ -1,13 +1,11 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
-import com.visma.of.rp.routeevaluator.objectives.Objective;
 import com.visma.of.rp.routeevaluator.hardConstraints.HardConstraintsIncremental;
+import com.visma.of.rp.routeevaluator.objectives.Objective;
 import com.visma.of.rp.routeevaluator.routeResult.RouteSimulatorResult;
 import com.visma.of.rp.routeevaluator.routeResult.Visit;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
-import com.visma.of.rp.routeevaluator.transportInfo.TransportMode;
-import com.visma.of.rp.routeevaluator.transportInfo.TravelInfo;
 
 import java.util.PriorityQueue;
 
@@ -48,7 +46,7 @@ public class LabellingAlgorithm {
      *
      * @param nodeExtendInfo       Information on how to extend labels and which resources to use.
      * @param syncedNodesStartTime Intended start time of synced tasks.
-     * @param shift    Employee to simulate route for.
+     * @param shift                Employee to simulate route for.
      * @return Total fitness value.
      */
     public Double solve(IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime, long[] syncedNodesLatestStartTime, IShift shift) {
@@ -77,11 +75,10 @@ public class LabellingAlgorithm {
         Label bestLabel = labelsOnDestinationNode.peek();
         if (bestLabel == null)
             return null;
-        TravelInfo fullRouteTravelInfo = new TravelInfo(0, 0);
         RouteSimulatorResult simulatorResult = new RouteSimulatorResult(employeeWorkShift);
-        int visitCnt = extractVisitsAndSyncedStartTime(fullRouteTravelInfo, bestLabel, simulatorResult, syncedNodesStartTime);
+        int visitCnt = extractVisitsAndSyncedStartTime(bestLabel, simulatorResult, syncedNodesStartTime);
         simulatorResult.setObjectiveValue(totalFitness);
-        simulatorResult.addVisits(visits, visitCnt, fullRouteTravelInfo);
+        simulatorResult.addVisits(visits, visitCnt);
         simulatorResult.updateTimeOfOfficeReturn(labels[0].getCurrentTime());
         return simulatorResult;
     }
@@ -98,10 +95,8 @@ public class LabellingAlgorithm {
 
     private Double runAlgorithmWithStartLabel(IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime,
                                               long[] syncedNodesLatestStartTime, IShift employeeWorkShift, Label startLabel) {
-        TransportMode employeeTransportMode = employeeWorkShift.getTransport();
         long employeeShiftEndTime = employeeWorkShift.getEndTime();
         this.nodeExtendInfo = nodeExtendInfo;
-        graph.setEdgesTransportMode(employeeTransportMode);
         searchInfo.update(syncedNodesStartTime, syncedNodesLatestStartTime, employeeShiftEndTime, employeeWorkShift);
         labelLists.clear();
         solveLabellingAlgorithm(startLabel);
@@ -132,24 +127,28 @@ public class LabellingAlgorithm {
                 labelsOnDestinationNode.peek().getObjective().getObjectiveValue() < currentLabel.getObjective().getObjectiveValue();
     }
 
-    private int extractVisitsAndSyncedStartTime(TravelInfo travelInfo, Label bestLabel, RouteSimulatorResult result, long[] syncedNodesStartTime) {
+    private int extractVisitsAndSyncedStartTime(Label bestLabel, RouteSimulatorResult result, long[] syncedNodesStartTime) {
         int labelCnt = collectLabels(bestLabel);
-        long totalTravelTimeWithParking = 0;
-        long totalTravelTimeWithoutParking = 0;
+        long totalTravelTime = 0;
         int visitCnt = 0;
         for (int i = labelCnt - 1; i > 0; i--) {
             bestLabel = labels[i];
             visitCnt = addVisit(visitCnt, bestLabel);
             if (bestLabel.getNode().isSynced())
                 result.addChromosomeStartTime(bestLabel.getNode().getTask(), syncedNodesStartTime[bestLabel.getNode().getId()]);
-            if (bestLabel.getEdge() != null) {
-                totalTravelTimeWithParking += bestLabel.getEdge().getTravelInfo().getTravelTimeWithParking();
-                totalTravelTimeWithoutParking += bestLabel.getEdge().getTravelInfo().getRawTravelTime();
-            }
+            totalTravelTime += getLabelTravelTime(bestLabel);
         }
+        totalTravelTime += getLabelTravelTime(labels[0]);
 
-        addTravelInfo(travelInfo, totalTravelTimeWithParking, totalTravelTimeWithoutParking);
+        result.updateTotalTravelTime(totalTravelTime);
         return visitCnt;
+    }
+
+    private long getLabelTravelTime(Label label) {
+        if (label.getEdge() != null)
+            return label.getEdge().getTravelTime();
+        else
+            return 0;
     }
 
     private int collectLabels(Label currentLabel) {
@@ -164,18 +163,11 @@ public class LabellingAlgorithm {
     private int addVisit(int visitCnt, Label currentLabel) {
         visits[visitCnt++] = new Visit(currentLabel.getNode().getTask(), currentLabel.getCurrentTime(), currentLabel.getCurrentTime() +
                 currentLabel.getNode().getTask().getDuration(),
-                currentLabel.getEdge() != null ? currentLabel.getEdge().getTravelInfo().getTravelTimeWithParking() : 0,
+                currentLabel.getEdge() != null ? currentLabel.getEdge().getTravelTime() : 0,
                 robustnessTimeSeconds);
         return visitCnt;
     }
 
-    private void addTravelInfo(TravelInfo travelInfo, long travelTimeWithParking, long travelTimeWithoutParking) {
-        if (labels[0].getEdge() != null) {
-            travelTimeWithParking += labels[0].getEdge().getTravelInfo().getTravelTimeWithParking();
-            travelTimeWithoutParking += labels[0].getEdge().getTravelInfo().getRawTravelTime();
-        }
-        travelInfo.addTravelInfo(travelTimeWithParking, travelTimeWithoutParking);
-    }
 
     private void extendLabelToAllPossibleTasks(Label label, PriorityQueue<Label> labelsOnDestinationNode) {
         boolean returnToDestinationNode = true;
