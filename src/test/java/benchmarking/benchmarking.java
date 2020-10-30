@@ -130,7 +130,7 @@ public class benchmarking extends JUnitTestAbstract {
         return office;
     }
 
-    private static void printResult(RouteSimulatorResult result) {
+    public static void printResult(RouteSimulatorResult result) {
         String visitString = "Visits: " + result.getVisitSolution().size() + "\n";
         for (Visit visit : result.getVisitSolution()) {
             visitString += "\t" + printVisit(visit, 0);

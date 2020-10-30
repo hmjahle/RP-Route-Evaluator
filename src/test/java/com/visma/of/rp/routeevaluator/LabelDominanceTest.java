@@ -13,7 +13,7 @@ public class LabelDominanceTest {
 
 
     @Test
-    public void labelDominanceTestResourceAndObjectiveValue() {
+    public void resourceAndObjectiveValue() {
         Objective costA = new Objective(0);
         Objective costB = new Objective(1);
         ResourceTwoElements resourcesA = new ResourceTwoElements(2, 2);
@@ -52,7 +52,7 @@ public class LabelDominanceTest {
     }
 
     @Test
-    public void labelDominanceTestCurrentTimeAndDrivingTime() {
+    public void currentTimeAndDrivingTime() {
         Objective costA = new Objective(0);
         ResourceTwoElements resources = new ResourceTwoElements(0, 0);
 
@@ -90,7 +90,7 @@ public class LabelDominanceTest {
     }
 
     @Test
-    public void labelDominanceTestCurrentTimeAndDrivingTimeAndObjectiveValue() {
+    public void currentTimeAndDrivingTimeAndObjectiveValue() {
         Objective costA = new Objective(0);
         Objective costB = new Objective(1);
         ResourceTwoElements resources = new ResourceTwoElements(0, 0);
@@ -123,7 +123,7 @@ public class LabelDominanceTest {
     }
 
     @Test
-    public void labelDominanceTestCurrentTimeAndDrivingTimeAndObjectiveValueAndResources() {
+    public void currentTimeAndDrivingTimeAndObjectiveValueAndResources() {
         Objective costA = new Objective(0);
         Objective costB = new Objective(1);
         ResourceTwoElements resourcesA = new ResourceTwoElements(0, 1);
@@ -162,7 +162,7 @@ public class LabelDominanceTest {
     }
 
     @Test
-    public void labelDominanceTestObjectiveValueAndResources() {
+    public void objectiveValueAndResources() {
         Objective costA = new Objective(0);
         Objective costB = new Objective(1);
         ResourceTwoElements resourcesA = new ResourceTwoElements(1, 1);
