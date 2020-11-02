@@ -18,6 +18,26 @@ public class Label implements Comparable<Label> {
     private long robustTimeSeconds;
     private long actualRobustTimeSeconds;
 
+    public long getCanLeaveLocationAt() {
+        return canLeaveLocationAt;
+    }
+
+    public void setCanLeaveLocationAt(long canLeaveLocationAt) {
+        this.canLeaveLocationAt = canLeaveLocationAt;
+    }
+
+    private long canLeaveLocationAt;
+
+    public long getConsumedTime() {
+        return consumedTime;
+    }
+
+    public void setConsumedTime(long consumedTime) {
+        this.consumedTime = consumedTime;
+    }
+
+    private long consumedTime;
+
     public Label(SearchInfo searchInfo, Label previous, Node currentNode, Node physicalLocation, Edge edge, Objective objective, long currentTime, long timeAlreadyTravelled, IResource resources, long robustTimeSeconds) {
         this.previous = previous;
         this.edge = edge;
@@ -31,7 +51,11 @@ public class Label implements Comparable<Label> {
         this.closed = false;
         this.robustTimeSeconds = robustTimeSeconds;
         this.actualRobustTimeSeconds = (previous != null ? robustTimeSeconds : 0);
+
+        this.canLeaveLocationAt = currentTime;
+
     }
+
 
     /**
      * Check if a label is being dominated by another label. Return -1 if this is dominating, 0 if equal,
@@ -64,22 +88,58 @@ public class Label implements Comparable<Label> {
     }
 
     public Label extendAlong(ExtendToInfo extendToInfo) {
+
+
         Node nextNode = extendToInfo.getToNode();
         boolean requirePhysicalAppearance = nextNode.getRequirePhysicalAppearance();
         Node newPhysicalPosition = newPhysicalLocation(requirePhysicalAppearance, nextNode);
         Edge potentialEdgeToTravel = potentialEdgeToTravel(nextNode, newPhysicalPosition);
 
-        long travelTime = getTravelTime(potentialEdgeToTravel);
-        long remainingTravelTime = Math.max(travelTime - timeAlreadyTravelled, 0);
-        long taskFinishedAt = currentTime + node.getDurationSeconds();
-        long arrivalTimeNextTask = remainingTravelTime + taskFinishedAt + actualRobustTimeSeconds;
         long earliestStartTimeNextTask = findEarliestStartTimeNextTask(nextNode);
-        long startOfServiceNextTask = Math.max(arrivalTimeNextTask, earliestStartTimeNextTask);
-        long updatedTimeAlreadyTravelled = calculateUpdatedTimeAlreadyTravelled(requirePhysicalAppearance,
-                remainingTravelTime, arrivalTimeNextTask, startOfServiceNextTask);
+        long travelTime = getTravelTime(potentialEdgeToTravel);
+        long actualTravelTime = travelTime;
+        long extraTimeAvailable = 0;
+        long newConsumedTime = consumedTime;
+        long newCanLeaveLocationAt = canLeaveLocationAt;
 
-        return generateLabel(extendToInfo, newPhysicalPosition, potentialEdgeToTravel, travelTime, arrivalTimeNextTask,
-                startOfServiceNextTask, updatedTimeAlreadyTravelled);
+        if (requirePhysicalAppearance) {
+            extraTimeAvailable = currentTime - canLeaveLocationAt - consumedTime;
+            actualTravelTime = Math.max(travelTime - extraTimeAvailable, 0);
+            newConsumedTime = 0;
+        } else {
+            newCanLeaveLocationAt += node.getDurationSeconds() + actualRobustTimeSeconds;
+        }
+        long taskFinishedAt = currentTime + node.getDurationSeconds();
+        System.out.println("actualTravelTime " + actualTravelTime);
+        long arrivalTimeNextTask = actualTravelTime + taskFinishedAt + actualRobustTimeSeconds;
+
+        long startOfServiceNextTask = Math.max(arrivalTimeNextTask, earliestStartTimeNextTask);
+
+        if (requirePhysicalAppearance)
+             newCanLeaveLocationAt = startOfServiceNextTask;
+
+
+        System.out.println("Next require: " + requirePhysicalAppearance);
+
+        System.out.println("currentTime: " + currentTime);
+        System.out.println("extraTimeAvailable: " + extraTimeAvailable);
+        System.out.println("canLeaveLocationAt: " + canLeaveLocationAt);
+        System.out.println("node.getDurationSeconds(): " + node.getDurationSeconds());
+        System.out.println("consumedTime: " + consumedTime);
+        System.out.println("travelTime: " + travelTime);
+        System.out.println("actualTravelTime22: " + actualTravelTime);
+        System.out.println();
+
+        Label newLabel = generateLabel(extendToInfo, newPhysicalPosition, potentialEdgeToTravel, travelTime, arrivalTimeNextTask,
+                startOfServiceNextTask, 0);
+        newLabel.setCanLeaveLocationAt(newCanLeaveLocationAt);
+        newLabel.setConsumedTime(newConsumedTime);
+        return newLabel;
+//        Label newLabel = generateLabel(extendToInfo, newPhysicalPosition, potentialEdgeToTravel, travelTime, arrivalTimeNextTask,
+//                startOfServiceNextTask, updatedTimeAlreadyTravelled);
+//        newLabel.setCanLeaveLocationAt(newcanLeaveLocationAt);
+//        newLabel.setConsumedTime(newConsumedTime);
+//        return newLabel;
 
     }
 
