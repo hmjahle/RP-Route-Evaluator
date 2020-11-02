@@ -59,15 +59,11 @@ public class Label implements Comparable<Label> {
     }
 
     public Label extendAlong(ExtendToInfo extendToInfo) {
-        Node newPhysicalPosition;
-        Edge travelledEdge = null;
-        if (extendToInfo.getToNode().getRequirePhysicalAppearance()) {
-            travelledEdge = getEdgeToNextNode(extendToInfo.getToNode());
-            newPhysicalPosition = extendToInfo.getToNode();
-        } else {
-            newPhysicalPosition = physicalLocation;
-        }
+        Node nextNode = extendToInfo.getToNode();
+        Node newPhysicalPosition = nextNode.getRequirePhysicalAppearance() ? nextNode : physicalLocation;
+        Edge travelledEdge = newPhysicalPosition == physicalLocation ? null : getEdgeToNextNode(extendToInfo.getToNode());
         long travelTime = getTravelTime(travelledEdge);
+
         long savedTravelTimeDueToNonPhysicalTasks = Math.min(travelTime, extraDrivingTime);
         long baseTime = currentTime - savedTravelTimeDueToNonPhysicalTasks + node.getDurationSeconds();
         long arrivalTimeNextTask = baseTime + travelTime + actualRobustTimeSeconds;
@@ -125,14 +121,9 @@ public class Label implements Comparable<Label> {
     private long getTravelTime(Edge edge) {
         if (shouldNotTravel(edge)) {
             return 0;
-        } else if (physicallyAtCurrentNode(this.physicalLocation, this.node)) {
-            return edge.
-                    getTravelTime();
-        } else {
-            return getEdgeToNextNode(edge.
-                    getToNode()).
-                    getTravelTime();
-        }
+        } else
+            return edge.getTravelTime();
+
     }
 
     private Edge getEdgeToNextNode(Node toNode) {
