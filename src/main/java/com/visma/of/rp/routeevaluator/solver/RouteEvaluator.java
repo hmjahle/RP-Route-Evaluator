@@ -59,8 +59,9 @@ public class RouteEvaluator {
     /**
      * Simulates the route given by the tasks input, the order of the tasks is the order of the route.
      *
-     * @param tasks             The route to be simulated, the order of the list is the order of the route.
-     * @param employeeWorkShift Employee the route applies to.
+     * @param tasks                The route to be simulated, the order of the list is the order of the route.
+     * @param syncedTasksStartTime Map of ALL synced tasks and their start times. Un-predicable behaviour if this is not the case.
+     * @param employeeWorkShift    Employee the route applies to.
      * @return A routeSimulator result for the simulated route.
      */
     public RouteEvaluatorResult evaluateRouteByTheOrderOfTasks(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
@@ -68,6 +69,10 @@ public class RouteEvaluator {
         ExtendInfoOneElement nodeExtendInfoOneElement = new ExtendInfoOneElement();
         nodeExtendInfoOneElement.update(firstNodeList);
         return algorithm.solveRouteSimulatorResult(nodeExtendInfoOneElement, syncedNodesStartTime, syncedNodesLatestStartTime, employeeWorkShift);
+    }
+
+    public RouteEvaluatorResult evaluateRouteByTheOrderOfTasks(List<ITask> tasks, IShift employeeWorkShift) {
+        return evaluateRouteByTheOrderOfTasks(tasks, null, employeeWorkShift);
     }
 
     private void updateFirstTaskList(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime) {
