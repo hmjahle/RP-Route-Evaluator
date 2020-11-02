@@ -71,16 +71,24 @@ public class Label implements Comparable<Label> {
 
         long travelTime = getTravelTime(potentialEdgeToTravel);
         long remainingTravelTime = Math.max(travelTime - timeAlreadyTravelled, 0);
-        long taskFinishedAt = currentTime + node.getDurationSeconds();
-        long arrivalTimeNextTask = remainingTravelTime + taskFinishedAt + actualRobustTimeSeconds;
-        long earliestStartTimeNextTask = findEarliestStartTimeNextTask(nextNode);
-        long startOfServiceNextTask = Math.max(arrivalTimeNextTask, earliestStartTimeNextTask);
+        long arrivalTimeNextTask = getArrivalTimeNextTask(remainingTravelTime);
+        long startOfServiceNextTask = getStartOfServiceNextTask(nextNode, arrivalTimeNextTask);
         long updatedTimeAlreadyTravelled = calculateUpdatedTimeAlreadyTravelled(requirePhysicalAppearance,
                 remainingTravelTime, arrivalTimeNextTask, startOfServiceNextTask);
 
         return generateLabel(extendToInfo, newPhysicalPosition, potentialEdgeToTravel, travelTime, arrivalTimeNextTask,
                 startOfServiceNextTask, updatedTimeAlreadyTravelled);
 
+    }
+
+    private long getArrivalTimeNextTask(long remainingTravelTime) {
+        long taskFinishedAt = currentTime + node.getDurationSeconds();
+        return remainingTravelTime + taskFinishedAt + actualRobustTimeSeconds;
+    }
+
+    private long getStartOfServiceNextTask(Node nextNode, long arrivalTimeNextTask) {
+        long earliestStartTimeNextTask = findEarliestStartTimeNextTask(nextNode);
+        return Math.max(arrivalTimeNextTask, earliestStartTimeNextTask);
     }
 
     private long calculateUpdatedTimeAlreadyTravelled(boolean requirePhysicalAppearance, long actualTravelTime, long arrivalTimeNextTask, long startOfServiceNextTask) {
