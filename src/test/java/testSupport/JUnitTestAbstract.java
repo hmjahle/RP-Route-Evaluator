@@ -30,7 +30,7 @@ public abstract class JUnitTestAbstract {
     }
 
     protected Label createStartLabel(SearchGraph graph, SearchInfo searchInfo) {
-        return new Label(searchInfo, null, graph.getOffice(), graph.getOffice(), null, new Objective(0), 0, 0, new ResourceOneElement(0), 0);
+        return new Label(searchInfo, null, graph.getOffice(), graph.getOffice(), null, new Objective(0), 0, new ResourceOneElement(0), 0,0);
     }
 
     protected ILocation createOffice() {

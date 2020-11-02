@@ -119,7 +119,7 @@ public class LabellingAlgorithm {
 
     private Label createStartLabel(long startTime, IResource emptyResource) {
         return new Label(searchInfo, null, graph.getOffice(), graph.getOffice(), null,
-                new Objective(0.0), startTime, 0, emptyResource, graph.getRobustTimeSeconds());
+                new Objective(0.0), startTime,  emptyResource, graph.getRobustTimeSeconds(),startTime);
     }
 
     private boolean optimalSolutionFound(Label currentLabel) {
