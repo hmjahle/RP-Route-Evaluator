@@ -34,10 +34,6 @@ public class RouteEvaluator {
     private long[] syncedNodesStartTime;
     private long[] syncedNodesLatestStartTime;
 
-    public SearchGraph getGraph() {
-        return graph;
-    }
-
     public RouteEvaluator(long robustTimeSeconds, ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks, ILocation officePosition) {
         this.graph = new SearchGraph(distanceMatrixMatrix, tasks, officePosition, robustTimeSeconds);
         this.algorithm = new LabellingAlgorithm(graph);
@@ -47,14 +43,12 @@ public class RouteEvaluator {
         this.syncedNodesLatestStartTime = new long[graph.getNodes().size()];
     }
 
-
     public Double evaluateRouteObjective(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
         updateFirstTaskList(tasks, syncedTasksStartTime);
         ExtendInfoOneElement nodeExtendInfoOneElement = new ExtendInfoOneElement();
         nodeExtendInfoOneElement.update(firstNodeList);
         return algorithm.solve(nodeExtendInfoOneElement, syncedNodesStartTime, syncedNodesLatestStartTime, employeeWorkShift);
     }
-
 
     /**
      * Simulates the route given by the tasks input, the order of the tasks is the order of the route.

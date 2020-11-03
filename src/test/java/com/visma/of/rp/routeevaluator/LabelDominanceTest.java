@@ -18,10 +18,10 @@ public class LabelDominanceTest {
         Objective costB = new Objective(1);
         ResourceTwoElements resourcesA = new ResourceTwoElements(2, 2);
         ResourceTwoElements resourcesB = new ResourceTwoElements(1, 2);
-        Label labelA = new Label(null, null, null, null, null, costA, 3, 2, resourcesA, 0);
-        Label labelB = new Label(null, null, null, null, null, costB, 3, 2, resourcesA, 0);
-        Label labelC = new Label(null, null, null, null, null, costA, 3, 2, resourcesB, 0);
-        Label labelD = new Label(null, null, null, null, null, costB, 3, 2, resourcesB, 0);
+        Label labelA = new Label(null, null, null, null, costA, resourcesA, 3, 0, 2);
+        Label labelB = new Label(null, null, null, null, costB, resourcesA, 3, 0, 2);
+        Label labelC = new Label(null, null, null, null, costA, resourcesB, 3, 0, 2);
+        Label labelD = new Label(null, null, null, null, costB, resourcesB, 3, 0, 2);
 
         Assert.assertEquals("1", 0, labelTest(labelA, labelA));
         Assert.assertEquals("2", 0, labelTest(labelB, labelB));
@@ -56,11 +56,10 @@ public class LabelDominanceTest {
         Objective costA = new Objective(0);
         ResourceTwoElements resources = new ResourceTwoElements(0, 0);
 
-        Label labelA = new Label(null, null, null, null, null, costA, 1, 3, resources, 0);
-        Label labelB = new Label(null, null, null, null, null, costA, 2, 4, resources, 0);
-
-        Label labelC = new Label(null, null, null, null, null, costA, 3, 2, resources, 0);
-        Label labelD = new Label(null, null, null, null, null, costA, 4, 1, resources, 0);
+        Label labelA = new Label(null, null, null, null, costA, resources, 1, 0, 2);
+        Label labelB = new Label(null, null, null, null, costA, resources, 2, 0, 0);
+        Label labelC = new Label(null, null, null, null, costA, resources, 3, 0, 3);
+        Label labelD = new Label(null, null, null, null, costA, resources, 4, 0, 4);
 
         Assert.assertEquals("1", 2, labelTest(labelA, labelB));
         Assert.assertEquals("2", 2, labelTest(labelB, labelA));
@@ -95,11 +94,10 @@ public class LabelDominanceTest {
         Objective costB = new Objective(1);
         ResourceTwoElements resources = new ResourceTwoElements(0, 0);
 
-        Label labelA = new Label(null, null, null, null, null, costA, 1, 2, resources, 0);
-        Label labelB = new Label(null, null, null, null, null, costA, 2, 1, resources, 0);
-
-        Label labelC = new Label(null, null, null, null, null, costB, 1, 2, resources, 0);
-        Label labelD = new Label(null, null, null, null, null, costB, 2, 1, resources, 0);
+        Label labelA = new Label(null, null, null, null, costA, resources, 1, 0, 1);
+        Label labelB = new Label(null, null, null, null, costA, resources, 2, 0, 2);
+        Label labelC = new Label(null, null, null, null, costB, resources, 1, 0, 1);
+        Label labelD = new Label(null, null, null, null, costB, resources, 2, 0, 2);
 
 
         Assert.assertEquals("1", -1, labelTest(labelA, labelC));
@@ -129,11 +127,11 @@ public class LabelDominanceTest {
         ResourceTwoElements resourcesA = new ResourceTwoElements(0, 1);
         ResourceTwoElements resourcesB = new ResourceTwoElements(1, 0);
 
-        Label labelA = new Label(null, null, null, null, null, costA, 1, 2, resourcesA, 0);
-        Label labelB = new Label(null, null, null, null, null, costA, 2, 1, resourcesA, 0);
+        Label labelA = new Label(null, null, null, null, costA, resourcesA, 1, 0, 1);
+        Label labelB = new Label(null, null, null, null, costA, resourcesA, 2, 0, 2);
 
-        Label labelC = new Label(null, null, null, null, null, costB, 1, 2, resourcesB, 0);
-        Label labelD = new Label(null, null, null, null, null, costB, 2, 1, resourcesB, 0);
+        Label labelC = new Label(null, null, null, null, costB, resourcesB, 1, 0, 1);
+        Label labelD = new Label(null, null, null, null, costB, resourcesB, 2, 0, 2);
 
 
         Assert.assertEquals("1", -1, labelTest(labelA, labelB));
@@ -168,11 +166,11 @@ public class LabelDominanceTest {
         ResourceTwoElements resourcesA = new ResourceTwoElements(1, 1);
         ResourceTwoElements resourcesB = new ResourceTwoElements(1, 2);
 
-        Label labelA = new Label(null, null, null, null, null, costA, 1, 1, resourcesA, 0);
-        Label labelB = new Label(null, null, null, null, null, costB, 1, 1, resourcesA, 0);
+        Label labelA = new Label(null, null, null, null, costA, resourcesA, 1, 0, 0);
+        Label labelB = new Label(null, null, null, null, costB, resourcesA, 1, 0, 0);
 
-        Label labelC = new Label(null, null, null, null, null, costA, 1, 1, resourcesB, 0);
-        Label labelD = new Label(null, null, null, null, null, costB, 1, 1, resourcesB, 0);
+        Label labelC = new Label(null, null, null, null, costA, resourcesB, 1, 0, 0);
+        Label labelD = new Label(null, null, null, null, costB, resourcesB, 1, 0, 0);
 
 
         Assert.assertEquals("1", -1, labelTest(labelA, labelB));
@@ -201,8 +199,8 @@ public class LabelDominanceTest {
     }
 
     public int labelTest(Label a, Label b) {
-        Label labelA = new Label(null, a.getPrevious(), a.getNode(), a.getPhysicalLocation(), a.getEdge(), a.getObjective(), a.getCurrentTime(), a.getTimeAlreadyTravelled(), a.getResources(), 0);
-        Label labelB = new Label(null, b.getPrevious(), b.getNode(), b.getPhysicalLocation(), b.getEdge(), b.getObjective(), b.getCurrentTime(), b.getTimeAlreadyTravelled(), b.getResources(), 0);
+        Label labelA = new Label(null, a.getPrevious(), a.getNode(), a.getCurrentLocation(), a.getObjective(), a.getResources(), a.getCurrentTime(), 0, a.getCanLeaveLocationAtTime());
+        Label labelB = new Label(null, b.getPrevious(), b.getNode(), b.getCurrentLocation(), b.getObjective(), b.getResources(), b.getCurrentTime(), 0, b.getCanLeaveLocationAtTime());
         return labelA.dominates(labelB);
     }
 }

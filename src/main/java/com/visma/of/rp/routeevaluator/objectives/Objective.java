@@ -13,13 +13,11 @@ public class Objective {
         this.objectiveValue = objectiveValue;
     }
 
-    public Objective extend(SearchInfo searchInfo, Node toNode, long travelTimeWithParking, long arrivalTime,
-                            long officeArrivalTime,
-                            long syncedTaskLatestStartTime) {
+    public Objective extend(SearchInfo searchInfo, Node toNode, long travelTime, long startOfServiceNextTask, long syncedTaskLatestStartTime) {
         if (toNode.getTask() == null) {
-            return createObjectiveFunctionToOffice(searchInfo, travelTimeWithParking, officeArrivalTime);
+            return createObjectiveFunctionToOffice(searchInfo, travelTime, startOfServiceNextTask);
         } else {
-            return createObjectiveFunctionFor(searchInfo, toNode, travelTimeWithParking, arrivalTime, syncedTaskLatestStartTime);
+            return createObjectiveFunctionFor(searchInfo, toNode, travelTime, startOfServiceNextTask, syncedTaskLatestStartTime);
         }
     }
 

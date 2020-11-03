@@ -107,7 +107,6 @@ public class NoPhysicalAppearanceTravelTimesTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(6));
 
         RouteEvaluatorResult result = evaluateRoute(tasks);
-
         Assert.assertEquals(getTime(0, 6, 28), getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
         Assert.assertEquals(getTime(0, 2, 7), getVisitTravelTime(result, 2));

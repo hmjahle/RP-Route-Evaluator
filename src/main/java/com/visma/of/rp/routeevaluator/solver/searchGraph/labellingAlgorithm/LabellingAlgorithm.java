@@ -118,8 +118,8 @@ public class LabellingAlgorithm {
     }
 
     private Label createStartLabel(long startTime, IResource emptyResource) {
-        return new Label(searchInfo, null, graph.getOffice(), graph.getOffice(), null,
-                new Objective(0.0), startTime, 0, emptyResource, graph.getRobustTimeSeconds());
+        return new Label(searchInfo, null, graph.getOffice(), graph.getOffice(),
+                new Objective(0.0), emptyResource, startTime, 0, startTime);
     }
 
     private boolean optimalSolutionFound(Label currentLabel) {
@@ -143,12 +143,8 @@ public class LabellingAlgorithm {
     }
 
     private long getLabelTravelTime(Label label) {
-        if (label.getEdge() != null)
-            return label.getEdge().getTravelTime();
-        else
-            return 0;
+        return label.getTravelTime();
     }
-
     private int collectLabels(Label currentLabel) {
         int labelCnt = 0;
         while (currentLabel.getPrevious() != null) {
@@ -161,7 +157,7 @@ public class LabellingAlgorithm {
     private int addVisit(int visitCnt, Label currentLabel) {
         visits[visitCnt++] = new Visit(currentLabel.getNode().getTask(), currentLabel.getCurrentTime(), currentLabel.getCurrentTime() +
                 currentLabel.getNode().getTask().getDuration(),
-                currentLabel.getEdge() != null ? currentLabel.getEdge().getTravelTime() : 0,
+                currentLabel.getTravelTime(),
                 robustnessTimeSeconds);
         return visitCnt;
     }
