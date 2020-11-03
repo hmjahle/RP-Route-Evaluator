@@ -8,7 +8,7 @@ public class SyncedTasksConstraint extends HardConstraintIncrementalAbstract {
     final long syncedStartTimeSlack;
 
     public SyncedTasksConstraint(){
-        syncedStartTimeSlack = 60;
+        syncedStartTimeSlack = 0;
     }
 
     @Override
