@@ -142,12 +142,6 @@ public class LabellingAlgorithm {
         return visitCnt;
     }
 
-//    private long getLabelTravelTime(Label label) {
-//        if (label.getEdge() != null)
-//            return label.getEdge().getTravelTime();
-//        else
-//            return 0;
-//    }
     private long getLabelTravelTime(Label label) {
         return label.getTravelTime();
     }
