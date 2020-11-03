@@ -18,8 +18,6 @@ import testSupport.JUnitTestAbstract;
 import java.util.ArrayList;
 import java.util.List;
 
-import static benchmarking.benchmarking.printResult;
-
 /**
  * Tests if the order of non-physical appearance tasks is handled correctly.
  */
@@ -88,7 +86,6 @@ public class NoPhysicalAppearanceOrderTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(2));
 
         RouteEvaluatorResult result = evaluateRoute(tasks);
-        printResult(result);
 
         Assert.assertEquals(5, getVisitTravelTime(result, 0));
         Assert.assertEquals(13, getVisitTravelTime(result, 1));
@@ -109,7 +106,6 @@ public class NoPhysicalAppearanceOrderTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(4));
 
         RouteEvaluatorResult result = evaluateRoute(tasks);
-        printResult(result);
 
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
