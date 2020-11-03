@@ -3,10 +3,10 @@ package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveIntraRoute;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.constraints.ConstraintsIncremental;
+import com.visma.of.rp.routeevaluator.constraints.ConstraintsIntraRouteHandler;
 import com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo.ConstraintInfo;
 import com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo.ObjectiveInfo;
-import com.visma.of.rp.routeevaluator.objectives.IncrementalObjectivesHandler;
+import com.visma.of.rp.routeevaluator.objectives.ObjectivesIntraRouteHandler;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Edge;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
@@ -14,8 +14,8 @@ import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 
 public class SearchInfo {
     private SearchGraph graph;
-    public IncrementalObjectivesHandler incrementalObjectivesHandler;
-    private ConstraintsIncremental constraintsEvaluator;
+    public ObjectivesIntraRouteHandler objectives;
+    private ConstraintsIntraRouteHandler constraints;
     private long[] syncedNodesStartTime;
     private long[] syncedNodesLatestStartTime;
     private long endOfShift;
@@ -25,17 +25,17 @@ public class SearchInfo {
     public SearchInfo(SearchGraph graph) {
         this.graph = graph;
         this.robustness = graph.getRobustTimeSeconds();
-        this.incrementalObjectivesHandler = new IncrementalObjectivesHandler();
-        this.constraintsEvaluator = new ConstraintsIncremental();
+        this.objectives = new ObjectivesIntraRouteHandler();
+        this.constraints = new ConstraintsIntraRouteHandler();
     }
 
     public void addObjectiveIntraShift(IObjectiveIntraRoute objectiveIntraShift) {
-        incrementalObjectivesHandler.addObjectiveIntraShift(objectiveIntraShift);
+        objectives.addObjectiveIntraShift(objectiveIntraShift);
     }
 
     public boolean isFeasible(long earliestOfficeReturn, ITask task, long startOfServiceNextTask, long syncedLatestStart) {
         ConstraintInfo constraintInfo = new ConstraintInfo(endOfShift, earliestOfficeReturn, task, startOfServiceNextTask, syncedLatestStart);
-        return constraintsEvaluator.isFeasible(constraintInfo);
+        return constraints.isFeasible(constraintInfo);
     }
 
     /**
@@ -65,7 +65,7 @@ public class SearchInfo {
         long visitEnd = task != null ? startOfServiceNextTask + task.getDuration() : 0;
         ObjectiveInfo costInfo = new ObjectiveInfo(travelTime, task, visitEnd, startOfServiceNextTask,
                 syncedTaskLatestStartTime, endOfShift);
-        return incrementalObjectivesHandler.calculateIncrementalObjectiveValue(costInfo);
+        return objectives.calculateIncrementalObjectiveValue(costInfo);
     }
 
     long[] getSyncedNodesStartTime() {

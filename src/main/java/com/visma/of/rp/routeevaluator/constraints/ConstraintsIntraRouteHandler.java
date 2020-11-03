@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ConstraintsIncremental {
+public class ConstraintsIntraRouteHandler {
 
     List<IConstraintIntraRoute> constraints;
 
-    public ConstraintsIncremental() {
+    public ConstraintsIntraRouteHandler() {
         constraints = new ArrayList<>();
     }
 
