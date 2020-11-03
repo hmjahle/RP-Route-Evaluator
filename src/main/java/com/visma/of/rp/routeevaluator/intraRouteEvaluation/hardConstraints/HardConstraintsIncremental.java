@@ -1,8 +1,8 @@
-package com.visma.of.rp.routeevaluator.hardConstraints;
+package com.visma.of.rp.routeevaluator.intraRouteEvaluation.hardConstraints;
 
 
-import com.visma.of.rp.routeevaluator.Interfaces.IConstraintIntraRoute;
-import com.visma.of.rp.routeevaluator.Interfaces.ITask;
+import com.visma.of.rp.routeevaluator.PublicInterfaces.IConstraintIntraRoute;
+import com.visma.of.rp.routeevaluator.PublicInterfaces.ITask;
 
 import java.util.ArrayList;
 import java.util.List;

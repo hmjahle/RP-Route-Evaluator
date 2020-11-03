@@ -1,22 +1,20 @@
-package com.visma.of.rp.routeevaluator.hardConstraints;
+package com.visma.of.rp.routeevaluator.intraRouteEvaluation.hardConstraints;
 
-import com.visma.of.rp.routeevaluator.Interfaces.IConstraintIntraRoute;
-import com.visma.of.rp.routeevaluator.Interfaces.ITask;
+import com.visma.of.rp.routeevaluator.PublicInterfaces.IConstraintIntraRoute;
 
 
 public class SyncedTasksConstraint implements IConstraintIntraRoute {
 
     final long syncedStartTimeSlack;
 
-    public SyncedTasksConstraint(){
+    public SyncedTasksConstraint() {
         syncedStartTimeSlack = 60;
     }
 
     @Override
-    public boolean constraintIsFeasible(long endOfShift, long earliestPossibleReturnToOfficeTime, ITask task,
-                                           long serviceStartTime, long syncedStartTime) {
-        if (task == null || !task.isSynced()) //Task is office or is not synced.
+    public boolean constraintIsFeasible(ConstraintInfo constraintInfo) {
+        if (!constraintInfo.isSynced()) //Task is office or is not synced.
             return true;
-        return (serviceStartTime <= syncedStartTime + syncedStartTimeSlack);
+        return (constraintInfo.serviceStartTime <= constraintInfo.syncedStartTime + syncedStartTimeSlack);
     }
 }

@@ -1,13 +1,11 @@
-package com.visma.of.rp.routeevaluator.hardConstraints;
+package com.visma.of.rp.routeevaluator.intraRouteEvaluation.hardConstraints;
 
 
-import com.visma.of.rp.routeevaluator.Interfaces.IConstraintIntraRoute;
-import com.visma.of.rp.routeevaluator.Interfaces.ITask;
+import com.visma.of.rp.routeevaluator.PublicInterfaces.IConstraintIntraRoute;
 
 public class StrictTimeWindowConstraint implements IConstraintIntraRoute {
 
     final long threshold;
-
 
     public StrictTimeWindowConstraint() {
         threshold = 60;
@@ -15,8 +13,8 @@ public class StrictTimeWindowConstraint implements IConstraintIntraRoute {
 
     @Override
     public boolean constraintIsFeasible(ConstraintInfo constraintInfo) {
-        if (task == null || !task.isStrict()) //Task is office or is not strict.
+        if (!constraintInfo.isStrict()) //Task is office or is not strict.
             return true;
-        return serviceStartTime + task.getDuration() <= task.getEndTime() + threshold;
+        return constraintInfo.serviceStartTime + constraintInfo.getTask().getDuration() <= constraintInfo.getTask().getEndTime() + threshold;
     }
 }

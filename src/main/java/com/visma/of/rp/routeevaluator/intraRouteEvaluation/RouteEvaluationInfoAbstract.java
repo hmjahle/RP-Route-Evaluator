@@ -1,49 +1,38 @@
-package com.visma.of.rp.routeevaluator.intraRouteEvaluation.hardConstraints;
+package com.visma.of.rp.routeevaluator.intraRouteEvaluation;
 
-import com.visma.of.rp.routeevaluator.Interfaces.ITask;
+import com.visma.of.rp.routeevaluator.PublicInterfaces.ITask;
 
 /**
- * Class that contain the necessary info to evaluate the constraints.
+ * Class that contain the necessary info and functions to evaluate constraints and objectives.
  */
-public class ConstraintInfo {
+public class RouteEvaluationInfoAbstract {
 
-    long endOfShift;
-    long earliestPossibleReturnToOfficeTime;
-    ITask task;
-    long serviceStartTime;
-    long syncedStartTime;
+    protected ITask task;
+    protected long endOfWorkShift;
 
-    public ConstraintInfo(long endOfShift, long earliestPossibleReturnToOfficeTime, ITask task, long serviceStartTime, long syncedStartTime) {
-        this.endOfShift = endOfShift;
-        this.earliestPossibleReturnToOfficeTime = earliestPossibleReturnToOfficeTime;
+    public RouteEvaluationInfoAbstract(ITask task,long endOfWorkShift) {
         this.task = task;
-        this.serviceStartTime = serviceStartTime;
-        this.syncedStartTime = syncedStartTime;
-    }
-
-    public long getEndOfShift() {
-        return endOfShift;
-    }
-
-    public long getEarliestPossibleReturnToOfficeTime() {
-        return earliestPossibleReturnToOfficeTime;
+        this.endOfWorkShift = endOfWorkShift;
     }
 
     public ITask getTask() {
         return task;
     }
 
+    public long getEndOfWorkShift() {
+        return endOfWorkShift;
+    }
+
     public boolean isStrict() {
         return task != null && task.isStrict();
     }
 
-
-    public long getServiceStartTime() {
-        return serviceStartTime;
+    public boolean isSynced() {
+        return task != null && task.isSynced();
     }
 
-    public long getSyncedStartTime() {
-        return syncedStartTime;
+    public boolean isOfficeTask() {
+        return task == null;
     }
 
 }

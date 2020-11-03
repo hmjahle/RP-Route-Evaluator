@@ -1,57 +1,39 @@
-package com.visma.of.rp.routeevaluator.objectives;
+package com.visma.of.rp.routeevaluator.intraRouteEvaluation.objectives;
 
-import com.visma.of.rp.routeevaluator.Interfaces.ITask;
+import com.visma.of.rp.routeevaluator.PublicInterfaces.ITask;
+import com.visma.of.rp.routeevaluator.intraRouteEvaluation.RouteEvaluationInfoAbstract;
 
-public class ObjectiveInfo {
-    private double travelTime;
-    private ITask task;
-    private double visitEnd;
-    private double arrivalTime;
-    private double syncedTaskLatestStartTime;
-    private double endOfWorkShift;
+public class ObjectiveInfo extends RouteEvaluationInfoAbstract {
+    private long travelTime;
+    private long visitEnd;
+    private long arrivalTime;
+    private long syncedTaskLatestStartTime;
 
-    public ObjectiveInfo(double travelTime, ITask task, double visitEnd, double arrivalTime, double syncedTaskLatestStartTime, double endOfWorkShift) {
+    public ObjectiveInfo(long travelTime, ITask task, long visitEnd, long arrivalTime, long syncedTaskLatestStartTime, long endOfWorkShift) {
+        super(task,endOfWorkShift);
         this.travelTime = travelTime;
-        this.task = task;
         this.visitEnd = visitEnd;
         this.arrivalTime = arrivalTime;
         this.syncedTaskLatestStartTime = syncedTaskLatestStartTime;
-        this.endOfWorkShift = endOfWorkShift;
     }
 
-    public boolean isOfficeTask() {
-        return task == null;
-    }
-
-    public double getEndOfWorkShift() {
+    public long getEndOfWorkShift() {
         return endOfWorkShift;
     }
 
-    public double getTravelTime() {
+    public long getTravelTime() {
         return travelTime;
     }
 
-    public ITask getTask() {
-        return task;
-    }
-
-    public boolean isStrict() {
-        return task != null && task.isStrict();
-    }
-
-    public boolean isSynced() {
-        return task != null && task.isSynced();
-    }
-
-    public double getVisitEnd() {
+    public long getVisitEnd() {
         return visitEnd;
     }
 
-    public double getArrivalTime() {
+    public long getArrivalTime() {
         return arrivalTime;
     }
 
-    public double getSyncedTasksLatestStartTime() {
+    public long getSyncedTasksLatestStartTime() {
         return syncedTaskLatestStartTime;
     }
 }

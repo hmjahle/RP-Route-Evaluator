@@ -1,6 +1,6 @@
-package com.visma.of.rp.routeevaluator.objectives;
+package com.visma.of.rp.routeevaluator.intraRouteEvaluation.objectives;
 
-import com.visma.of.rp.routeevaluator.Interfaces.IObjectiveIntraRoute;
+import com.visma.of.rp.routeevaluator.PublicInterfaces.IObjectiveIntraRoute;
 
 import java.util.ArrayList;
 import java.util.List;
