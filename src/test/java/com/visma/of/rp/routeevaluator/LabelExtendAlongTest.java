@@ -8,7 +8,7 @@ import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Labe
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.SearchInfo;
 import org.junit.Assert;
 import org.junit.Test;
-import testInterfaceImplementationClasses.*;
+import testInterfaceImplementationClasses.TestTravelTimeMatrix;
 import testSupport.JUnitTestAbstract;
 
 import java.util.ArrayList;
