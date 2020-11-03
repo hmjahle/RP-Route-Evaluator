@@ -11,19 +11,8 @@ public class Label implements Comparable<Label> {
     private Node currentLocation;
     private Objective objective;
     private IResource resources;
-    /**
-     * The start of service of the current task.
-     */
     private long currentTime;
-    /**
-     * Travel time from the previous location.
-     */
     private long travelTime;
-    /**
-     * The time from which it is possible to calculate the travel time from a physical location to the next.
-     * E.g. it is the start of service time of a task + duration of all tasks performed at that location
-     * or on the way to the next location.
-     */
     private long canLeaveLocationAtTime;
     private boolean closed;
 
@@ -47,7 +36,7 @@ public class Label implements Comparable<Label> {
         Node newLocation = findNewLocation(taskRequirePhysicalAppearance, nextNode);
         long travelTime = getTravelTime(nextNode, newLocation);
         long startOfServiceNextTask = calcStartOfServiceNextTask(nextNode, taskRequirePhysicalAppearance, travelTime);
-        
+
         long earliestOfficeReturn = calcEarliestPossibleReturnToOfficeTime(nextNode, startOfServiceNextTask);
         long syncedLatestStart = nextNode.isSynced() ? searchInfo.getSyncedNodesLatestStartTime()[nextNode.getId()] : -1;
         if (!searchInfo.isFeasible(earliestOfficeReturn, nextNode.getTask(), startOfServiceNextTask, syncedLatestStart))
@@ -131,6 +120,9 @@ public class Label implements Comparable<Label> {
         return objective;
     }
 
+    /**
+     * The start of service of the current task.
+     */
     public long getCurrentTime() {
         return currentTime;
     }
@@ -147,10 +139,18 @@ public class Label implements Comparable<Label> {
         return currentLocation;
     }
 
+    /**
+     * The time from which it is possible to calculate the travel time from a physical location to the next.
+     * E.g. it is the start of service time of a task + duration of all tasks performed at that location
+     * or on the way to the next location.
+     */
     public long getCanLeaveLocationAtTime() {
         return canLeaveLocationAtTime;
     }
 
+    /**
+     * Travel time from the previous location.
+     */
     public long getTravelTime() {
         return travelTime;
     }
