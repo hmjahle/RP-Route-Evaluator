@@ -1,9 +1,6 @@
 package com.visma.of.rp.routeevaluator.solver;
 
-import com.visma.of.rp.routeevaluator.Interfaces.ITravelTimeMatrix;
-import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
-import com.visma.of.rp.routeevaluator.Interfaces.IShift;
-import com.visma.of.rp.routeevaluator.Interfaces.ITask;
+import com.visma.of.rp.routeevaluator.Interfaces.*;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.NodeList;
@@ -41,6 +38,10 @@ public class RouteEvaluator {
         this.secondNodeList = new NodeList(graph.getNodes().size());
         this.syncedNodesStartTime = new long[graph.getNodes().size()];
         this.syncedNodesLatestStartTime = new long[graph.getNodes().size()];
+    }
+
+    public void addObjectiveIntraShift(IObjectiveIntraRoute objectiveIntraShift) {
+        algorithm.addObjectiveIntraShift(objectiveIntraShift);
     }
 
     public Double evaluateRouteObjective(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
