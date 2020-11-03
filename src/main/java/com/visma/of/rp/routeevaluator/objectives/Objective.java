@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator.intraRouteEvaluation.objectives;
+package com.visma.of.rp.routeevaluator.objectives;
 
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.SearchInfo;
@@ -27,7 +27,7 @@ public class Objective {
     }
 
     private Objective createObjectiveFunctionToOffice(SearchInfo searchInfo, long travelTimeWithParking, long officeArrivalTime) {
-        double newObjectiveValue = searchInfo.calculateObjectiveValue(travelTimeWithParking, null, officeArrivalTime, Double.MAX_VALUE);
+        double newObjectiveValue = searchInfo.calculateObjectiveValue(travelTimeWithParking, null, officeArrivalTime, Long.MAX_VALUE);
         return new Objective(this.objectiveValue + newObjectiveValue);
     }
 

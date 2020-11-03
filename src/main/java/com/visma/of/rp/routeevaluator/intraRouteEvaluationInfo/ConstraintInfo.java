@@ -1,7 +1,6 @@
-package com.visma.of.rp.routeevaluator.intraRouteEvaluation.hardConstraints;
+package com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo;
 
 import com.visma.of.rp.routeevaluator.PublicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.intraRouteEvaluation.RouteEvaluationInfoAbstract;
 
 /**
  * Class that contain the necessary info to evaluate the constraints.

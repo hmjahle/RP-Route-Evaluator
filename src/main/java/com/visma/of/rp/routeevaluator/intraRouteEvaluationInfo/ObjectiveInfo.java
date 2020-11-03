@@ -1,7 +1,6 @@
-package com.visma.of.rp.routeevaluator.intraRouteEvaluation.objectives;
+package com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo;
 
 import com.visma.of.rp.routeevaluator.PublicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.intraRouteEvaluation.RouteEvaluationInfoAbstract;
 
 public class ObjectiveInfo extends RouteEvaluationInfoAbstract {
     private long travelTime;

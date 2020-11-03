@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator.intraRouteEvaluation;
+package com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo;
 
 import com.visma.of.rp.routeevaluator.PublicInterfaces.ITask;
 

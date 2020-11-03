@@ -5,7 +5,7 @@ import com.visma.of.rp.routeevaluator.PublicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.PublicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.PublicInterfaces.ITask;
 import com.visma.of.rp.routeevaluator.PublicInterfaces.ITravelTimeMatrix;
-import com.visma.of.rp.routeevaluator.intraRouteEvaluation.objectives.TimeWindowObjective;
+import com.visma.of.rp.routeevaluator.objectives.TimeWindowObjective;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
 import org.junit.Assert;

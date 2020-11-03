@@ -1,6 +1,7 @@
 package com.visma.of.rp.routeevaluator.PublicInterfaces;
 
-import com.visma.of.rp.routeevaluator.intraRouteEvaluation.hardConstraints.ConstraintInfo;
+
+import com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo.ConstraintInfo;
 
 public interface IConstraintIntraRoute {
 

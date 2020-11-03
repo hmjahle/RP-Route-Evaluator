@@ -3,9 +3,10 @@ package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 import com.visma.of.rp.routeevaluator.PublicInterfaces.IObjectiveIntraRoute;
 import com.visma.of.rp.routeevaluator.PublicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.PublicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.intraRouteEvaluation.hardConstraints.HardConstraintsIncremental;
-import com.visma.of.rp.routeevaluator.intraRouteEvaluation.objectives.ObjectiveInfo;
-import com.visma.of.rp.routeevaluator.intraRouteEvaluation.objectives.IncrementalObjectivesHandler;
+import com.visma.of.rp.routeevaluator.hardConstraints.HardConstraintsIncremental;
+import com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo.ConstraintInfo;
+import com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo.ObjectiveInfo;
+import com.visma.of.rp.routeevaluator.objectives.IncrementalObjectivesHandler;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Edge;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
@@ -13,7 +14,7 @@ import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 
 public class SearchInfo {
     private SearchGraph graph;
-    private IncrementalObjectivesHandler incrementalObjectivesHandler;
+    public IncrementalObjectivesHandler incrementalObjectivesHandler;
     private HardConstraintsIncremental hardConstraintsEvaluator;
     private long[] syncedNodesStartTime;
     private long[] syncedNodesLatestStartTime;
@@ -37,7 +38,8 @@ public class SearchInfo {
     }
 
     public boolean isFeasible(long earliestPossibleReturnToOfficeTime, ITask task, long serviceStartTime, Long syncedStartTime) {
-        return hardConstraintsEvaluator.isFeasible(endOfShift, earliestPossibleReturnToOfficeTime, task, serviceStartTime, syncedStartTime);
+        ConstraintInfo constraintInfo = new ConstraintInfo(endOfShift, earliestPossibleReturnToOfficeTime, task, serviceStartTime, syncedStartTime);
+        return hardConstraintsEvaluator.isFeasible(constraintInfo);
     }
 
     /**
@@ -62,9 +64,9 @@ public class SearchInfo {
         this.employeeWorkShift = employeeWorkShift;
     }
 
-    public double calculateObjectiveValue(double travelTime, ITask task,
-                                          double arrivalTime, double syncedLatestStartTime) {
-        double visitEnd = task != null ? arrivalTime + task.getDuration() : 0;
+    public double calculateObjectiveValue(long travelTime, ITask task,
+                                          long arrivalTime, long syncedLatestStartTime) {
+        long visitEnd = task != null ? arrivalTime + task.getDuration() : 0;
         ObjectiveInfo costInfo = new ObjectiveInfo(travelTime, task, visitEnd, arrivalTime, syncedLatestStartTime, endOfShift);
         return incrementalObjectivesHandler.calculateIncrementalObjectiveValue(costInfo);
     }
