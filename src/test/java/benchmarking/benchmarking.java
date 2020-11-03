@@ -71,7 +71,7 @@ public class benchmarking extends JUnitTestAbstract {
         newTasks.add(tasks.get(77));
 
         IShift shift = new TestShift(3600 * 8, 3600 * 8, 3600 * 16);
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 3000000; i++) {
 
             RouteEvaluatorResult result1 = routeEvaluator1.evaluateRouteByTheOrderOfTasks(newTasks, null, shift);
             RouteEvaluatorResult result2 = routeEvaluator2.evaluateRouteByTheOrderOfTasks(newTasks, null, shift);

@@ -10,15 +10,16 @@ public class Label implements Comparable<Label> {
     private Node node;
     private Node physicalLocation;
     private Objective objective;
-    private Edge edge;
     private IResource resources;
     /**
      * The start of service of the current task.
      */
     private long currentTime;
+    /**
+     * Travel time from the previous location.
+     */
+    private long travelTime;
     private boolean closed;
-    private long robustTimeSeconds;
-    private long actualRobustTimeSeconds;
     /**
      * The time from which it is possible to calculate the travel time from a physical location to the next.
      * E.g. it is the start of service time of a task + duration of all tasks performed at that location
@@ -26,20 +27,18 @@ public class Label implements Comparable<Label> {
      */
     private long canLeaveLocationAtTime;
 
-    public Label(SearchInfo searchInfo, Label previous, Node currentNode, Node physicalLocation, Edge edge, Objective objective,
-                 long currentTime, IResource resources, long robustTimeSeconds, long canLeaveLocationAtTime) {
+    public Label(SearchInfo searchInfo, Label previous, Node currentNode, Node physicalLocation, Objective objective,
+                 IResource resources, long currentTime, long travelTime, long canLeaveLocationAtTime) {
+        this.searchInfo = searchInfo;
         this.previous = previous;
-        this.edge = edge;
         this.node = currentNode;
         this.physicalLocation = physicalLocation;
         this.objective = objective;
-        this.currentTime = currentTime;
         this.resources = resources;
-        this.searchInfo = searchInfo;
-        this.closed = false;
-        this.robustTimeSeconds = robustTimeSeconds;
-        this.actualRobustTimeSeconds = (previous != null ? robustTimeSeconds : 0);
+        this.currentTime = currentTime;
+        this.travelTime = travelTime;
         this.canLeaveLocationAtTime = canLeaveLocationAtTime;
+        this.closed = false;
     }
 
     /**
@@ -83,7 +82,7 @@ public class Label implements Comparable<Label> {
         long startOfServiceNextTask = Math.max(arrivalTimeNextTask, earliestStartTimeNextTask);
         long canLeaveLocationAt = updateCanLeaveLocationAt(taskRequirePhysicalAppearance, startOfServiceNextTask);
 
-        return generateLabel(extendToInfo, newLocation, potentialEdgeToTravel, travelTime, arrivalTimeNextTask,
+        return generateLabel(extendToInfo, newLocation,  travelTime, arrivalTimeNextTask,
                 startOfServiceNextTask, canLeaveLocationAt);
     }
 
@@ -92,14 +91,14 @@ public class Label implements Comparable<Label> {
         if (requirePhysicalAppearance) {
             actualTravelTime = Math.max(travelTime - (currentTime - canLeaveLocationAtTime), 0);
         }
-        return actualTravelTime + currentTime + node.getDurationSeconds() + actualRobustTimeSeconds;
+        return actualTravelTime + currentTime + node.getDurationSeconds() + searchInfo.getRobustTimeSeconds();
     }
 
     private long updateCanLeaveLocationAt(boolean requirePhysicalAppearance, long startOfServiceNextTask) {
         if (requirePhysicalAppearance)
             return startOfServiceNextTask;
         else {
-            return canLeaveLocationAtTime + node.getDurationSeconds() + actualRobustTimeSeconds;
+            return canLeaveLocationAtTime + node.getDurationSeconds() + searchInfo.getRobustTimeSeconds();
         }
     }
 
@@ -111,8 +110,8 @@ public class Label implements Comparable<Label> {
         return requirePhysicalAppearance || nextNode.getRequirePhysicalAppearance() ? nextNode : physicalLocation;
     }
 
-    private Label generateLabel(ExtendToInfo extendToInfo, Node physicalPosition, Edge travelledEdge,
-                                long travelTimeWithParking, long officeArrivalTime, long serviceStartTime, long canLeaveLocationAt) {
+    private Label generateLabel(ExtendToInfo extendToInfo, Node physicalPosition, long travelTime,
+                                 long officeArrivalTime, long serviceStartTime, long canLeaveLocationAt) {
 
         Node nextNode = extendToInfo.getToNode();
         long arrivalTime = nextNode.getTask() == null ? officeArrivalTime : serviceStartTime;
@@ -123,13 +122,12 @@ public class Label implements Comparable<Label> {
         if (!searchInfo.isFeasible(earliestPossibleReturnToOfficeTime, nextNode.getTask(), serviceStartTime, syncedLatestStart))
             return null;
 
-        Objective objective = this.objective.extend(this.searchInfo, nextNode, travelTimeWithParking,
+        Objective objective = this.objective.extend(this.searchInfo, nextNode, travelTime,
                 serviceStartTime, officeArrivalTime, syncedLatestStart);
 
         IResource resources = this.resources.extend(extendToInfo);
-
-        return new Label(this.searchInfo, this, nextNode, physicalPosition, travelledEdge, objective,
-                arrivalTime, resources, robustTimeSeconds, canLeaveLocationAt);
+        return new Label(this.searchInfo, this, nextNode, physicalPosition, objective, resources,
+                arrivalTime,travelTime, canLeaveLocationAt);
     }
 
 
@@ -166,10 +164,6 @@ public class Label implements Comparable<Label> {
         return previous;
     }
 
-    public Edge getEdge() {
-        return edge;
-    }
-
     public Node getNode() {
         return node;
     }
@@ -200,6 +194,10 @@ public class Label implements Comparable<Label> {
 
     public long getCanLeaveLocationAtTime() {
         return canLeaveLocationAtTime;
+    }
+
+    public long getTravelTime() {
+        return travelTime;
     }
 }
 

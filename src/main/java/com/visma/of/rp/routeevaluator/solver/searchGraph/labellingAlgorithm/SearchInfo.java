@@ -18,9 +18,11 @@ public class SearchInfo {
     private long[] syncedNodesLatestStartTime;
     private long endOfShift;
     private IShift employeeWorkShift;
+    private long robustness;
 
     public SearchInfo(SearchGraph graph) {
         this.graph = graph;
+        this.robustness = graph.getRobustTimeSeconds();
         this.incrementalObjectivesHandler = new IncrementalObjectivesHandler();
         this.hardConstraintsEvaluator = new HardConstraintsIncremental();
     }
@@ -82,4 +84,7 @@ public class SearchInfo {
         return endOfShift;
     }
 
+    public long getRobustTimeSeconds() {
+        return robustness;
+    }
 }
