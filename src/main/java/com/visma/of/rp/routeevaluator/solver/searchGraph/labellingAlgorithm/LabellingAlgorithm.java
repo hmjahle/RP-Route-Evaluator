@@ -1,9 +1,8 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
+import com.visma.of.rp.routeevaluator.objectives.Objective;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveIntraRoute;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
-import com.visma.of.rp.routeevaluator.hardConstraints.HardConstraintsIncremental;
-import com.visma.of.rp.routeevaluator.objectives.Objective;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.routeResult.Visit;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
@@ -38,10 +37,6 @@ public class LabellingAlgorithm {
     }
     public void addObjectiveIntraShift(IObjectiveIntraRoute objectiveIntraShift) {
         searchInfo.addObjectiveIntraShift(objectiveIntraShift);
-    }
-
-    protected void replaceHardConstraintsEvaluator(HardConstraintsIncremental hardConstraintsEvaluator) {
-        this.searchInfo.replaceHardConstraintsEvaluator(hardConstraintsEvaluator);
     }
 
     /**

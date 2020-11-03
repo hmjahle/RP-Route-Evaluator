@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator.hardConstraints;
+package com.visma.of.rp.routeevaluator.constraints;
 
 
 import com.visma.of.rp.routeevaluator.publicInterfaces.IConstraintIntraRoute;

@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator.hardConstraints;
+package com.visma.of.rp.routeevaluator.constraints;
 
 
 import com.visma.of.rp.routeevaluator.publicInterfaces.IConstraintIntraRoute;
@@ -8,16 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class HardConstraintsIncremental {
+public class ConstraintsIncremental {
 
-    List<IConstraintIntraRoute> hardConstraints;
+    List<IConstraintIntraRoute> constraints;
 
-    public HardConstraintsIncremental() {
-        hardConstraints = new ArrayList<>();
+    public ConstraintsIncremental() {
+        constraints = new ArrayList<>();
     }
 
     public boolean isFeasible(ConstraintInfo constraintInfo) {
-        for (IConstraintIntraRoute constraint : hardConstraints) {
+        for (IConstraintIntraRoute constraint : constraints) {
             if (!constraint.constraintIsFeasible(constraintInfo)) {
                 return false;
             }
@@ -25,7 +25,7 @@ public class HardConstraintsIncremental {
         return true;
     }
 
-    void addHardConstraint(IConstraintIntraRoute constraint) {
-        hardConstraints.add(constraint);
+    void addConstraint(IConstraintIntraRoute constraint) {
+        constraints.add(constraint);
     }
 }
