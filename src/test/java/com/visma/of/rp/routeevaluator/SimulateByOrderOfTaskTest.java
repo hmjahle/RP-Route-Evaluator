@@ -129,7 +129,7 @@ public class SimulateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Start time should be: ", 80, result.getVisitSolution().get(5).getStart());
         Assert.assertEquals("Start time should be: ", 87, result.getVisitSolution().get(6).getStart());
         Assert.assertEquals("Start time should be: ", 94, result.getVisitSolution().get(7).getStart());
-        Assert.assertEquals("Office return should be: ", 97, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Office return should be: ", 102, result.getTimeOfOfficeReturn().longValue());
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
     }
 
@@ -156,7 +156,7 @@ public class SimulateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Start time should be: ", 40, result.getVisitSolution().get(0).getStart());
         Assert.assertEquals("Start time should be: ", 52, result.getVisitSolution().get(1).getStart());
         Assert.assertEquals("Start time should be: ", 64, result.getVisitSolution().get(2).getStart());
-        Assert.assertEquals("Office return should be: ", 67, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Office return should be: ", 77, result.getTimeOfOfficeReturn().longValue());
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
     }
 
