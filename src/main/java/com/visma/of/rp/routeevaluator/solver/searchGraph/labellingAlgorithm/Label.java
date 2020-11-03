@@ -8,7 +8,7 @@ public class Label implements Comparable<Label> {
     private SearchInfo searchInfo;
     private Label previous;
     private Node node;
-    private Node physicalLocation;
+    private Node currentLocation;
     private Objective objective;
     private IResource resources;
     /**
@@ -19,26 +19,140 @@ public class Label implements Comparable<Label> {
      * Travel time from the previous location.
      */
     private long travelTime;
-    private boolean closed;
     /**
      * The time from which it is possible to calculate the travel time from a physical location to the next.
      * E.g. it is the start of service time of a task + duration of all tasks performed at that location
      * or on the way to the next location.
      */
     private long canLeaveLocationAtTime;
+    private boolean closed;
 
-    public Label(SearchInfo searchInfo, Label previous, Node currentNode, Node physicalLocation, Objective objective,
+    public Label(SearchInfo searchInfo, Label previous, Node currentNode, Node currentLocation, Objective objective,
                  IResource resources, long currentTime, long travelTime, long canLeaveLocationAtTime) {
         this.searchInfo = searchInfo;
         this.previous = previous;
         this.node = currentNode;
-        this.physicalLocation = physicalLocation;
+        this.currentLocation = currentLocation;
         this.objective = objective;
         this.resources = resources;
         this.currentTime = currentTime;
         this.travelTime = travelTime;
         this.canLeaveLocationAtTime = canLeaveLocationAtTime;
         this.closed = false;
+    }
+
+    public Label extendAlong(ExtendToInfo extendToInfo) {
+        Node nextNode = extendToInfo.getToNode();
+        boolean taskRequirePhysicalAppearance = nextNode.getRequirePhysicalAppearance();
+        Node newLocation = findNewLocation(taskRequirePhysicalAppearance, nextNode);
+        long travelTime = getTravelTime(nextNode, newLocation);
+        long startOfServiceNextTask = calcStartOfServiceNextTask(nextNode, taskRequirePhysicalAppearance, travelTime);
+        
+        long earliestOfficeReturn = calcEarliestPossibleReturnToOfficeTime(nextNode, startOfServiceNextTask);
+        long syncedLatestStart = nextNode.isSynced() ? searchInfo.getSyncedNodesLatestStartTime()[nextNode.getId()] : -1;
+        if (!searchInfo.isFeasible(earliestOfficeReturn, nextNode.getTask(), startOfServiceNextTask, syncedLatestStart))
+            return null;
+
+        long canLeaveLocationAt = updateCanLeaveLocationAt(taskRequirePhysicalAppearance, startOfServiceNextTask);
+        return buildNewLabel(extendToInfo, nextNode, newLocation, travelTime,
+                startOfServiceNextTask, canLeaveLocationAt, syncedLatestStart);
+    }
+
+    private Label buildNewLabel(ExtendToInfo extendToInfo, Node nextNode, Node newLocation, long travelTime, long startOfServiceNextTask, long canLeaveLocationAt, long syncedLatestStart) {
+        Objective objective = this.objective.extend(this.searchInfo, nextNode, travelTime, startOfServiceNextTask, syncedLatestStart);
+        IResource resources = this.resources.extend(extendToInfo);
+        return new Label(this.searchInfo, this, nextNode, newLocation, objective, resources, startOfServiceNextTask, travelTime, canLeaveLocationAt);
+    }
+
+    private long calcStartOfServiceNextTask(Node nextNode, boolean taskRequirePhysicalAppearance, long travelTime) {
+        long arrivalTimeNextTask = calcArrivalTimeNextTask(taskRequirePhysicalAppearance, travelTime);
+        long earliestStartTimeNextTask = findEarliestStartTimeNextTask(nextNode);
+        return Math.max(arrivalTimeNextTask, earliestStartTimeNextTask);
+    }
+
+    private long getTravelTime(Node nextNode, Node newLocation) {
+        Edge edge = newLocation == currentLocation ? null : getEdgeToNextNode(nextNode);
+        if (edge == null) {
+            return 0;
+        } else
+            return edge.getTravelTime();
+    }
+
+    private long calcEarliestPossibleReturnToOfficeTime(Node nextNode, long startOfServiceNextTask) {
+        return startOfServiceNextTask + nextNode.getDurationSeconds() +
+                searchInfo.getTravelTimeToOffice(nextNode);
+    }
+
+    private long calcArrivalTimeNextTask(boolean requirePhysicalAppearance, long travelTime) {
+        long actualTravelTime = travelTime;
+        if (requirePhysicalAppearance) {
+            actualTravelTime = Math.max(travelTime - (currentTime - canLeaveLocationAtTime), 0);
+        }
+        return actualTravelTime + currentTime + node.getDurationSeconds() + searchInfo.getRobustTimeSeconds();
+    }
+
+    private long updateCanLeaveLocationAt(boolean requirePhysicalAppearance, long startOfServiceNextTask) {
+        if (requirePhysicalAppearance)
+            return startOfServiceNextTask;
+        else {
+            return canLeaveLocationAtTime + node.getDurationSeconds() + searchInfo.getRobustTimeSeconds();
+        }
+    }
+
+    private Node findNewLocation(boolean requirePhysicalAppearance, Node nextNode) {
+        return requirePhysicalAppearance || nextNode.getRequirePhysicalAppearance() ? nextNode : currentLocation;
+    }
+
+    private long findEarliestStartTimeNextTask(Node toNode) {
+        if (toNode.isSynced()) {
+            return searchInfo.getSyncedNodesStartTime()[toNode.getId()];
+        } else {
+            return toNode.getStartTime();
+        }
+    }
+
+    private Edge getEdgeToNextNode(Node toNode) {
+        return searchInfo.getGraph().getEdgesNodeToNode().getEdge(this.currentLocation, toNode);
+    }
+
+    public Label getPrevious() {
+        return previous;
+    }
+
+    public Node getNode() {
+        return node;
+    }
+
+    public boolean isClosed() {
+        return closed;
+    }
+
+    public Objective getObjective() {
+        return objective;
+    }
+
+    public long getCurrentTime() {
+        return currentTime;
+    }
+
+    public IResource getResources() {
+        return resources;
+    }
+
+    public void setClosed(boolean close) {
+        closed = close;
+    }
+
+    public Node getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public long getCanLeaveLocationAtTime() {
+        return canLeaveLocationAtTime;
+    }
+
+    public long getTravelTime() {
+        return travelTime;
     }
 
     /**
@@ -70,135 +184,11 @@ public class Label implements Comparable<Label> {
         return Double.compare(objective.getObjectiveValue(), other.objective.getObjectiveValue());
     }
 
-    public Label extendAlong(ExtendToInfo extendToInfo) {
-        Node nextNode = extendToInfo.getToNode();
-        boolean taskRequirePhysicalAppearance = nextNode.getRequirePhysicalAppearance();
-        Node newLocation = findNewLocation(taskRequirePhysicalAppearance, nextNode);
-        Edge potentialEdgeToTravel = potentialEdgeToTravel(nextNode, newLocation);
-
-        long earliestStartTimeNextTask = findEarliestStartTimeNextTask(nextNode);
-        long travelTime = getTravelTime(potentialEdgeToTravel);
-        long arrivalTimeNextTask = calcArrivalTimeNextTask(taskRequirePhysicalAppearance, travelTime);
-        long startOfServiceNextTask = Math.max(arrivalTimeNextTask, earliestStartTimeNextTask);
-        long canLeaveLocationAt = updateCanLeaveLocationAt(taskRequirePhysicalAppearance, startOfServiceNextTask);
-
-        return generateLabel(extendToInfo, newLocation,  travelTime, arrivalTimeNextTask,
-                startOfServiceNextTask, canLeaveLocationAt);
-    }
-
-    private long calcArrivalTimeNextTask(boolean requirePhysicalAppearance, long travelTime) {
-        long actualTravelTime = travelTime;
-        if (requirePhysicalAppearance) {
-            actualTravelTime = Math.max(travelTime - (currentTime - canLeaveLocationAtTime), 0);
-        }
-        return actualTravelTime + currentTime + node.getDurationSeconds() + searchInfo.getRobustTimeSeconds();
-    }
-
-    private long updateCanLeaveLocationAt(boolean requirePhysicalAppearance, long startOfServiceNextTask) {
-        if (requirePhysicalAppearance)
-            return startOfServiceNextTask;
-        else {
-            return canLeaveLocationAtTime + node.getDurationSeconds() + searchInfo.getRobustTimeSeconds();
-        }
-    }
-
-    private Edge potentialEdgeToTravel(Node nextNode, Node newPhysicalPosition) {
-        return newPhysicalPosition == physicalLocation ? null : getEdgeToNextNode(nextNode);
-    }
-
-    private Node findNewLocation(boolean requirePhysicalAppearance, Node nextNode) {
-        return requirePhysicalAppearance || nextNode.getRequirePhysicalAppearance() ? nextNode : physicalLocation;
-    }
-
-    private Label generateLabel(ExtendToInfo extendToInfo, Node physicalPosition, long travelTime,
-                                 long officeArrivalTime, long serviceStartTime, long canLeaveLocationAt) {
-
-        Node nextNode = extendToInfo.getToNode();
-        long arrivalTime = nextNode.getTask() == null ? officeArrivalTime : serviceStartTime;
-        long earliestPossibleReturnToOfficeTime = arrivalTime + nextNode.getDurationSeconds() +
-                searchInfo.getTravelTimeToOffice(nextNode);
-
-        long syncedLatestStart = nextNode.isSynced() ? searchInfo.getSyncedNodesLatestStartTime()[nextNode.getId()] : -1;
-        if (!searchInfo.isFeasible(earliestPossibleReturnToOfficeTime, nextNode.getTask(), serviceStartTime, syncedLatestStart))
-            return null;
-
-        Objective objective = this.objective.extend(this.searchInfo, nextNode, travelTime,
-                serviceStartTime, officeArrivalTime, syncedLatestStart);
-
-        IResource resources = this.resources.extend(extendToInfo);
-        return new Label(this.searchInfo, this, nextNode, physicalPosition, objective, resources,
-                arrivalTime,travelTime, canLeaveLocationAt);
-    }
-
-
-    private long findEarliestStartTimeNextTask(Node toNode) {
-        long earliestStartTime;
-        if (toNode.isSynced()) {
-            earliestStartTime = searchInfo.getSyncedNodesStartTime()[toNode.getId()];
-        } else {
-            earliestStartTime = toNode.getStartTime();
-        }
-        return earliestStartTime;
-    }
-
-    private long getTravelTime(Edge edge) {
-        if (shouldNotTravel(edge)) {
-            return 0;
-        } else
-            return edge.getTravelTime();
-    }
-
-    private Edge getEdgeToNextNode(Node toNode) {
-        return searchInfo.getGraph().getEdgesNodeToNode().getEdge(this.physicalLocation, toNode);
-    }
-
-    private boolean shouldNotTravel(Edge edge) {
-        return edge == null || this.physicalLocation.equals(edge.getToNode());
-    }
-
+    @Override
     public String toString() {
         return node.getId() + ", " + objective + ", " + resources;
     }
 
-    public Label getPrevious() {
-        return previous;
-    }
-
-    public Node getNode() {
-        return node;
-    }
-
-    public boolean isClosed() {
-        return closed;
-    }
-
-    public Objective getObjective() {
-        return objective;
-    }
-
-    public long getCurrentTime() {
-        return currentTime;
-    }
-
-    public IResource getResources() {
-        return resources;
-    }
-
-    public void setClosed(boolean close) {
-        closed = close;
-    }
-
-    public Node getPhysicalLocation() {
-        return physicalLocation;
-    }
-
-    public long getCanLeaveLocationAtTime() {
-        return canLeaveLocationAtTime;
-    }
-
-    public long getTravelTime() {
-        return travelTime;
-    }
 }
 
 
