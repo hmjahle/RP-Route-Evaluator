@@ -125,6 +125,3 @@ publishing {
 artifactoryPublish {
     dependsOn jar
 }
-
-// code will be generated during compilation
-compileJava.dependsOn(generateCode)
