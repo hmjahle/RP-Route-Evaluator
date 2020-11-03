@@ -59,7 +59,6 @@ public class RouteEvaluatorResult {
         this.timeOfOfficeReturn = timeOfOfficeReturn;
     }
 
-
     private void addVisitToVisitSolution(Visit visit) {
         visitSolution.add(visit);
     }
@@ -87,7 +86,6 @@ public class RouteEvaluatorResult {
     public double getObjectiveValue() {
         return objectiveValue;
     }
-
 
     public Long getTimeOfOfficeReturn() {
         return timeOfOfficeReturn;

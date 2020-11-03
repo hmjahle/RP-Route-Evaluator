@@ -201,8 +201,8 @@ public class LabelDominanceTest {
     }
 
     public int labelTest(Label a, Label b) {
-        Label labelA = new Label(null, a.getPrevious(), a.getNode(), a.getPhysicalLocation(), a.getEdge(), a.getObjective(), a.getCurrentTime(), a.getExtraDrivingTime(), a.getResources(), 0);
-        Label labelB = new Label(null, b.getPrevious(), b.getNode(), b.getPhysicalLocation(), b.getEdge(), b.getObjective(), b.getCurrentTime(), b.getExtraDrivingTime(), b.getResources(), 0);
+        Label labelA = new Label(null, a.getPrevious(), a.getNode(), a.getPhysicalLocation(), a.getEdge(), a.getObjective(), a.getCurrentTime(), a.getTimeAlreadyTravelled(), a.getResources(), 0);
+        Label labelB = new Label(null, b.getPrevious(), b.getNode(), b.getPhysicalLocation(), b.getEdge(), b.getObjective(), b.getCurrentTime(), b.getTimeAlreadyTravelled(), b.getResources(), 0);
         return labelA.dominates(labelB);
     }
 }

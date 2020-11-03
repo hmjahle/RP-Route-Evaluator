@@ -50,7 +50,7 @@ public class NoPhysicalAppearanceTravelTimesTest extends JUnitTestAbstract {
         Assert.assertEquals(getTime(0, 6, 28), getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
         Assert.assertEquals(getTime(0, 2, 23), getVisitTravelTime(result, 2));
-        Assert.assertEquals(getTime(10, 25, 40), result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", getTime(10, 25, 40), result.getTimeOfOfficeReturn().longValue());
     }
 
     @Test
@@ -65,7 +65,7 @@ public class NoPhysicalAppearanceTravelTimesTest extends JUnitTestAbstract {
         Assert.assertEquals(getTime(0, 6, 28), getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
         Assert.assertEquals(getTime(0, 2, 7), getVisitTravelTime(result, 2));
-        Assert.assertEquals(getTime(10, 28, 51), result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", getTime(10, 28, 51), result.getTimeOfOfficeReturn().longValue());
     }
 
 
@@ -81,7 +81,7 @@ public class NoPhysicalAppearanceTravelTimesTest extends JUnitTestAbstract {
         Assert.assertEquals(getTime(0, 6, 28), getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
         Assert.assertEquals(getTime(0, 2, 7), getVisitTravelTime(result, 2));
-        Assert.assertEquals(getTime(10, 26, 44), result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", getTime(10, 26, 44), result.getTimeOfOfficeReturn().longValue());
     }
 
     @Test
@@ -96,7 +96,7 @@ public class NoPhysicalAppearanceTravelTimesTest extends JUnitTestAbstract {
         Assert.assertEquals(getTime(0, 6, 28), getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
         Assert.assertEquals(getTime(0, 2, 23), getVisitTravelTime(result, 2));
-        Assert.assertEquals(getTime(10, 25, 40), result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", getTime(10, 25, 40), result.getTimeOfOfficeReturn().longValue());
     }
 
     @Test
@@ -111,7 +111,7 @@ public class NoPhysicalAppearanceTravelTimesTest extends JUnitTestAbstract {
         Assert.assertEquals(getTime(0, 6, 28), getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
         Assert.assertEquals(getTime(0, 2, 7), getVisitTravelTime(result, 2));
-        Assert.assertEquals(getTime(10, 27, 51), result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", getTime(10, 27, 51), result.getTimeOfOfficeReturn().longValue());
     }
 
     private List<ILocation> createLocations() {
