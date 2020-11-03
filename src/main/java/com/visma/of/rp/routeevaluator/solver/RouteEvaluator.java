@@ -60,7 +60,7 @@ public class RouteEvaluator {
      * Simulates the route given by the tasks input, the order of the tasks is the order of the route.
      *
      * @param tasks                The route to be simulated, the order of the list is the order of the route.
-     * @param syncedTasksStartTime Map of ALL synced tasks and their start times. Un-predicable behaviour if this is not the case.
+     * @param syncedTasksStartTime Map of ALL synced tasks and their start times. 
      * @param employeeWorkShift    Employee the route applies to.
      * @return A routeSimulator result for the simulated route.
      */
