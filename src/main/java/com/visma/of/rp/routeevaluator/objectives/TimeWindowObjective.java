@@ -7,7 +7,7 @@ public class TimeWindowObjective implements IObjectiveIntraRoute {
 
     @Override
     public double calculateIncrementalObjectiveValueFor(ObjectiveInfo objectiveInfo) {
-        if (objectiveInfo.isOfficeTask())
+        if (objectiveInfo.isDestination())
             return 0;
         else
             return Math.max(0,objectiveInfo.getVisitEnd() - objectiveInfo.getTask().getEndTime());

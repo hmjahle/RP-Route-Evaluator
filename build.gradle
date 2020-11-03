@@ -1,9 +1,55 @@
-plugins {
-    id 'java'
+buildscript {
+    repositories {
+        maven {
+            url 'https://vismaartifactory.jfrog.io/artifactory/optimization-maven-virtual-repository'
+            credentials {
+                username = "$System.env.JFROG_USERNAME"
+                password = "$System.env.JFROG_ACCESS_KEY"
+            }
+            name = "maven-main-cache"
+        }
+    }
+    dependencies {
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.17.2"
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.6'
+    }
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+plugins {
+    id 'java'
+    id 'application'
+    id "com.jfrog.artifactory" version "4.17.2"
+    id 'maven-publish'
+}
+
+group 'com.visma.of'
+mainClassName = 'Main'
+sourceCompatibility = 1.8
+
+task incrementVersion {
+    doLast{
+        Properties props = new Properties()
+        File propsFile = new File('gradle.properties')
+        props.load(propsFile.newDataInputStream())
+        def stable_project_version = props.getProperty('version') as String
+        def (major, minor) = stable_project_version.tokenize('.')
+        minor = String.valueOf(minor.toInteger() + 1)
+        String project_version = major + '.' + minor
+        props.setProperty('version', project_version)
+        props.store(propsFile.newWriter(), null)
+        println(project_version)
+    }
+}
+
+task printVersion {
+    // any code that goes here is part of configuring the task
+    // this code will always get run, even if the task is not executed
+    doLast { // add a task action
+        // any code that goes here is part of executing the task
+        // this code will only get run if and when the task gets executed
+        println project.version
+    }
+}
 
 repositories {
     mavenCentral()
@@ -11,4 +57,71 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+sourceSets {
+    main.java.srcDirs = ['src/main/java']
+    main.resources.srcDirs = ['src/main/resources']
+    test.java.srcDirs = ['src/test/java']
+    test.resources.srcDirs = ['src/test/resources']
+}
+
+repositories {
+    maven {
+        url 'https://vismaartifactory.jfrog.io/artifactory/optimization-maven-virtual-repository'
+        credentials {
+            username = "$System.env.JFROG_USERNAME"
+            password = "$System.env.JFROG_ACCESS_KEY"
+        }
+    }
+}
+
+// attach the generated folder as source for this project
+sourceSets {
+    main {
+        java {
+            srcDir "$buildDir/java-client/src/main/java"
+        }
+    }
+}
+
+
+artifactory {
+    contextUrl = "${artifactory_contextUrl}"
+    publish {
+        repository {
+            repoKey = 'optimization-maven-repository'
+            username = "$System.env.JFROG_USERNAME"
+            password = "$System.env.JFROG_ACCESS_KEY"
+            maven = true
+        }
+        defaults {
+            publications('mavenJava')
+        }
+    }
+    resolve {
+        repository {
+            repoKey = 'optimization-maven-virtual-repository'
+            username = "$System.env.JFROG_USERNAME"
+            password = "$System.env.JFROG_ACCESS_KEY"
+            maven = true
+
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = "${group}"
+            artifactId = "rp-route-evaluator"
+            version = "${version}"
+            from components.java
+        }
+    }
+}
+
+
+artifactoryPublish {
+    dependsOn jar
 }
