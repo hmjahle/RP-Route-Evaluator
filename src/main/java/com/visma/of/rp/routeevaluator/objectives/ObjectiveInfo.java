@@ -2,7 +2,7 @@ package com.visma.of.rp.routeevaluator.objectives;
 
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 
-public class IncrementalObjectiveInfo {
+public class ObjectiveInfo {
     private double travelTime;
     private ITask task;
     private double visitEnd;
@@ -10,7 +10,7 @@ public class IncrementalObjectiveInfo {
     private double syncedTaskLatestStartTime;
     private double endOfWorkShift;
 
-    public IncrementalObjectiveInfo(double travelTime, ITask task, double visitEnd, double arrivalTime, double syncedTaskLatestStartTime, double endOfWorkShift) {
+    public ObjectiveInfo(double travelTime, ITask task, double visitEnd, double arrivalTime, double syncedTaskLatestStartTime, double endOfWorkShift) {
         this.travelTime = travelTime;
         this.task = task;
         this.visitEnd = visitEnd;

@@ -17,10 +17,10 @@ public class IncrementalObjectivesHandler {
         intraShiftObjectives.add(objectiveIntraShift);
     }
 
-    public double calculateIncrementalObjectiveValue(IncrementalObjectiveInfo incrementalObjectiveInfo) {
+    public double calculateIncrementalObjectiveValue(ObjectiveInfo objectiveInfo) {
         double incrementalObjectiveValue = 0.0;
         for (IObjectiveIntraRoute intraShiftObjective : intraShiftObjectives)
-            incrementalObjectiveValue += intraShiftObjective.calculateIncrementalObjectiveValueFor(incrementalObjectiveInfo);
+            incrementalObjectiveValue += intraShiftObjective.calculateIncrementalObjectiveValueFor(objectiveInfo);
         return incrementalObjectiveValue;
     }
 }

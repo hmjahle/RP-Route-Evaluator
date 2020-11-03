@@ -1,9 +1,10 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
+import com.visma.of.rp.routeevaluator.Interfaces.IObjectiveIntraRoute;
 import com.visma.of.rp.routeevaluator.Interfaces.IShift;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 import com.visma.of.rp.routeevaluator.hardConstraints.HardConstraintsIncremental;
-import com.visma.of.rp.routeevaluator.objectives.IncrementalObjectiveInfo;
+import com.visma.of.rp.routeevaluator.objectives.ObjectiveInfo;
 import com.visma.of.rp.routeevaluator.objectives.IncrementalObjectivesHandler;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Edge;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
@@ -25,6 +26,10 @@ public class SearchInfo {
         this.robustness = graph.getRobustTimeSeconds();
         this.incrementalObjectivesHandler = new IncrementalObjectivesHandler();
         this.hardConstraintsEvaluator = new HardConstraintsIncremental();
+    }
+
+    public void addObjectiveIntraShift(IObjectiveIntraRoute objectiveIntraShift) {
+        incrementalObjectivesHandler.addObjectiveIntraShift(objectiveIntraShift);
     }
 
     protected void replaceHardConstraintsEvaluator(HardConstraintsIncremental hardConstraintsEvaluator) {
@@ -60,7 +65,7 @@ public class SearchInfo {
     public double calculateObjectiveValue(double travelTime, ITask task,
                                           double arrivalTime, double syncedLatestStartTime) {
         double visitEnd = task != null ? arrivalTime + task.getDuration() : 0;
-        IncrementalObjectiveInfo costInfo = new IncrementalObjectiveInfo(travelTime, task, visitEnd, arrivalTime, syncedLatestStartTime, endOfShift);
+        ObjectiveInfo costInfo = new ObjectiveInfo(travelTime, task, visitEnd, arrivalTime, syncedLatestStartTime, endOfShift);
         return incrementalObjectivesHandler.calculateIncrementalObjectiveValue(costInfo);
     }
 
