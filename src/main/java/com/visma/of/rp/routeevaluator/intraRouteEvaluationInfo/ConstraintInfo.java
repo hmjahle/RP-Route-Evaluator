@@ -1,25 +1,24 @@
 package com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo;
 
-import com.visma.of.rp.routeevaluator.PublicInterfaces.ITask;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 
 /**
  * Class that contain the necessary info to evaluate the constraints.
  */
 public class ConstraintInfo extends RouteEvaluationInfoAbstract {
 
-    long earliestPossibleReturnToOfficeTime;
-    long serviceStartTime;
-    long syncedStartTime;
+    long earliestOfficeReturn;
+    long startOfServiceNextTask;
 
-    public ConstraintInfo(long endOfWorkShift, long earliestPossibleReturnToOfficeTime, ITask task, long serviceStartTime, long syncedStartTime) {
-        super(task, endOfWorkShift);
-        this.earliestPossibleReturnToOfficeTime = earliestPossibleReturnToOfficeTime;
-        this.serviceStartTime = serviceStartTime;
-        this.syncedStartTime = syncedStartTime;
+    public ConstraintInfo(long endOfWorkShift, long earliestOfficeReturn, ITask task, long startOfServiceNextTask, long syncedTaskLatestStartTime) {
+        super(task, endOfWorkShift,syncedTaskLatestStartTime);
+        this.earliestOfficeReturn = earliestOfficeReturn;
+        this.startOfServiceNextTask = startOfServiceNextTask;
+        this.syncedTaskLatestStartTime = syncedTaskLatestStartTime;
     }
 
-    public long getEarliestPossibleReturnToOfficeTime() {
-        return earliestPossibleReturnToOfficeTime;
+    public long getEarliestOfficeReturn() {
+        return earliestOfficeReturn;
     }
 
     public boolean isStrict() {
@@ -27,12 +26,9 @@ public class ConstraintInfo extends RouteEvaluationInfoAbstract {
     }
 
 
-    public long getServiceStartTime() {
-        return serviceStartTime;
+    public long getStartOfServiceNextTask() {
+        return startOfServiceNextTask;
     }
 
-    public long getSyncedStartTime() {
-        return syncedStartTime;
-    }
 
 }

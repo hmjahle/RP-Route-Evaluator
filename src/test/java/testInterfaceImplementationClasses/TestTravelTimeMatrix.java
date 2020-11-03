@@ -1,7 +1,7 @@
 package testInterfaceImplementationClasses;
 
-import com.visma.of.rp.routeevaluator.PublicInterfaces.ITravelTimeMatrix;
-import com.visma.of.rp.routeevaluator.PublicInterfaces.ILocation;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ITravelTimeMatrix;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 
 import java.util.HashMap;
 import java.util.Map;

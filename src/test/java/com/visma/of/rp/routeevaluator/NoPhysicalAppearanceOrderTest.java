@@ -1,9 +1,9 @@
 package com.visma.of.rp.routeevaluator;
 
 
-import com.visma.of.rp.routeevaluator.PublicInterfaces.ILocation;
-import com.visma.of.rp.routeevaluator.PublicInterfaces.IShift;
-import com.visma.of.rp.routeevaluator.PublicInterfaces.ITask;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
+import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
 import org.junit.Assert;

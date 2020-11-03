@@ -1,6 +1,6 @@
 package testInterfaceImplementationClasses;
 
-import com.visma.of.rp.routeevaluator.PublicInterfaces.IShift;
+import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 
 /**
  * Implements the IShift interface and uses it to test methods in the route evaluator.

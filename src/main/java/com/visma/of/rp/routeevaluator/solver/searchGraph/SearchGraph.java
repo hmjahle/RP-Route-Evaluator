@@ -1,9 +1,9 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph;
 
 
-import com.visma.of.rp.routeevaluator.PublicInterfaces.ILocation;
-import com.visma.of.rp.routeevaluator.PublicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.PublicInterfaces.ITravelTimeMatrix;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ITravelTimeMatrix;
 
 import java.util.*;
 

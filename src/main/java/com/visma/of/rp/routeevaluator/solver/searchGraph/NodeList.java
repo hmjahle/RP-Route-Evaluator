@@ -1,7 +1,7 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph;
 
 
-import com.visma.of.rp.routeevaluator.PublicInterfaces.ITask;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 
 import java.util.List;
 

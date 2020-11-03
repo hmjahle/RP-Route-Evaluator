@@ -1,8 +1,8 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
-import com.visma.of.rp.routeevaluator.PublicInterfaces.IObjectiveIntraRoute;
-import com.visma.of.rp.routeevaluator.PublicInterfaces.IShift;
-import com.visma.of.rp.routeevaluator.PublicInterfaces.ITask;
+import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveIntraRoute;
+import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 import com.visma.of.rp.routeevaluator.hardConstraints.HardConstraintsIncremental;
 import com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo.ConstraintInfo;
 import com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo.ObjectiveInfo;
@@ -37,8 +37,8 @@ public class SearchInfo {
         this.hardConstraintsEvaluator = hardConstraintsEvaluator;
     }
 
-    public boolean isFeasible(long earliestPossibleReturnToOfficeTime, ITask task, long serviceStartTime, Long syncedStartTime) {
-        ConstraintInfo constraintInfo = new ConstraintInfo(endOfShift, earliestPossibleReturnToOfficeTime, task, serviceStartTime, syncedStartTime);
+    public boolean isFeasible(long earliestOfficeReturn, ITask task, long startOfServiceNextTask, long syncedLatestStart) {
+        ConstraintInfo constraintInfo = new ConstraintInfo(endOfShift, earliestOfficeReturn, task, startOfServiceNextTask, syncedLatestStart);
         return hardConstraintsEvaluator.isFeasible(constraintInfo);
     }
 
@@ -65,9 +65,9 @@ public class SearchInfo {
     }
 
     public double calculateObjectiveValue(long travelTime, ITask task,
-                                          long arrivalTime, long syncedLatestStartTime) {
-        long visitEnd = task != null ? arrivalTime + task.getDuration() : 0;
-        ObjectiveInfo costInfo = new ObjectiveInfo(travelTime, task, visitEnd, arrivalTime, syncedLatestStartTime, endOfShift);
+                                          long startOfServiceNextTask, long syncedTaskLatestStartTime) {
+        long visitEnd = task != null ? startOfServiceNextTask + task.getDuration() : 0;
+        ObjectiveInfo costInfo = new ObjectiveInfo(travelTime, task, visitEnd, startOfServiceNextTask, syncedTaskLatestStartTime, endOfShift);
         return incrementalObjectivesHandler.calculateIncrementalObjectiveValue(costInfo);
     }
 

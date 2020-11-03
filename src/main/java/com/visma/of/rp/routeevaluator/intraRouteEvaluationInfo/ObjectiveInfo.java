@@ -1,19 +1,17 @@
 package com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo;
 
-import com.visma.of.rp.routeevaluator.PublicInterfaces.ITask;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 
 public class ObjectiveInfo extends RouteEvaluationInfoAbstract {
     private long travelTime;
     private long visitEnd;
-    private long arrivalTime;
-    private long syncedTaskLatestStartTime;
+    private long startOfServiceNextTask;
 
-    public ObjectiveInfo(long travelTime, ITask task, long visitEnd, long arrivalTime, long syncedTaskLatestStartTime, long endOfWorkShift) {
-        super(task,endOfWorkShift);
+    public ObjectiveInfo(long travelTime, ITask task, long visitEnd, long startOfServiceNextTask, long syncedTaskLatestStartTime, long endOfWorkShift) {
+        super(task, endOfWorkShift, syncedTaskLatestStartTime);
         this.travelTime = travelTime;
         this.visitEnd = visitEnd;
-        this.arrivalTime = arrivalTime;
-        this.syncedTaskLatestStartTime = syncedTaskLatestStartTime;
+        this.startOfServiceNextTask = startOfServiceNextTask;
     }
 
     public long getEndOfWorkShift() {
@@ -28,11 +26,8 @@ public class ObjectiveInfo extends RouteEvaluationInfoAbstract {
         return visitEnd;
     }
 
-    public long getArrivalTime() {
-        return arrivalTime;
+    public long getStartOfServiceNextTask() {
+        return startOfServiceNextTask;
     }
 
-    public long getSyncedTasksLatestStartTime() {
-        return syncedTaskLatestStartTime;
-    }
 }

@@ -21,8 +21,8 @@ public class Objective {
         }
     }
 
-    private Objective createObjectiveFunctionFor(SearchInfo searchInfo, Node toNode, long travelTimeWithParking, long arrivalTime, long syncedTaskLatestStartTime) {
-        double newObjectiveValue = searchInfo.calculateObjectiveValue(travelTimeWithParking, toNode.getTask(), arrivalTime, syncedTaskLatestStartTime);
+    private Objective createObjectiveFunctionFor(SearchInfo searchInfo, Node toNode, long travelTimeWithParking, long startOfServiceNextTask, long syncedTaskLatestStartTime) {
+        double newObjectiveValue = searchInfo.calculateObjectiveValue(travelTimeWithParking, toNode.getTask(), startOfServiceNextTask, syncedTaskLatestStartTime);
         return new Objective(this.objectiveValue + newObjectiveValue);
     }
 
