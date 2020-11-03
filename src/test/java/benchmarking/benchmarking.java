@@ -1,8 +1,8 @@
 package benchmarking;
 
-import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
-import com.visma.of.rp.routeevaluator.Interfaces.IShift;
-import com.visma.of.rp.routeevaluator.Interfaces.ITask;
+import com.visma.of.rp.routeevaluator.PublicInterfaces.ILocation;
+import com.visma.of.rp.routeevaluator.PublicInterfaces.IShift;
+import com.visma.of.rp.routeevaluator.PublicInterfaces.ITask;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.routeResult.Visit;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;

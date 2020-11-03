@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator.Interfaces;
+package com.visma.of.rp.routeevaluator.PublicInterfaces;
 
 /**
  * A location refers to a physical location from which a distance to another physical location can be calculated.

@@ -1,11 +1,11 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
-import com.visma.of.rp.routeevaluator.Interfaces.IObjectiveIntraRoute;
-import com.visma.of.rp.routeevaluator.Interfaces.IShift;
-import com.visma.of.rp.routeevaluator.Interfaces.ITask;
-import com.visma.of.rp.routeevaluator.hardConstraints.HardConstraintsIncremental;
-import com.visma.of.rp.routeevaluator.objectives.ObjectiveInfo;
-import com.visma.of.rp.routeevaluator.objectives.IncrementalObjectivesHandler;
+import com.visma.of.rp.routeevaluator.PublicInterfaces.IObjectiveIntraRoute;
+import com.visma.of.rp.routeevaluator.PublicInterfaces.IShift;
+import com.visma.of.rp.routeevaluator.PublicInterfaces.ITask;
+import com.visma.of.rp.routeevaluator.intraRouteEvaluation.hardConstraints.HardConstraintsIncremental;
+import com.visma.of.rp.routeevaluator.intraRouteEvaluation.objectives.ObjectiveInfo;
+import com.visma.of.rp.routeevaluator.intraRouteEvaluation.objectives.IncrementalObjectivesHandler;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Edge;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;

@@ -1,9 +1,10 @@
 package com.visma.of.rp.routeevaluator.hardConstraints;
 
+import com.visma.of.rp.routeevaluator.Interfaces.IConstraintIntraRoute;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 
 
-public class SyncedTasksConstraint extends HardConstraintIncrementalAbstract {
+public class SyncedTasksConstraint implements IConstraintIntraRoute {
 
     final long syncedStartTimeSlack;
 
@@ -12,7 +13,7 @@ public class SyncedTasksConstraint extends HardConstraintIncrementalAbstract {
     }
 
     @Override
-    protected boolean constraintIsFeasible(long endOfShift, long earliestPossibleReturnToOfficeTime, ITask task,
+    public boolean constraintIsFeasible(long endOfShift, long earliestPossibleReturnToOfficeTime, ITask task,
                                            long serviceStartTime, long syncedStartTime) {
         if (task == null || !task.isSynced()) //Task is office or is not synced.
             return true;

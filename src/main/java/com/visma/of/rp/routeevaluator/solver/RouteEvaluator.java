@@ -1,6 +1,6 @@
 package com.visma.of.rp.routeevaluator.solver;
 
-import com.visma.of.rp.routeevaluator.Interfaces.*;
+import com.visma.of.rp.routeevaluator.PublicInterfaces.*;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.NodeList;

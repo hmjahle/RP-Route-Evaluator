@@ -1,6 +1,6 @@
-package com.visma.of.rp.routeevaluator.Interfaces;
+package com.visma.of.rp.routeevaluator.PublicInterfaces;
 
-import com.visma.of.rp.routeevaluator.objectives.ObjectiveInfo;
+import com.visma.of.rp.routeevaluator.intraRouteEvaluation.objectives.ObjectiveInfo;
 
 /**
  * Interface for objectives that is solely evaluated within the route.

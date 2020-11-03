@@ -1,9 +1,10 @@
 package com.visma.of.rp.routeevaluator.hardConstraints;
 
 
+import com.visma.of.rp.routeevaluator.Interfaces.IConstraintIntraRoute;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 
-public class StrictTimeWindowConstraint extends HardConstraintIncrementalAbstract {
+public class StrictTimeWindowConstraint implements IConstraintIntraRoute {
 
     final long threshold;
 
@@ -13,8 +14,7 @@ public class StrictTimeWindowConstraint extends HardConstraintIncrementalAbstrac
     }
 
     @Override
-    protected boolean constraintIsFeasible(long endOfShift, long earliestPossibleReturnToOfficeTime,
-                                           ITask task, long serviceStartTime, long syncedStartTime) {
+    public boolean constraintIsFeasible(ConstraintInfo constraintInfo) {
         if (task == null || !task.isStrict()) //Task is office or is not strict.
             return true;
         return serviceStartTime + task.getDuration() <= task.getEndTime() + threshold;

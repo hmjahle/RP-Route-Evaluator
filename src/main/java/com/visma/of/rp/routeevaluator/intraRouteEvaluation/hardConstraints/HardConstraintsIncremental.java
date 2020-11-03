@@ -1,6 +1,7 @@
 package com.visma.of.rp.routeevaluator.hardConstraints;
 
 
+import com.visma.of.rp.routeevaluator.Interfaces.IConstraintIntraRoute;
 import com.visma.of.rp.routeevaluator.Interfaces.ITask;
 
 import java.util.ArrayList;
@@ -8,14 +9,14 @@ import java.util.List;
 
 public class HardConstraintsIncremental {
 
-    List<HardConstraintIncrementalAbstract> hardConstraints;
+    List<IConstraintIntraRoute> hardConstraints;
 
     public HardConstraintsIncremental() {
         hardConstraints = new ArrayList<>();
     }
 
     public boolean isFeasible(long endOfShift, long earliestPossibleReturnToOfficeTime, ITask task, long serviceStartTime, long syncedStartTime) {
-        for (HardConstraintIncrementalAbstract constraint : hardConstraints) {
+        for (IConstraintIntraRoute constraint : hardConstraints) {
             if (!constraint.constraintIsFeasible(endOfShift, earliestPossibleReturnToOfficeTime, task, serviceStartTime, syncedStartTime)) {
                 return false;
             }
@@ -23,7 +24,7 @@ public class HardConstraintsIncremental {
         return true;
     }
 
-    void addHardConstraint(HardConstraintIncrementalAbstract constraint) {
+    void addHardConstraint(IConstraintIntraRoute constraint) {
         hardConstraints.add(constraint);
     }
 }

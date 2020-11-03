@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator.Interfaces;
+package com.visma.of.rp.routeevaluator.PublicInterfaces;
 
 public interface ITask {
 
