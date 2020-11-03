@@ -31,7 +31,7 @@ public class RouteEvaluationInfoAbstract {
         return task != null && task.isSynced();
     }
 
-    public boolean isOfficeTask() {
+    public boolean isDestination() {
         return task == null;
     }
 
