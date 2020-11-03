@@ -96,7 +96,6 @@ public class NoPhysicalAppearanceOrderTest extends JUnitTestAbstract {
     }
 
 
-
     @Test
     public void threeNonPhysicalAtTheStart() {
         List<ITask> tasks = new ArrayList<>();
@@ -134,6 +133,7 @@ public class NoPhysicalAppearanceOrderTest extends JUnitTestAbstract {
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 4));
         Assert.assertEquals("Must return to office at: ",77, result.getTimeOfOfficeReturn().longValue());
     }
+
     private List<ITask> createTasks(List<ILocation> locations) {
         TestTask task1 = new TestTask(10, 0, 100, false, false, false, 0, 0, locations.get(0), "1");
         TestTask task2 = new TestTask(10, 0, 100, false, false, false, 0, 0, locations.get(1), "2");
@@ -170,6 +170,6 @@ public class NoPhysicalAppearanceOrderTest extends JUnitTestAbstract {
 
     private RouteEvaluatorResult evaluateRoute(List<ITask> tasks) {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, null, shift);
+        return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }
 }
