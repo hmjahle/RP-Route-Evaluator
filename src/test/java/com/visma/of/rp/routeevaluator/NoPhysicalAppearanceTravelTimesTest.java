@@ -161,6 +161,6 @@ printResult(result);
 
     private RouteEvaluatorResult evaluateRoute(List<ITask> tasks) {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, null, shift);
+        return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }
 }
