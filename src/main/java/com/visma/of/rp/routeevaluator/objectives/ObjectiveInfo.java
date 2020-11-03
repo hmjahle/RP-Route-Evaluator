@@ -19,7 +19,7 @@ public class ObjectiveInfo {
         this.endOfWorkShift = endOfWorkShift;
     }
 
-    public boolean isOfficeTask() {
+    public boolean isDestination() {
         return task == null;
     }
 
