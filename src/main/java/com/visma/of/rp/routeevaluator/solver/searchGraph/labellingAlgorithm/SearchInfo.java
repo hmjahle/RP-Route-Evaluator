@@ -1,5 +1,6 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
+import com.visma.of.rp.routeevaluator.publicInterfaces.IConstraintIntraRoute;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveIntraRoute;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
@@ -31,6 +32,11 @@ public class SearchInfo {
 
     public void addObjectiveIntraShift(IObjectiveIntraRoute objectiveIntraShift) {
         objectives.addObjectiveIntraShift(objectiveIntraShift);
+    }
+
+
+    public void addConstraint(IConstraintIntraRoute constraint) {
+        constraints.addConstraint(constraint);
     }
 
     public boolean isFeasible(long earliestOfficeReturn, ITask task, long startOfServiceNextTask, long syncedLatestStart) {
