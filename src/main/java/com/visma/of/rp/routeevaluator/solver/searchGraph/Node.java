@@ -1,7 +1,7 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph;
 
-import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
-import com.visma.of.rp.routeevaluator.Interfaces.ITask;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 
 
    public class Node {

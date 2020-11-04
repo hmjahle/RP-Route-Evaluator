@@ -1,11 +1,12 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
-import com.visma.of.rp.routeevaluator.Interfaces.IObjectiveIntraRoute;
-import com.visma.of.rp.routeevaluator.Interfaces.IShift;
-import com.visma.of.rp.routeevaluator.Interfaces.ITask;
-import com.visma.of.rp.routeevaluator.hardConstraints.HardConstraintsIncremental;
-import com.visma.of.rp.routeevaluator.objectives.ObjectiveInfo;
-import com.visma.of.rp.routeevaluator.objectives.IncrementalObjectivesHandler;
+import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveIntraRoute;
+import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
+import com.visma.of.rp.routeevaluator.constraints.ConstraintsIntraRouteHandler;
+import com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo.ConstraintInfo;
+import com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo.ObjectiveInfo;
+import com.visma.of.rp.routeevaluator.objectives.ObjectivesIntraRouteHandler;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Edge;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
@@ -13,8 +14,8 @@ import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 
 public class SearchInfo {
     private SearchGraph graph;
-    private IncrementalObjectivesHandler incrementalObjectivesHandler;
-    private HardConstraintsIncremental hardConstraintsEvaluator;
+    public ObjectivesIntraRouteHandler objectives;
+    private ConstraintsIntraRouteHandler constraints;
     private long[] syncedNodesStartTime;
     private long[] syncedNodesLatestStartTime;
     private long endOfShift;
@@ -24,20 +25,17 @@ public class SearchInfo {
     public SearchInfo(SearchGraph graph) {
         this.graph = graph;
         this.robustness = graph.getRobustTimeSeconds();
-        this.incrementalObjectivesHandler = new IncrementalObjectivesHandler();
-        this.hardConstraintsEvaluator = new HardConstraintsIncremental();
+        this.objectives = new ObjectivesIntraRouteHandler();
+        this.constraints = new ConstraintsIntraRouteHandler();
     }
 
     public void addObjectiveIntraShift(IObjectiveIntraRoute objectiveIntraShift) {
-        incrementalObjectivesHandler.addObjectiveIntraShift(objectiveIntraShift);
+        objectives.addObjectiveIntraShift(objectiveIntraShift);
     }
 
-    protected void replaceHardConstraintsEvaluator(HardConstraintsIncremental hardConstraintsEvaluator) {
-        this.hardConstraintsEvaluator = hardConstraintsEvaluator;
-    }
-
-    public boolean isFeasible(long earliestPossibleReturnToOfficeTime, ITask task, long serviceStartTime, Long syncedStartTime) {
-        return hardConstraintsEvaluator.isFeasible(endOfShift, earliestPossibleReturnToOfficeTime, task, serviceStartTime, syncedStartTime);
+    public boolean isFeasible(long earliestOfficeReturn, ITask task, long startOfServiceNextTask, long syncedLatestStart) {
+        ConstraintInfo constraintInfo = new ConstraintInfo(endOfShift, earliestOfficeReturn, task, startOfServiceNextTask, syncedLatestStart);
+        return constraints.isFeasible(constraintInfo);
     }
 
     /**
@@ -62,11 +60,12 @@ public class SearchInfo {
         this.employeeWorkShift = employeeWorkShift;
     }
 
-    public double calculateObjectiveValue(double travelTime, ITask task,
-                                          double arrivalTime, double syncedLatestStartTime) {
-        double visitEnd = task != null ? arrivalTime + task.getDuration() : 0;
-        ObjectiveInfo costInfo = new ObjectiveInfo(travelTime, task, visitEnd, arrivalTime, syncedLatestStartTime, endOfShift);
-        return incrementalObjectivesHandler.calculateIncrementalObjectiveValue(costInfo);
+    public double calculateObjectiveValue(long travelTime, ITask task, long startOfServiceNextTask,
+                                          long syncedTaskLatestStartTime) {
+        long visitEnd = task != null ? startOfServiceNextTask + task.getDuration() : 0;
+        ObjectiveInfo costInfo = new ObjectiveInfo(travelTime, task, visitEnd, startOfServiceNextTask,
+                syncedTaskLatestStartTime, endOfShift);
+        return objectives.calculateIncrementalObjectiveValue(costInfo);
     }
 
     long[] getSyncedNodesStartTime() {

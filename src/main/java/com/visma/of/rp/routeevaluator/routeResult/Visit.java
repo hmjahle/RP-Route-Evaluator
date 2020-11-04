@@ -1,6 +1,6 @@
 package com.visma.of.rp.routeevaluator.routeResult;
 
-import com.visma.of.rp.routeevaluator.Interfaces.ITask;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 
 public class Visit {
 
