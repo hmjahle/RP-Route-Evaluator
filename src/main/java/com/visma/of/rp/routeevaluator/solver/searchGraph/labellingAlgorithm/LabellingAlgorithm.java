@@ -1,6 +1,7 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.objectives.Objective;
+import com.visma.of.rp.routeevaluator.publicInterfaces.IConstraintIntraRoute;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveIntraRoute;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
@@ -39,6 +40,9 @@ public class LabellingAlgorithm {
         searchInfo.addObjectiveIntraShift(objectiveIntraShift);
     }
 
+    public void addConstraint(IConstraintIntraRoute constraint) {
+        searchInfo.addConstraint(constraint);
+    }
     /**
      * Solves the labelling algorithm and returns the objective value of the route.
      *

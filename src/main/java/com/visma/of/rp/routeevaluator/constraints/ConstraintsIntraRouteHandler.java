@@ -25,7 +25,7 @@ public class ConstraintsIntraRouteHandler {
         return true;
     }
 
-    void addConstraint(IConstraintIntraRoute constraint) {
+    public void addConstraint(IConstraintIntraRoute constraint) {
         constraints.add(constraint);
     }
 }
