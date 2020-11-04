@@ -1,9 +1,9 @@
 package com.visma.of.rp.routeevaluator;
 
 
-import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
-import com.visma.of.rp.routeevaluator.Interfaces.IShift;
-import com.visma.of.rp.routeevaluator.Interfaces.ITask;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
+import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
 import org.junit.Assert;
@@ -17,8 +17,6 @@ import testSupport.JUnitTestAbstract;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static benchmarking.benchmarking.printResult;
 
 /**
  * Tests if the order of non-physical appearance tasks is handled correctly.

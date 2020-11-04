@@ -1,8 +1,8 @@
 package com.visma.of.rp.routeevaluator.routeResult;
 
 
-import com.visma.of.rp.routeevaluator.Interfaces.IShift;
-import com.visma.of.rp.routeevaluator.Interfaces.ITask;
+import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 
 import java.util.*;
 import java.util.stream.Collectors;

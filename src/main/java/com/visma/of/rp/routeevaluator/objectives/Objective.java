@@ -21,13 +21,13 @@ public class Objective {
         }
     }
 
-    private Objective createObjectiveFunctionFor(SearchInfo searchInfo, Node toNode, long travelTimeWithParking, long arrivalTime, long syncedTaskLatestStartTime) {
-        double newObjectiveValue = searchInfo.calculateObjectiveValue(travelTimeWithParking, toNode.getTask(), arrivalTime, syncedTaskLatestStartTime);
+    private Objective createObjectiveFunctionFor(SearchInfo searchInfo, Node toNode, long travelTimeWithParking, long startOfServiceNextTask, long syncedTaskLatestStartTime) {
+        double newObjectiveValue = searchInfo.calculateObjectiveValue(travelTimeWithParking, toNode.getTask(), startOfServiceNextTask, syncedTaskLatestStartTime);
         return new Objective(this.objectiveValue + newObjectiveValue);
     }
 
     private Objective createObjectiveFunctionToOffice(SearchInfo searchInfo, long travelTimeWithParking, long officeArrivalTime) {
-        double newObjectiveValue = searchInfo.calculateObjectiveValue(travelTimeWithParking, null, officeArrivalTime, Double.MAX_VALUE);
+        double newObjectiveValue = searchInfo.calculateObjectiveValue(travelTimeWithParking, null, officeArrivalTime, Long.MAX_VALUE);
         return new Objective(this.objectiveValue + newObjectiveValue);
     }
 
