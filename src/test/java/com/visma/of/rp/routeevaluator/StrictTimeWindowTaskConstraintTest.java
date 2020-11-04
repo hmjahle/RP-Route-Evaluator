@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static benchmarking.benchmarking.printResult;
-
 /**
  * Tests if the strict time window constraint is implemented correctly.
  */
@@ -64,7 +62,7 @@ public class StrictTimeWindowTaskConstraintTest extends JUnitTestAbstract {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(allTasks.get(0));
         tasks.add(allTasks.get(2));
-        travelTimeMatrix.addUndirectedConnection(allTasks.get(0).getLocation(),allTasks.get(2).getLocation(),30);
+        travelTimeMatrix.addUndirectedConnection(allTasks.get(0).getLocation(), allTasks.get(2).getLocation(), 30);
 
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
         routeEvaluator.addConstraint(new StrictTimeWindowConstraint(5));
@@ -81,7 +79,7 @@ public class StrictTimeWindowTaskConstraintTest extends JUnitTestAbstract {
 
     @Test
     public void fiveMixedTasksInfeasible() {
-        travelTimeMatrix.addUndirectedConnection(locations.get(1),locations.get(2),6);
+        travelTimeMatrix.addUndirectedConnection(locations.get(1), locations.get(2), 6);
         RouteEvaluatorResult result = evaluateRoute(allTasks);
         Assert.assertNull("Must be infeasible. ", result);
     }
@@ -93,7 +91,6 @@ public class StrictTimeWindowTaskConstraintTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(1));
         tasks.add(allTasks.get(3));
         RouteEvaluatorResult result = evaluateRoute(tasks);
-        printResult(result);
         Assert.assertNotNull("Must be feasible. ", result);
     }
 

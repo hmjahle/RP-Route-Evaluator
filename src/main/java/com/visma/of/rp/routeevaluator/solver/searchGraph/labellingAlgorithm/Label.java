@@ -37,7 +37,7 @@ public class Label implements Comparable<Label> {
         long travelTime = getTravelTime(nextNode, newLocation);
         long startOfServiceNextTask = calcStartOfServiceNextTask(nextNode, taskRequirePhysicalAppearance, travelTime);
 
-        long earliestOfficeReturn = calcEarliestPossibleReturnToOfficeTime(nextNode, startOfServiceNextTask);
+        long earliestOfficeReturn = calcEarliestPossibleReturnToOfficeTime(nextNode, newLocation, startOfServiceNextTask);
         long syncedTaskLatestStartTime = nextNode.isSynced() ? searchInfo.getSyncedNodesLatestStartTime()[nextNode.getId()] : -1;
         if (!searchInfo.isFeasible(earliestOfficeReturn, nextNode.getTask(), startOfServiceNextTask, syncedTaskLatestStartTime))
             return null;
@@ -67,9 +67,8 @@ public class Label implements Comparable<Label> {
             return edge.getTravelTime();
     }
 
-    private long calcEarliestPossibleReturnToOfficeTime(Node nextNode, long startOfServiceNextTask) {
-        return startOfServiceNextTask + nextNode.getDurationSeconds() +
-                searchInfo.getTravelTimeToOffice(nextNode);
+    private long calcEarliestPossibleReturnToOfficeTime(Node nextNode, Node currentLocation, long startOfServiceNextTask) {
+        return startOfServiceNextTask + nextNode.getDurationSeconds() + searchInfo.getTravelTimeToOffice(currentLocation);
     }
 
     private long calcArrivalTimeNextTask(boolean requirePhysicalAppearance, long travelTime) {
