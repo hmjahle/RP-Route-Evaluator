@@ -1,6 +1,7 @@
 package com.visma.of.rp.routeevaluator;
 
 
+import com.visma.of.rp.routeevaluator.objectives.OvertimeObjective;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
@@ -138,7 +139,7 @@ public class OvertimeObjectiveTest extends JUnitTestAbstract {
 
     private RouteEvaluatorResult evaluateRoute(List<ITask> tasks) {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-//        routeEvaluator.addObjectiveIntraShift(new OvertimeObjective());
+        routeEvaluator.addObjectiveIntraShift(new OvertimeObjective());
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }
 }
