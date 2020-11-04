@@ -1,6 +1,9 @@
 package com.visma.of.rp.routeevaluator;
 
 
+import com.visma.of.rp.routeevaluator.constraints.OvertimeConstraint;
+import com.visma.of.rp.routeevaluator.constraints.StrictTimeWindowConstraint;
+import com.visma.of.rp.routeevaluator.constraints.SyncedTasksConstraint;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
@@ -19,8 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static benchmarking.benchmarking.printResult;
 
 /**
  * Tests if the order of non-physical appearance tasks is handled correctly.
@@ -52,9 +53,9 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task1.getLocation(), 1);
         travelTimeMatrix.addUndirectedConnection(office, task2.getLocation(), 100);
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
-        //OverTimeConstraint
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        routeEvaluator.addConstraint(new OvertimeConstraint());
 
+        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
         Assert.assertNotNull("Must be feasible. ", result);
         Assert.assertEquals(10, getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
@@ -72,7 +73,8 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task1.getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(office, task2.getLocation(), 20);
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
-        //OverTimeConstraint
+        routeEvaluator.addConstraint(new OvertimeConstraint());
+
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
 
         Assert.assertNull("Must be infeasible. ", result);
@@ -89,7 +91,7 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task1.getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(office, task2.getLocation(), 50);
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
-        //StrictTimeWindowConstraint
+        routeEvaluator.addConstraint(new StrictTimeWindowConstraint());
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
 
         Assert.assertNull("Must be infeasible. ", result);
@@ -106,7 +108,8 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task1.getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(office, task2.getLocation(), 50);
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
-        //StrictTimeWindowConstraint
+        routeEvaluator.addConstraint(new StrictTimeWindowConstraint());
+
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
 
         Assert.assertNotNull("Must be feasible. ", result);
@@ -127,7 +130,8 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task3.getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(office, task3.getLocation(), 45);
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
-        //syncedTaskConstraint
+        routeEvaluator.addConstraint(new SyncedTasksConstraint());
+
         Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();
         syncedTaskStartTimes.put(task2, 10L);
         syncedTaskStartTimes.put(task3, 50L);
@@ -135,7 +139,6 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
 
         Assert.assertNotNull("Must be feasible. ", result);
     }
-
 
     @Test
     public void syncedTaskConstraintWithAppearanceInMiddleInfeasible() {
@@ -152,7 +155,8 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task3.getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(office, task3.getLocation(), 20);
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
-        //syncedTaskConstraint
+        routeEvaluator.addConstraint(new SyncedTasksConstraint());
+
         Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();
         syncedTaskStartTimes.put(task1, 10L);
         syncedTaskStartTimes.put(task3, 40L);
@@ -174,12 +178,11 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task3.getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(office, task2.getLocation(), 45);
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
-        //syncedTaskConstraint
+        routeEvaluator.addConstraint(new SyncedTasksConstraint());
         Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();
         syncedTaskStartTimes.put(task1, 40L);
-        syncedTaskStartTimes.put(task3, 50L);
+        syncedTaskStartTimes.put(task3, 60L);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
-        printResult(result);
 
         Assert.assertNotNull("Must be feasible. ", result);
     }
@@ -201,7 +204,8 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(task1.getLocation(), task3.getLocation(), 25);
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task3.getLocation(), 5);
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
-        //syncedTaskConstraint
+        routeEvaluator.addConstraint(new SyncedTasksConstraint());
+
         Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();
         syncedTaskStartTimes.put(task1, 10L);
         syncedTaskStartTimes.put(task2, 15L);

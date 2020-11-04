@@ -1,6 +1,7 @@
 package com.visma.of.rp.routeevaluator;
 
 
+import com.visma.of.rp.routeevaluator.constraints.SyncedTasksConstraint;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
@@ -59,7 +60,6 @@ public class SyncedTaskConstraintTest extends JUnitTestAbstract {
         Assert.assertNotNull("Must be feasible. ", result);
     }
 
-
     @Test
     public void twoSyncedTaskInfeasible() {
         List<ITask> tasks = new ArrayList<>();
@@ -68,7 +68,7 @@ public class SyncedTaskConstraintTest extends JUnitTestAbstract {
         Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();
         syncedTaskStartTimes.put(allTasks.get(0), 40L);
         syncedTaskStartTimes.put(allTasks.get(2), 55L);
-        travelTimeMatrix.addUndirectedConnection(allTasks.get(0).getLocation(),allTasks.get(1).getLocation(),6);
+        travelTimeMatrix.addUndirectedConnection(allTasks.get(0).getLocation(),allTasks.get(2).getLocation(),6);
         RouteEvaluatorResult result = evaluateRoute(tasks, syncedTaskStartTimes);
         Assert.assertNull("Must be infeasible. ", result);
     }
@@ -81,9 +81,9 @@ public class SyncedTaskConstraintTest extends JUnitTestAbstract {
         Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();
         syncedTaskStartTimes.put(allTasks.get(0), 40L);
         syncedTaskStartTimes.put(allTasks.get(2), 55L);
-        travelTimeMatrix.addUndirectedConnection(allTasks.get(0).getLocation(),allTasks.get(1).getLocation(),6);
+        travelTimeMatrix.addUndirectedConnection(allTasks.get(0).getLocation(),allTasks.get(2).getLocation(),6);
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        //Set threshold == 1
+        routeEvaluator.addConstraint(new SyncedTasksConstraint(1));
         RouteEvaluatorResult result =  routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
         Assert.assertNotNull("Must be feasible. ", result);
     }
@@ -93,7 +93,7 @@ public class SyncedTaskConstraintTest extends JUnitTestAbstract {
         Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();
         syncedTaskStartTimes.put(allTasks.get(0), 10L);
         syncedTaskStartTimes.put(allTasks.get(2), 50L);
-        syncedTaskStartTimes.put(allTasks.get(4), 70L);
+        syncedTaskStartTimes.put(allTasks.get(4), 80L);
         RouteEvaluatorResult result = evaluateRoute(allTasks, syncedTaskStartTimes);
         Assert.assertNotNull("Must be feasible. ", result);
     }
@@ -150,11 +150,8 @@ public class SyncedTaskConstraintTest extends JUnitTestAbstract {
 
     private RouteEvaluatorResult evaluateRoute(List<ITask> tasks, Map<ITask, Long> syncedTaskStartTimes) {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
+        routeEvaluator.addConstraint(new SyncedTasksConstraint());
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
     }
 
-    private RouteEvaluatorResult evaluateRoute(List<ITask> tasks) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
-    }
 }
