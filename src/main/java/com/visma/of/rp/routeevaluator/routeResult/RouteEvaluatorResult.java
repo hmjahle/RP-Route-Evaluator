@@ -39,6 +39,7 @@ public class RouteEvaluatorResult {
         totalTimeToPatients = 0L;
         totalTimeInOffice = 0L;
         objectiveValue = 0;
+        timeOfOfficeReturn = 0L;
     }
 
     public void updateTotalTravelTime(long totalTravelTime) {
