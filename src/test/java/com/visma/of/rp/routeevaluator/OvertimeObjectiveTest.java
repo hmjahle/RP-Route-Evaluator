@@ -1,7 +1,6 @@
 package com.visma.of.rp.routeevaluator;
 
 
-import com.visma.of.rp.routeevaluator.constraints.OvertimeConstraint;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
@@ -23,7 +22,7 @@ import java.util.List;
 /**
  * Tests if the overtime constraint is implemented correctly.
  */
-public class OverTimeTaskConstraintTest extends JUnitTestAbstract {
+public class OvertimeObjectiveTest extends JUnitTestAbstract {
 
     List<ILocation> locations;
     List<ITask> allTasks;
@@ -41,33 +40,35 @@ public class OverTimeTaskConstraintTest extends JUnitTestAbstract {
     }
 
     @Test
-    public void oneTaskFeasible() {
+    public void oneTaskNoOvertime() {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(allTasks.get(0));
         RouteEvaluatorResult result = evaluateRoute(tasks);
-        Assert.assertNotNull("Must be feasible. ", result);
+
+        Assert.assertEquals("No overtime. ", 0, result.getObjectiveValue(), 1E-6);
     }
 
     @Test
-    public void oneTaskInfeasible() {
+    public void oneTaskOvertime() {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(createStandardTask(10, 90, 100));
         travelTimeMatrix.addUndirectedConnection(office, tasks.get(0).getLocation(), 5);
         RouteEvaluatorResult result = evaluateRoute(tasks);
-        Assert.assertNull("Must be infeasible. ", result);
+
+        Assert.assertEquals("Should have overtime. ", 5, result.getObjectiveValue(), 1E-6);
     }
 
     @Test
     public void fiveTasksFeasible() {
         RouteEvaluatorResult result = evaluateRoute(allTasks);
-        Assert.assertNotNull("Must be feasible. ", result);
+        Assert.assertEquals("No overtime. ", 0, result.getObjectiveValue(), 1E-6);
     }
 
     /**
      * Returns 1 minute late.
      */
     @Test
-    public void sixTasksInfeasible() {
+    public void sixTasksOvertime() {
         List<ITask> tasks = new ArrayList<>();
         ITask task6 = createStandardTask(10, 34, 100);
         locations.add(task6.getLocation());
@@ -75,14 +76,16 @@ public class OverTimeTaskConstraintTest extends JUnitTestAbstract {
         tasks.addAll(allTasks);
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
         RouteEvaluatorResult result = evaluateRoute(tasks);
-        Assert.assertNull("Must be infeasible. ", result);
+
+        Assert.assertEquals("Should have overtime. ", 1, result.getObjectiveValue(), 1E-6);
+
     }
 
     /**
      * Returns exactly on time.
      */
     @Test
-    public void sixTasksFeasible() {
+    public void sixTasksNoOvertime() {
         List<ITask> tasks = new ArrayList<>();
         ITask task6 = createStandardTask(10, 33, 100);
         locations.add(task6.getLocation());
@@ -91,7 +94,8 @@ public class OverTimeTaskConstraintTest extends JUnitTestAbstract {
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
         RouteEvaluatorResult result = evaluateRoute(tasks);
 
-        Assert.assertNotNull("Must be feasible. ", result);
+        Assert.assertEquals("No overtime. ", 0, result.getObjectiveValue(), 1E-6);
+
     }
 
 
@@ -134,7 +138,7 @@ public class OverTimeTaskConstraintTest extends JUnitTestAbstract {
 
     private RouteEvaluatorResult evaluateRoute(List<ITask> tasks) {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        routeEvaluator.addConstraint(new OvertimeConstraint());
+//        routeEvaluator.addObjectiveIntraShift(new OvertimeObjective());
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }
 }

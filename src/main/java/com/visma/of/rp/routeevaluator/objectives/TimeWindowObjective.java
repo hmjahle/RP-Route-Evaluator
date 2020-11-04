@@ -10,6 +10,6 @@ public class TimeWindowObjective implements IObjectiveIntraRoute {
         if (objectiveInfo.isDestination())
             return 0;
         else
-            return Math.max(0,objectiveInfo.getVisitEnd() - objectiveInfo.getTask().getEndTime());
+            return Math.max(0, objectiveInfo.getVisitEnd() - objectiveInfo.getTask().getEndTime());
     }
 }
