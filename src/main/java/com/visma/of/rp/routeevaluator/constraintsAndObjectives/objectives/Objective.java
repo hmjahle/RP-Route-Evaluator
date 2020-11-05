@@ -7,7 +7,7 @@ import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Sear
  * Calculates objective values and check whether one objective dominates the other.
  */
 public class Objective {
-    
+
     private double objectiveValue;
 
     public Objective(double objectiveValue) {
