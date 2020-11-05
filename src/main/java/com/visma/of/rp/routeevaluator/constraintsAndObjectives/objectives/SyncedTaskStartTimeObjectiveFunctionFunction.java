@@ -1,17 +1,17 @@
 package com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives;
 
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ObjectiveInfo;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveIntraRoute;
+import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveFunctionIntraRoute;
 
-public class SyncedTaskStartTimeObjectiveFunction implements IObjectiveIntraRoute {
+public class SyncedTaskStartTimeObjectiveFunctionFunction implements IObjectiveFunctionIntraRoute {
 
-    final long allowedSlack;
+    private final long allowedSlack;
 
-    public SyncedTaskStartTimeObjectiveFunction(long allowedSlack) {
+    public SyncedTaskStartTimeObjectiveFunctionFunction(long allowedSlack) {
         this.allowedSlack = allowedSlack;
     }
 
-    public SyncedTaskStartTimeObjectiveFunction() {
+    public SyncedTaskStartTimeObjectiveFunctionFunction() {
         this.allowedSlack = 0;
     }
 

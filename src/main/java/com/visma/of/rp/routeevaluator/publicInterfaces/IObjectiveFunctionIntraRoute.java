@@ -5,7 +5,7 @@ import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluat
 /**
  * Interface for objectives that is solely evaluated within the route.
  */
-public interface IObjectiveIntraRoute {
+public interface IObjectiveFunctionIntraRoute {
 
     /**
      * The function calculates the objective value of the objective for a part of the route.

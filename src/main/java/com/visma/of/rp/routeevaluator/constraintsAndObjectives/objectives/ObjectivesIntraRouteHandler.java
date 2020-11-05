@@ -1,26 +1,27 @@
 package com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives;
 
-import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveIntraRoute;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ObjectiveInfo;
+import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveFunctionIntraRoute;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class ObjectivesIntraRouteHandler {
-    private List<IObjectiveIntraRoute> objectives;
+
+    private List<IObjectiveFunctionIntraRoute> objectiveFunctions;
 
     public ObjectivesIntraRouteHandler() {
-        objectives = new ArrayList<>();
+        objectiveFunctions = new ArrayList<>();
     }
 
-    public void addObjectiveIntraShift(IObjectiveIntraRoute objectiveIntraShift) {
-        objectives.add(objectiveIntraShift);
+    public void addIntraShiftObjectiveFunction(IObjectiveFunctionIntraRoute objectiveIntraShift) {
+        objectiveFunctions.add(objectiveIntraShift);
     }
 
     public double calculateIncrementalObjectiveValue(ObjectiveInfo objectiveInfo) {
         double objectiveValue = 0.0;
-        for (IObjectiveIntraRoute objective : objectives)
+        for (IObjectiveFunctionIntraRoute objective : objectiveFunctions)
             objectiveValue += objective.calculateIncrementalObjectiveValueFor(objectiveInfo);
         return objectiveValue;
     }

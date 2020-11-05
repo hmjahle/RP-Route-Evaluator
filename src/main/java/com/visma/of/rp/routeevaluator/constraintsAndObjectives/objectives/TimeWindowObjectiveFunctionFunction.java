@@ -1,9 +1,9 @@
 package com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives;
 
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ObjectiveInfo;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveIntraRoute;
+import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveFunctionIntraRoute;
 
-public class TimeWindowObjectiveFunction implements IObjectiveIntraRoute {
+public class TimeWindowObjectiveFunctionFunction implements IObjectiveFunctionIntraRoute {
 
     @Override
     public double calculateIncrementalObjectiveValueFor(ObjectiveInfo objectiveInfo) {

@@ -2,18 +2,18 @@ package com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives;
 
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.TimeWindowCustomCriteriaAbstract;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ObjectiveInfo;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveIntraRoute;
+import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveFunctionIntraRoute;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 
 import java.util.function.Function;
 
-public class TimeWindowCustomCriteriaObjectiveFunction extends TimeWindowCustomCriteriaAbstract implements IObjectiveIntraRoute {
+public class TimeWindowCustomCriteriaObjectiveFunctionFunction extends TimeWindowCustomCriteriaAbstract implements IObjectiveFunctionIntraRoute {
 
-    public TimeWindowCustomCriteriaObjectiveFunction(Function<ITask, Boolean> criteriaFunction) {
+    public TimeWindowCustomCriteriaObjectiveFunctionFunction(Function<ITask, Boolean> criteriaFunction) {
         super(criteriaFunction, 0);
     }
 
-    public TimeWindowCustomCriteriaObjectiveFunction(Function<ITask, Boolean> criteriaFunction, long allowedSLack) {
+    public TimeWindowCustomCriteriaObjectiveFunctionFunction(Function<ITask, Boolean> criteriaFunction, long allowedSLack) {
         super(criteriaFunction, allowedSLack);
     }
 

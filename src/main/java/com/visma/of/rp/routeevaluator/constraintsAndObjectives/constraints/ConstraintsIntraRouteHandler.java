@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ConstraintsIntraRouteHandler {
 
-    List<IConstraintIntraRoute> constraints;
+    private List<IConstraintIntraRoute> constraints;
 
     public ConstraintsIntraRouteHandler() {
         constraints = new ArrayList<>();

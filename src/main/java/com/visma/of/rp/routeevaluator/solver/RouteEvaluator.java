@@ -40,7 +40,7 @@ public class RouteEvaluator {
         this.syncedNodesLatestStartTime = new long[graph.getNodes().size()];
     }
 
-    public void addObjectiveIntraShift(IObjectiveIntraRoute objectiveIntraShift) {
+    public void addObjectiveIntraShift(IObjectiveFunctionIntraRoute objectiveIntraShift) {
         algorithm.addObjectiveIntraShift(objectiveIntraShift);
     }
 

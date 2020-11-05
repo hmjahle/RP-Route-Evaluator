@@ -6,7 +6,7 @@ import com.visma.of.rp.routeevaluator.publicInterfaces.IConstraintIntraRoute;
 
 public class SyncedTasksConstraint implements IConstraintIntraRoute {
 
-    final long allowedSlack;
+    private final long allowedSlack;
 
     public SyncedTasksConstraint(long allowedSlack) {
         this.allowedSlack = allowedSlack;

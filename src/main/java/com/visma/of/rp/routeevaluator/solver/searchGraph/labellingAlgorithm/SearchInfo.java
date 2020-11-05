@@ -1,7 +1,7 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.publicInterfaces.IConstraintIntraRoute;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveIntraRoute;
+import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveFunctionIntraRoute;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints.ConstraintsIntraRouteHandler;
@@ -30,8 +30,8 @@ public class SearchInfo {
         this.constraints = new ConstraintsIntraRouteHandler();
     }
 
-    public void addObjectiveIntraShift(IObjectiveIntraRoute objectiveIntraShift) {
-        objectives.addObjectiveIntraShift(objectiveIntraShift);
+    public void addObjectiveIntraShift(IObjectiveFunctionIntraRoute objectiveIntraShift) {
+        objectives.addIntraShiftObjectiveFunction(objectiveIntraShift);
     }
 
 
