@@ -1,10 +1,10 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph;
 
-import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
-import com.visma.of.rp.routeevaluator.Interfaces.ITask;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 
 
-   public class Node {
+public class Node {
     private ITask task;
     private ILocation address;
     private int id;
@@ -43,14 +43,18 @@ import com.visma.of.rp.routeevaluator.Interfaces.ITask;
     }
 
     @Override
-    public boolean equals(Object o) {
-        return this.hashCode() == o.hashCode();
+    public boolean equals(Object other) {
+        if ((other instanceof Node))
+            return ((Node) other).id == this.id;
+        else
+            return false;
     }
 
     @Override
     public int hashCode() {
         return id;
     }
+
 
     @Override
     public String toString() {

@@ -37,18 +37,18 @@ public class Label implements Comparable<Label> {
         long travelTime = getTravelTime(nextNode, newLocation);
         long startOfServiceNextTask = calcStartOfServiceNextTask(nextNode, taskRequirePhysicalAppearance, travelTime);
 
-        long earliestOfficeReturn = calcEarliestPossibleReturnToOfficeTime(nextNode, startOfServiceNextTask);
-        long syncedLatestStart = nextNode.isSynced() ? searchInfo.getSyncedNodesLatestStartTime()[nextNode.getId()] : -1;
-        if (!searchInfo.isFeasible(earliestOfficeReturn, nextNode.getTask(), startOfServiceNextTask, syncedLatestStart))
+        long earliestOfficeReturn = calcEarliestPossibleReturnToOfficeTime(nextNode, newLocation, startOfServiceNextTask);
+        long syncedTaskLatestStartTime = nextNode.isSynced() ? searchInfo.getSyncedNodesLatestStartTime()[nextNode.getId()] : -1;
+        if (!searchInfo.isFeasible(earliestOfficeReturn, nextNode.getTask(), startOfServiceNextTask, syncedTaskLatestStartTime))
             return null;
 
         long canLeaveLocationAt = updateCanLeaveLocationAt(taskRequirePhysicalAppearance, startOfServiceNextTask);
         return buildNewLabel(extendToInfo, nextNode, newLocation, travelTime,
-                startOfServiceNextTask, canLeaveLocationAt, syncedLatestStart);
+                startOfServiceNextTask, canLeaveLocationAt, syncedTaskLatestStartTime);
     }
 
-    private Label buildNewLabel(ExtendToInfo extendToInfo, Node nextNode, Node newLocation, long travelTime, long startOfServiceNextTask, long canLeaveLocationAt, long syncedLatestStart) {
-        Objective objective = this.objective.extend(this.searchInfo, nextNode, travelTime, startOfServiceNextTask, syncedLatestStart);
+    private Label buildNewLabel(ExtendToInfo extendToInfo, Node nextNode, Node newLocation, long travelTime, long startOfServiceNextTask, long canLeaveLocationAt, long syncedTaskLatestStartTime) {
+        Objective objective = this.objective.extend(this.searchInfo, nextNode, travelTime, startOfServiceNextTask, syncedTaskLatestStartTime);
         IResource resources = this.resources.extend(extendToInfo);
         return new Label(this.searchInfo, this, nextNode, newLocation, objective, resources, startOfServiceNextTask, travelTime, canLeaveLocationAt);
     }
@@ -67,9 +67,8 @@ public class Label implements Comparable<Label> {
             return edge.getTravelTime();
     }
 
-    private long calcEarliestPossibleReturnToOfficeTime(Node nextNode, long startOfServiceNextTask) {
-        return startOfServiceNextTask + nextNode.getDurationSeconds() +
-                searchInfo.getTravelTimeToOffice(nextNode);
+    private long calcEarliestPossibleReturnToOfficeTime(Node nextNode, Node currentLocation, long startOfServiceNextTask) {
+        return startOfServiceNextTask + nextNode.getDurationSeconds() + searchInfo.getTravelTimeToOffice(currentLocation);
     }
 
     private long calcArrivalTimeNextTask(boolean requirePhysicalAppearance, long travelTime) {

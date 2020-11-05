@@ -1,7 +1,7 @@
 package com.visma.of.rp.routeevaluator;
 
-import com.visma.of.rp.routeevaluator.Interfaces.ILocation;
-import com.visma.of.rp.routeevaluator.Interfaces.ITask;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ExtendToInfo;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Label;

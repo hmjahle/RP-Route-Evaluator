@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator.Interfaces;
+package com.visma.of.rp.routeevaluator.publicInterfaces;
 
 /**
  * The shift interface is used to describe the essential information about a shift.
