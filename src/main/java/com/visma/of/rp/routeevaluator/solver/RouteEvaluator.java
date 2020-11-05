@@ -29,7 +29,6 @@ public class RouteEvaluator {
     private NodeList firstNodeList;
     private NodeList secondNodeList;
     private long[] syncedNodesStartTime;
-    private long[] syncedNodesLatestStartTime;
 
     public RouteEvaluator(long robustTimeSeconds, ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks, ILocation officePosition) {
         this.graph = new SearchGraph(distanceMatrixMatrix, tasks, officePosition, robustTimeSeconds);
@@ -37,7 +36,6 @@ public class RouteEvaluator {
         this.firstNodeList = new NodeList(graph.getNodes().size());
         this.secondNodeList = new NodeList(graph.getNodes().size());
         this.syncedNodesStartTime = new long[graph.getNodes().size()];
-        this.syncedNodesLatestStartTime = new long[graph.getNodes().size()];
     }
 
     public void addObjectiveIntraShift(IObjectiveFunctionIntraRoute objectiveIntraShift) {
@@ -52,7 +50,7 @@ public class RouteEvaluator {
         updateFirstTaskList(tasks, syncedTasksStartTime);
         ExtendInfoOneElement nodeExtendInfoOneElement = new ExtendInfoOneElement();
         nodeExtendInfoOneElement.update(firstNodeList);
-        return algorithm.solve(nodeExtendInfoOneElement, syncedNodesStartTime, syncedNodesLatestStartTime, employeeWorkShift);
+        return algorithm.solve(nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
     }
 
     /**
@@ -67,7 +65,7 @@ public class RouteEvaluator {
         updateFirstTaskList(tasks, syncedTasksStartTime);
         ExtendInfoOneElement nodeExtendInfoOneElement = new ExtendInfoOneElement();
         nodeExtendInfoOneElement.update(firstNodeList);
-        return algorithm.solveRouteSimulatorResult(nodeExtendInfoOneElement, syncedNodesStartTime, syncedNodesLatestStartTime, employeeWorkShift);
+        return algorithm.solveRouteSimulatorResult(nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
     }
 
     public RouteEvaluatorResult evaluateRouteByTheOrderOfTasks(List<ITask> tasks, IShift employeeWorkShift) {
@@ -115,6 +113,5 @@ public class RouteEvaluator {
         graph.updateNodeType(task);
         Node node = graph.getNode(task);
         syncedNodesStartTime[node.getId()] = startTime;
-        syncedNodesLatestStartTime[node.getId()] = startTime + task.getSyncedWithIntervalDiff();
     }
 }
