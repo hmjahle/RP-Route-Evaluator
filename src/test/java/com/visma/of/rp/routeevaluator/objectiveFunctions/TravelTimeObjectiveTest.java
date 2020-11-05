@@ -102,7 +102,7 @@ public class TravelTimeObjectiveTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(7));
         tasks.add(allTasks.get(2));
         tasks.add(allTasks.get(3));
-        travelTimeMatrix.addUndirectedConnection(office, allTasks.get(0).getLocation(), 10);
+        travelTimeMatrix.addUndirectedConnection(office, allTasks.get(7).getLocation(), 10);
         RouteEvaluatorResult result = evaluateRoute(10, tasks, null);
 
         Assert.assertEquals("Cost should be: ", 14, result.getObjectiveValue(), 1E-6);

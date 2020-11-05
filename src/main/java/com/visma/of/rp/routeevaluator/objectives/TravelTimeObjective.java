@@ -7,10 +7,6 @@ public class TravelTimeObjective implements IObjectiveIntraRoute {
 
     @Override
     public double calculateIncrementalObjectiveValueFor(ObjectiveInfo objectiveInfo) {
-
-        if (objectiveInfo.isDestination())
-            return 0;
-        else
-            return -1;
+        return objectiveInfo.getTravelTime();
     }
 }
