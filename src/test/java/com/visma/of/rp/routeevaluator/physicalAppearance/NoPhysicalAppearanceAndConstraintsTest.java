@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator;
+package com.visma.of.rp.routeevaluator.physicalAppearance;
 
 
 import com.visma.of.rp.routeevaluator.constraints.OvertimeConstraint;

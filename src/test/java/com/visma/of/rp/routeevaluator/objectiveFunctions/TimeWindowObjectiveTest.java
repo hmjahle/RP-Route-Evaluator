@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator;
+package com.visma.of.rp.routeevaluator.objectiveFunctions;
 
 
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
