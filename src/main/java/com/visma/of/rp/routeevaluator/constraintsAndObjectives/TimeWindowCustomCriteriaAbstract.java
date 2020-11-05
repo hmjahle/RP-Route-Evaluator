@@ -8,11 +8,9 @@ import java.util.function.Function;
 public class TimeWindowCustomCriteriaAbstract {
 
     private final Function<ITask, Boolean> criteriaFunction;
-    protected final long allowedSlack;
 
-    public TimeWindowCustomCriteriaAbstract(Function<ITask, Boolean> criteriaFunction, long allowedSlack) {
+    public TimeWindowCustomCriteriaAbstract(Function<ITask, Boolean> criteriaFunction) {
         this.criteriaFunction = criteriaFunction;
-        this.allowedSlack = allowedSlack;
     }
 
     protected boolean criteriaIsFulfilled(RouteEvaluationInfoAbstract info) {

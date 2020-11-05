@@ -57,20 +57,6 @@ public class StrictTimeWindowTaskConstraintTest extends JUnitTestAbstract {
     }
 
     @Test
-    public void twoStrictTaskAllowedSlackFeasible() {
-        List<ITask> tasks = new ArrayList<>();
-        tasks.add(allTasks.get(0));
-        tasks.add(allTasks.get(2));
-        travelTimeMatrix.addUndirectedConnection(allTasks.get(0).getLocation(), allTasks.get(2).getLocation(), 30);
-
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        routeEvaluator.addConstraint(new StrictTimeWindowConstraint(5));
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
-
-        Assert.assertNotNull("Must be feasible. ", result);
-    }
-
-    @Test
     public void fiveMixedTasksFeasible() {
         RouteEvaluatorResult result = evaluateRoute(allTasks);
         Assert.assertNotNull("Must be feasible. ", result);
