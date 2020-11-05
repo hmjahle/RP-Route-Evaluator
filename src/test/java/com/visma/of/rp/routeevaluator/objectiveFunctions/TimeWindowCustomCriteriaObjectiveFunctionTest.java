@@ -1,7 +1,7 @@
 package com.visma.of.rp.routeevaluator.objectiveFunctions;
 
 
-import com.visma.of.rp.routeevaluator.objectives.TimeWindowCustomCriteriaObjective;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TimeWindowCustomCriteriaObjectiveFunctionFunction;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
@@ -24,7 +24,7 @@ import java.util.function.Function;
 /**
  * Tests if the Time window objective return the correct objective values.
  */
-public class TimeWindowCustomCriteriaObjectiveTest extends JUnitTestAbstract {
+public class TimeWindowCustomCriteriaObjectiveFunctionTest extends JUnitTestAbstract {
 
     ILocation office;
     TestTravelTimeMatrix travelTimeMatrix;
@@ -117,7 +117,7 @@ public class TimeWindowCustomCriteriaObjectiveTest extends JUnitTestAbstract {
 
     private RouteEvaluatorResult evaluateRoute(List<ITask> tasks, Function<ITask, Boolean> criteriaFunction) {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        routeEvaluator.addObjectiveIntraShift(new TimeWindowCustomCriteriaObjective(criteriaFunction));
+        routeEvaluator.addObjectiveIntraShift(new TimeWindowCustomCriteriaObjectiveFunctionFunction(criteriaFunction));
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }
 

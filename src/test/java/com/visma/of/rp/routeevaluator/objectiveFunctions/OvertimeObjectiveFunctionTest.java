@@ -1,7 +1,7 @@
 package com.visma.of.rp.routeevaluator.objectiveFunctions;
 
 
-import com.visma.of.rp.routeevaluator.objectives.OvertimeObjective;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.OvertimeObjectiveFunctionFunction;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Tests if the overtime constraint is implemented correctly.
  */
-public class OvertimeObjectiveTest extends JUnitTestAbstract {
+public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
 
     List<ILocation> locations;
     List<ITask> allTasks;
@@ -139,7 +139,7 @@ public class OvertimeObjectiveTest extends JUnitTestAbstract {
 
     private RouteEvaluatorResult evaluateRoute(List<ITask> tasks) {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        routeEvaluator.addObjectiveIntraShift(new OvertimeObjective());
+        routeEvaluator.addObjectiveIntraShift(new OvertimeObjectiveFunctionFunction());
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }
 }

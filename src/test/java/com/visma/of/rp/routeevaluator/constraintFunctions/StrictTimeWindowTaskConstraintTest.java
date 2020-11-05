@@ -1,6 +1,6 @@
 package com.visma.of.rp.routeevaluator.constraintFunctions;
 
-import com.visma.of.rp.routeevaluator.constraints.StrictTimeWindowConstraint;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints.StrictTimeWindowConstraint;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
@@ -54,20 +54,6 @@ public class StrictTimeWindowTaskConstraintTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(0));
         RouteEvaluatorResult result = evaluateRoute(tasks);
         Assert.assertNull("Must be infeasible. ", result);
-    }
-
-    @Test
-    public void twoStrictTaskAllowedSlackFeasible() {
-        List<ITask> tasks = new ArrayList<>();
-        tasks.add(allTasks.get(0));
-        tasks.add(allTasks.get(2));
-        travelTimeMatrix.addUndirectedConnection(allTasks.get(0).getLocation(), allTasks.get(2).getLocation(), 30);
-
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        routeEvaluator.addConstraint(new StrictTimeWindowConstraint(5));
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
-
-        Assert.assertNotNull("Must be feasible. ", result);
     }
 
     @Test

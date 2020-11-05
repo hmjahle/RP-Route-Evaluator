@@ -1,7 +1,7 @@
-package com.visma.of.rp.routeevaluator.constraints;
+package com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints;
 
 
-import com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo.ConstraintInfo;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ConstraintInfo;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IConstraintIntraRoute;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ConstraintsIntraRouteHandler {
 
-    List<IConstraintIntraRoute> constraints;
+    private List<IConstraintIntraRoute> constraints;
 
     public ConstraintsIntraRouteHandler() {
         constraints = new ArrayList<>();

@@ -3,7 +3,7 @@ package testSupport;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITravelTimeMatrix;
-import com.visma.of.rp.routeevaluator.objectives.Objective;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.Objective;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.routeResult.Visit;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;

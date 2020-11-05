@@ -1,11 +1,11 @@
 package com.visma.of.rp.routeevaluator.publicInterfaces;
 
-import com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo.ObjectiveInfo;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ObjectiveInfo;
 
 /**
  * Interface for objectives that is solely evaluated within the route.
  */
-public interface IObjectiveIntraRoute {
+public interface IObjectiveFunctionIntraRoute {
 
     /**
      * The function calculates the objective value of the objective for a part of the route.

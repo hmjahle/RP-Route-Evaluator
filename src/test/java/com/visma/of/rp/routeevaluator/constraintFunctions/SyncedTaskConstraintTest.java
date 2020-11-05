@@ -1,7 +1,7 @@
 package com.visma.of.rp.routeevaluator.constraintFunctions;
 
 
-import com.visma.of.rp.routeevaluator.constraints.SyncedTasksConstraint;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints.SyncedTasksConstraint;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
