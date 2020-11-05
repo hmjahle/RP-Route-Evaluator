@@ -3,7 +3,7 @@ package com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ObjectiveInfo;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveIntraRoute;
 
-public class TimeWindowLowHighObjective implements IObjectiveIntraRoute {
+public class TimeWindowLowHighObjectiveFunction implements IObjectiveIntraRoute {
 
     /**
      * Cut off at which the high penalty is applied.
@@ -15,7 +15,7 @@ public class TimeWindowLowHighObjective implements IObjectiveIntraRoute {
      */
     final double highPenaltyMultiplier;
 
-    public TimeWindowLowHighObjective(long highPenaltyCutOff, double highPenaltyMultiplier) {
+    public TimeWindowLowHighObjectiveFunction(long highPenaltyCutOff, double highPenaltyMultiplier) {
         this.highPenaltyCutOff = highPenaltyCutOff;
         this.highPenaltyMultiplier = highPenaltyMultiplier;
     }

@@ -7,13 +7,13 @@ import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 
 import java.util.function.Function;
 
-public class TimeWindowCustomCriteriaObjective extends TimeWindowCustomCriteriaAbstract implements IObjectiveIntraRoute {
+public class TimeWindowCustomCriteriaObjectiveFunction extends TimeWindowCustomCriteriaAbstract implements IObjectiveIntraRoute {
 
-    public TimeWindowCustomCriteriaObjective(Function<ITask, Boolean> criteriaFunction) {
+    public TimeWindowCustomCriteriaObjectiveFunction(Function<ITask, Boolean> criteriaFunction) {
         super(criteriaFunction, 0);
     }
 
-    public TimeWindowCustomCriteriaObjective(Function<ITask, Boolean> criteriaFunction, long allowedSLack) {
+    public TimeWindowCustomCriteriaObjectiveFunction(Function<ITask, Boolean> criteriaFunction, long allowedSLack) {
         super(criteriaFunction, allowedSLack);
     }
 

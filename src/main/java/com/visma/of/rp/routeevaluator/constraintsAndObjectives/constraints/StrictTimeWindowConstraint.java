@@ -1,25 +1,14 @@
-package com.visma.of.rp.routeevaluator.test.constraints;
+package com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints;
 
 
-import com.visma.of.rp.routeevaluator.test.intraRouteEvaluationInfo.ConstraintInfo;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IConstraintIntraRoute;
-
-public class StrictTimeWindowConstraint implements IConstraintIntraRoute {
-
-    public StrictTimeWindowConstraint(long allowedSlack) {
-        this.allowedSlack = allowedSlack;
-    }
-
-    final long allowedSlack;
+public class StrictTimeWindowConstraint extends TimeWindowCustomCriteriaConstraint {
 
     public StrictTimeWindowConstraint() {
-        allowedSlack = 0;
+        super(i -> i != null && i.isStrict(), 0);
     }
 
-    @Override
-    public boolean constraintIsFeasible(ConstraintInfo constraintInfo) {
-        if (!constraintInfo.isStrict()) //Task is office or is not strict.
-            return true;
-        return constraintInfo.getStartOfServiceNextTask() + constraintInfo.getTask().getDuration() <= constraintInfo.getTask().getEndTime() + allowedSlack;
+    public StrictTimeWindowConstraint(long allowedSlack) {
+        super(i -> i != null && i.isStrict(), allowedSlack);
     }
+
 }

@@ -4,7 +4,7 @@ import com.visma.of.rp.routeevaluator.constraintsAndObjectives.OvertimeAbstract;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ObjectiveInfo;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveIntraRoute;
 
-public class OvertimeObjective extends OvertimeAbstract implements IObjectiveIntraRoute {
+public class OvertimeObjectiveFunction extends OvertimeAbstract implements IObjectiveIntraRoute {
 
     @Override
     public double calculateIncrementalObjectiveValueFor(ObjectiveInfo objectiveInfo) {

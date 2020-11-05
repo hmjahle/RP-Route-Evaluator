@@ -8,23 +8,15 @@ import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 
 import java.util.function.Function;
 
-public class StrictTimeWindowConstraint extends TimeWindowCustomCriteriaAbstract implements IConstraintIntraRoute {
+public class TimeWindowCustomCriteriaConstraint extends TimeWindowCustomCriteriaAbstract implements IConstraintIntraRoute {
 
-    public StrictTimeWindowConstraint(Function<ITask, Boolean> criteriaFunction, long allowedSlack) {
-        super(criteriaFunction);
-        this.allowedSlack = allowedSlack;
-    }
-
-    final long allowedSlack;
-
-    public StrictTimeWindowConstraint() {
-
-        allowedSlack = 0;
+    public TimeWindowCustomCriteriaConstraint(Function<ITask, Boolean> criteriaFunction, long allowedSlack) {
+        super(criteriaFunction, allowedSlack);
     }
 
     @Override
     public boolean constraintIsFeasible(ConstraintInfo constraintInfo) {
-        if (!constraintInfo.isStrict()) //Task is office or is not strict.
+        if (constraintInfo.isDestination() || !criteriaIsFulfilled(constraintInfo))
             return true;
         return constraintInfo.getStartOfServiceNextTask() + constraintInfo.getTask().getDuration() <= constraintInfo.getTask().getEndTime() + allowedSlack;
     }
