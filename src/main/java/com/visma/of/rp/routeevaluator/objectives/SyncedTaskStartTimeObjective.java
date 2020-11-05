@@ -17,6 +17,14 @@ public class SyncedTaskStartTimeObjective implements IObjectiveIntraRoute {
 
     @Override
     public double calculateIncrementalObjectiveValueFor(ObjectiveInfo objectiveInfo) {
-        return -1;
+        if (!objectiveInfo.isSynced())
+            return 0;
+        else {
+            System.out.println();
+            System.out.println("objectiveInfo.getStartOfServiceNextTask(): " +objectiveInfo.getStartOfServiceNextTask() );
+            System.out.println("objectiveInfo.getSyncedTaskLatestStartTime(): " +objectiveInfo.getSyncedTaskLatestStartTime() );
+            return Math.max(0.0, (objectiveInfo.getStartOfServiceNextTask() -
+                    (objectiveInfo.getSyncedTaskLatestStartTime() + allowedSlack)));
+        }
     }
 }

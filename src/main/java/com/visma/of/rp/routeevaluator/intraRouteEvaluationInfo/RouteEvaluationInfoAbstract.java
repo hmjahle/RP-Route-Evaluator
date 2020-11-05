@@ -16,6 +16,7 @@ public class RouteEvaluationInfoAbstract {
         this.endOfWorkShift = endOfWorkShift;
         this.syncedTaskLatestStartTime = syncedTaskLatestStartTime;
     }
+
     public long getSyncedTaskLatestStartTime() {
         return syncedTaskLatestStartTime;
     }
