@@ -1,9 +1,9 @@
 package testSupport;
 
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.Objective;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITravelTimeMatrix;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.Objective;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.routeResult.Visit;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
@@ -30,7 +30,7 @@ public abstract class JUnitTestAbstract {
     }
 
     protected Label createStartLabel(SearchGraph graph, SearchInfo searchInfo) {
-        return new Label(searchInfo, null, graph.getOffice(), graph.getOffice(),  new Objective(0),  new ResourceOneElement(0), 0,0,0);
+        return new Label(null, graph.getOffice(), graph.getOffice(), new Objective(0), new ResourceOneElement(0), 0, 0, 0);
     }
 
     protected ILocation createOffice() {
@@ -42,15 +42,15 @@ public abstract class JUnitTestAbstract {
     }
 
     protected ITask createStandardTask(long duration, long startTime, long endTime) {
-        return new TestTask(duration, startTime, endTime, false, false, true, 0, 0, new TestLocation(false),"x");
+        return new TestTask(duration, startTime, endTime, false, false, true, 0, 0, new TestLocation(false), "x");
     }
 
     protected ITask createSyncedTask(long duration, long startTime, long endTime) {
-        return new TestTask(duration, startTime, endTime, false, true, true, 0, 0, new TestLocation(false),"x");
+        return new TestTask(duration, startTime, endTime, false, true, true, 0, 0, new TestLocation(false), "x");
     }
 
     protected ITask createStrictTask(long duration, long startTime, long endTime) {
-        return new TestTask(duration, startTime, endTime, true, false, true, 0, 0, new TestLocation(false),"x");
+        return new TestTask(duration, startTime, endTime, true, false, true, 0, 0, new TestLocation(false), "x");
     }
 
     protected long getVisitTravelTime(RouteEvaluatorResult result, int visitNo) {

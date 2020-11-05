@@ -5,6 +5,7 @@ import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ExtendToInfo;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Label;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.LabellingAlgorithm;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.SearchInfo;
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,7 +31,8 @@ public class LabelExtendAlongTest extends JUnitTestAbstract {
         SearchInfo searchInfo = new SearchInfo(graph);
 
         Label label = createStartLabel(graph, searchInfo);
-        Label newLabel = label.extendAlong(new ExtendToInfo(graph.getNode(task), 1));
+        LabellingAlgorithm labellingAlgorithm = new LabellingAlgorithm(graph);
+        Label newLabel = labellingAlgorithm.extendAlong(label, new ExtendToInfo(graph.getNode(task), 1));
 
         Assert.assertNotNull(newLabel);
         Assert.assertEquals("Position should be node: ", "1", newLabel.getCurrentLocation().toString());
