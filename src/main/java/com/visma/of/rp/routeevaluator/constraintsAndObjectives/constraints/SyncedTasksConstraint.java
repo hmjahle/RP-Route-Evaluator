@@ -1,6 +1,6 @@
-package com.visma.of.rp.routeevaluator.constraints;
+package com.visma.of.rp.routeevaluator.test.constraints;
 
-import com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo.ConstraintInfo;
+import com.visma.of.rp.routeevaluator.test.intraRouteEvaluationInfo.ConstraintInfo;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IConstraintIntraRoute;
 
 

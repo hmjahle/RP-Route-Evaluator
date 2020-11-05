@@ -1,7 +1,7 @@
 package com.visma.of.rp.routeevaluator.objectiveFunctions;
 
 
-import com.visma.of.rp.routeevaluator.objectives.SyncedTaskStartTimeObjective;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.SyncedTaskStartTimeObjectiveFunction;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
@@ -96,7 +96,7 @@ public class SyncedTaskObjectiveTest extends JUnitTestAbstract {
         syncedTaskStartTimes.put(allTasks.get(2), 50L);
         travelTimeMatrix.addUndirectedConnection(allTasks.get(0).getLocation(), allTasks.get(2).getLocation(), 31);
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjective(1));
+        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction(1));
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
 
         Assert.assertEquals("Objective value must be: ", 0, result.getObjectiveValue(), 1E-6);
@@ -123,7 +123,7 @@ public class SyncedTaskObjectiveTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(allTasks.get(0).getLocation(), allTasks.get(1).getLocation(), 7);
         travelTimeMatrix.addUndirectedConnection(allTasks.get(2).getLocation(), allTasks.get(3).getLocation(), 24);
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
-        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjective(1));
+        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction(1));
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
 
         Assert.assertEquals("Objective value must be: ", 11, result.getObjectiveValue(), 1E-6);
@@ -172,7 +172,7 @@ public class SyncedTaskObjectiveTest extends JUnitTestAbstract {
 
     private RouteEvaluatorResult evaluateRoute(List<ITask> tasks, Map<ITask, Long> syncedTaskStartTimes) {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjective());
+        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
     }
 

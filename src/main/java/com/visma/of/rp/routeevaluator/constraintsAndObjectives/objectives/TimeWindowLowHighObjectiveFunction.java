@@ -1,6 +1,6 @@
-package com.visma.of.rp.routeevaluator.objectives;
+package com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives;
 
-import com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo.ObjectiveInfo;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ObjectiveInfo;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveIntraRoute;
 
 public class TimeWindowLowHighObjective implements IObjectiveIntraRoute {

@@ -1,6 +1,6 @@
 package com.visma.of.rp.routeevaluator.objectiveFunctions;
 
-import com.visma.of.rp.routeevaluator.objectives.TravelTimeObjective;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TravelTimeObjectiveFunction;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
@@ -17,7 +17,7 @@ import testSupport.JUnitTestAbstract;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TravelTimeObjectiveTest extends JUnitTestAbstract {
+public class TravelTimeObjectiveFunctionTest extends JUnitTestAbstract {
 
     ILocation office;
     List<ITask> allTasks;
@@ -110,7 +110,7 @@ public class TravelTimeObjectiveTest extends JUnitTestAbstract {
 
     private RouteEvaluatorResult evaluateRoute(long robustness, List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime) {
         RouteEvaluator routeEvaluator = new RouteEvaluator(robustness, travelTimeMatrix, allTasks, office);
-        routeEvaluator.addObjectiveIntraShift(new TravelTimeObjective());
+        routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTasksStartTime, shift);
     }
 

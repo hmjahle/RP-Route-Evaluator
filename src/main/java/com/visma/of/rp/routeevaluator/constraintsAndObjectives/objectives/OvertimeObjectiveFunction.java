@@ -1,9 +1,10 @@
-package com.visma.of.rp.routeevaluator.objectives;
+package com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives;
 
-import com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo.ObjectiveInfo;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.OvertimeAbstract;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ObjectiveInfo;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveIntraRoute;
 
-public class OvertimeObjective implements IObjectiveIntraRoute {
+public class OvertimeObjective extends OvertimeAbstract implements IObjectiveIntraRoute {
 
     @Override
     public double calculateIncrementalObjectiveValueFor(ObjectiveInfo objectiveInfo) {
@@ -17,7 +18,4 @@ public class OvertimeObjective implements IObjectiveIntraRoute {
         return 0;
     }
 
-    private boolean isOverTime(long workShiftEnd, long officeReturn) {
-        return officeReturn > workShiftEnd;
-    }
 }

@@ -1,9 +1,9 @@
 package com.visma.of.rp.routeevaluator.physicalAppearance;
 
 
-import com.visma.of.rp.routeevaluator.constraints.OvertimeConstraint;
-import com.visma.of.rp.routeevaluator.constraints.StrictTimeWindowConstraint;
-import com.visma.of.rp.routeevaluator.constraints.SyncedTasksConstraint;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints.OvertimeConstraint;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints.StrictTimeWindowConstraint;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints.SyncedTasksConstraint;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
