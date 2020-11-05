@@ -24,7 +24,14 @@ public class TimeWindowLowHighObjective implements IObjectiveIntraRoute {
     public double calculateIncrementalObjectiveValueFor(ObjectiveInfo objectiveInfo) {
         if (objectiveInfo.isDestination())
             return 0;
-        else
-            return Math.max(0, objectiveInfo.getVisitEnd() - objectiveInfo.getTask().getEndTime());
+        else {
+            long timeWindowBreak = objectiveInfo.getVisitEnd() - objectiveInfo.getTask().getEndTime();
+            if (timeWindowBreak <= highPenaltyCutOff)
+                return Math.max(0, timeWindowBreak);
+            else {
+                long highPenaltyTimeWindowBreak = timeWindowBreak - highPenaltyCutOff;
+                return highPenaltyCutOff + highPenaltyTimeWindowBreak * highPenaltyMultiplier;
+            }
+        }
     }
 }
