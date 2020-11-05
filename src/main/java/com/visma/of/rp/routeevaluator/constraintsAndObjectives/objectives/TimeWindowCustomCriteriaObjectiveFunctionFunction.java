@@ -10,11 +10,7 @@ import java.util.function.Function;
 public class TimeWindowCustomCriteriaObjectiveFunctionFunction extends TimeWindowCustomCriteriaAbstract implements IObjectiveFunctionIntraRoute {
 
     public TimeWindowCustomCriteriaObjectiveFunctionFunction(Function<ITask, Boolean> criteriaFunction) {
-        super(criteriaFunction, 0);
-    }
-
-    public TimeWindowCustomCriteriaObjectiveFunctionFunction(Function<ITask, Boolean> criteriaFunction, long allowedSLack) {
-        super(criteriaFunction, allowedSLack);
+        super(criteriaFunction);
     }
 
     @Override

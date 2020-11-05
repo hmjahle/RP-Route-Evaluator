@@ -10,14 +10,14 @@ import java.util.function.Function;
 
 public class TimeWindowCustomCriteriaConstraint extends TimeWindowCustomCriteriaAbstract implements IConstraintIntraRoute {
 
-    public TimeWindowCustomCriteriaConstraint(Function<ITask, Boolean> criteriaFunction, long allowedSlack) {
-        super(criteriaFunction, allowedSlack);
+    public TimeWindowCustomCriteriaConstraint(Function<ITask, Boolean> criteriaFunction) {
+        super(criteriaFunction);
     }
 
     @Override
     public boolean constraintIsFeasible(ConstraintInfo constraintInfo) {
         if (constraintInfo.isDestination() || !criteriaIsFulfilled(constraintInfo))
             return true;
-        return constraintInfo.getStartOfServiceNextTask() + constraintInfo.getTask().getDuration() <= constraintInfo.getTask().getEndTime() + allowedSlack;
+        return constraintInfo.getStartOfServiceNextTask() + constraintInfo.getTask().getDuration() <= constraintInfo.getTask().getEndTime();
     }
 }
