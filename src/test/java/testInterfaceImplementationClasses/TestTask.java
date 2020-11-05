@@ -87,4 +87,7 @@ public class TestTask implements ITask {
         return id;
     }
 
+    public void setStrict(boolean strict) {
+        isStrict = strict;
+    }
 }

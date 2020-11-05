@@ -1,8 +1,8 @@
 package com.visma.of.rp.routeevaluator.constraints;
 
 
-import com.visma.of.rp.routeevaluator.publicInterfaces.IConstraintIntraRoute;
 import com.visma.of.rp.routeevaluator.intraRouteEvaluationInfo.ConstraintInfo;
+import com.visma.of.rp.routeevaluator.publicInterfaces.IConstraintIntraRoute;
 
 public class StrictTimeWindowConstraint implements IConstraintIntraRoute {
 

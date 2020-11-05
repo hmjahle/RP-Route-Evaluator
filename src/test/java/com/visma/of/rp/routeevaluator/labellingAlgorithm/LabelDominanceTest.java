@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator;
+package com.visma.of.rp.routeevaluator.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.objectives.Objective;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Label;

@@ -1,11 +1,12 @@
-package com.visma.of.rp.routeevaluator;
+package com.visma.of.rp.routeevaluator.objectiveFunctions;
 
 
+import com.visma.of.rp.routeevaluator.objectives.TimeWindowLowHighObjective;
+import com.visma.of.rp.routeevaluator.objectives.TimeWindowObjective;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITravelTimeMatrix;
-import com.visma.of.rp.routeevaluator.objectives.TimeWindowObjective;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
 import org.junit.Assert;
@@ -45,25 +46,35 @@ public class TimeWindowObjectiveTest extends JUnitTestAbstract {
         TestTask task1 = new TestTask(1, 0, 10, false, false, true, 0, 0, locations.get(0), "1");
         allTasks.add(task1);
         travelTimeMatrix.addUndirectedConnection(office, task1.getLocation(), 9);
-        RouteEvaluatorResult result = evaluateRoute(allTasks);
-
+        RouteEvaluatorResult result = evaluateRouteStandardTimeWindow(allTasks);
+        init();
+        RouteEvaluatorResult resultLowHigh = evaluateRouteLowHighTimeWindow(allTasks, 100, 1);
         Assert.assertNotNull("Must be feasible. ", result);
-        Assert.assertEquals("Objective value must be.", 0, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("Objective value for the standard time window must be.", 0, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("Objective value for the low/high time window must be.", 0, resultLowHigh.getObjectiveValue(), 1E-6);
         Assert.assertEquals(9, getVisitTravelTime(result, 0));
         Assert.assertEquals("Must return to office at: ", 19, result.getTimeOfOfficeReturn().longValue());
     }
 
     @Test
     public void timeWindowCostOfOne() {
+        initTest();
+        RouteEvaluatorResult result = evaluateRouteStandardTimeWindow(allTasks);
+        initTest();
+        RouteEvaluatorResult resultLowHigh = evaluateRouteLowHighTimeWindow(allTasks, 100, 0);
+
+        Assert.assertNotNull("Must be feasible. ", result);
+        Assert.assertEquals("Objective value for the standard time window must be.", 1, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("Objective value for the low/high time window must be.", 100, resultLowHigh.getObjectiveValue(), 1E-6);
+        Assert.assertEquals(10, getVisitTravelTime(result, 0));
+        Assert.assertEquals("Must return to office at: ", 21, result.getTimeOfOfficeReturn().longValue());
+    }
+
+    private void initTest() {
+        init();
         TestTask task1 = new TestTask(1, 0, 10, false, false, true, 0, 0, locations.get(0), "1");
         allTasks.add(task1);
         travelTimeMatrix.addUndirectedConnection(office, task1.getLocation(), 10);
-        RouteEvaluatorResult result = evaluateRoute(allTasks);
-
-        Assert.assertNotNull("Must be feasible. ", result);
-        Assert.assertEquals("Objective value must be.", 1, result.getObjectiveValue(), 1E-6);
-        Assert.assertEquals(10, getVisitTravelTime(result, 0));
-        Assert.assertEquals("Must return to office at: ", 21, result.getTimeOfOfficeReturn().longValue());
     }
 
     @Test
@@ -73,9 +84,12 @@ public class TimeWindowObjectiveTest extends JUnitTestAbstract {
         TestTask task3 = new TestTask(1, 0, 10, false, false, true, 0, 0, locations.get(2), "3");
         TestTask task4 = new TestTask(1, 0, 10, false, false, true, 0, 0, locations.get(3), "4");
 
-        RouteEvaluatorResult result = evaluateRoute(task1, task2, task3, task4);
+        RouteEvaluatorResult result = evaluateRouteStandardTimeWindow(task1, task2, task3, task4);
+        init();
+        RouteEvaluatorResult resultLowHigh = evaluateRouteLowHighTimeWindow(task1, task2, task3, task4, 1000, 10);
         Assert.assertNotNull("Must be feasible. ", result);
-        Assert.assertEquals("Objective value must be.", 70, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("Objective value for the standard time window must be.", 70, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("Objective value for the low/high time window must be.", 39031, resultLowHigh.getObjectiveValue(), 1E-6);
         Assert.assertEquals("Must return to office at: ", 54, result.getTimeOfOfficeReturn().longValue());
     }
 
@@ -86,11 +100,12 @@ public class TimeWindowObjectiveTest extends JUnitTestAbstract {
         TestTask task3 = new TestTask(1, 0, 50, false, false, true, 0, 0, locations.get(2), "3");
         TestTask task4 = new TestTask(1, 0, 10, false, false, true, 0, 0, locations.get(3), "4");
 
-        RouteEvaluatorResult result = evaluateRoute(task1, task2, task3, task4);
+        RouteEvaluatorResult resultLowHigh = evaluateRouteLowHighTimeWindow(task1, task2, task3, task4, 1000, 4);
+        init();
+        RouteEvaluatorResult result = evaluateRouteStandardTimeWindow(task1, task2, task3, task4);
 
-        Assert.assertNotNull("Must be feasible. ", result);
-        Assert.assertEquals("Objective value must be.", 35, result.getObjectiveValue(), 1E-6);
-        Assert.assertEquals("Must return to office at: ", 54, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Objective value for the standard time window must be.", 35, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("Objective value for the low/high time window must be.", 30005, resultLowHigh.getObjectiveValue(), 1E-6);
     }
 
     @Test
@@ -100,24 +115,35 @@ public class TimeWindowObjectiveTest extends JUnitTestAbstract {
         TestTask task3 = new TestTask(1, 0, 50, false, false, true, 0, 0, locations.get(2), "3");
         TestTask task4 = new TestTask(1, 0, 100, false, false, true, 0, 0, locations.get(3), "4");
 
-        RouteEvaluatorResult result = evaluateRoute(task1, task2, task3, task4);
+        RouteEvaluatorResult result = evaluateRouteStandardTimeWindow(task1, task2, task3, task4);
+        init();
+        RouteEvaluatorResult resultLowHigh = evaluateRouteLowHighTimeWindow(task1, task2, task3, task4, 100, 1);
 
         Assert.assertNotNull("Must be feasible. ", result);
-        Assert.assertEquals("Objective value must be.", 0, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("Objective value for the standard time window must be.", 0, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("Objective value for the low/high time window must be.", 0, resultLowHigh.getObjectiveValue(), 1E-6);
         Assert.assertEquals("Must return to office at: ", 54, result.getTimeOfOfficeReturn().longValue());
     }
 
+    private RouteEvaluatorResult evaluateRouteStandardTimeWindow(TestTask task1, TestTask task2, TestTask task3, TestTask task4) {
+        RouteEvaluator routeEvaluator = buildEvaluator(task1, task2, task3, task4);
+        routeEvaluator.addObjectiveIntraShift(new TimeWindowObjective());
+        return routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+    }
 
-    private RouteEvaluatorResult evaluateRoute(TestTask task1, TestTask task2, TestTask task3, TestTask task4) {
+    private RouteEvaluatorResult evaluateRouteLowHighTimeWindow(TestTask task1, TestTask task2, TestTask task3, TestTask task4, double highMultiplier, long highCutOff) {
+        RouteEvaluator routeEvaluator = buildEvaluator(task1, task2, task3, task4);
+        routeEvaluator.addObjectiveIntraShift(new TimeWindowLowHighObjective(highCutOff, highMultiplier));
+        return routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+    }
+
+    private RouteEvaluator buildEvaluator(TestTask task1, TestTask task2, TestTask task3, TestTask task4) {
         allTasks.add(task1);
         allTasks.add(task2);
         allTasks.add(task3);
         allTasks.add(task4);
         ITravelTimeMatrix travelTimeMatrix = createTravelTimeMatrix(office, allTasks);
-
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
-        routeEvaluator.addObjectiveIntraShift(new TimeWindowObjective());
-        return routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        return new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
     }
 
     private TestTravelTimeMatrix createTravelTimeMatrix(List<ILocation> locations, ILocation office) {
@@ -137,12 +163,18 @@ public class TimeWindowObjectiveTest extends JUnitTestAbstract {
         return locations;
     }
 
-    private RouteEvaluatorResult evaluateRoute(List<ITask> tasks) {
+    private RouteEvaluatorResult evaluateRouteStandardTimeWindow(List<ITask> tasks) {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
         routeEvaluator.addObjectiveIntraShift(new TimeWindowObjective());
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }
-    
+
+    private RouteEvaluatorResult evaluateRouteLowHighTimeWindow(List<ITask> tasks, double highMultiplier, long highCutOff) {
+        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
+        routeEvaluator.addObjectiveIntraShift(new TimeWindowLowHighObjective(highCutOff, highMultiplier));
+        return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+    }
+
     private ITravelTimeMatrix createTravelTimeMatrix(ILocation office, Collection<ITask> tasks) {
         TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
         for (ITask taskA : tasks) {

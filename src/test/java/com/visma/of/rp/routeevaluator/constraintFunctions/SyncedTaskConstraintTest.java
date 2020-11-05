@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator;
+package com.visma.of.rp.routeevaluator.constraintFunctions;
 
 
 import com.visma.of.rp.routeevaluator.constraints.SyncedTasksConstraint;
