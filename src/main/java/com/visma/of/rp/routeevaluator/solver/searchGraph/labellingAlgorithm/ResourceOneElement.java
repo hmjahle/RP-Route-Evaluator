@@ -4,6 +4,7 @@ package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
  * This class implement IResource, and has two elements. This should be used by INodeExtendSets with to elements.
  */
 public class ResourceOneElement implements IResource {
+
     private int elementOneCount;
 
     public ResourceOneElement(int elementOneCount) {

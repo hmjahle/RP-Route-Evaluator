@@ -9,7 +9,6 @@ import com.visma.of.rp.routeevaluator.routeResult.Visit;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Label;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ResourceOneElement;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.SearchInfo;
 import testInterfaceImplementationClasses.TestLocation;
 import testInterfaceImplementationClasses.TestTask;
 
@@ -29,7 +28,7 @@ public abstract class JUnitTestAbstract {
         return hours * 3600;
     }
 
-    protected Label createStartLabel(SearchGraph graph, SearchInfo searchInfo) {
+    protected Label createStartLabel(SearchGraph graph) {
         return new Label(null, graph.getOffice(), graph.getOffice(), new Objective(0), new ResourceOneElement(0), 0, 0, 0);
     }
 

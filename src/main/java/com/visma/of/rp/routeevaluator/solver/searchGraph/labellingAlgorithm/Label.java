@@ -54,7 +54,7 @@ import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
         return resources;
     }
 
-    public void setClosed(boolean close) {
+    public void close(boolean close) {
         closed = close;
     }
 

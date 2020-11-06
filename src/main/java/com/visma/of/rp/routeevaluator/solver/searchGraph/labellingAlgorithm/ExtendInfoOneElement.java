@@ -1,10 +1,7 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
-
-
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.NodeList;
-
 
 import java.util.ArrayList;
 import java.util.List;
