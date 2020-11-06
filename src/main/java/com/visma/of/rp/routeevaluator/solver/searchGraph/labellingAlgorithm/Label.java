@@ -1,9 +1,8 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.Objective;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
 
- public class Label implements Comparable<Label> {
+public class Label implements Comparable<Label> {
     private Label previous;
     private Node node;
     private Node currentLocation;

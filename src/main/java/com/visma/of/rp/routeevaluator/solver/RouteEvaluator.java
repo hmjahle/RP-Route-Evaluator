@@ -2,9 +2,9 @@ package com.visma.of.rp.routeevaluator.solver;
 
 import com.visma.of.rp.routeevaluator.publicInterfaces.*;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.NodeList;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Node;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.NodeList;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.SearchGraph;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ExtendInfoOneElement;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.LabellingAlgorithm;
 

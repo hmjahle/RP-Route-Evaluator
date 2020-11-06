@@ -2,7 +2,7 @@ package com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives;
 
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ObjectiveInfo;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Node;
 
 /**
  * Calculates objective values and check whether one objective dominates the other.

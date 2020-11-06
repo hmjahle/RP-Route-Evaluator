@@ -12,21 +12,15 @@ public class SearchGraph {
     private List<Node> nodes;
     private Map<ITask, Node> nodesToTask;
     private Node office;
-    private Set<Edge> edgesAll;
-    private TravelTimeSet edgesNodeToNode;
-    private Map<Edge, Long> edgeTravelTime;
+    private Long[][] edgesNodeToNode;
     private int nodeId;
-    private int edgeId;
     private long robustTimeSeconds;
 
     public SearchGraph(ITravelTimeMatrix travelTimeMatrix, Collection<ITask> tasks, ILocation officePosition, long robustTimeSeconds) {
         this.robustTimeSeconds = robustTimeSeconds;
         this.nodes = new ArrayList<>();
-        this.edgesAll = new HashSet<>();
         this.nodesToTask = new HashMap<>();
-        this.edgeTravelTime = new HashMap<>();
         this.nodeId = 0;
-        this.edgeId = 0;
         this.populateGraph(travelTimeMatrix, tasks, officePosition);
     }
 
@@ -34,27 +28,18 @@ public class SearchGraph {
         return nodes;
     }
 
-    public TravelTimeSet getEdgesNodeToNode() {
-        return edgesNodeToNode;
+    public Long getTravelTime(Node nodeA, Node nodeB) {
+        return edgesNodeToNode[nodeA.getId()][nodeB.getId()];
     }
 
     private int getNewNodeId() {
         return nodeId++;
     }
 
-    private int getNewEdgeId() {
-        return edgeId++;
-    }
-
     private void populateGraph(ITravelTimeMatrix travelTimeMatrix, Collection<ITask> tasks, ILocation officePosition) {
         addNodesToGraph(tasks, officePosition);
+        edgesNodeToNode = new Long[nodes.size()][nodes.size()];
         addTravelInfo(travelTimeMatrix);
-        addEdges();
-    }
-
-    private void addEdges() {
-        edgesNodeToNode = new TravelTimeSet(nodes.size());
-        edgesNodeToNode.update(edgesAll);
     }
 
     private void addTravelInfo(ITravelTimeMatrix travelTimeMatrix) {
@@ -80,11 +65,8 @@ public class SearchGraph {
     private void addEdge(ITravelTimeMatrix travelTimeMatrix, Node node1, Node node2) {
         if (!travelTimeMatrix.connected(node1.getAddress(), node2.getAddress()))
             return;
-        Edge edge = new Edge(getNewEdgeId(), node1, node2);
-        Long travelTime = travelTimeMatrix.getTravelTime(node1.getAddress(), node2.getAddress());
-        edge.setTravelTime(travelTime);
-        edgeTravelTime.put(edge, travelTime);
-        edgesAll.add(edge);
+        long travelTime = travelTimeMatrix.getTravelTime(node1.getAddress(), node2.getAddress());
+        edgesNodeToNode[node1.getId()][node2.getId()] = travelTime;
     }
 
     public void updateNodeType(ITask task) {
