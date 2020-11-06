@@ -18,8 +18,6 @@ import testSupport.JUnitTestAbstract;
 
 import java.util.*;
 
-import static benchmarking.benchmarking.printResult;
-
 /**
  * Tests if the synced task constraint is implemented correctly.
  */
@@ -74,7 +72,7 @@ public class SyncedTaskConstraintTest extends JUnitTestAbstract {
         Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();
         syncedTaskStartTimes.put(newTask, 25L);
         RouteEvaluatorResult result = evaluateRoute(tasks, syncedTaskStartTimes);
-        printResult(result);
+
         Assert.assertNotNull("Must be feasible. ", result);
     }
 
