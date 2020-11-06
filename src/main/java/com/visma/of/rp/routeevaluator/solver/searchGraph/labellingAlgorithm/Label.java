@@ -1,24 +1,21 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.Objective;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.Edge;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
 
 public class Label implements Comparable<Label> {
-    private SearchInfo searchInfo;
-    private Label previous;
-    private Node node;
-    private Node currentLocation;
-    private Objective objective;
-    private IResource resources;
-    private long currentTime;
-    private long travelTime;
-    private long canLeaveLocationAtTime;
-    private boolean closed;
+    public Label previous;
+    public Node node;
+    public Node currentLocation;
+    public Objective objective;
+    public IResource resources;
+    public long currentTime;
+    public long travelTime;
+    public long canLeaveLocationAtTime;
+    public boolean closed;
 
-    public Label(SearchInfo searchInfo, Label previous, Node currentNode, Node currentLocation, Objective objective,
+    public Label( Label previous, Node currentNode, Node currentLocation, Objective objective,
                  IResource resources, long currentTime, long travelTime, long canLeaveLocationAtTime) {
-        this.searchInfo = searchInfo;
         this.previous = previous;
         this.node = currentNode;
         this.currentLocation = currentLocation;
@@ -28,79 +25,6 @@ public class Label implements Comparable<Label> {
         this.travelTime = travelTime;
         this.canLeaveLocationAtTime = canLeaveLocationAtTime;
         this.closed = false;
-    }
-
-    public Label extendAlong(ExtendToInfo extendToInfo) {
-        Node nextNode = extendToInfo.getToNode();
-        boolean taskRequirePhysicalAppearance = nextNode.getRequirePhysicalAppearance();
-        Node newLocation = findNewLocation(taskRequirePhysicalAppearance, nextNode);
-        long travelTime = getTravelTime(nextNode, newLocation);
-        long startOfServiceNextTask = calcStartOfServiceNextTask(nextNode, taskRequirePhysicalAppearance, travelTime);
-
-        long earliestOfficeReturn = calcEarliestPossibleReturnToOfficeTime(nextNode, newLocation, startOfServiceNextTask);
-        long syncedTaskLatestStartTime = nextNode.isSynced() ? searchInfo.getSyncedNodesLatestStartTime()[nextNode.getId()] : -1;
-        if (!searchInfo.isFeasible(earliestOfficeReturn, nextNode.getTask(), startOfServiceNextTask, syncedTaskLatestStartTime))
-            return null;
-
-        long canLeaveLocationAt = updateCanLeaveLocationAt(taskRequirePhysicalAppearance, startOfServiceNextTask);
-        return buildNewLabel(extendToInfo, nextNode, newLocation, travelTime,
-                startOfServiceNextTask, canLeaveLocationAt, syncedTaskLatestStartTime);
-    }
-
-    private Label buildNewLabel(ExtendToInfo extendToInfo, Node nextNode, Node newLocation, long travelTime, long startOfServiceNextTask, long canLeaveLocationAt, long syncedTaskLatestStartTime) {
-        Objective objective = this.objective.extend(this.searchInfo, nextNode, travelTime, startOfServiceNextTask, syncedTaskLatestStartTime);
-        IResource resources = this.resources.extend(extendToInfo);
-        return new Label(this.searchInfo, this, nextNode, newLocation, objective, resources, startOfServiceNextTask, travelTime, canLeaveLocationAt);
-    }
-
-    private long calcStartOfServiceNextTask(Node nextNode, boolean taskRequirePhysicalAppearance, long travelTime) {
-        long arrivalTimeNextTask = calcArrivalTimeNextTask(taskRequirePhysicalAppearance, travelTime);
-        long earliestStartTimeNextTask = findEarliestStartTimeNextTask(nextNode);
-        return Math.max(arrivalTimeNextTask, earliestStartTimeNextTask);
-    }
-
-    private long getTravelTime(Node nextNode, Node newLocation) {
-        Edge edge = newLocation == currentLocation ? null : getEdgeToNextNode(nextNode);
-        if (edge == null) {
-            return 0;
-        } else
-            return edge.getTravelTime();
-    }
-
-    private long calcEarliestPossibleReturnToOfficeTime(Node nextNode, Node currentLocation, long startOfServiceNextTask) {
-        return startOfServiceNextTask + nextNode.getDurationSeconds() + searchInfo.getTravelTimeToOffice(currentLocation);
-    }
-
-    private long calcArrivalTimeNextTask(boolean requirePhysicalAppearance, long travelTime) {
-        long actualTravelTime = travelTime;
-        if (requirePhysicalAppearance) {
-            actualTravelTime = Math.max(travelTime - (currentTime - canLeaveLocationAtTime), 0);
-        }
-        return actualTravelTime + currentTime + node.getDurationSeconds() + searchInfo.getRobustTimeSeconds();
-    }
-
-    private long updateCanLeaveLocationAt(boolean requirePhysicalAppearance, long startOfServiceNextTask) {
-        if (requirePhysicalAppearance)
-            return startOfServiceNextTask;
-        else {
-            return canLeaveLocationAtTime + node.getDurationSeconds() + searchInfo.getRobustTimeSeconds();
-        }
-    }
-
-    private Node findNewLocation(boolean requirePhysicalAppearance, Node nextNode) {
-        return requirePhysicalAppearance || nextNode.getRequirePhysicalAppearance() ? nextNode : currentLocation;
-    }
-
-    private long findEarliestStartTimeNextTask(Node toNode) {
-        if (toNode.isSynced()) {
-            return searchInfo.getSyncedNodesStartTime()[toNode.getId()];
-        } else {
-            return toNode.getStartTime();
-        }
-    }
-
-    private Edge getEdgeToNextNode(Node toNode) {
-        return searchInfo.getGraph().getEdgesNodeToNode().getEdge(this.currentLocation, toNode);
     }
 
     public Label getPrevious() {
