@@ -198,9 +198,7 @@ public class LabelDominanceTest {
         Assert.assertEquals("16", 0, labelTest(labelD, labelD));
     }
 
-    public int labelTest(Label a, Label b) {
-        Label labelA = new Label(a.getPrevious(), a.getNode(), a.getCurrentLocation(), a.getObjective(), a.getResources(), a.getCurrentTime(), 0, a.getCanLeaveLocationAtTime());
-        Label labelB = new Label(b.getPrevious(), b.getNode(), b.getCurrentLocation(), b.getObjective(), b.getResources(), b.getCurrentTime(), 0, b.getCanLeaveLocationAtTime());
+    public int labelTest(Label labelA, Label labelB) {
         return labelA.dominates(labelB);
     }
 }

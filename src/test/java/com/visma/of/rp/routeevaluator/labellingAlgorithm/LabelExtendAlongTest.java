@@ -32,7 +32,7 @@ public class LabelExtendAlongTest extends JUnitTestAbstract {
 
         Label label = createStartLabel(graph, searchInfo);
         LabellingAlgorithm labellingAlgorithm = new LabellingAlgorithm(graph);
-        Label newLabel = labellingAlgorithm.extendAlong(label, new ExtendToInfo(graph.getNode(task), 1));
+        Label newLabel = labellingAlgorithm.extendLabelToNextNode(label, new ExtendToInfo(graph.getNode(task), 1));
 
         Assert.assertNotNull(newLabel);
         Assert.assertEquals("Position should be node: ", "1", newLabel.getCurrentLocation().toString());

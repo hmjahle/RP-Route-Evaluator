@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ObjectivesIntraRouteHandler {
+public class ObjectiveFunctionsIntraRouteHandler {
 
     private List<IObjectiveFunctionIntraRoute> objectiveFunctions;
 
-    public ObjectivesIntraRouteHandler() {
+    public ObjectiveFunctionsIntraRouteHandler() {
         objectiveFunctions = new ArrayList<>();
     }
 

@@ -16,29 +16,29 @@ public class Objective {
         this.objectiveValue = objectiveValue;
     }
 
-    public Objective extend(SearchInfo searchInfo, Node toNode, long travelTime, long startOfServiceNextTask, long syncedTaskLatestStartTime, long endOfShift, ObjectivesIntraRouteHandler objectivesIntraRouteHandler) {
+    public Objective extend(SearchInfo searchInfo, Node toNode, long travelTime, long startOfServiceNextTask, long syncedTaskLatestStartTime, long endOfShift, ObjectiveFunctionsIntraRouteHandler objectiveFunctionsIntraRouteHandler) {
         if (toNode.getTask() == null) {
-            return createObjectiveFunctionToOffice(searchInfo, travelTime, startOfServiceNextTask, endOfShift, objectivesIntraRouteHandler);
+            return createObjectiveFunctionToOffice(searchInfo, travelTime, startOfServiceNextTask, endOfShift, objectiveFunctionsIntraRouteHandler);
         } else {
-            return createObjectiveFunctionFor(searchInfo, toNode, travelTime, startOfServiceNextTask, syncedTaskLatestStartTime, endOfShift, objectivesIntraRouteHandler);
+            return createObjectiveFunctionFor(searchInfo, toNode, travelTime, startOfServiceNextTask, syncedTaskLatestStartTime, endOfShift, objectiveFunctionsIntraRouteHandler);
         }
     }
 
     public double calculateObjectiveValue(long travelTime, ITask task, long startOfServiceNextTask,
-                                          long syncedTaskLatestStartTime, long endOfShift, ObjectivesIntraRouteHandler objectivesIntraRouteHandler) {
+                                          long syncedTaskLatestStartTime, long endOfShift, ObjectiveFunctionsIntraRouteHandler objectiveFunctionsIntraRouteHandler) {
         long visitEnd = task != null ? startOfServiceNextTask + task.getDuration() : 0;
         ObjectiveInfo costInfo = new ObjectiveInfo(travelTime, task, visitEnd, startOfServiceNextTask,
                 syncedTaskLatestStartTime, endOfShift);
-        return objectivesIntraRouteHandler.calculateIncrementalObjectiveValue(costInfo);
+        return objectiveFunctionsIntraRouteHandler.calculateIncrementalObjectiveValue(costInfo);
     }
 
-    private Objective createObjectiveFunctionFor(SearchInfo searchInfo, Node toNode, long travelTimeWithParking, long startOfServiceNextTask, long syncedTaskLatestStartTime, long endOfShift, ObjectivesIntraRouteHandler objectivesIntraRouteHandler) {
-        double newObjectiveValue = calculateObjectiveValue(travelTimeWithParking, toNode.getTask(), startOfServiceNextTask, syncedTaskLatestStartTime, endOfShift, objectivesIntraRouteHandler);
+    private Objective createObjectiveFunctionFor(SearchInfo searchInfo, Node toNode, long travelTimeWithParking, long startOfServiceNextTask, long syncedTaskLatestStartTime, long endOfShift, ObjectiveFunctionsIntraRouteHandler objectiveFunctionsIntraRouteHandler) {
+        double newObjectiveValue = calculateObjectiveValue(travelTimeWithParking, toNode.getTask(), startOfServiceNextTask, syncedTaskLatestStartTime, endOfShift, objectiveFunctionsIntraRouteHandler);
         return new Objective(this.objectiveValue + newObjectiveValue);
     }
 
-    private Objective createObjectiveFunctionToOffice(SearchInfo searchInfo, long travelTimeWithParking, long officeArrivalTime, long endOfShift, ObjectivesIntraRouteHandler objectivesIntraRouteHandler) {
-        double newObjectiveValue = calculateObjectiveValue(travelTimeWithParking, null, officeArrivalTime, Long.MAX_VALUE, endOfShift, objectivesIntraRouteHandler);
+    private Objective createObjectiveFunctionToOffice(SearchInfo searchInfo, long travelTimeWithParking, long officeArrivalTime, long endOfShift, ObjectiveFunctionsIntraRouteHandler objectiveFunctionsIntraRouteHandler) {
+        double newObjectiveValue = calculateObjectiveValue(travelTimeWithParking, null, officeArrivalTime, Long.MAX_VALUE, endOfShift, objectiveFunctionsIntraRouteHandler);
         return new Objective(this.objectiveValue + newObjectiveValue);
     }
 

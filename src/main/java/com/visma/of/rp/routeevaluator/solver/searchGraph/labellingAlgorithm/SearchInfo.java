@@ -7,7 +7,7 @@ import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints.ConstraintsIntraRouteHandler;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ConstraintInfo;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ObjectiveInfo;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.ObjectivesIntraRouteHandler;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.ObjectiveFunctionsIntraRouteHandler;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Edge;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
@@ -15,7 +15,7 @@ import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 
 public class SearchInfo {
     private SearchGraph graph;
-    public ObjectivesIntraRouteHandler objectives;
+    public ObjectiveFunctionsIntraRouteHandler objectives;
     private ConstraintsIntraRouteHandler constraints;
     private long[] syncedNodesStartTime;
     private long[] syncedNodesLatestStartTime;
@@ -26,7 +26,7 @@ public class SearchInfo {
     public SearchInfo(SearchGraph graph) {
         this.graph = graph;
         this.robustness = graph.getRobustTimeSeconds();
-        this.objectives = new ObjectivesIntraRouteHandler();
+        this.objectives = new ObjectiveFunctionsIntraRouteHandler();
         this.constraints = new ConstraintsIntraRouteHandler();
     }
 
