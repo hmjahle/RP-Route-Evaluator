@@ -3,15 +3,15 @@ package com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ObjectiveInfo;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveFunctionIntraRoute;
 
-public class SyncedTaskStartTimeObjectiveFunctionFunction implements IObjectiveFunctionIntraRoute {
+public class SyncedTaskStartTimeObjectiveFunction implements IObjectiveFunctionIntraRoute {
 
     private final long allowedSlack;
 
-    public SyncedTaskStartTimeObjectiveFunctionFunction(long allowedSlack) {
+    public SyncedTaskStartTimeObjectiveFunction(long allowedSlack) {
         this.allowedSlack = allowedSlack;
     }
 
-    public SyncedTaskStartTimeObjectiveFunctionFunction() {
+    public SyncedTaskStartTimeObjectiveFunction() {
         this.allowedSlack = 0;
     }
 
@@ -21,7 +21,8 @@ public class SyncedTaskStartTimeObjectiveFunctionFunction implements IObjectiveF
             return 0;
         else {
             return Math.max(0.0, (objectiveInfo.getStartOfServiceNextTask() -
-                    (objectiveInfo.getSyncedTaskLatestStartTime() + allowedSlack)));
+                    (objectiveInfo.getSyncedTaskStartTime() + allowedSlack
+                            + objectiveInfo.getTask().getSyncedWithIntervalDiff())));
         }
     }
 }
