@@ -216,16 +216,11 @@ public class LabellingAlgorithm {
 
     private long getTravelTime(Label thisLabel, Node nextNode, Node newLocation) {
 
-//        Edge edge = newLocation == thisLabel.getCurrentLocation() ? null : getEdgeToNextNode(thisLabel, nextNode);
-//        if (edge == null) {
-//            return 0;
-//        } else
-//            return edge.getTravelTime();
-        Long edge = newLocation == thisLabel.getCurrentLocation() ? null : graph.getTravelTime(thisLabel.getCurrentLocation(), nextNode);
-        if (edge == null) {
+        Long travelTime = newLocation == thisLabel.getCurrentLocation() ? null : graph.getTravelTime(thisLabel.getCurrentLocation(), nextNode);
+        if (travelTime == null) {
             return 0;
         } else
-            return edge;
+            return travelTime;
     }
 
     private long calcEarliestPossibleReturnToOfficeTime(Node nextNode, Node currentLocation, long startOfServiceNextTask) {
@@ -235,11 +230,8 @@ public class LabellingAlgorithm {
     private long getTravelTimeToOffice(Node node) {
         if (node.getAddress() == graph.getOffice().getAddress())
             return 0;
-//        Edge edge = graph.getEdgesNodeToNode()
-//                .getEdge(node, graph.getOffice());
-
-        Long edge = graph.getTravelTime(node, graph.getOffice());
-        return edge == null ? 0 : edge;
+        Long travelTime = graph.getTravelTime(node, graph.getOffice());
+        return travelTime == null ? 0 : travelTime;
     }
 
     private Node findNewLocation(Label thisLabel, boolean requirePhysicalAppearance, Node nextNode) {
@@ -253,10 +245,6 @@ public class LabellingAlgorithm {
             return toNode.getStartTime();
         }
     }
-
-//    private Edge getEdgeToNextNode(Label thisLabel, Node toNode) {
-//        return graph.getEdgesNodeToNode().getEdge(thisLabel.getCurrentLocation(), toNode);
-//    }
 
     private boolean optimalSolutionFound(Label currentLabel) {
         return labelsOnDestinationNode.peek() != null && currentLabel != null &&
