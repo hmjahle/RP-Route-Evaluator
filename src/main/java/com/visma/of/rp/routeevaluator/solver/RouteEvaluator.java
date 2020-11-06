@@ -39,7 +39,7 @@ public class RouteEvaluator {
     }
 
     public void addObjectiveIntraShift(IObjectiveFunctionIntraRoute objectiveIntraShift) {
-        algorithm.addObjectiveIntraShift(objectiveIntraShift);
+        algorithm.addObjectiveFunctionIntraShift(objectiveIntraShift);
     }
 
     public void addConstraint(IConstraintIntraRoute constraint) {
@@ -50,7 +50,7 @@ public class RouteEvaluator {
         updateFirstTaskList(tasks, syncedTasksStartTime);
         ExtendInfoOneElement nodeExtendInfoOneElement = new ExtendInfoOneElement();
         nodeExtendInfoOneElement.update(firstNodeList);
-        return algorithm.solve(nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
+        return algorithm.runAlgorithm(nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
     }
 
     /**
@@ -65,7 +65,7 @@ public class RouteEvaluator {
         updateFirstTaskList(tasks, syncedTasksStartTime);
         ExtendInfoOneElement nodeExtendInfoOneElement = new ExtendInfoOneElement();
         nodeExtendInfoOneElement.update(firstNodeList);
-        return algorithm.solveRouteSimulatorResult(nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
+        return algorithm.solveRouteEvaluatorResult(nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
     }
 
     public RouteEvaluatorResult evaluateRouteByTheOrderOfTasks(List<ITask> tasks, IShift employeeWorkShift) {
