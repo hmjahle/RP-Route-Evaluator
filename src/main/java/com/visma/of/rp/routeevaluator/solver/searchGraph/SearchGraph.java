@@ -52,7 +52,6 @@ public class SearchGraph {
         addEdges();
     }
 
-
     private void addEdges() {
         edgesNodeToNode = new TravelTimeSet(nodes.size());
         edgesNodeToNode.update(edgesAll);
