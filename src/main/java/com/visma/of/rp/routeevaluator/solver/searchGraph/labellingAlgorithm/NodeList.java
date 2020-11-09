@@ -1,11 +1,10 @@
-package com.visma.of.rp.routeevaluator.solver.searchGraph;
-
+package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 
 import java.util.List;
 
-  public class NodeList {
+public class NodeList {
     private Node[] nodes;
     private int nodesCnt;
 
@@ -26,7 +25,6 @@ import java.util.List;
         nodesCnt = 0;
     }
 
-
     public void setNodes(SearchGraph graph, List<ITask> tasks) {
         nodesCnt = tasks.size();
         for (int i = 0; i < tasks.size(); i++) {
@@ -37,7 +35,6 @@ import java.util.List;
     public void setNode(SearchGraph graph, ITask task) {
         nodesCnt = 1;
         nodes[0] = graph.getNode(task);
-
     }
 
     void addNode(SearchGraph graph, ITask task) {

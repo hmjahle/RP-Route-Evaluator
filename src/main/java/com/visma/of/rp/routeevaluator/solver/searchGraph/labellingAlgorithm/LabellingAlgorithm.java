@@ -10,9 +10,6 @@ import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.routeResult.Visit;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.Edge;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.Node;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.SearchGraph;
 
 import java.util.PriorityQueue;
 
@@ -173,7 +170,7 @@ public class LabellingAlgorithm {
     }
 
     private Label buildNewLabel(Label thisLabel, ExtendToInfo extendToInfo, Node nextNode, Node newLocation, long travelTime, long startOfServiceNextTask, long canLeaveLocationAt, long syncedTaskLatestStartTime) {
-        Objective objective = thisLabel.getObjective().extend( nextNode, travelTime, startOfServiceNextTask, syncedTaskLatestStartTime, endOfShift, objectiveFunctions);
+        Objective objective = thisLabel.getObjective().extend(nextNode, travelTime, startOfServiceNextTask, syncedTaskLatestStartTime, endOfShift, objectiveFunctions);
         IResource resources = thisLabel.getResources().extend(extendToInfo);
         return new Label(thisLabel, nextNode, newLocation, objective, resources, startOfServiceNextTask, travelTime, canLeaveLocationAt);
     }
@@ -218,11 +215,12 @@ public class LabellingAlgorithm {
     }
 
     private long getTravelTime(Label thisLabel, Node nextNode, Node newLocation) {
-        Edge edge = newLocation == thisLabel.getCurrentLocation() ? null : getEdgeToNextNode(thisLabel, nextNode);
-        if (edge == null) {
+
+        Long travelTime = newLocation == thisLabel.getCurrentLocation() ? null : graph.getTravelTime(thisLabel.getCurrentLocation(), nextNode);
+        if (travelTime == null) {
             return 0;
         } else
-            return edge.getTravelTime();
+            return travelTime;
     }
 
     private long calcEarliestPossibleReturnToOfficeTime(Node nextNode, Node currentLocation, long startOfServiceNextTask) {
@@ -232,9 +230,8 @@ public class LabellingAlgorithm {
     private long getTravelTimeToOffice(Node node) {
         if (node.getAddress() == graph.getOffice().getAddress())
             return 0;
-        Edge edge = graph.getEdgesNodeToNode()
-                .getEdge(node, graph.getOffice());
-        return edge == null ? 0 : edge.getTravelTime();
+        Long travelTime = graph.getTravelTime(node, graph.getOffice());
+        return travelTime == null ? 0 : travelTime;
     }
 
     private Node findNewLocation(Label thisLabel, boolean requirePhysicalAppearance, Node nextNode) {
@@ -247,10 +244,6 @@ public class LabellingAlgorithm {
         } else {
             return toNode.getStartTime();
         }
-    }
-
-    private Edge getEdgeToNextNode(Label thisLabel, Node toNode) {
-        return graph.getEdgesNodeToNode().getEdge(thisLabel.getCurrentLocation(), toNode);
     }
 
     private boolean optimalSolutionFound(Label currentLabel) {
