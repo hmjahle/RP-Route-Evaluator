@@ -20,6 +20,8 @@ public class SyncedTasksConstraint implements IConstraintIntraRoute {
     public boolean constraintIsFeasible(ConstraintInfo constraintInfo) {
         if (!constraintInfo.isSynced())
             return true;
-        return (constraintInfo.getStartOfServiceNextTask() <= constraintInfo.getSyncedTaskLatestStartTime() + allowedSlack);
+        return (constraintInfo.getStartOfServiceNextTask() <= constraintInfo.getSyncedTaskStartTime()
+                + constraintInfo.getTask().getSyncedWithIntervalDiff()
+                + allowedSlack);
     }
 }

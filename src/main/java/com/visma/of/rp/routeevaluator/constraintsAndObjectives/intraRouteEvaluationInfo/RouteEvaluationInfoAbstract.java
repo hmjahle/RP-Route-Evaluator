@@ -9,16 +9,16 @@ public class RouteEvaluationInfoAbstract {
 
     protected ITask task;
     protected long endOfWorkShift;
-    protected long syncedTaskLatestStartTime;
+    protected long syncedTaskStartTime;
 
-    public RouteEvaluationInfoAbstract(ITask task, long endOfWorkShift, long syncedTaskLatestStartTime) {
+    public RouteEvaluationInfoAbstract(ITask task, long endOfWorkShift, long syncedTaskStartTime) {
         this.task = task;
         this.endOfWorkShift = endOfWorkShift;
-        this.syncedTaskLatestStartTime = syncedTaskLatestStartTime;
+        this.syncedTaskStartTime = syncedTaskStartTime;
     }
 
-    public long getSyncedTaskLatestStartTime() {
-        return syncedTaskLatestStartTime;
+    public long getSyncedTaskStartTime() {
+        return syncedTaskStartTime;
     }
 
     public ITask getTask() {

@@ -14,7 +14,7 @@ public class ConstraintInfo extends RouteEvaluationInfoAbstract {
         super(task, endOfWorkShift, syncedTaskLatestStartTime);
         this.earliestOfficeReturn = earliestOfficeReturn;
         this.startOfServiceNextTask = startOfServiceNextTask;
-        this.syncedTaskLatestStartTime = syncedTaskLatestStartTime;
+        this.syncedTaskStartTime = syncedTaskLatestStartTime;
     }
 
     public long getEarliestOfficeReturn() {
