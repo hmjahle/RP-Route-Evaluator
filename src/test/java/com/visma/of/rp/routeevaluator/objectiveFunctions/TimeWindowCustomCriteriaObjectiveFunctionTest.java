@@ -1,7 +1,8 @@
 package com.visma.of.rp.routeevaluator.objectiveFunctions;
 
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TimeWindowCustomCriteriaObjectiveFunctionFunction;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.RouteEvaluationInfoAbstract;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.CustomCriteriaObjectiveFunction;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
@@ -48,47 +49,47 @@ public class TimeWindowCustomCriteriaObjectiveFunctionTest extends JUnitTestAbst
         tasks.add(task1);
         travelTimeMatrix.addUndirectedConnection(office, task1.getLocation(), 10);
 
-        RouteEvaluatorResult result = evaluateRoute(tasks, ITask::isStrict);
+        RouteEvaluatorResult result = evaluateRoute(tasks, i -> !i.isDestination() && i.getTask().isStrict());
         Assert.assertEquals("Objective value must be.", 1, result.getObjectiveValue(), 1E-6);
         task1.setStrict(false);
 
-        result = evaluateRoute(tasks, ITask::isStrict);
+        result = evaluateRoute(tasks, i -> !i.isDestination() && i.getTask().isStrict());
         Assert.assertEquals("Objective value must be.", 0, result.getObjectiveValue(), 1E-6);
 
-        result = evaluateRoute(tasks, ITask::isSynced);
+        result = evaluateRoute(tasks, i -> !i.isDestination() && i.getTask().isSynced());
         Assert.assertEquals("Objective value must be.", 1, result.getObjectiveValue(), 1E-6);
     }
 
     @Test
     public void allNonPhysicalAppearanceCustomCriteria() {
-        RouteEvaluatorResult result = evaluateRoute(allTasks, x -> !x.getRequirePhysicalAppearance());
+        RouteEvaluatorResult result = evaluateRoute(allTasks, i -> !i.isDestination() && !i.getTask().getRequirePhysicalAppearance());
         Assert.assertEquals("All has physical appearance.", 0, result.getObjectiveValue(), 1E-6);
     }
 
     @Test
     public void allPhysicalAppearanceCustomCriteria() {
-        RouteEvaluatorResult result = evaluateRoute(allTasks, ITask::getRequirePhysicalAppearance);
+        RouteEvaluatorResult result = evaluateRoute(allTasks, i -> !i.isDestination() && i.getTask().getRequirePhysicalAppearance());
         Assert.assertEquals("Four require physical appearance.", 4, result.getObjectiveValue(), 1E-6);
 
     }
 
     @Test
     public void syncedTaskCustomCriteria() {
-        RouteEvaluatorResult result = evaluateRoute(allTasks, ITask::isSynced);
+        RouteEvaluatorResult result = evaluateRoute(allTasks, i -> !i.isDestination() && i.getTask().isSynced());
         Assert.assertEquals("Two is strict.", 2, result.getObjectiveValue(), 1E-6);
     }
 
 
     @Test
     public void strictTaskCustomCriteria() {
-        RouteEvaluatorResult result = evaluateRoute(allTasks, ITask::isStrict);
+        RouteEvaluatorResult result = evaluateRoute(allTasks, i -> !i.isDestination() && i.getTask().isStrict());
         Assert.assertEquals("Three is strict.", 3, result.getObjectiveValue(), 1E-6);
     }
 
 
     @Test
     public void durationCustomCriteria() {
-        RouteEvaluatorResult result = evaluateRoute(allTasks, x -> x.getDuration() > 1);
+        RouteEvaluatorResult result = evaluateRoute(allTasks, x -> !x.isDestination() && x.getTask().getDuration() > 1);
         Assert.assertEquals("Three has a duration of more than 1.", 3, result.getObjectiveValue(), 1E-6);
     }
 
@@ -115,9 +116,9 @@ public class TimeWindowCustomCriteriaObjectiveFunctionTest extends JUnitTestAbst
         return locations;
     }
 
-    private RouteEvaluatorResult evaluateRoute(List<ITask> tasks, Function<ITask, Boolean> criteriaFunction) {
+    private RouteEvaluatorResult evaluateRoute(List<ITask> tasks, Function<RouteEvaluationInfoAbstract, Boolean> criteriaFunction) {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        routeEvaluator.addObjectiveIntraShift(new TimeWindowCustomCriteriaObjectiveFunctionFunction(criteriaFunction));
+        routeEvaluator.addObjectiveIntraShift(new CustomCriteriaObjectiveFunction(criteriaFunction, objectiveInfo -> Math.max(0.0, objectiveInfo.getVisitEnd() - objectiveInfo.getTask().getEndTime())));
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }
 
