@@ -1,8 +1,8 @@
 package com.visma.of.rp.routeevaluator.objectiveFunctions;
 
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TimeWindowLowHighObjectiveFunctionFunction;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TimeWindowObjectiveFunctionFunction;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TimeWindowLowHighObjectiveFunction;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TimeWindowObjectiveFunction;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
@@ -127,13 +127,13 @@ public class TimeWindowObjectiveFunctionTest extends JUnitTestAbstract {
 
     private RouteEvaluatorResult evaluateRouteStandardTimeWindow(TestTask task1, TestTask task2, TestTask task3, TestTask task4) {
         RouteEvaluator routeEvaluator = buildEvaluator(task1, task2, task3, task4);
-        routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunctionFunction());
+        routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
     }
 
     private RouteEvaluatorResult evaluateRouteLowHighTimeWindow(TestTask task1, TestTask task2, TestTask task3, TestTask task4, double highMultiplier, long highCutOff) {
         RouteEvaluator routeEvaluator = buildEvaluator(task1, task2, task3, task4);
-        routeEvaluator.addObjectiveIntraShift(new TimeWindowLowHighObjectiveFunctionFunction(highCutOff, highMultiplier));
+        routeEvaluator.addObjectiveIntraShift(new TimeWindowLowHighObjectiveFunction(highCutOff, highMultiplier));
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
     }
 
@@ -165,13 +165,13 @@ public class TimeWindowObjectiveFunctionTest extends JUnitTestAbstract {
 
     private RouteEvaluatorResult evaluateRouteStandardTimeWindow(List<ITask> tasks) {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunctionFunction());
+        routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }
 
     private RouteEvaluatorResult evaluateRouteLowHighTimeWindow(List<ITask> tasks, double highMultiplier, long highCutOff) {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        routeEvaluator.addObjectiveIntraShift(new TimeWindowLowHighObjectiveFunctionFunction(highCutOff, highMultiplier));
+        routeEvaluator.addObjectiveIntraShift(new TimeWindowLowHighObjectiveFunction(highCutOff, highMultiplier));
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }
 
