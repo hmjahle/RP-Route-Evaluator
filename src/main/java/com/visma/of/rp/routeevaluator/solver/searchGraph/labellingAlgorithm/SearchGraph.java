@@ -8,7 +8,7 @@ import java.util.*;
 
 public class SearchGraph {
 
-    private Node start;
+    private Node origin;
     private Node destination;
     private List<Node> nodes;
     private Map<ITask, Node> nodesToTask;
@@ -17,14 +17,12 @@ public class SearchGraph {
     private long robustTimeSeconds;
     private Map<ILocation, Integer> locationToLocationIds;
 
-    public SearchGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<ITask> tasks, ILocation office, long robustTimeSeconds) {
+    public SearchGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<ITask> tasks, ILocation originLocation, ILocation destinationLocation, long robustTimeSeconds) {
         this.robustTimeSeconds = robustTimeSeconds;
         this.nodes = new ArrayList<>();
         this.nodesToTask = new HashMap<>();
         this.nodeIdCounter = 0;
-        ILocation startLocation = office;
-        ILocation destinationLocation = office;
-        this.populateGraph(travelTimeMatrixInput, tasks, startLocation, destinationLocation);
+        this.populateGraph(travelTimeMatrixInput, tasks, originLocation, destinationLocation);
     }
 
     public List<Node> getNodes() {
@@ -40,7 +38,7 @@ public class SearchGraph {
     }
 
     private void populateGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<ITask> tasks, ILocation startLocation, ILocation destinationLocation) {
-        this.start = new Node(getNewNodeId(), null);
+        this.origin = new Node(getNewNodeId(), null);
         this.destination = new Node(getNewNodeId(), null);
 
         addNodesToGraph(tasks);
@@ -48,21 +46,20 @@ public class SearchGraph {
         this.travelTimeMatrix = new Long[n][n];
         addTravelInfo(travelTimeMatrixInput);
         locationToLocationIds = new HashMap<>();
+        addTravelTimeBetweenNodes(travelTimeMatrixInput, startLocation, origin.getId(), destinationLocation, destination.getId());
+        addTravelTimeBetweenNodes(travelTimeMatrixInput, destinationLocation, destination.getId(), startLocation, origin.getId());
+
         for (Node nodeA : nodes) {
             locationToLocationIds.put(nodeA.getTask().getLocation(), nodeA.getId());
-            addTravelTimeBetweenNodes(travelTimeMatrixInput, startLocation, start.getId(), nodeA.getTask().getLocation(), nodeA.getId());
+            addTravelTimeBetweenNodes(travelTimeMatrixInput, startLocation, origin.getId(), nodeA.getTask().getLocation(), nodeA.getId());
             addTravelTimeBetweenNodes(travelTimeMatrixInput, destinationLocation, destination.getId(), nodeA.getTask().getLocation(), nodeA.getId());
-            addTravelTimeBetweenNodes(travelTimeMatrixInput, nodeA.getTask().getLocation(), nodeA.getId(), startLocation, start.getId());
+            addTravelTimeBetweenNodes(travelTimeMatrixInput, nodeA.getTask().getLocation(), nodeA.getId(), startLocation, origin.getId());
             addTravelTimeBetweenNodes(travelTimeMatrixInput, nodeA.getTask().getLocation(), nodeA.getId(), destinationLocation, destination.getId());
         }
-        locationToLocationIds.put(startLocation, start.getId());
+        locationToLocationIds.put(startLocation, origin.getId());
         locationToLocationIds.put(destinationLocation, destination.getId());
-        nodes.add(start);
+        nodes.add(origin);
         nodes.add(destination);
-
-
-
-
     }
 
     private void addTravelInfo(ITravelTimeMatrix travelTimeMatrixInput) {
@@ -102,8 +99,12 @@ public class SearchGraph {
             nodesToTask.get(task).setSynced(task.isSynced());
     }
 
-    public Node getOffice() {
-        return start;
+    public Node getOrigin() {
+        return origin;
+    }
+
+    public Node getDestination() {
+        return destination;
     }
 
     public Node getNode(ITask task) {

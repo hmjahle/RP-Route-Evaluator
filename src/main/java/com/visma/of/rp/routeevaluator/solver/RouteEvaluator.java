@@ -31,7 +31,11 @@ public class RouteEvaluator {
     private long[] syncedNodesStartTime;
 
     public RouteEvaluator(long robustTimeSeconds, ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks, ILocation officePosition) {
-        this.graph = new SearchGraph(distanceMatrixMatrix, tasks, officePosition, robustTimeSeconds);
+        this(robustTimeSeconds, distanceMatrixMatrix, tasks, officePosition, officePosition);
+    }
+
+    public RouteEvaluator(long robustTimeSeconds, ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks, ILocation origin, ILocation destination) {
+        this.graph = new SearchGraph(distanceMatrixMatrix, tasks, origin, destination, robustTimeSeconds);
         this.algorithm = new LabellingAlgorithm(graph);
         this.firstNodeList = new NodeList(graph.getNodes().size());
         this.secondNodeList = new NodeList(graph.getNodes().size());

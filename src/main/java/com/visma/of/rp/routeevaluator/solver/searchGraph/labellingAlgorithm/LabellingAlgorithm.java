@@ -155,7 +155,7 @@ public class LabellingAlgorithm {
             extendLabel(label, extendToInfo);
         }
         if (returnToDestinationNode) {
-            Label newLabel = extendLabelToNextNode(label, new ExtendToInfo(graph.getOffice(), 0));
+            Label newLabel = extendLabelToNextNode(label, new ExtendToInfo(graph.getDestination(), 0));
             if (newLabel != null)
                 labelsOnDestinationNode.add(newLabel);
         }
@@ -183,7 +183,7 @@ public class LabellingAlgorithm {
     }
 
     private Label createStartLabel(long startTime, IResource emptyResource) {
-        return new Label(null, graph.getOffice(), graph.getOffice(),
+        return new Label(null, graph.getOrigin(), graph.getOrigin(),
                 new Objective(0.0), emptyResource, startTime, 0, startTime);
     }
 
@@ -224,13 +224,13 @@ public class LabellingAlgorithm {
     }
 
     private long calcEarliestPossibleReturnToOfficeTime(Node nextNode, Node currentLocation, long startOfServiceNextTask) {
-        return startOfServiceNextTask + nextNode.getDurationSeconds() + getTravelTimeToOffice(currentLocation);
+        return startOfServiceNextTask + nextNode.getDurationSeconds() + getTravelTimeToDestination(currentLocation);
     }
 
-    private long getTravelTimeToOffice(Node node) {
-        if (node.getId() == graph.getOffice().getId())
+    private long getTravelTimeToDestination(Node node) {
+        if (node.getId() == graph.getDestination().getId())
             return 0;
-        Long travelTime = graph.getTravelTime(node, graph.getOffice());
+        Long travelTime = graph.getTravelTime(node, graph.getDestination());
         return travelTime == null ? 0 : travelTime;
     }
 
