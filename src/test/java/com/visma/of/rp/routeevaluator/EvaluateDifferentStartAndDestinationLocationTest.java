@@ -78,20 +78,52 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
     }
 
     @Test
+    public void multipleTasksUpdateStart() {
+        allTasks = createTasksNoTW();
+        travelTimeMatrix = createTravelTimeMatrix(origin,destination,allTasks);
+
+        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, origin, destination);
+        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        Assert.assertEquals("Office return should be: ", 19, result.getTimeOfOfficeReturn().longValue());
+
+        routeEvaluator.updateOrigin(destination);
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        Assert.assertEquals("When starting at the destination office return should be: ", 27, result.getTimeOfOfficeReturn().longValue());
+
+        routeEvaluator.updateOrigin(allTasks.get(0).getLocation());
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        Assert.assertEquals("When starting at the first node office return should be: ", 17, result.getTimeOfOfficeReturn().longValue());
+
+        routeEvaluator.updateOrigin(allTasks.get(2).getLocation());
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        Assert.assertEquals("When starting at another node office return should be: ", 18, result.getTimeOfOfficeReturn().longValue());
+
+        routeEvaluator.updateOrigin(origin);
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        Assert.assertEquals("When starting at the destination office return should be: ", 19, result.getTimeOfOfficeReturn().longValue());
+    }
+
+    @Test
     public void multipleTasksUpdateDestination() {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, origin, destination);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
-
-        Assert.assertEquals("Office return should be: ", 51, result.getTimeOfOfficeReturn().longValue());
-        //To start
-        Assert.assertEquals("Office return should be: ", 43, result.getTimeOfOfficeReturn().longValue());
-        //To other node
-        Assert.assertEquals("Office return should be: ", 42, result.getTimeOfOfficeReturn().longValue());
-        //To last node
-        Assert.assertEquals("Office return should be: ", 41, result.getTimeOfOfficeReturn().longValue());
-        //To self
         Assert.assertEquals("Office return should be: ", 51, result.getTimeOfOfficeReturn().longValue());
 
+        routeEvaluator.updateDestination(origin);
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        Assert.assertEquals("When returning to origin office return should be: ", 43, result.getTimeOfOfficeReturn().longValue());
+
+        routeEvaluator.updateDestination(allTasks.get(1).getLocation());
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        Assert.assertEquals("When returning to another node office return should be: ", 42, result.getTimeOfOfficeReturn().longValue());
+
+        routeEvaluator.updateDestination(allTasks.get(3).getLocation());
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        Assert.assertEquals("When returning to the previous node office return should be: ", 41, result.getTimeOfOfficeReturn().longValue());
+
+        routeEvaluator.updateDestination(destination);
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        Assert.assertEquals("When returning to destination office return should be: ", 51, result.getTimeOfOfficeReturn().longValue());
     }
 
     private ITravelTimeMatrix createTravelTimeMatrix(ILocation origin, ILocation destination, Collection<ITask> tasks) {
@@ -113,6 +145,20 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
         ITask taskB = createStandardTask(1, 20, 60);
         ITask taskC = createStandardTask(1, 30, 70);
         ITask taskD = createStandardTask(1, 40, 80);
+
+        List<ITask> tasks = new ArrayList<>();
+        tasks.add(taskA);
+        tasks.add(taskB);
+        tasks.add(taskC);
+        tasks.add(taskD);
+        return tasks;
+    }
+
+    private List<ITask> createTasksNoTW() {
+        ITask taskA = createStandardTask(1, 0, 100);
+        ITask taskB = createStandardTask(1, 0, 100);
+        ITask taskC = createStandardTask(1, 0, 100);
+        ITask taskD = createStandardTask(1, 0, 100);
 
         List<ITask> tasks = new ArrayList<>();
         tasks.add(taskA);
