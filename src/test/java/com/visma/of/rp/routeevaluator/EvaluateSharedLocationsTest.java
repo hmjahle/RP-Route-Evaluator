@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static benchmarking.benchmarking.printResult;
-
 public class EvaluateSharedLocationsTest extends JUnitTestAbstract {
 
     ILocation origin;
@@ -44,7 +42,7 @@ public class EvaluateSharedLocationsTest extends JUnitTestAbstract {
 
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, origin, destination);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
-        printResult(result);
+
         Assert.assertEquals("Start time should be: ", 2, result.getVisitSolution().get(0).getTravelTimeWithParking());
         Assert.assertEquals("Start time should be: ", 1, result.getVisitSolution().get(1).getTravelTimeWithParking());
         Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(2).getTravelTimeWithParking());
@@ -68,7 +66,6 @@ public class EvaluateSharedLocationsTest extends JUnitTestAbstract {
 
     @Test
     public void multipleTasksAllAtOffice() {
-
         List<ITask> tasks = createTasksAllSame();
 
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, locations.get(0),locations.get(0));
