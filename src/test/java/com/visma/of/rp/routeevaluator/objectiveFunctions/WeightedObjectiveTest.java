@@ -66,6 +66,17 @@ public class WeightedObjectiveTest extends JUnitTestAbstract {
 
         //Todo: synced 30, travel 30, tw 25.
         Assert.assertEquals("Objective value must be: ", 85, result.getObjectiveValue(), 1E-6);
+
+         routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
+        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
+        routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
+        routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
+         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
+        //Todo: ratio synced 100000, travel 100, tw 0.
+        Assert.assertEquals("Objective value must be: ", 3030025, result.getObjectiveValue(), 1E-6);
+
+
+
     }
 
     @Test
@@ -82,6 +93,14 @@ public class WeightedObjectiveTest extends JUnitTestAbstract {
 
         //Todo: synced 0, travel 25, tw 0.
         Assert.assertEquals("Objective value must be: ", 25, result.getObjectiveValue(), 1E-6);
+
+        routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
+        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
+        routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
+        routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        //Todo: ratio synced 100000, travel 100, tw 0.
+        Assert.assertEquals("Objective value must be: ", 2500, result.getObjectiveValue(), 1E-6);
     }
 
     @Test
@@ -103,6 +122,14 @@ public class WeightedObjectiveTest extends JUnitTestAbstract {
 
         //Todo: synced 1, travel 51, tw 1.
         Assert.assertEquals("Objective value must be: ", 53, result.getObjectiveValue(), 1E-6);
+
+        routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
+        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
+        routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
+        routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
+        //Todo: ratio synced 100000, travel 100, tw 0.
+        Assert.assertEquals("Objective value must be: ", 105101, result.getObjectiveValue(), 1E-6);
     }
 
 
@@ -125,6 +152,14 @@ public class WeightedObjectiveTest extends JUnitTestAbstract {
 
         //Todo: synced 11, travel 66, tw 7.
         Assert.assertEquals("Objective value must be: ", 84, result.getObjectiveValue(), 1E-6);
+
+        routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
+        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
+        routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
+        routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
+        //Todo: ratio synced 100000, travel 100, tw 0.
+        Assert.assertEquals("Objective value must be: ", 1106607, result.getObjectiveValue(), 1E-6);
 
     }
 
