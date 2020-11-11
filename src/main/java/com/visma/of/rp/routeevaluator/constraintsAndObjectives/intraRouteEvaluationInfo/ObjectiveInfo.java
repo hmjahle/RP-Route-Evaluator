@@ -7,8 +7,9 @@ public class ObjectiveInfo extends RouteEvaluationInfoAbstract {
     private long visitEnd;
     private long startOfServiceNextTask;
 
-    public ObjectiveInfo(long travelTime, ITask task, long visitEnd, long startOfServiceNextTask, long syncedTaskLatestStartTime, long endOfWorkShift) {
-        super(task, endOfWorkShift, syncedTaskLatestStartTime);
+    public ObjectiveInfo(long travelTime, ITask task, long visitEnd, long startOfServiceNextTask,
+                         long syncedTaskStartTime, long endOfWorkShift) {
+        super(task, endOfWorkShift, syncedTaskStartTime);
         this.travelTime = travelTime;
         this.visitEnd = visitEnd;
         this.startOfServiceNextTask = startOfServiceNextTask;
