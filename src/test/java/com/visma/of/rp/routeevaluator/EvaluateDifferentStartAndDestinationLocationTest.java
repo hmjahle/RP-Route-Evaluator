@@ -77,6 +77,22 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
     }
 
+    @Test
+    public void multipleTasksUpdateDestination() {
+        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, origin, destination);
+        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+
+        Assert.assertEquals("Office return should be: ", 51, result.getTimeOfOfficeReturn().longValue());
+        //To start
+        Assert.assertEquals("Office return should be: ", 43, result.getTimeOfOfficeReturn().longValue());
+        //To other node
+        Assert.assertEquals("Office return should be: ", 42, result.getTimeOfOfficeReturn().longValue());
+        //To last node
+        Assert.assertEquals("Office return should be: ", 41, result.getTimeOfOfficeReturn().longValue());
+        //To self
+        Assert.assertEquals("Office return should be: ", 51, result.getTimeOfOfficeReturn().longValue());
+
+    }
 
     private ITravelTimeMatrix createTravelTimeMatrix(ILocation origin, ILocation destination, Collection<ITask> tasks) {
         TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
