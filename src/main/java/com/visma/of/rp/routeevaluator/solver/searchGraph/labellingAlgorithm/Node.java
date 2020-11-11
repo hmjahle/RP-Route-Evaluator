@@ -25,6 +25,10 @@ public class Node {
         return locationId;
     }
 
+    public void setLocationId(int locationId) {
+        this.locationId = locationId;
+    }
+
     public boolean getRequirePhysicalAppearance() {
         return task == null || task.getRequirePhysicalAppearance();
     }
