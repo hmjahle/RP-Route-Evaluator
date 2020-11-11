@@ -33,7 +33,7 @@ public class LabelExtendAlongTest extends JUnitTestAbstract {
         Label newLabel = labellingAlgorithm.extendLabelToNextNode(label, new ExtendToInfo(graph.getNode(task), 1));
 
         Assert.assertNotNull(newLabel);
-        Assert.assertEquals("Position should be node: ", "1", newLabel.getCurrentLocation().toString());
+        Assert.assertEquals("Position should be node: ", "2", newLabel.getCurrentLocation().toString());
         Assert.assertEquals("Current time should be: ", 2, newLabel.getCurrentTime());
         Assert.assertEquals("Cost should be: ", 0.0, newLabel.getObjective().getObjectiveValue(), 1E-6);
     }

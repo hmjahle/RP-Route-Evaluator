@@ -1,21 +1,29 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
-import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 
 public class Node {
-    private ITask task;
-    private ILocation address;
-    private int id;
-    private boolean isSynced;
 
-    public Node(int id, ITask task, ILocation address) {
-        this.id = id;
-        this.task = task;
-        this.address = address;
-        this.isSynced = address != null && address.isOffice() || (this.task != null && this.task.isSynced());
+    private int id;
+    private ITask task;
+    private int locationId;
+    private boolean isSynced; //ToDo: Test consequence of removing field
+
+    public Node(int id, ITask task, int locationId) {
+        this(id, task);
+        this.locationId = locationId;
     }
 
+    public Node(int id, ITask task) {
+        this.task = task;
+        this.id = id;
+        this.locationId = id;
+        this.isSynced = (this.task != null && this.task.isSynced());
+    }
+
+    public int getLocationId() {
+        return locationId;
+    }
 
     public boolean getRequirePhysicalAppearance() {
         return task == null || task.getRequirePhysicalAppearance();
@@ -54,14 +62,9 @@ public class Node {
         return id;
     }
 
-
     @Override
     public String toString() {
         return Integer.toString(id);
-    }
-
-    public ILocation getAddress() {
-        return address;
     }
 
     public ITask getTask() {

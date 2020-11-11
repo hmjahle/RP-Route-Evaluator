@@ -27,7 +27,7 @@ public class LabelListsTest {
         Label labelD = createLabel(costB, resourcesB);
 
         LabelLists list = new LabelLists(10, 10);
-        Node node = new Node(1, null, null);
+        Node node = new Node(1, null);
 
         List<Label> labels = new ArrayList<>();
         labels.add(labelD);
@@ -72,7 +72,7 @@ public class LabelListsTest {
         Label labelH = createLabel(cost4, resourcesH);
 
         LabelLists list = new LabelLists(10, 4);
-        Node node = new Node(1, null, null);
+        Node node = new Node(1, null);
         Assert.assertEquals("List length wrong", 0, list.size(node));
         Assert.assertEquals("List capacity wrong", 4, list.getLabelCapacity(node));
 

@@ -228,7 +228,7 @@ public class LabellingAlgorithm {
     }
 
     private long getTravelTimeToOffice(Node node) {
-        if (node.getAddress() == graph.getOffice().getAddress())
+        if (node.getId() == graph.getOffice().getId())
             return 0;
         Long travelTime = graph.getTravelTime(node, graph.getOffice());
         return travelTime == null ? 0 : travelTime;
