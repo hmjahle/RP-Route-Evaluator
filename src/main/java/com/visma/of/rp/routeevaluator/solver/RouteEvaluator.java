@@ -2,11 +2,7 @@ package com.visma.of.rp.routeevaluator.solver;
 
 import com.visma.of.rp.routeevaluator.publicInterfaces.*;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Node;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.NodeList;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.SearchGraph;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ExtendInfoOneElement;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.LabellingAlgorithm;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -38,8 +34,12 @@ public class RouteEvaluator {
         this.syncedNodesStartTime = new long[graph.getNodes().size()];
     }
 
+    public void addObjectiveIntraShift(String objectiveFunctionId, double objectiveWeight, IObjectiveFunctionIntraRoute objectiveIntraShift) {
+        algorithm.addObjectiveFunctionIntraShift(objectiveFunctionId, objectiveWeight, objectiveIntraShift);
+    }
+
     public void addObjectiveIntraShift(IObjectiveFunctionIntraRoute objectiveIntraShift) {
-        algorithm.addObjectiveFunctionIntraShift(objectiveIntraShift);
+        algorithm.addObjectiveFunctionIntraShift(objectiveIntraShift.getClass().getSimpleName(), 1.0, objectiveIntraShift);
     }
 
     public void addConstraint(IConstraintIntraRoute constraint) {

@@ -1,19 +1,19 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.Objective;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjective;
 
 public class Label implements Comparable<Label> {
     private Label previous;
     private Node node;
     private Node currentLocation;
-    private Objective objective;
+    private WeightedObjective objective;
     private IResource resources;
     private long currentTime;
     private long travelTime;
     private long canLeaveLocationAtTime;
     private boolean closed;
 
-    public Label(Label previous, Node currentNode, Node currentLocation, Objective objective,
+    public Label(Label previous, Node currentNode, Node currentLocation, WeightedObjective objective,
                  IResource resources, long currentTime, long travelTime, long canLeaveLocationAtTime) {
         this.previous = previous;
         this.node = currentNode;
@@ -38,7 +38,7 @@ public class Label implements Comparable<Label> {
         return closed;
     }
 
-    public Objective getObjective() {
+    public WeightedObjective getObjective() {
         return objective;
     }
 

@@ -1,6 +1,6 @@
 package testSupport;
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.Objective;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjective;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITravelTimeMatrix;
@@ -29,7 +29,7 @@ public abstract class JUnitTestAbstract {
     }
 
     protected Label createStartLabel(SearchGraph graph) {
-        return new Label(null, graph.getOffice(), graph.getOffice(), new Objective(0), new ResourceOneElement(0), 0, 0, 0);
+        return new Label(null, graph.getOffice(), graph.getOffice(), new WeightedObjective(0), new ResourceOneElement(0), 0, 0, 0);
     }
 
     protected ILocation createOffice() {

@@ -20,8 +20,6 @@ import testSupport.JUnitTestAbstract;
 
 import java.util.*;
 
-import static benchmarking.benchmarking.printResult;
-
 /**
  * Tests if the synced task objective is implemented correctly.
  */
@@ -56,27 +54,14 @@ public class WeightedObjectiveTest extends JUnitTestAbstract {
         syncedTaskStartTimes.put(allTasks.get(0), 10L);
         syncedTaskStartTimes.put(newTask, 35L);
 
-
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
-        routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
-        routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
-        printResult(result);
+        RouteEvaluatorResult result = getRouteEvaluatorResult(tasks, syncedTaskStartTimes, routeEvaluator);
+        Assert.assertEquals("WeightedObjective value must be: ", 85, result.getObjectiveValue(), 1E-6);
 
-        //Todo: synced 30, travel 30, tw 25.
-        Assert.assertEquals("Objective value must be: ", 85, result.getObjectiveValue(), 1E-6);
-
-         routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
-        routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
-        routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
-         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
-        //Todo: ratio synced 100000, travel 100, tw 0.
-        Assert.assertEquals("Objective value must be: ", 3030025, result.getObjectiveValue(), 1E-6);
-
-
-
+        routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
+        addWeightedObjectives(routeEvaluator, 0);
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
+        Assert.assertEquals("WeightedObjective value must be: ", 3003025, result.getObjectiveValue(), 1E-6);
     }
 
     @Test
@@ -84,23 +69,14 @@ public class WeightedObjectiveTest extends JUnitTestAbstract {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(allTasks.get(1));
         tasks.add(allTasks.get(3));
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
-        routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
-        routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
+        RouteEvaluator routeEvaluator = createRouteEvaluator(tasks);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
-        printResult(result);
-
-        //Todo: synced 0, travel 25, tw 0.
-        Assert.assertEquals("Objective value must be: ", 25, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("WeightedObjective value must be: ", 25, result.getObjectiveValue(), 1E-6);
 
         routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
-        routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
-        routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
+        addWeightedObjectives(routeEvaluator, 0);
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
-        //Todo: ratio synced 100000, travel 100, tw 0.
-        Assert.assertEquals("Objective value must be: ", 2500, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("WeightedObjective value must be: ", 2500, result.getObjectiveValue(), 1E-6);
     }
 
     @Test
@@ -113,25 +89,15 @@ public class WeightedObjectiveTest extends JUnitTestAbstract {
         syncedTaskStartTimes.put(allTasks.get(2), 50L);
         travelTimeMatrix.addUndirectedConnection(allTasks.get(0).getLocation(), allTasks.get(2).getLocation(), 31);
 
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
-        routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
-        routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
-        printResult(result);
-
-        //Todo: synced 1, travel 51, tw 1.
-        Assert.assertEquals("Objective value must be: ", 53, result.getObjectiveValue(), 1E-6);
+        RouteEvaluatorResult result = getRouteEvaluatorResult(tasks, syncedTaskStartTimes);
+        RouteEvaluator routeEvaluator;
+        Assert.assertEquals("WeightedObjective value must be: ", 53, result.getObjectiveValue(), 1E-6);
 
         routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
-        routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
-        routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
+        addWeightedObjectives(routeEvaluator, 0);
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
-        //Todo: ratio synced 100000, travel 100, tw 0.
-        Assert.assertEquals("Objective value must be: ", 105101, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("WeightedObjective value must be: ", 105101, result.getObjectiveValue(), 1E-6);
     }
-
 
     @Test
     public void sixMixedTasksRobustness() {
@@ -143,24 +109,46 @@ public class WeightedObjectiveTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(allTasks.get(2).getLocation(), allTasks.get(3).getLocation(), 24);
 
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
-        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction(1));
-
-        routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
-        routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
+        addObjectives(routeEvaluator, 1);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
-        printResult(result);
-
-        //Todo: synced 11, travel 66, tw 7.
-        Assert.assertEquals("Objective value must be: ", 84, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("WeightedObjective value must be: ", 84, result.getObjectiveValue(), 1E-6);
 
         routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
+        addWeightedObjectives(routeEvaluator, 1);
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
+        Assert.assertEquals("WeightedObjective value must be: ", 1106607, result.getObjectiveValue(), 1E-6);
+    }
+
+
+    private RouteEvaluatorResult getRouteEvaluatorResult(List<ITask> tasks, Map<ITask, Long> syncedTaskStartTimes, RouteEvaluator routeEvaluator) {
         routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
         routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
         routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
-        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
-        //Todo: ratio synced 100000, travel 100, tw 0.
-        Assert.assertEquals("Objective value must be: ", 1106607, result.getObjectiveValue(), 1E-6);
+        return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
+    }
 
+
+    private RouteEvaluatorResult getRouteEvaluatorResult(List<ITask> tasks, Map<ITask, Long> syncedTaskStartTimes) {
+        RouteEvaluator routeEvaluator = createRouteEvaluator(tasks);
+        return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
+    }
+
+    private RouteEvaluator createRouteEvaluator(List<ITask> tasks) {
+        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
+        addObjectives(routeEvaluator, 0);
+        return routeEvaluator;
+    }
+
+    private void addObjectives(RouteEvaluator routeEvaluator, int slack) {
+        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction(slack));
+        routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
+        routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
+    }
+
+    private void addWeightedObjectives(RouteEvaluator routeEvaluator, int slack) {
+        routeEvaluator.addObjectiveIntraShift("1", 100000, new SyncedTaskStartTimeObjectiveFunction(slack));
+        routeEvaluator.addObjectiveIntraShift("2", 100, new TravelTimeObjectiveFunction());
+        routeEvaluator.addObjectiveIntraShift("3", 1, new TimeWindowObjectiveFunction());
     }
 
     private List<ITask> createTasks(List<ILocation> locations) {
@@ -202,14 +190,6 @@ public class WeightedObjectiveTest extends JUnitTestAbstract {
         locations.add(new TestLocation(false));
         locations.add(new TestLocation(false));
         return locations;
-    }
-
-    private RouteEvaluatorResult evaluateRoute(List<ITask> tasks, Map<ITask, Long> syncedTaskStartTimes) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
-        routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
-        routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
-        return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
     }
 
 }

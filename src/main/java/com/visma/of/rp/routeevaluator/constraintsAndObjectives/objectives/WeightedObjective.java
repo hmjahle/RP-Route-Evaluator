@@ -7,19 +7,19 @@ import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Node
 /**
  * Calculates objective values and check whether one objective dominates the other.
  */
-public class Objective {
+public class WeightedObjective  {
 
     private double objectiveValue;
 
-    public Objective(double objectiveValue) {
+    public WeightedObjective(double objectiveValue) {
         this.objectiveValue = objectiveValue;
     }
 
-    public Objective extend(Node toNode, long travelTime, long startOfServiceNextTask, long syncedTaskLatestStartTime,
-                            long endOfShift, ObjectiveFunctionsIntraRouteHandler objectiveFunctionsIntraRouteHandler) {
+    public WeightedObjective extend(Node toNode, long travelTime, long startOfServiceNextTask, long syncedTaskLatestStartTime,
+                                    long endOfShift, ObjectiveFunctionsIntraRouteHandler objectiveFunctionsIntraRouteHandler) {
         double newObjectiveValue = calculateObjectiveValue(travelTime, toNode.getTask(),
                 startOfServiceNextTask, syncedTaskLatestStartTime, endOfShift, objectiveFunctionsIntraRouteHandler);
-        return new Objective(this.objectiveValue + newObjectiveValue);
+        return new WeightedObjective(this.objectiveValue + newObjectiveValue);
     }
 
     public double calculateObjectiveValue(long travelTime, ITask task, long startOfServiceNextTask,
@@ -35,7 +35,7 @@ public class Objective {
         return objectiveValue;
     }
 
-    public int dominates(Objective other) {
+    public int dominates(WeightedObjective other) {
         if (this.objectiveValue < other.objectiveValue) {
             return -1;
         } else if (this.objectiveValue > other.objectiveValue)

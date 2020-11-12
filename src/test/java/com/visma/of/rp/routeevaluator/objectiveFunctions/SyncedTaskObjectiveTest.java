@@ -46,7 +46,7 @@ public class SyncedTaskObjectiveTest extends JUnitTestAbstract {
         syncedTaskStartTimes.put(allTasks.get(0), 10L);
         RouteEvaluatorResult result = evaluateRoute(tasks, syncedTaskStartTimes);
 
-        Assert.assertEquals("Objective value must be: ", 0, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("WeightedObjective value must be: ", 0, result.getObjectiveValue(), 1E-6);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class SyncedTaskObjectiveTest extends JUnitTestAbstract {
         syncedTaskStartTimes.put(allTasks.get(2), 50L);
         RouteEvaluatorResult result = evaluateRoute(tasks, syncedTaskStartTimes);
 
-        Assert.assertEquals("Objective value must be: ", 0, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("WeightedObjective value must be: ", 0, result.getObjectiveValue(), 1E-6);
     }
 
     /**
@@ -76,7 +76,7 @@ public class SyncedTaskObjectiveTest extends JUnitTestAbstract {
         syncedTaskStartTimes.put(allTasks.get(0), 10L);
         syncedTaskStartTimes.put(newTask, 35L);
         RouteEvaluatorResult result = evaluateRoute(tasks, syncedTaskStartTimes);
-        Assert.assertEquals("Objective value must be: ", 30, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("WeightedObjective value must be: ", 30, result.getObjectiveValue(), 1E-6);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class SyncedTaskObjectiveTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(3));
         RouteEvaluatorResult result = evaluateRoute(tasks, null);
 
-        Assert.assertEquals("Objective value must be: ", 0, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("WeightedObjective value must be: ", 0, result.getObjectiveValue(), 1E-6);
     }
 
     @Test
@@ -100,7 +100,7 @@ public class SyncedTaskObjectiveTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(allTasks.get(0).getLocation(), allTasks.get(2).getLocation(), 31);
         RouteEvaluatorResult result = evaluateRoute(tasks, syncedTaskStartTimes);
 
-        Assert.assertEquals("Objective value must be: ", 1, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("WeightedObjective value must be: ", 1, result.getObjectiveValue(), 1E-6);
     }
 
     @Test
@@ -116,7 +116,7 @@ public class SyncedTaskObjectiveTest extends JUnitTestAbstract {
         routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction(1));
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
 
-        Assert.assertEquals("Objective value must be: ", 0, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("WeightedObjective value must be: ", 0, result.getObjectiveValue(), 1E-6);
 
     }
 
@@ -128,7 +128,7 @@ public class SyncedTaskObjectiveTest extends JUnitTestAbstract {
         syncedTaskStartTimes.put(allTasks.get(4), 90L);
         RouteEvaluatorResult result = evaluateRoute(allTasks, syncedTaskStartTimes);
 
-        Assert.assertEquals("Objective value must be: ", 0, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("WeightedObjective value must be: ", 0, result.getObjectiveValue(), 1E-6);
     }
 
     @Test
@@ -143,7 +143,7 @@ public class SyncedTaskObjectiveTest extends JUnitTestAbstract {
         routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction(1));
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
 
-        Assert.assertEquals("Objective value must be: ", 11, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("WeightedObjective value must be: ", 11, result.getObjectiveValue(), 1E-6);
 
     }
 

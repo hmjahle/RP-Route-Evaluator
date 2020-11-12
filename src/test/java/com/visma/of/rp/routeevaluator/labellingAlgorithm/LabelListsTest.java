@@ -1,10 +1,11 @@
 package com.visma.of.rp.routeevaluator.labellingAlgorithm;
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.Objective;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Node;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjective;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Label;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.LabelLists;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Node;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ResourceTwoElements;
+import com.visma.of.rp.routeevaluator.utilities.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -15,8 +16,8 @@ public class LabelListsTest {
 
     @Test
     public void labelDominanceResourceAndObjectiveValue() {
-        Objective costA = new Objective(0);
-        Objective costB = new Objective(1);
+        WeightedObjective costA = new WeightedObjective(0);
+        WeightedObjective costB = new WeightedObjective(1);
 
         ResourceTwoElements resourcesA = new ResourceTwoElements(2, 2);
         ResourceTwoElements resourcesB = new ResourceTwoElements(1, 2);
@@ -48,10 +49,18 @@ public class LabelListsTest {
 
     @Test
     public void labelsOutOfBound() {
-        Objective cost1 = new Objective(0);
-        Objective cost2 = new Objective(1);
-        Objective cost3 = new Objective(2);
-        Objective cost4 = new Objective(3);
+        WeightedObjective cost1 = new WeightedObjective(0);
+        WeightedObjective cost2 = new WeightedObjective(1);
+        WeightedObjective cost3 = new WeightedObjective(2);
+        WeightedObjective cost4 = new WeightedObjective(3);
+
+
+        Pair<Integer, WeightedObjective> pair1 = new Pair<>(1, cost1);
+        Pair<Integer, WeightedObjective> pair2 = new Pair<>(1, cost2);
+        Pair<Integer, Label> pair3 = new Pair<>(1, createLabel(null,null));
+        boolean a = pair1.equals(pair2);
+        boolean b = pair1.equals(pair1);
+        boolean c = pair1.equals(pair3);
 
         ResourceTwoElements resourcesA = new ResourceTwoElements(0, 1);
         ResourceTwoElements resourcesB = new ResourceTwoElements(0, 2);
@@ -107,7 +116,7 @@ public class LabelListsTest {
         Assert.assertEquals("List capacity wrong", 16, list.getLabelCapacity(node));
     }
 
-    private Label createLabel(Objective cost1, ResourceTwoElements resourcesA) {
+    private Label createLabel(WeightedObjective cost1, ResourceTwoElements resourcesA) {
         return new Label(null, null, null,
                 cost1, resourcesA, 3, 0, 2);
     }

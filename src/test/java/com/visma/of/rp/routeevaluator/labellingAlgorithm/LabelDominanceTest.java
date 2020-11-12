@@ -1,6 +1,6 @@
 package com.visma.of.rp.routeevaluator.labellingAlgorithm;
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.Objective;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjective;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Label;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ResourceTwoElements;
 import org.junit.Assert;
@@ -14,8 +14,8 @@ public class LabelDominanceTest {
 
     @Test
     public void resourceAndObjectiveValue() {
-        Objective costA = new Objective(0);
-        Objective costB = new Objective(1);
+        WeightedObjective costA = new WeightedObjective(0);
+        WeightedObjective costB = new WeightedObjective(1);
         ResourceTwoElements resourcesA = new ResourceTwoElements(2, 2);
         ResourceTwoElements resourcesB = new ResourceTwoElements(1, 2);
         Label labelA = new Label(null, null, null, costA, resourcesA, 3, 0, 2);
@@ -53,7 +53,7 @@ public class LabelDominanceTest {
 
     @Test
     public void currentTimeAndDrivingTime() {
-        Objective costA = new Objective(0);
+        WeightedObjective costA = new WeightedObjective(0);
         ResourceTwoElements resources = new ResourceTwoElements(0, 0);
 
         Label labelA = new Label(null, null, null, costA, resources, 1, 0, 2);
@@ -90,8 +90,8 @@ public class LabelDominanceTest {
 
     @Test
     public void currentTimeAndDrivingTimeAndObjectiveValue() {
-        Objective costA = new Objective(0);
-        Objective costB = new Objective(1);
+        WeightedObjective costA = new WeightedObjective(0);
+        WeightedObjective costB = new WeightedObjective(1);
         ResourceTwoElements resources = new ResourceTwoElements(0, 0);
 
         Label labelA = new Label(null, null, null, costA, resources, 1, 0, 1);
@@ -122,8 +122,8 @@ public class LabelDominanceTest {
 
     @Test
     public void currentTimeAndDrivingTimeAndObjectiveValueAndResources() {
-        Objective costA = new Objective(0);
-        Objective costB = new Objective(1);
+        WeightedObjective costA = new WeightedObjective(0);
+        WeightedObjective costB = new WeightedObjective(1);
         ResourceTwoElements resourcesA = new ResourceTwoElements(0, 1);
         ResourceTwoElements resourcesB = new ResourceTwoElements(1, 0);
 
@@ -161,8 +161,8 @@ public class LabelDominanceTest {
 
     @Test
     public void objectiveValueAndResources() {
-        Objective costA = new Objective(0);
-        Objective costB = new Objective(1);
+        WeightedObjective costA = new WeightedObjective(0);
+        WeightedObjective costB = new WeightedObjective(1);
         ResourceTwoElements resourcesA = new ResourceTwoElements(1, 1);
         ResourceTwoElements resourcesB = new ResourceTwoElements(1, 2);
 

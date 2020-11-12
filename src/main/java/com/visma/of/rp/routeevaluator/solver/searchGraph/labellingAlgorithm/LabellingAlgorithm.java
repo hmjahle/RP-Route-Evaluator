@@ -2,8 +2,8 @@ package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints.ConstraintsIntraRouteHandler;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ConstraintInfo;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.Objective;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.ObjectiveFunctionsIntraRouteHandler;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjective;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IConstraintIntraRoute;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveFunctionIntraRoute;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
@@ -82,10 +82,11 @@ public class LabellingAlgorithm {
     /**
      * Adds an objective function to the route evaluator.
      *
+     * @param objectiveFunctionId
      * @param objectiveIntraShift The objective function to be added.
      */
-    public void addObjectiveFunctionIntraShift(IObjectiveFunctionIntraRoute objectiveIntraShift) {
-        objectiveFunctions.addIntraShiftObjectiveFunction(objectiveIntraShift);
+    public void addObjectiveFunctionIntraShift(String objectiveFunctionId, double weight, IObjectiveFunctionIntraRoute objectiveIntraShift) {
+        objectiveFunctions.addIntraShiftObjectiveFunction(objectiveFunctionId, weight, objectiveIntraShift);
     }
 
     /**
@@ -170,7 +171,7 @@ public class LabellingAlgorithm {
     }
 
     private Label buildNewLabel(Label thisLabel, ExtendToInfo extendToInfo, Node nextNode, Node newLocation, long travelTime, long startOfServiceNextTask, long canLeaveLocationAt, long syncedTaskLatestStartTime) {
-        Objective objective = thisLabel.getObjective().extend(nextNode, travelTime, startOfServiceNextTask, syncedTaskLatestStartTime, endOfShift, objectiveFunctions);
+        WeightedObjective objective = thisLabel.getObjective().extend(nextNode, travelTime, startOfServiceNextTask, syncedTaskLatestStartTime, endOfShift, objectiveFunctions);
         IResource resources = thisLabel.getResources().extend(extendToInfo);
         return new Label(thisLabel, nextNode, newLocation, objective, resources, startOfServiceNextTask, travelTime, canLeaveLocationAt);
     }
@@ -184,7 +185,7 @@ public class LabellingAlgorithm {
 
     private Label createStartLabel(long startTime, IResource emptyResource) {
         return new Label(null, graph.getOffice(), graph.getOffice(),
-                new Objective(0.0), emptyResource, startTime, 0, startTime);
+                new WeightedObjective(0.0), emptyResource, startTime, 0, startTime);
     }
 
     private long calcArrivalTimeNextTask(Label thisLabel, boolean requirePhysicalAppearance, long travelTime) {
