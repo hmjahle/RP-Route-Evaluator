@@ -2,11 +2,7 @@ package com.visma.of.rp.routeevaluator.solver;
 
 import com.visma.of.rp.routeevaluator.publicInterfaces.*;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Node;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.NodeList;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.SearchGraph;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ExtendInfoOneElement;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.LabellingAlgorithm;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -31,19 +27,15 @@ public class RouteEvaluator {
     private long[] syncedNodesStartTime;
 
     public RouteEvaluator(long robustTimeSeconds, ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks, ILocation officePosition) {
-        this.graph = new SearchGraph(distanceMatrixMatrix, tasks, officePosition, robustTimeSeconds);
+        this(robustTimeSeconds, distanceMatrixMatrix, tasks, officePosition, officePosition);
+    }
+
+    public RouteEvaluator(long robustTimeSeconds, ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks, ILocation origin, ILocation destination) {
+        this.graph = new SearchGraph(distanceMatrixMatrix, tasks, origin, destination, robustTimeSeconds);
         this.algorithm = new LabellingAlgorithm(graph);
         this.firstNodeList = new NodeList(graph.getNodes().size());
         this.secondNodeList = new NodeList(graph.getNodes().size());
         this.syncedNodesStartTime = new long[graph.getNodes().size()];
-    }
-
-    public void addObjectiveIntraShift(IObjectiveFunctionIntraRoute objectiveIntraShift) {
-        algorithm.addObjectiveFunctionIntraShift(objectiveIntraShift);
-    }
-
-    public void addConstraint(IConstraintIntraRoute constraint) {
-        algorithm.addConstraint(constraint);
     }
 
     public Double evaluateRouteObjective(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
@@ -70,6 +62,34 @@ public class RouteEvaluator {
 
     public RouteEvaluatorResult evaluateRouteByTheOrderOfTasks(List<ITask> tasks, IShift employeeWorkShift) {
         return evaluateRouteByTheOrderOfTasks(tasks, null, employeeWorkShift);
+    }
+
+    public void addObjectiveIntraShift(IObjectiveFunctionIntraRoute objectiveIntraShift) {
+        algorithm.addObjectiveFunctionIntraShift(objectiveIntraShift);
+    }
+
+    public void addConstraint(IConstraintIntraRoute constraint) {
+        algorithm.addConstraint(constraint);
+    }
+
+    /**
+     * Updates the start location used to evaluate routes. The location must be present
+     * in the route evaluator, i.e., the travel times matrix given when the route evaluator was constructed.
+     *
+     * @param originLocation The the location where the route should start.
+     */
+    public void updateOrigin(ILocation originLocation) {
+        graph.updateOrigin(originLocation);
+    }
+
+    /**
+     * Updates the end location used when evaluating routes. The location must be present in the route evaluator, i.e.,
+     * the travel times matrix given when the route evaluator was constructed.
+     *
+     * @param destinationLocation The the location where the route should end.
+     */
+    public void updateDestination(ILocation destinationLocation) {
+        graph.updateDestination(destinationLocation);
     }
 
     private void updateFirstTaskList(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime) {
@@ -112,6 +132,6 @@ public class RouteEvaluator {
     private void setStartTime(ITask task, long startTime) {
         graph.updateNodeType(task);
         Node node = graph.getNode(task);
-        syncedNodesStartTime[node.getId()] = startTime;
+        syncedNodesStartTime[node.getNodeId()] = startTime;
     }
 }

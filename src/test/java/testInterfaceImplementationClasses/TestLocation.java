@@ -7,10 +7,15 @@ import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
  */
 public class TestLocation implements ILocation {
 
+    String name;
+
     public TestLocation(boolean isOffice) {
         this.isOffice = isOffice;
     }
 
+    public TestLocation(String name) {
+        this.name = name;
+    }
     boolean isOffice;
 
     long longitude;
@@ -36,7 +41,7 @@ public class TestLocation implements ILocation {
     @Override
     public String toString()
     {
-        return ("Long: " + longitude + "\tLat: " + latitude);
+        return (" Name: " + name + "\tLong: " + longitude + "\tLat: " + latitude);
     }
 
     @Override

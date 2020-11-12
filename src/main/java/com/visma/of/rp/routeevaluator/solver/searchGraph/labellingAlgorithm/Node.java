@@ -1,21 +1,28 @@
 package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
-import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 
 public class Node {
-    private ITask task;
-    private ILocation address;
-    private int id;
-    private boolean isSynced;
 
-    public Node(int id, ITask task, ILocation address) {
-        this.id = id;
+    private int nodeId;
+    private ITask task;
+    private int locationId;
+    private boolean isSynced; //ToDo: Test consequence of removing field
+
+    public Node(int nodeId, ITask task, int locationId) {
         this.task = task;
-        this.address = address;
-        this.isSynced = address != null && address.isOffice() || (this.task != null && this.task.isSynced());
+        this.nodeId = nodeId;
+        this.locationId = locationId;
+        this.isSynced = (this.task != null && this.task.isSynced());
     }
 
+    public int getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(int locationId) {
+        this.locationId = locationId;
+    }
 
     public boolean getRequirePhysicalAppearance() {
         return task == null || task.getRequirePhysicalAppearance();
@@ -44,31 +51,26 @@ public class Node {
     @Override
     public boolean equals(Object other) {
         if ((other instanceof Node))
-            return ((Node) other).id == this.id;
+            return ((Node) other).nodeId == this.nodeId;
         else
             return false;
     }
 
     @Override
     public int hashCode() {
-        return id;
+        return nodeId;
     }
-
 
     @Override
     public String toString() {
-        return Integer.toString(id);
-    }
-
-    public ILocation getAddress() {
-        return address;
+        return Integer.toString(nodeId);
     }
 
     public ITask getTask() {
         return task;
     }
 
-    public int getId() {
-        return id;
+    public int getNodeId() {
+        return nodeId;
     }
 }

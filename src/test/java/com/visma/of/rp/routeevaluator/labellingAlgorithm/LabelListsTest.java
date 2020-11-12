@@ -1,9 +1,9 @@
 package com.visma.of.rp.routeevaluator.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.Objective;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Node;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Label;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.LabelLists;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Node;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ResourceTwoElements;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class LabelListsTest {
         Label labelD = createLabel(costB, resourcesB);
 
         LabelLists list = new LabelLists(10, 10);
-        Node node = new Node(1, null, null);
+        Node node = new Node(1, null, 1);
 
         List<Label> labels = new ArrayList<>();
         labels.add(labelD);
@@ -72,7 +72,7 @@ public class LabelListsTest {
         Label labelH = createLabel(cost4, resourcesH);
 
         LabelLists list = new LabelLists(10, 4);
-        Node node = new Node(1, null, null);
+        Node node = new Node(1, null, 1);
         Assert.assertEquals("List length wrong", 0, list.size(node));
         Assert.assertEquals("List capacity wrong", 4, list.getLabelCapacity(node));
 
@@ -108,7 +108,7 @@ public class LabelListsTest {
     }
 
     private Label createLabel(Objective cost1, ResourceTwoElements resourcesA) {
-        return new Label(null, null, null,
+        return new Label(null, null, 0,
                 cost1, resourcesA, 3, 0, 2);
     }
 

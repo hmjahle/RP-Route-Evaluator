@@ -1,8 +1,9 @@
 package testInterfaceImplementationClasses;
 
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITravelTimeMatrix;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
+import com.visma.of.rp.routeevaluator.publicInterfaces.ITravelTimeMatrix;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +26,11 @@ public class TestTravelTimeMatrix implements ITravelTimeMatrix {
     @Override
     public long getTravelTime(ILocation from, ILocation to) {
         return travelTimes.get(from).get(to);
+    }
+
+    @Override
+    public Collection<ILocation> getLocations() {
+        return travelTimes.keySet();
     }
 
     public void addUndirectedConnection(ILocation locationA, ILocation locationB, long distance) {
