@@ -4,20 +4,15 @@ import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 
 public class Node {
 
-    private int id;
+    private int nodeId;
     private ITask task;
     private int locationId;
     private boolean isSynced; //ToDo: Test consequence of removing field
 
-    public Node(int id, ITask task, int locationId) {
-        this(id, task);
-        this.locationId = locationId;
-    }
-
-    public Node(int id, ITask task) {
+    public Node(int nodeId, ITask task, int locationId) {
         this.task = task;
-        this.id = id;
-        this.locationId = id;
+        this.nodeId = nodeId;
+        this.locationId = locationId;
         this.isSynced = (this.task != null && this.task.isSynced());
     }
 
@@ -56,26 +51,26 @@ public class Node {
     @Override
     public boolean equals(Object other) {
         if ((other instanceof Node))
-            return ((Node) other).id == this.id;
+            return ((Node) other).nodeId == this.nodeId;
         else
             return false;
     }
 
     @Override
     public int hashCode() {
-        return id;
+        return nodeId;
     }
 
     @Override
     public String toString() {
-        return Integer.toString(id);
+        return Integer.toString(nodeId);
     }
 
     public ITask getTask() {
         return task;
     }
 
-    public int getId() {
-        return id;
+    public int getNodeId() {
+        return nodeId;
     }
 }

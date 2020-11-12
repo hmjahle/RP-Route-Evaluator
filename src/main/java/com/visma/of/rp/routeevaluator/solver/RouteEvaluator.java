@@ -132,6 +132,6 @@ public class RouteEvaluator {
     private void setStartTime(ITask task, long startTime) {
         graph.updateNodeType(task);
         Node node = graph.getNode(task);
-        syncedNodesStartTime[node.getId()] = startTime;
+        syncedNodesStartTime[node.getNodeId()] = startTime;
     }
 }

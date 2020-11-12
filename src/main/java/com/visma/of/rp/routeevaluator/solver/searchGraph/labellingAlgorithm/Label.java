@@ -108,7 +108,7 @@ public class Label implements Comparable<Label> {
 
     @Override
     public String toString() {
-        return node.getId() + ", " + objective + ", " + resources;
+        return node.getNodeId() + ", " + objective + ", " + resources;
     }
 
 }

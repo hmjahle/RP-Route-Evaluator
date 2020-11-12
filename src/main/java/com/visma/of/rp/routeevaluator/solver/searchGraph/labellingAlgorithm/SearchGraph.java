@@ -11,17 +11,21 @@ public class SearchGraph {
     private Node origin;
     private Node destination;
     private List<Node> nodes;
-    private Map<ITask, Node> nodesToTask;
+    private Map<ITask, Node> taskToNodes;
     private Long[][] travelTimeMatrix;
     private int nodeIdCounter;
+    private int locationIdCounter;
     private long robustTimeSeconds;
     private Map<ILocation, Integer> locationToLocationIds;
 
     public SearchGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<ITask> tasks, ILocation originLocation, ILocation destinationLocation, long robustTimeSeconds) {
         this.robustTimeSeconds = robustTimeSeconds;
         this.nodes = new ArrayList<>();
-        this.nodesToTask = new HashMap<>();
+        this.taskToNodes = new HashMap<>();
+        this.locationToLocationIds = new HashMap<>();
         this.nodeIdCounter = 0;
+        this.locationIdCounter = 0;
+
         this.populateGraph(travelTimeMatrixInput, tasks, originLocation, destinationLocation);
     }
 
@@ -57,58 +61,68 @@ public class SearchGraph {
         return nodeIdCounter++;
     }
 
-    private void populateGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<ITask> tasks, ILocation startLocation, ILocation destinationLocation) {
-        this.origin = new Node(getNewNodeId(), null);
-        this.destination = new Node(getNewNodeId(), null);
+    private int getNewLocationId() {
+        return locationIdCounter++;
+    }
+
+    private void populateGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<ITask> tasks, ILocation originLocation,
+                               ILocation destinationLocation) {
+        initializeOriginDestination(originLocation, destinationLocation);
         addNodesToGraph(tasks);
         updateTravelTimeInformation(travelTimeMatrixInput);
-        connectOriginDestinationNodes(travelTimeMatrixInput, startLocation, destinationLocation);
     }
 
-    private void connectOriginDestinationNodes(ITravelTimeMatrix travelTimeMatrixInput, ILocation startLocation, ILocation destinationLocation) {
-        addTravelTimeBetweenNodes(travelTimeMatrixInput, startLocation, origin.getLocationId(), destinationLocation, destination.getLocationId());
-        addTravelTimeBetweenNodes(travelTimeMatrixInput, destinationLocation, destination.getLocationId(), startLocation, origin.getLocationId());
-        connectNodesToOriginDestination(travelTimeMatrixInput, startLocation, destinationLocation);
-        locationToLocationIds.put(startLocation, origin.getLocationId());
-        locationToLocationIds.put(destinationLocation, destination.getLocationId());
+    private void initializeOriginDestination(ILocation originLocation, ILocation destinationLocation) {
+        this.origin = new Node(getNewNodeId(), null, getLocationId(originLocation));
+        this.destination = new Node(getNewNodeId(), null, getLocationId(destinationLocation));
         nodes.add(origin);
         nodes.add(destination);
+        locationToLocationIds.put(originLocation, origin.getLocationId());
+        locationToLocationIds.put(destinationLocation, destination.getLocationId());
     }
 
-    private void connectNodesToOriginDestination(ITravelTimeMatrix travelTimeMatrixInput, ILocation startLocation, ILocation destinationLocation) {
-        for (Node nodeA : nodes) {
-            addTravelTimeBetweenNodes(travelTimeMatrixInput, startLocation, origin.getLocationId(), nodeA.getTask().getLocation(), nodeA.getLocationId());
-            addTravelTimeBetweenNodes(travelTimeMatrixInput, destinationLocation, destination.getLocationId(), nodeA.getTask().getLocation(), nodeA.getLocationId());
-            addTravelTimeBetweenNodes(travelTimeMatrixInput, nodeA.getTask().getLocation(), nodeA.getLocationId(), startLocation, origin.getLocationId());
-            addTravelTimeBetweenNodes(travelTimeMatrixInput, nodeA.getTask().getLocation(), nodeA.getLocationId(), destinationLocation, destination.getLocationId());
+    private void addNodesToGraph(Collection<ITask> tasks) {
+        for (ITask task : tasks) {
+            int locationId = getLocationId(task.getLocation());
+            Node node = new Node(getNewNodeId(), task, locationId);
+            nodes.add(node);
+            taskToNodes.put(task, node);
         }
     }
 
     private void updateTravelTimeInformation(ITravelTimeMatrix travelTimeMatrixInput) {
-        int n = nodes.size() + 2;
+        int n = potentialLocations(travelTimeMatrixInput);
         this.travelTimeMatrix = new Long[n][n];
-        this.locationToLocationIds = new HashMap<>();
-        for (Node nodeA : nodes) {
-            locationToLocationIds.put(nodeA.getTask().getLocation(), nodeA.getLocationId());
-            for (Node nodeB : nodes) {
-                if (nodeA != nodeB) {
-                    addTravelTimeBetweenNodes(travelTimeMatrixInput, nodeA.getTask().getLocation(), nodeA.getLocationId(),
-                            nodeB.getTask().getLocation(), nodeB.getLocationId());
+        for (ILocation locationA : travelTimeMatrixInput.getLocations()) {
+            for (ILocation locationB : travelTimeMatrixInput.getLocations()) {
+                if (locationA != locationB) {
+                    addTravelTime(travelTimeMatrixInput, locationA, locationB);
                 }
             }
         }
     }
 
-    private void addNodesToGraph(Collection<ITask> tasks) {
-        for (ITask task : tasks) {
-            Node node = new Node(getNewNodeId(), task);
-            nodes.add(node);
-            nodesToTask.put(task, node);
-        }
+    private int potentialLocations(ITravelTimeMatrix travelTimeMatrixInput) {
+        int n = locationIdCounter;
+        for (ILocation locationA : travelTimeMatrixInput.getLocations())
+            n += !locationToLocationIds.containsKey(locationA) ? 1 : 0;
+        return n;
     }
 
-    private void addTravelTimeBetweenNodes(ITravelTimeMatrix travelTimeMatrixInput, ILocation fromLocation, int fromId,
-                                           ILocation toLocation, int toId) {
+    private int getLocationId(ILocation location) {
+
+        if (locationToLocationIds.containsKey(location))
+            return locationToLocationIds.get(location);
+        int locationId = getNewLocationId();
+        locationToLocationIds.put(location, locationId);
+        return locationId;
+    }
+
+    private void addTravelTime(ITravelTimeMatrix travelTimeMatrixInput, ILocation fromLocation, ILocation toLocation) {
+
+        int fromId = getLocationId(fromLocation);
+        int toId = getLocationId(toLocation);
+
         if (!travelTimeMatrixInput.connected(fromLocation, toLocation))
             return;
         long travelTime = travelTimeMatrixInput.getTravelTime(fromLocation, toLocation);
@@ -116,12 +130,12 @@ public class SearchGraph {
     }
 
     public void updateNodeType(ITask task) {
-        nodesToTask.get(task).setSynced(task.isSynced());
+        taskToNodes.get(task).setSynced(task.isSynced());
     }
 
     public void updateNodeType(Collection<ITask> tasks) {
         for (ITask task : tasks)
-            nodesToTask.get(task).setSynced(task.isSynced());
+            taskToNodes.get(task).setSynced(task.isSynced());
     }
 
     public Node getOrigin() {
@@ -133,7 +147,7 @@ public class SearchGraph {
     }
 
     public Node getNode(ITask task) {
-        return nodesToTask.get(task);
+        return taskToNodes.get(task);
     }
 
     public long getRobustTimeSeconds() {

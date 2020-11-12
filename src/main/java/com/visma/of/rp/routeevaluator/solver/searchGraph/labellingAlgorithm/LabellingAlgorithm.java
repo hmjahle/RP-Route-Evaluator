@@ -140,7 +140,7 @@ public class LabellingAlgorithm {
         long travelTime = getTravelTime(thisLabel, nextNode, newLocation);
         long startOfServiceNextTask = calcStartOfServiceNextTask(thisLabel, nextNode, taskRequirePhysicalAppearance, travelTime);
         long earliestOfficeReturn = calcEarliestPossibleReturnToOfficeTime(nextNode, newLocation, startOfServiceNextTask);
-        long syncedTaskLatestStartTime = nextNode.isSynced() ? syncedNodesStartTime[nextNode.getId()] : -1;
+        long syncedTaskLatestStartTime = nextNode.isSynced() ? syncedNodesStartTime[nextNode.getNodeId()] : -1;
         if (!isFeasible(earliestOfficeReturn, nextNode.getTask(), startOfServiceNextTask, syncedTaskLatestStartTime))
             return null;
         long canLeaveLocationAt = updateCanLeaveLocationAt(thisLabel, taskRequirePhysicalAppearance, startOfServiceNextTask);
@@ -228,7 +228,7 @@ public class LabellingAlgorithm {
     }
 
     private long getTravelTimeToDestination(Node node) {
-        if (node.getId() == graph.getDestination().getId())
+        if (node.getNodeId() == graph.getDestination().getNodeId())
             return 0;
         Long travelTime = graph.getTravelTime(node, graph.getDestination());
         return travelTime == null ? 0 : travelTime;
@@ -240,7 +240,7 @@ public class LabellingAlgorithm {
 
     private long findEarliestStartTimeNextTask(Node toNode) {
         if (toNode.isSynced()) {
-            return syncedNodesStartTime[toNode.getId()];
+            return syncedNodesStartTime[toNode.getNodeId()];
         } else {
             return toNode.getStartTime();
         }

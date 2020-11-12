@@ -17,7 +17,7 @@ public class LabelLists {
     }
 
     public boolean addAndReturnTrueIfAdded(Node node, Label label) {
-        int nodeId = node.getId();
+        int nodeId = node.getNodeId();
         List<Integer> labelsDominated = new ArrayList<>();
         if (isDominated(label, nodeId, labelsDominated))
             return false;
@@ -61,11 +61,11 @@ public class LabelLists {
     }
 
     public List<Label> findLabels(Node node) {
-        return Arrays.asList(elements[node.getId()]).subList(0, elementCnt[node.getId()]);
+        return Arrays.asList(elements[node.getNodeId()]).subList(0, elementCnt[node.getNodeId()]);
     }
 
     public int size(Node node) {
-        return elementCnt[node.getId()];
+        return elementCnt[node.getNodeId()];
     }
 
     public void clear() {
@@ -73,6 +73,6 @@ public class LabelLists {
     }
 
     public int getLabelCapacity(Node node) {
-        return labelCapacity[node.getId()];
+        return labelCapacity[node.getNodeId()];
     }
 }
