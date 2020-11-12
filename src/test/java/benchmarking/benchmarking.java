@@ -135,7 +135,7 @@ public class benchmarking extends JUnitTestAbstract {
         String visitString = "Visits: " + result.getVisitSolution().size() + "\n";
         for (Visit visit : result.getVisitSolution()) {
             visitString += "\t" + printVisit(visit, 0);
-            visitString += "\n";
+            visitString += visit.getTask().getLocation() + "\n";
         }
         System.out.println(visitString);
     }

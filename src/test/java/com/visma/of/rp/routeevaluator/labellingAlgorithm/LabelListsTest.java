@@ -5,7 +5,6 @@ import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Labe
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.LabelLists;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Node;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ResourceTwoElements;
-import com.visma.of.rp.routeevaluator.utilities.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,7 +27,7 @@ public class LabelListsTest {
         Label labelD = createLabel(costB, resourcesB);
 
         LabelLists list = new LabelLists(10, 10);
-        Node node = new Node(1, null, null);
+        Node node = new Node(1, null, 1);
 
         List<Label> labels = new ArrayList<>();
         labels.add(labelD);
@@ -55,12 +54,6 @@ public class LabelListsTest {
         WeightedObjective cost4 = new WeightedObjective(3);
 
 
-        Pair<Integer, WeightedObjective> pair1 = new Pair<>(1, cost1);
-        Pair<Integer, WeightedObjective> pair2 = new Pair<>(1, cost2);
-        Pair<Integer, Label> pair3 = new Pair<>(1, createLabel(null,null));
-        boolean a = pair1.equals(pair2);
-        boolean b = pair1.equals(pair1);
-        boolean c = pair1.equals(pair3);
 
         ResourceTwoElements resourcesA = new ResourceTwoElements(0, 1);
         ResourceTwoElements resourcesB = new ResourceTwoElements(0, 2);
@@ -81,7 +74,7 @@ public class LabelListsTest {
         Label labelH = createLabel(cost4, resourcesH);
 
         LabelLists list = new LabelLists(10, 4);
-        Node node = new Node(1, null, null);
+        Node node = new Node(1, null, 1);
         Assert.assertEquals("List length wrong", 0, list.size(node));
         Assert.assertEquals("List capacity wrong", 4, list.getLabelCapacity(node));
 
@@ -117,7 +110,7 @@ public class LabelListsTest {
     }
 
     private Label createLabel(WeightedObjective cost1, ResourceTwoElements resourcesA) {
-        return new Label(null, null, null,
+        return new Label(null, null, 0,
                 cost1, resourcesA, 3, 0, 2);
     }
 

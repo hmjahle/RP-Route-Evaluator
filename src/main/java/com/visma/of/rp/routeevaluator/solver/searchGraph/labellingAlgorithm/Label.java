@@ -5,21 +5,21 @@ import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.Weight
 public class Label implements Comparable<Label> {
     private Label previous;
     private Node node;
-    private Node currentLocation;
     private WeightedObjective objective;
     private IResource resources;
+    private int currentLocationId;
     private long currentTime;
     private long travelTime;
     private long canLeaveLocationAtTime;
     private boolean closed;
 
-    public Label(Label previous, Node currentNode, Node currentLocation, WeightedObjective objective,
+    public Label(Label previous, Node currentNode, int currentLocationId, WeightedObjective objective,
                  IResource resources, long currentTime, long travelTime, long canLeaveLocationAtTime) {
         this.previous = previous;
         this.node = currentNode;
-        this.currentLocation = currentLocation;
         this.objective = objective;
         this.resources = resources;
+        this.currentLocationId = currentLocationId;
         this.currentTime = currentTime;
         this.travelTime = travelTime;
         this.canLeaveLocationAtTime = canLeaveLocationAtTime;
@@ -57,8 +57,8 @@ public class Label implements Comparable<Label> {
         closed = close;
     }
 
-    public Node getCurrentLocation() {
-        return currentLocation;
+    public int getCurrentLocationId() {
+        return currentLocationId;
     }
 
     /**
@@ -108,7 +108,7 @@ public class Label implements Comparable<Label> {
 
     @Override
     public String toString() {
-        return node.getId() + ", " + objective + ", " + resources;
+        return node.getNodeId() + ", " + objective + ", " + resources;
     }
 
 }
