@@ -26,7 +26,7 @@ public abstract class JUnitTestAbstract {
     }
 
     protected Label createStartLabel(SearchGraph graph) {
-        return new Label(null, graph.getOrigin(), graph.getOrigin(), new Objective(0), new ResourceOneElement(0), 0, 0, 0);
+        return new Label(null, graph.getOrigin(), graph.getOrigin().getLocationId(), new Objective(0), new ResourceOneElement(0), 0, 0, 0);
     }
 
     protected ILocation createOffice() {

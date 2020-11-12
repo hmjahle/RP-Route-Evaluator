@@ -25,7 +25,6 @@ public class SearchGraph {
         this.locationToLocationIds = new HashMap<>();
         this.nodeIdCounter = 0;
         this.locationIdCounter = 0;
-
         this.populateGraph(travelTimeMatrixInput, tasks, originLocation, destinationLocation);
     }
 
@@ -53,8 +52,8 @@ public class SearchGraph {
         return nodes;
     }
 
-    public Long getTravelTime(Node nodeA, Node nodeB) {
-        return travelTimeMatrix[nodeA.getLocationId()][nodeB.getLocationId()];
+    public Long getTravelTime(int locationIdA, int locationIdB) {
+        return travelTimeMatrix[locationIdA][locationIdB];
     }
 
     private int getNewNodeId() {

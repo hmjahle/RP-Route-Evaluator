@@ -108,7 +108,7 @@ public class LabelListsTest {
     }
 
     private Label createLabel(Objective cost1, ResourceTwoElements resourcesA) {
-        return new Label(null, null, null,
+        return new Label(null, null, 0,
                 cost1, resourcesA, 3, 0, 2);
     }
 
