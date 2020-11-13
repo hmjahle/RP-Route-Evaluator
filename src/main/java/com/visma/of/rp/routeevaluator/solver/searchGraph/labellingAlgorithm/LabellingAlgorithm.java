@@ -174,14 +174,22 @@ public class LabellingAlgorithm {
     private Label buildNewLabel(Label thisLabel, ExtendToInfo extendToInfo, Node nextNode, int newLocation, long travelTime,
                                 long startOfServiceNextTask, long canLeaveLocationAt, long syncedTaskLatestStartTime) {
 
-        ObjectiveAbstract objective = thisLabel.getObjective().extend(nextNode, travelTime, startOfServiceNextTask,
-                syncedTaskLatestStartTime, endOfShift, objectiveFunctions);
+        ObjectiveAbstract objective = extend(thisLabel.getObjective(),nextNode, travelTime, startOfServiceNextTask,
+                syncedTaskLatestStartTime, endOfShift);
 
         IResource resources = thisLabel.getResources().extend(extendToInfo);
 
         return new Label(thisLabel, nextNode, newLocation, objective, resources, startOfServiceNextTask, travelTime,
                 canLeaveLocationAt);
     }
+    public ObjectiveAbstract extend(ObjectiveAbstract currentObjective,Node toNode, long travelTime, long startOfServiceNextTask, long syncedTaskLatestStartTime,
+                                    long endOfShift) {
+        ITask task = toNode.getTask();
+        long visitEnd = task != null ? startOfServiceNextTask + task.getDuration() : 0;
+        return objectiveFunctions.calculateObjectiveValue(currentObjective, travelTime, task,
+                startOfServiceNextTask, visitEnd, syncedTaskLatestStartTime, endOfShift);
+    }
+
 
     private Label findNextLabel() {
         Label currentLabel = unExtendedLabels.poll();

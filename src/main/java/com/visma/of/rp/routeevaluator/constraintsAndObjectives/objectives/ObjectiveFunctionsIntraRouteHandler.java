@@ -19,7 +19,7 @@ public class ObjectiveFunctionsIntraRouteHandler {
         objectiveFunctions.put(objectiveFunctionId, new WeightObjectivePair(weight, objectiveIntraShift));
     }
 
-    protected ObjectiveAbstract calculateObjectiveValue(ObjectiveAbstract currentObjective, long travelTime, ITask task, long startOfServiceNextTask,
+    public ObjectiveAbstract calculateObjectiveValue(ObjectiveAbstract currentObjective, long travelTime, ITask task, long startOfServiceNextTask,
                                                      long visitEnd, long syncedTaskLatestStartTime, long endOfShift) {
 
         ObjectiveAbstract newObjective = currentObjective.initializeNewObjective();
