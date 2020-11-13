@@ -1,5 +1,8 @@
 package benchmarking;
 
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.SyncedTaskStartTimeObjectiveFunction;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TimeWindowObjectiveFunction;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TravelTimeObjectiveFunction;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
@@ -69,6 +72,18 @@ public class benchmarking extends JUnitTestAbstract {
         newTasks.add(tasks.get(45));
         newTasks.add(tasks.get(155));
         newTasks.add(tasks.get(77));
+
+        routeEvaluator1.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
+        routeEvaluator1.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
+        routeEvaluator1.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction(1));
+
+        routeEvaluator2.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
+        routeEvaluator2.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
+        routeEvaluator2.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction(1));
+
+        routeEvaluator3.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
+        routeEvaluator3.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
+        routeEvaluator3.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction(1));
 
         IShift shift = new TestShift(3600 * 8, 3600 * 8, 3600 * 16);
         for (int i = 0; i < 3000000; i++) {

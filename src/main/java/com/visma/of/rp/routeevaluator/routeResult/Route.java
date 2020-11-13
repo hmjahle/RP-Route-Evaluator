@@ -1,49 +1,33 @@
 package com.visma.of.rp.routeevaluator.routeResult;
 
-
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
-
-public class RouteEvaluatorResult {
+public class Route {
 
     private IShift employeeWorkShift;
     private List<Visit> visitSolution;
-    private Long totalTravelTime;
-    private Long totalTimeToPatients;
-    private Long totalTimeInOffice;
-    private Long timeOfOfficeReturn;
-    private double objectiveValue;
+    private long timeOfOfficeReturn;
 
-    public RouteEvaluatorResult(IShift employeeWorkShift) {
+    public void setTimeOfOfficeReturn(long timeOfOfficeReturn) {
+        this.timeOfOfficeReturn = timeOfOfficeReturn;
+    }
+
+    public Route(IShift employeeWorkShift) {
         this.employeeWorkShift = employeeWorkShift;
         this.visitSolution = new ArrayList<>();
-        resetDataStructureForEmployee();
+        this.timeOfOfficeReturn = 0L;
     }
 
-    RouteEvaluatorResult(RouteEvaluatorResult copy) {
-        this.employeeWorkShift = copy.employeeWorkShift;
+    Route(Route copy) {
         this.visitSolution = new ArrayList<>(copy.visitSolution);
-        this.totalTravelTime = copy.totalTravelTime;
-        this.totalTimeToPatients = copy.totalTimeToPatients;
-        this.totalTimeInOffice = copy.totalTimeInOffice;
+        this.employeeWorkShift = copy.employeeWorkShift;
         this.timeOfOfficeReturn = copy.timeOfOfficeReturn;
-        this.objectiveValue = copy.objectiveValue;
-    }
-
-    private void resetDataStructureForEmployee() {
-        totalTravelTime = 0L;
-        totalTimeToPatients = 0L;
-        totalTimeInOffice = 0L;
-        objectiveValue = 0;
-        timeOfOfficeReturn = 0L;
-    }
-
-    public void updateTotalTravelTime(long totalTravelTime) {
-        this.totalTravelTime = totalTravelTime;
     }
 
     public void addVisits(Visit[] visits, int visitsCnt) {
@@ -52,11 +36,7 @@ public class RouteEvaluatorResult {
         }
     }
 
-    public void setObjectiveValue(double objectiveValue) {
-        this.objectiveValue = objectiveValue;
-    }
-
-    public void updateTimeOfOfficeReturn(Long timeOfOfficeReturn) {
+    public void updateTimeOfOfficeReturn(long timeOfOfficeReturn) {
         this.timeOfOfficeReturn = timeOfOfficeReturn;
     }
 
@@ -72,29 +52,8 @@ public class RouteEvaluatorResult {
         return visitSolution;
     }
 
-    public Long getTotalTravelTime() {
-        return totalTravelTime;
-    }
-
-    public Long getTotalTimeToPatients() {
-        return totalTimeToPatients;
-    }
-
-    public Long getTotalTimeInOffice() {
-        return totalTimeInOffice;
-    }
-
-    public double getObjectiveValue() {
-        return objectiveValue;
-    }
-
-    public Long getTimeOfOfficeReturn() {
+    public long getTimeOfOfficeReturn() {
         return timeOfOfficeReturn;
-    }
-
-    public Long calculateAndGetTotalFreeTime() {
-        long workShiftDuration = employeeWorkShift.getDuration();
-        return Math.max(0, workShiftDuration - totalTimeToPatients - totalTimeInOffice - totalTravelTime);
     }
 
     public List<ITask> extractEmployeeRoute() {
