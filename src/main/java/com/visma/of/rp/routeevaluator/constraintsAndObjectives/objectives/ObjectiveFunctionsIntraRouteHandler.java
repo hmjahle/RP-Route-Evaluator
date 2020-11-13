@@ -19,10 +19,10 @@ public class ObjectiveFunctionsIntraRouteHandler {
         objectiveFunctions.put(objectiveFunctionId, new WeightObjectivePair(weight, objectiveIntraShift));
     }
 
-    public WeightedObjective calculateObjectiveValue(WeightedObjective objective, long travelTime, ITask task, long startOfServiceNextTask,
+    public ObjectiveAbstract calculateObjectiveValue(ObjectiveAbstract currentObjective, long travelTime, ITask task, long startOfServiceNextTask,
                                                      long visitEnd, long syncedTaskLatestStartTime, long endOfShift) {
-        WeightedObjective newObjective = new WeightedObjective(objective);
 
+        ObjectiveAbstract newObjective = currentObjective.initializeNewObjective();
         ObjectiveInfo objectiveInfo = new ObjectiveInfo(travelTime, task, visitEnd, startOfServiceNextTask,
                 syncedTaskLatestStartTime, endOfShift);
 

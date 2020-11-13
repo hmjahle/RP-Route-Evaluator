@@ -23,7 +23,7 @@ import java.util.*;
 /**
  * Tests if the synced task objective is implemented correctly.
  */
-public class WeightedObjectiveTest extends JUnitTestAbstract {
+public class ObjectiveAbstractTest extends JUnitTestAbstract {
 
     List<ILocation> locations;
     List<ITask> allTasks;
@@ -56,12 +56,12 @@ public class WeightedObjectiveTest extends JUnitTestAbstract {
 
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
         RouteEvaluatorResult result = getRouteEvaluatorResult(tasks, syncedTaskStartTimes, routeEvaluator);
-        Assert.assertEquals("WeightedObjective value must be: ", 85, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("ObjectiveAbstract value must be: ", 85, result.getObjectiveValue(), 1E-6);
 
         routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
         addWeightedObjectives(routeEvaluator, 0);
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
-        Assert.assertEquals("WeightedObjective value must be: ", 3003025, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("ObjectiveAbstract value must be: ", 3003025, result.getObjectiveValue(), 1E-6);
     }
 
     @Test
@@ -71,12 +71,12 @@ public class WeightedObjectiveTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(3));
         RouteEvaluator routeEvaluator = createRouteEvaluator(tasks);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
-        Assert.assertEquals("WeightedObjective value must be: ", 25, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("ObjectiveAbstract value must be: ", 25, result.getObjectiveValue(), 1E-6);
 
         routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
         addWeightedObjectives(routeEvaluator, 0);
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
-        Assert.assertEquals("WeightedObjective value must be: ", 2500, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("ObjectiveAbstract value must be: ", 2500, result.getObjectiveValue(), 1E-6);
     }
 
     @Test
@@ -91,12 +91,12 @@ public class WeightedObjectiveTest extends JUnitTestAbstract {
 
         RouteEvaluatorResult result = getRouteEvaluatorResult(tasks, syncedTaskStartTimes);
         RouteEvaluator routeEvaluator;
-        Assert.assertEquals("WeightedObjective value must be: ", 53, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("ObjectiveAbstract value must be: ", 53, result.getObjectiveValue(), 1E-6);
 
         routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
         addWeightedObjectives(routeEvaluator, 0);
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
-        Assert.assertEquals("WeightedObjective value must be: ", 105101, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("ObjectiveAbstract value must be: ", 105101, result.getObjectiveValue(), 1E-6);
     }
 
     @Test
@@ -111,12 +111,12 @@ public class WeightedObjectiveTest extends JUnitTestAbstract {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
         addObjectives(routeEvaluator, 1);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
-        Assert.assertEquals("WeightedObjective value must be: ", 84, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("ObjectiveAbstract value must be: ", 84, result.getObjectiveValue(), 1E-6);
 
         routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
         addWeightedObjectives(routeEvaluator, 1);
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
-        Assert.assertEquals("WeightedObjective value must be: ", 1106607, result.getObjectiveValue(), 1E-6);
+        Assert.assertEquals("ObjectiveAbstract value must be: ", 1106607, result.getObjectiveValue(), 1E-6);
     }
 
 
