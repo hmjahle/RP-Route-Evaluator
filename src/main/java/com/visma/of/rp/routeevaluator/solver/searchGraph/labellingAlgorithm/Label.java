@@ -102,6 +102,7 @@ public class Label implements Comparable<Label> {
             return 2;
     }
 
+    @Override
     public int compareTo(Label other) {
         return Double.compare(objective.getObjectiveValue(), other.objective.getObjectiveValue());
     }

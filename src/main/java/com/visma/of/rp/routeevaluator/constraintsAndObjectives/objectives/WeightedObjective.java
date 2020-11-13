@@ -1,13 +1,12 @@
 package com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives;
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ObjectiveInfo;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Node;
 
 /**
  * Calculates objective values and check whether one objective dominates the other.
  */
-public class WeightedObjective  {
+public class WeightedObjective {
 
     private double objectiveValue;
 
@@ -15,20 +14,20 @@ public class WeightedObjective  {
         this.objectiveValue = objectiveValue;
     }
 
-    public WeightedObjective extend(Node toNode, long travelTime, long startOfServiceNextTask, long syncedTaskLatestStartTime,
-                                    long endOfShift, ObjectiveFunctionsIntraRouteHandler objectiveFunctionsIntraRouteHandler) {
-        double newObjectiveValue = calculateObjectiveValue(travelTime, toNode.getTask(),
-                startOfServiceNextTask, syncedTaskLatestStartTime, endOfShift, objectiveFunctionsIntraRouteHandler);
-        return new WeightedObjective(this.objectiveValue + newObjectiveValue);
+    public WeightedObjective(WeightedObjective other) {
+        this.objectiveValue = other.objectiveValue;
     }
 
-    public double calculateObjectiveValue(long travelTime, ITask task, long startOfServiceNextTask,
-                                          long syncedTaskLatestStartTime, long endOfShift,
-                                          ObjectiveFunctionsIntraRouteHandler objectiveFunctionsIntraRouteHandler) {
+    public WeightedObjective extend(Node toNode, long travelTime, long startOfServiceNextTask, long syncedTaskLatestStartTime,
+                                    long endOfShift, ObjectiveFunctionsIntraRouteHandler objectiveFunctionsIntraRouteHandler) {
+        ITask task = toNode.getTask();
         long visitEnd = task != null ? startOfServiceNextTask + task.getDuration() : 0;
-        ObjectiveInfo costInfo = new ObjectiveInfo(travelTime, task, visitEnd, startOfServiceNextTask,
-                syncedTaskLatestStartTime, endOfShift);
-        return objectiveFunctionsIntraRouteHandler.calculateIncrementalObjectiveValue(costInfo);
+        return objectiveFunctionsIntraRouteHandler.calculateObjectiveValue(this, travelTime, task,
+                startOfServiceNextTask, visitEnd, syncedTaskLatestStartTime, endOfShift);
+    }
+
+    public void updateObjective(String objectiveFunctionId, double weight, double objectiveValue) {
+        this.objectiveValue += objectiveValue * weight;
     }
 
     public double getObjectiveValue() {
