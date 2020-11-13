@@ -4,9 +4,6 @@ import com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints.Const
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ConstraintInfo;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.ObjectiveAbstract;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.ObjectiveFunctionsIntraRouteHandler;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjective;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IConstraintIntraRoute;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveFunctionIntraRoute;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
@@ -33,16 +30,16 @@ public class LabellingAlgorithm {
     private long endOfShift;
     private long robustnessTimeSeconds;
 
-    public LabellingAlgorithm(SearchGraph graph) {
+    public LabellingAlgorithm(SearchGraph graph,ObjectiveFunctionsIntraRouteHandler objectiveFunctions,ConstraintsIntraRouteHandler constraints) {
         this.graph = graph;
+        this.objectiveFunctions = objectiveFunctions;
+        this.constraints = constraints;
         this.unExtendedLabels = new PriorityQueue<>();
         this.labels = new Label[graph.getNodes().size()];
         this.visits = new Visit[graph.getNodes().size()];
         this.labelLists = new LabelLists(graph.getNodes().size(), graph.getNodes().size() * 10);
         this.labelsOnDestinationNode = new PriorityQueue<>();
         this.robustnessTimeSeconds = graph.getRobustTimeSeconds();
-        this.objectiveFunctions = new ObjectiveFunctionsIntraRouteHandler();
-        this.constraints = new ConstraintsIntraRouteHandler();
     }
 
     /**
@@ -53,10 +50,10 @@ public class LabellingAlgorithm {
      * @param employeeWorkShift    Employee to simulate route for.
      * @return Total fitness value, null if infeasible.
      */
-    public Double runAlgorithm(IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime, IShift employeeWorkShift) {
+    public Double runAlgorithm(ObjectiveAbstract objective,IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime, IShift employeeWorkShift) {
         this.labelLists.clear();
         IResource startResource = nodeExtendInfo.createEmptyResource();
-        Label startLabel = createStartLabel(new WeightedObjective(), employeeWorkShift.getStartTime(), startResource);
+        Label startLabel = createStartLabel(objective, employeeWorkShift.getStartTime(), startResource);
         this.nodeExtendInfo = nodeExtendInfo;
         this.syncedNodesStartTime = syncedNodesStartTime;
         this.endOfShift = employeeWorkShift.getEndTime();
@@ -73,30 +70,11 @@ public class LabellingAlgorithm {
      * @param employeeWorkShift    Employee to simulate route for.
      * @return RouteEvaluatorResult or null if route is infeasible.
      */
-    public RouteEvaluatorResult solveRouteEvaluatorResult(IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime, IShift employeeWorkShift) {
-        Double totalFitness = runAlgorithm(nodeExtendInfo, syncedNodesStartTime, employeeWorkShift);
+    public RouteEvaluatorResult solveRouteEvaluatorResult(ObjectiveAbstract initialObjective,IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime, IShift employeeWorkShift) {
+        Double totalFitness = runAlgorithm(initialObjective,nodeExtendInfo, syncedNodesStartTime, employeeWorkShift);
         if (totalFitness == null)
             return null;
         return buildRouteEvaluatorResult(totalFitness, employeeWorkShift);
-    }
-
-    /**
-     * Adds an objective function to the route evaluator.
-     *
-     * @param objectiveFunctionId
-     * @param objectiveIntraShift The objective function to be added.
-     */
-    public void addObjectiveFunctionIntraShift(String objectiveFunctionId, double weight, IObjectiveFunctionIntraRoute objectiveIntraShift) {
-        objectiveFunctions.addIntraShiftObjectiveFunction(objectiveFunctionId, weight, objectiveIntraShift);
-    }
-
-    /**
-     * Adds an constraint to the route evaluator.
-     *
-     * @param constraint The constraint to be added.
-     */
-    public void addConstraint(IConstraintIntraRoute constraint) {
-        constraints.addConstraint(constraint);
     }
 
     /**
@@ -276,7 +254,7 @@ public class LabellingAlgorithm {
             totalTravelTime += bestLabel.getTravelTime();
         }
         totalTravelTime += labels[0].getTravelTime();
-        result.updateTotalTravelTime(totalTravelTime);
+//        result.updateTotalTravelTime(totalTravelTime);
         return visitCnt;
     }
 

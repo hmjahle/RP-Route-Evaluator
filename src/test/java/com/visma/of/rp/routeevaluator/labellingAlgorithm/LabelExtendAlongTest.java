@@ -1,12 +1,14 @@
 package com.visma.of.rp.routeevaluator.labellingAlgorithm;
 
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints.ConstraintsIntraRouteHandler;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.ObjectiveFunctionsIntraRouteHandler;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITravelTimeMatrix;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.SearchGraph;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ExtendToInfo;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Label;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.LabellingAlgorithm;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.SearchGraph;
 import org.junit.Assert;
 import org.junit.Test;
 import testInterfaceImplementationClasses.TestTravelTimeMatrix;
@@ -30,7 +32,7 @@ public class LabelExtendAlongTest extends JUnitTestAbstract {
         SearchGraph graph = buildGraph(office, tasks, distanceMatrix);
 
         Label label = createStartLabel(graph);
-        LabellingAlgorithm labellingAlgorithm = new LabellingAlgorithm(graph);
+        LabellingAlgorithm labellingAlgorithm = new LabellingAlgorithm(graph, new ObjectiveFunctionsIntraRouteHandler(), new ConstraintsIntraRouteHandler());
         Label newLabel = labellingAlgorithm.extendLabelToNextNode(label, new ExtendToInfo(graph.getNode(task), 1));
 
         Assert.assertNotNull(newLabel);
