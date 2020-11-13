@@ -11,6 +11,10 @@ public abstract class ObjectiveAbstract {
         this.objectiveValue = objectiveValue;
     }
 
+    protected ObjectiveAbstract() {
+        this.objectiveValue = 0;
+    }
+
     public double getObjectiveValue() {
         return objectiveValue;
     }

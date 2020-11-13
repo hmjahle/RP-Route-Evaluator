@@ -56,7 +56,7 @@ public class LabellingAlgorithm {
     public Double runAlgorithm(IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime, IShift employeeWorkShift) {
         this.labelLists.clear();
         IResource startResource = nodeExtendInfo.createEmptyResource();
-        Label startLabel = createStartLabel(new WeightedObjective(0.0), employeeWorkShift.getStartTime(), startResource);
+        Label startLabel = createStartLabel(new WeightedObjective(), employeeWorkShift.getStartTime(), startResource);
         this.nodeExtendInfo = nodeExtendInfo;
         this.syncedNodesStartTime = syncedNodesStartTime;
         this.endOfShift = employeeWorkShift.getEndTime();

@@ -6,6 +6,10 @@ public class WeightedObjective extends ObjectiveAbstract {
         super(objectiveValue);
     }
 
+    public WeightedObjective() {
+        super();
+    }
+
     protected void updateObjective(String objectiveFunctionId, double weight, double objectiveValue) {
         this.objectiveValue += objectiveValue * weight;
     }
