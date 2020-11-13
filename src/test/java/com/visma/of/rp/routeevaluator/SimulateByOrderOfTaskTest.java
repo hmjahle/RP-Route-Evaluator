@@ -54,6 +54,8 @@ public class SimulateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Start time should be: ", 30, result.getVisitSolution().get(0).getStart());
         Assert.assertEquals("Office return should be: ", 33, result.getTimeOfOfficeReturn().longValue());
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
+        double objective = routeEvaluator.evaluateRouteObjective(tasks, shift);
+        Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
     @Test
@@ -71,6 +73,8 @@ public class SimulateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Start time should be: ", 44, result.getVisitSolution().get(4).getStart());
         Assert.assertEquals("Office return should be: ", 47, result.getTimeOfOfficeReturn().longValue());
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
+        double objective = routeEvaluator.evaluateRouteObjective(tasks, shift);
+        Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
     @Test
@@ -91,6 +95,9 @@ public class SimulateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Start time should be: ", 80, result.getVisitSolution().get(2).getStart());
         Assert.assertEquals("Office return should be: ", 83, result.getTimeOfOfficeReturn().longValue());
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
+        double objective = routeEvaluator.evaluateRouteObjective(tasks, syncedTasksStartTime, shift);
+        Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
+
     }
 
     @Test
@@ -111,6 +118,8 @@ public class SimulateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Start time should be: ", 84, result.getVisitSolution().get(7).getStart());
         Assert.assertEquals("Office return should be: ", 87, result.getTimeOfOfficeReturn().longValue());
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
+        double objective = routeEvaluator.evaluateRouteObjective(allTasks, syncedTasksStartTime, shift);
+        Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
     @Test
@@ -131,6 +140,8 @@ public class SimulateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Start time should be: ", 94, result.getVisitSolution().get(7).getStart());
         Assert.assertEquals("Office return should be: ", 102, result.getTimeOfOfficeReturn().longValue());
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
+        double objective = routeEvaluator.evaluateRouteObjective(allTasks, syncedTasksStartTime, shift);
+        Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
     private Map<ITask, Long> getSyncedStartTime() {
@@ -158,6 +169,8 @@ public class SimulateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Start time should be: ", 64, result.getVisitSolution().get(2).getStart());
         Assert.assertEquals("Office return should be: ", 77, result.getTimeOfOfficeReturn().longValue());
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
+        double objective = routeEvaluator.evaluateRouteObjective(tasks, shift);
+        Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
     private ITravelTimeMatrix createTravelTimeMatrix(ILocation office, Collection<ITask> tasks) {

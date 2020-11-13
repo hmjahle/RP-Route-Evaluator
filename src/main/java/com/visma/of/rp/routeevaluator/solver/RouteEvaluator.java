@@ -41,7 +41,7 @@ public class RouteEvaluator {
         this.graph = new SearchGraph(distanceMatrixMatrix, tasks, origin, destination, robustTimeSeconds);
         this.objectiveFunctions = new ObjectiveFunctionsIntraRouteHandler();
         this.constraints = new ConstraintsIntraRouteHandler();
-        this.algorithm = new LabellingAlgorithm(graph,objectiveFunctions,constraints);
+        this.algorithm = new LabellingAlgorithm(graph, objectiveFunctions, constraints);
         this.firstNodeList = new NodeList(graph.getNodes().size());
         this.secondNodeList = new NodeList(graph.getNodes().size());
         this.syncedNodesStartTime = new long[graph.getNodes().size()];
@@ -54,6 +54,10 @@ public class RouteEvaluator {
         ExtendInfoOneElement nodeExtendInfoOneElement = new ExtendInfoOneElement();
         nodeExtendInfoOneElement.update(firstNodeList);
         return algorithm.runAlgorithm(initialObjective, nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
+    }
+
+    public Double evaluateRouteObjective(List<ITask> tasks, IShift employeeWorkShift) {
+        return evaluateRouteObjective(tasks, null, employeeWorkShift);
     }
 
     /**
@@ -123,6 +127,7 @@ public class RouteEvaluator {
     public void addConstraint(IConstraintIntraRoute constraint) {
         constraints.addConstraint(constraint);
     }
+
     private void updateFirstTaskList(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime) {
         setFirstNodeList(tasks);
         if (syncedTasksStartTime != null)
