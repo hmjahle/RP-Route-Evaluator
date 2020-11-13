@@ -19,7 +19,7 @@ public class ObjectiveFunctionsIntraRouteHandler {
         objectiveFunctions.put(objectiveFunctionId, new WeightObjectivePair(weight, objectiveIntraShift));
     }
 
-    public ObjectiveAbstract calculateObjectiveValue(ObjectiveAbstract currentObjective, long travelTime, ITask task, long startOfServiceNextTask,
+    protected ObjectiveAbstract calculateObjectiveValue(ObjectiveAbstract currentObjective, long travelTime, ITask task, long startOfServiceNextTask,
                                                      long visitEnd, long syncedTaskLatestStartTime, long endOfShift) {
 
         ObjectiveAbstract newObjective = currentObjective.initializeNewObjective();
@@ -38,18 +38,17 @@ public class ObjectiveFunctionsIntraRouteHandler {
         private final double weight;
         private final IObjectiveFunctionIntraRoute objectiveFunction;
 
-        public WeightObjectivePair(double weight, IObjectiveFunctionIntraRoute objectiveFunction) {
+        private WeightObjectivePair(double weight, IObjectiveFunctionIntraRoute objectiveFunction) {
             this.weight = weight;
             this.objectiveFunction = objectiveFunction;
         }
 
-        public double getWeight() {
+        private double getWeight() {
             return weight;
         }
 
-        public double calcObjectiveValue(ObjectiveInfo objectiveInfo) {
+        private double calcObjectiveValue(ObjectiveInfo objectiveInfo) {
             return objectiveFunction.calculateIncrementalObjectiveValueFor(objectiveInfo);
         }
-
     }
 }

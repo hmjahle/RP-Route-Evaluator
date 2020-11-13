@@ -10,7 +10,7 @@ public abstract class ObjectiveAbstract {
 
     protected double objectiveValue;
 
-    public ObjectiveAbstract(double objectiveValue) {
+    protected ObjectiveAbstract(double objectiveValue) {
         this.objectiveValue = objectiveValue;
     }
 
@@ -26,9 +26,9 @@ public abstract class ObjectiveAbstract {
         return objectiveValue;
     }
 
-    public abstract void updateObjective(String objectiveFunctionId, double weight, double objectiveValue);
+    protected abstract void updateObjective(String objectiveFunctionId, double weight, double objectiveValue);
 
-    public abstract ObjectiveAbstract initializeNewObjective();
+    protected abstract ObjectiveAbstract initializeNewObjective();
 
     public abstract int dominates(ObjectiveAbstract other);
 
