@@ -51,9 +51,8 @@ public class RouteEvaluator {
         updateFirstTaskList(tasks, syncedTasksStartTime);
         ExtendInfoOneElement nodeExtendInfoOneElement = new ExtendInfoOneElement();
         nodeExtendInfoOneElement.update(firstNodeList);
-        Label bestLabel =
-                        algorithm.runAlgorithm(new WeightedObjective(), nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
-    return  bestLabel == null ? null : bestLabel.getObjective().getObjectiveValue();
+        Label bestLabel = algorithm.runAlgorithm(new WeightedObjective(), nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
+        return bestLabel == null ? null : bestLabel.getObjective().getObjectiveValue();
 
     }
 

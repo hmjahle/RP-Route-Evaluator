@@ -24,7 +24,7 @@ import java.util.*;
 /**
  * Tests if the synced task objective is implemented correctly.
  */
-public class ObjectiveAbstractTest extends JUnitTestAbstract {
+public class IObjectiveTest extends JUnitTestAbstract {
 
     List<ILocation> locations;
     List<ITask> allTasks;
