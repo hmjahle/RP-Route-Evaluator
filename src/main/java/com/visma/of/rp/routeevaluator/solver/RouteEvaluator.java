@@ -13,14 +13,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The route simulator calculates the fitness of a route.
+ * The route evaluator calculates the fitness of a route.
  * When it is used it will only evaluate fitness' and hard constraints,
  * that relates to things that happens within a route. Hence fitness' like Visit history, work balance,
  * heavy tasks, etc. is not evaluated.
  * W.r.t. hard constraints the same assumption applies. Hence constraints like overtime.
- * Max travel distance on bike / walk, avoid overtime is handled within the route simulator.
+ * Max travel distance on bike / walk, avoid overtime is handled within the route evaluator.
  * Where constraints like two incompatible tasks on same route and heavy tasks will be ignored.
- * It is therefore assumed that input to the simulator is feasible w.r.t. to these types of constraints.
+ * It is therefore assumed that input to the evaluator is feasible w.r.t. to these types of constraints.
  */
 public class RouteEvaluator {
 
@@ -61,52 +61,52 @@ public class RouteEvaluator {
     }
 
     /**
-     * Simulates the route given by the tasks input, the order of the tasks is the order of the route.
+     * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
      *
-     * @param tasks                The route to be simulated, the order of the list is the order of the route.
+     * @param tasks                The route to be evaluated, the order of the list is the order of the route.
      * @param syncedTasksStartTime Map of ALL synced tasks and their start times.
      * @param employeeWorkShift    Employee the route applies to.
-     * @return A routeSimulator result for the simulated route.
+     * @return A routeEvaluator result for the evaluated route.
      */
     public RouteEvaluatorResult evaluateRouteByTheOrderOfTasks(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
         return calcRouteEvaluatorResult(new WeightedObjective(), tasks, syncedTasksStartTime, employeeWorkShift);
     }
 
     /**
-     * Simulates the route given by the tasks input, the order of the tasks is the order of the route.
+     * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
      * For routes with no synced tasks.
      *
-     * @param tasks             The route to be simulated, the order of the list is the order of the route.
+     * @param tasks             The route to be evaluated, the order of the list is the order of the route.
      * @param employeeWorkShift Employee the route applies to.
-     * @return A routeSimulator result for the simulated route.
+     * @return A routeEvaluator result for the evaluated route.
      */
     public RouteEvaluatorResult evaluateRouteByTheOrderOfTasks(List<ITask> tasks, IShift employeeWorkShift) {
         return calcRouteEvaluatorResult(new WeightedObjective(), tasks, null, employeeWorkShift);
     }
 
     /**
-     * Simulates the route given by the tasks input, the order of the tasks is the order of the route.
+     * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
      * Returns an objective that also contains the individual objective values for the different objective
      * functions in the route evaluator.
      * For routes with no synced tasks.
      *
-     * @param tasks             The route to be simulated, the order of the list is the order of the route.
+     * @param tasks             The route to be evaluated, the order of the list is the order of the route.
      * @param employeeWorkShift Employee the route applies to.
-     * @return A routeSimulator result for the simulated route.
+     * @return A routeEvaluator result for the evaluated route.
      */
     public RouteEvaluatorResult evaluateRouteByTheOrderOfTasksReturnStoreObjectiveValues(List<ITask> tasks, IShift employeeWorkShift) {
         return calcRouteEvaluatorResult(new WeightedObjectiveStoreValues(), tasks, null, employeeWorkShift);
     }
 
     /**
-     * Simulates the route given by the tasks input, the order of the tasks is the order of the route.
+     * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
      * Returns an objective that also contains the individual objective values for the different objective
      * functions in the route evaluator.
      *
-     * @param tasks                The route to be simulated, the order of the list is the order of the route.
+     * @param tasks                The route to be evaluated, the order of the list is the order of the route.
      * @param syncedTasksStartTime Map of ALL synced tasks and their start times.
      * @param employeeWorkShift    Employee the route applies to.
-     * @return A routeSimulator result for the simulated route.
+     * @return A routeEvaluator result for the evaluated route.
      */
     public RouteEvaluatorResult evaluateRouteByTheOrderOfTasksReturnStoreObjectiveValues(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
         return calcRouteEvaluatorResult(new WeightedObjectiveStoreValues(), tasks, syncedTasksStartTime, employeeWorkShift);

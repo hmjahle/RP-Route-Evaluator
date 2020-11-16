@@ -16,7 +16,7 @@ import testSupport.JUnitTestAbstract;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SimulateByOrderOfTaskTest extends JUnitTestAbstract {
+public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
 
     ILocation office;
     List<ITask> allTasks;
