@@ -2,7 +2,7 @@ package com.visma.of.rp.routeevaluator.objectiveFunctions;
 
 
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.OvertimeObjectiveFunction;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjectiveStoreValues;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjectiveWithValues;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
@@ -48,7 +48,7 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
         RouteEvaluatorResult result = evaluateRoute(tasks);
 
         Assert.assertEquals("No overtime. ", 0, result.getObjectiveValue(), 1E-6);
-        WeightedObjectiveStoreValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(tasks);
+        WeightedObjectiveWithValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(tasks);
         Assert.assertEquals("Should have overtime. ", 0, objectiveStoreValues.getObjectiveFunctionValue("OverTime"), 1E-6);
 
     }
@@ -62,7 +62,7 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
         RouteEvaluatorResult result = evaluateRoute(tasks);
         Assert.assertEquals("Should have overtime. ", 5, result.getObjectiveValue(), 1E-6);
 
-        WeightedObjectiveStoreValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(tasks);
+        WeightedObjectiveWithValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(tasks);
         Assert.assertEquals("Should have overtime. ", 5, objectiveStoreValues.getObjectiveFunctionValue("OverTime"), 1E-6);
 
     }
@@ -72,7 +72,7 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
         RouteEvaluatorResult result = evaluateRoute(allTasks);
         Assert.assertEquals("No overtime. ", 0, result.getObjectiveValue(), 1E-6);
 
-        WeightedObjectiveStoreValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(allTasks);
+        WeightedObjectiveWithValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(allTasks);
         Assert.assertEquals("Should have overtime. ", 0, objectiveStoreValues.getObjectiveFunctionValue("OverTime"), 1E-6);
 
     }
@@ -91,7 +91,7 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
         RouteEvaluatorResult result = evaluateRoute(tasks);
 
         Assert.assertEquals("Should have overtime. ", 1, result.getObjectiveValue(), 1E-6);
-        WeightedObjectiveStoreValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(tasks);
+        WeightedObjectiveWithValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(tasks);
         Assert.assertEquals("Should have overtime. ", 1, objectiveStoreValues.getObjectiveFunctionValue("OverTime"), 1E-6);
 
     }
@@ -110,7 +110,7 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
         RouteEvaluatorResult result = evaluateRoute(tasks);
 
         Assert.assertEquals("No overtime. ", 0, result.getObjectiveValue(), 1E-6);
-        WeightedObjectiveStoreValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(tasks);
+        WeightedObjectiveWithValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(tasks);
         Assert.assertEquals("Should have overtime. ", 0, objectiveStoreValues.getObjectiveFunctionValue("OverTime"), 1E-6);
 
     }
@@ -158,10 +158,10 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }
 
-    private WeightedObjectiveStoreValues evaluateRouteReturnIndividualObjectiveValues(List<ITask> tasks) {
+    private WeightedObjectiveWithValues evaluateRouteReturnIndividualObjectiveValues(List<ITask> tasks) {
         RouteEvaluator routeEvaluator = getRouteEvaluator(tasks);
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksReturnStoreObjectiveValues(tasks, shift);
-        return (WeightedObjectiveStoreValues) result.getObjective();
+        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByOrderOfTasksWithObjectiveValues(tasks, shift);
+        return (WeightedObjectiveWithValues) result.getObjective();
     }
 
     private RouteEvaluator getRouteEvaluator(List<ITask> tasks) {

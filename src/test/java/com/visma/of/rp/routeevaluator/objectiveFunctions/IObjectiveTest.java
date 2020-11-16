@@ -4,7 +4,7 @@ package com.visma.of.rp.routeevaluator.objectiveFunctions;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.SyncedTaskStartTimeObjectiveFunction;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TimeWindowObjectiveFunction;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TravelTimeObjectiveFunction;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjectiveStoreValues;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjectiveWithValues;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
@@ -64,7 +64,7 @@ public class IObjectiveTest extends JUnitTestAbstract {
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
         Assert.assertEquals("Weighted objective value: ", 3003025, result.getObjectiveValue(), 1E-6);
 
-        WeightedObjectiveStoreValues obj = evaluateRouteStoreObjectiveValues(routeEvaluator, tasks, syncedTaskStartTimes, shift);
+        WeightedObjectiveWithValues obj = evaluateRouteStoreObjectiveValues(routeEvaluator, tasks, syncedTaskStartTimes, shift);
         Assert.assertEquals("Synced objective value: ", 30, obj.getObjectiveFunctionValue("Sync"), 1E-6);
         Assert.assertEquals("Time window objective value: ", 30, obj.getObjectiveFunctionValue("TW"), 1E-6);
         Assert.assertEquals("Travel time objective value: ", 25, obj.getObjectiveFunctionValue("TT"), 1E-6);
@@ -85,7 +85,7 @@ public class IObjectiveTest extends JUnitTestAbstract {
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
         Assert.assertEquals("Weighted objective value: ", 2500, result.getObjectiveValue(), 1E-6);
 
-        WeightedObjectiveStoreValues obj = evaluateRouteStoreObjectiveValues(routeEvaluator, tasks, shift);
+        WeightedObjectiveWithValues obj = evaluateRouteStoreObjectiveValues(routeEvaluator, tasks, shift);
         Assert.assertEquals("Time window objective value: ", 25, obj.getObjectiveFunctionValue("TW"), 1E-6);
 
     }
@@ -110,7 +110,7 @@ public class IObjectiveTest extends JUnitTestAbstract {
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
         Assert.assertEquals("Weighted objective value: ", 105101, result.getObjectiveValue(), 1E-6);
 
-        WeightedObjectiveStoreValues obj = evaluateRouteStoreObjectiveValues(routeEvaluator, tasks, syncedTaskStartTimes, shift);
+        WeightedObjectiveWithValues obj = evaluateRouteStoreObjectiveValues(routeEvaluator, tasks, syncedTaskStartTimes, shift);
         Assert.assertEquals("Synced objective value: ", 1, obj.getObjectiveFunctionValue("Sync"), 1E-6);
         Assert.assertEquals("Time window objective value: ", 51, obj.getObjectiveFunctionValue("TW"), 1E-6);
         Assert.assertEquals("Travel time objective value: ", 1, obj.getObjectiveFunctionValue("TT"), 1E-6);
@@ -136,7 +136,7 @@ public class IObjectiveTest extends JUnitTestAbstract {
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
         Assert.assertEquals("Weighted objective value: ", 1106607, result.getObjectiveValue(), 1E-6);
 
-        WeightedObjectiveStoreValues obj = evaluateRouteStoreObjectiveValues(routeEvaluator, allTasks, syncedTaskStartTimes, shift);
+        WeightedObjectiveWithValues obj = evaluateRouteStoreObjectiveValues(routeEvaluator, allTasks, syncedTaskStartTimes, shift);
         Assert.assertEquals("Synced objective value: ", 11, obj.getObjectiveFunctionValue("Sync"), 1E-6);
         Assert.assertEquals("Time window objective value: ", 66, obj.getObjectiveFunctionValue("TW"), 1E-6);
         Assert.assertEquals("Travel time objective value: ", 7, obj.getObjectiveFunctionValue("TT"), 1E-6);
@@ -163,15 +163,15 @@ public class IObjectiveTest extends JUnitTestAbstract {
         return routeEvaluator;
     }
 
-    private WeightedObjectiveStoreValues evaluateRouteStoreObjectiveValues(RouteEvaluator routeEvaluator, List<ITask> tasks,
-                                                                           Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksReturnStoreObjectiveValues(tasks,
+    private WeightedObjectiveWithValues evaluateRouteStoreObjectiveValues(RouteEvaluator routeEvaluator, List<ITask> tasks,
+                                                                          Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
+        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByOrderOfTasksWithObjectiveValues(tasks,
                 syncedTasksStartTime, employeeWorkShift);
-        return (WeightedObjectiveStoreValues) result.getObjective();
+        return (WeightedObjectiveWithValues) result.getObjective();
     }
 
-    private WeightedObjectiveStoreValues evaluateRouteStoreObjectiveValues(RouteEvaluator routeEvaluator, List<ITask> tasks,
-                                                                           IShift employeeWorkShift) {
+    private WeightedObjectiveWithValues evaluateRouteStoreObjectiveValues(RouteEvaluator routeEvaluator, List<ITask> tasks,
+                                                                          IShift employeeWorkShift) {
         return evaluateRouteStoreObjectiveValues(routeEvaluator, tasks, null, employeeWorkShift);
     }
 
