@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator;
+package com.visma.of.rp.routeevaluator.evaluateRoutes;
 
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;

@@ -16,7 +16,7 @@ public class ExtendInfoTwoElements implements IExtendInfo {
         extendToInfo = new ArrayList<>();
     }
 
-    ExtendInfoTwoElements(NodeList nodeListOne, NodeList nodeListTwo) {
+    public ExtendInfoTwoElements(NodeList nodeListOne, NodeList nodeListTwo) {
         extendToInfo = new ArrayList<>();
         update(nodeListOne, nodeListTwo);
     }
