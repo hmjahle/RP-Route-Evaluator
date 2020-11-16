@@ -60,6 +60,8 @@ public class SyncedTaskObjectiveTest extends JUnitTestAbstract {
         RouteEvaluatorResult result = evaluateRoute(tasks, syncedTaskStartTimes);
 
         Assert.assertEquals("Objective value must be: ", 0, result.getObjectiveValue(), 1E-6);
+        double objective = evaluateRouteObjective(tasks, syncedTaskStartTimes);
+        Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
     /**
@@ -77,6 +79,8 @@ public class SyncedTaskObjectiveTest extends JUnitTestAbstract {
         syncedTaskStartTimes.put(newTask, 35L);
         RouteEvaluatorResult result = evaluateRoute(tasks, syncedTaskStartTimes);
         Assert.assertEquals("Objective value must be: ", 30, result.getObjectiveValue(), 1E-6);
+        double objective = evaluateRouteObjective(tasks, syncedTaskStartTimes);
+        Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
     @Test
@@ -87,7 +91,8 @@ public class SyncedTaskObjectiveTest extends JUnitTestAbstract {
         RouteEvaluatorResult result = evaluateRoute(tasks, null);
 
         Assert.assertEquals("Objective value must be: ", 0, result.getObjectiveValue(), 1E-6);
-    }
+        double objective = evaluateRouteObjective(tasks, null);
+        Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);   }
 
     @Test
     public void twoSyncedTaskExtraTravelTime() {
@@ -101,7 +106,8 @@ public class SyncedTaskObjectiveTest extends JUnitTestAbstract {
         RouteEvaluatorResult result = evaluateRoute(tasks, syncedTaskStartTimes);
 
         Assert.assertEquals("Objective value must be: ", 1, result.getObjectiveValue(), 1E-6);
-    }
+        double objective = evaluateRouteObjective(tasks, syncedTaskStartTimes);
+        Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);   }
 
     @Test
     public void twoSyncedTaskThreshold() {
@@ -117,7 +123,8 @@ public class SyncedTaskObjectiveTest extends JUnitTestAbstract {
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
 
         Assert.assertEquals("Objective value must be: ", 0, result.getObjectiveValue(), 1E-6);
-
+        double objective = routeEvaluator.evaluateRouteObjective(tasks, syncedTaskStartTimes, shift);
+        Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
     @Test
@@ -129,7 +136,9 @@ public class SyncedTaskObjectiveTest extends JUnitTestAbstract {
         RouteEvaluatorResult result = evaluateRoute(allTasks, syncedTaskStartTimes);
 
         Assert.assertEquals("Objective value must be: ", 0, result.getObjectiveValue(), 1E-6);
-    }
+        double objective = evaluateRouteObjective(allTasks, syncedTaskStartTimes);
+        Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);   }
+
 
     @Test
     public void sixMixedTasksRobustness() {
@@ -144,7 +153,8 @@ public class SyncedTaskObjectiveTest extends JUnitTestAbstract {
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
 
         Assert.assertEquals("Objective value must be: ", 11, result.getObjectiveValue(), 1E-6);
-
+        double objective = routeEvaluator.evaluateRouteObjective(allTasks, syncedTaskStartTimes, shift);
+        Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
     private List<ITask> createTasks(List<ILocation> locations) {
@@ -192,6 +202,12 @@ public class SyncedTaskObjectiveTest extends JUnitTestAbstract {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
         routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
+    }
+
+    private Double evaluateRouteObjective(List<ITask> tasks, Map<ITask, Long> syncedTaskStartTimes) {
+        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
+        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
+        return routeEvaluator.evaluateRouteObjective(tasks, syncedTaskStartTimes, shift);
     }
 
 }

@@ -1,100 +1,56 @@
 package com.visma.of.rp.routeevaluator.routeResult;
 
-
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjective;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.IObjective;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
-
 
 public class RouteEvaluatorResult {
 
-    private IShift employeeWorkShift;
-    private List<Visit> visitSolution;
-    private Long totalTravelTime;
-    private Long totalTimeToPatients;
-    private Long totalTimeInOffice;
-    private Long timeOfOfficeReturn;
-    private double objectiveValue;
+    private Route route;
+    private IObjective objective;
+
+    public RouteEvaluatorResult(IShift employeeWorkShift, IObjective objective) {
+        route = new Route(employeeWorkShift);
+        this.objective = objective;
+    }
 
     public RouteEvaluatorResult(IShift employeeWorkShift) {
-        this.employeeWorkShift = employeeWorkShift;
-        this.visitSolution = new ArrayList<>();
-        resetDataStructureForEmployee();
-    }
-
-    RouteEvaluatorResult(RouteEvaluatorResult copy) {
-        this.employeeWorkShift = copy.employeeWorkShift;
-        this.visitSolution = new ArrayList<>(copy.visitSolution);
-        this.totalTravelTime = copy.totalTravelTime;
-        this.totalTimeToPatients = copy.totalTimeToPatients;
-        this.totalTimeInOffice = copy.totalTimeInOffice;
-        this.timeOfOfficeReturn = copy.timeOfOfficeReturn;
-        this.objectiveValue = copy.objectiveValue;
-    }
-
-    private void resetDataStructureForEmployee() {
-        totalTravelTime = 0L;
-        totalTimeToPatients = 0L;
-        totalTimeInOffice = 0L;
-        objectiveValue = 0;
-        timeOfOfficeReturn = 0L;
-    }
-
-    public void updateTotalTravelTime(long totalTravelTime) {
-        this.totalTravelTime = totalTravelTime;
-    }
-
-    public void addVisits(Visit[] visits, int visitsCnt) {
-        for (int i = 0; i < visitsCnt; i++) {
-            addVisitToVisitSolution(visits[i]);
-        }
+        route = new Route(employeeWorkShift);
+        objective = new WeightedObjective();
     }
 
     public void setObjectiveValue(double objectiveValue) {
-        this.objectiveValue = objectiveValue;
+        objective = new WeightedObjective(objectiveValue);
+    }
+
+    public void addVisits(Visit[] visits, int visitsCnt) {
+        route.addVisits(visits, visitsCnt);
     }
 
     public void updateTimeOfOfficeReturn(Long timeOfOfficeReturn) {
-        this.timeOfOfficeReturn = timeOfOfficeReturn;
-    }
-
-    private void addVisitToVisitSolution(Visit visit) {
-        visitSolution.add(visit);
+        route.setTimeOfOfficeReturn(timeOfOfficeReturn);
     }
 
     public IShift getEmployeeWorkShift() {
-        return employeeWorkShift;
+        return route.getEmployeeWorkShift();
     }
 
     public List<Visit> getVisitSolution() {
-        return visitSolution;
+        return route.getVisitSolution();
     }
 
-    public Long getTotalTravelTime() {
-        return totalTravelTime;
-    }
-
-    public Long getTotalTimeToPatients() {
-        return totalTimeToPatients;
-    }
-
-    public Long getTotalTimeInOffice() {
-        return totalTimeInOffice;
-    }
 
     public double getObjectiveValue() {
-        return objectiveValue;
+        return objective.getObjectiveValue();
     }
 
     public Long getTimeOfOfficeReturn() {
-        return timeOfOfficeReturn;
-    }
-
-    public Long calculateAndGetTotalFreeTime() {
-        long workShiftDuration = employeeWorkShift.getDuration();
-        return Math.max(0, workShiftDuration - totalTimeToPatients - totalTimeInOffice - totalTravelTime);
+        return route.getTimeOfOfficeReturn();
     }
 
     public List<ITask> extractEmployeeRoute() {
@@ -107,5 +63,10 @@ public class RouteEvaluatorResult {
 
     public Collection<Visit> extractStrictVisits() {
         return this.getVisitSolution().stream().filter(i -> i.getTask().isStrict()).collect(Collectors.toList());
+    }
+
+
+    public IObjective getObjective() {
+        return objective;
     }
 }
