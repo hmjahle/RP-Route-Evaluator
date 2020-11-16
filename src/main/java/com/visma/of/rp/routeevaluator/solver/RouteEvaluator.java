@@ -3,7 +3,7 @@ package com.visma.of.rp.routeevaluator.solver;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints.ConstraintsIntraRouteHandler;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.ObjectiveFunctionsIntraRouteHandler;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjective;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjectiveStoreValues;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjectiveWithValues;
 import com.visma.of.rp.routeevaluator.publicInterfaces.*;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.*;
@@ -94,8 +94,8 @@ public class RouteEvaluator {
      * @param employeeWorkShift Employee the route applies to.
      * @return A routeEvaluator result for the evaluated route.
      */
-    public RouteEvaluatorResult evaluateRouteByTheOrderOfTasksReturnStoreObjectiveValues(List<ITask> tasks, IShift employeeWorkShift) {
-        return calcRouteEvaluatorResult(new WeightedObjectiveStoreValues(), tasks, null, employeeWorkShift);
+    public RouteEvaluatorResult evaluateRouteByTheOrderOfTasksReturnStoredObjectiveValues(List<ITask> tasks, IShift employeeWorkShift) {
+        return calcRouteEvaluatorResult(new WeightedObjectiveWithValues(), tasks, null, employeeWorkShift);
     }
 
     /**
@@ -108,8 +108,8 @@ public class RouteEvaluator {
      * @param employeeWorkShift    Employee the route applies to.
      * @return A routeEvaluator result for the evaluated route.
      */
-    public RouteEvaluatorResult evaluateRouteByTheOrderOfTasksReturnStoreObjectiveValues(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
-        return calcRouteEvaluatorResult(new WeightedObjectiveStoreValues(), tasks, syncedTasksStartTime, employeeWorkShift);
+    public RouteEvaluatorResult evaluateRouteByTheOrderOfTasksReturnStoredObjectiveValues(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
+        return calcRouteEvaluatorResult(new WeightedObjectiveWithValues(), tasks, syncedTasksStartTime, employeeWorkShift);
     }
 
     private RouteEvaluatorResult calcRouteEvaluatorResult(IObjective objective, List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {

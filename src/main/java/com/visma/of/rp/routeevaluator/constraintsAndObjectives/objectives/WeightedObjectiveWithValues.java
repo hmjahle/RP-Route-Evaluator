@@ -8,22 +8,22 @@ import java.util.Map;
 /**
  * Extends the weighted objective and stores the objective values in addition.
  */
-public class WeightedObjectiveStoreValues extends WeightedObjective {
+public class WeightedObjectiveWithValues extends WeightedObjective {
 
 
     Map<String, Double> objectiveFunctionValues;
 
-    public WeightedObjectiveStoreValues(double objectiveValue) {
+    public WeightedObjectiveWithValues(double objectiveValue) {
         super(objectiveValue);
         objectiveFunctionValues = new HashMap<>();
 
     }
 
-    public WeightedObjectiveStoreValues() {
+    public WeightedObjectiveWithValues() {
         this(0);
     }
 
-    public WeightedObjectiveStoreValues(WeightedObjectiveStoreValues other) {
+    public WeightedObjectiveWithValues(WeightedObjectiveWithValues other) {
         super(other.objectiveValue);
         this.objectiveFunctionValues = new HashMap<>(other.objectiveFunctionValues);
     }
@@ -46,7 +46,7 @@ public class WeightedObjectiveStoreValues extends WeightedObjective {
 
     @Override
     public IObjective initializeNewObjective() {
-        return new WeightedObjectiveStoreValues(this);
+        return new WeightedObjectiveWithValues(this);
     }
 
     /**
