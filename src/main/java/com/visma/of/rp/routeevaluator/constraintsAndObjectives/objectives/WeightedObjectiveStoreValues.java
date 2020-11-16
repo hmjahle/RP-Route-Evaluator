@@ -31,7 +31,7 @@ public class WeightedObjectiveStoreValues extends WeightedObjective {
 
     /**
      * Adds the product of the weight and value of the objective to the objective value.
-     * And stores the
+     * And stores the individual values such that they can be retrieved later.
      *
      * @param objectiveFunctionId Id of the objective function.
      * @param weight              Weight of the objective.
