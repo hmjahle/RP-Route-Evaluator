@@ -1,30 +1,47 @@
 package com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives;
 
-public class WeightedObjective extends ObjectiveAbstract {
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.IObjective;
+
+/**
+ * A weighted objective calculates the objectives value by adding the sum of weights multiplied by the values of the objectives.
+ */
+public class WeightedObjective implements IObjective {
+
+    double objectiveValue;
 
     public WeightedObjective(double objectiveValue) {
-        super(objectiveValue);
+        this.objectiveValue = objectiveValue;
     }
 
     public WeightedObjective() {
-        super();
+        this(0);
     }
 
-    protected void updateObjective(String objectiveFunctionId, double weight, double objectiveValue) {
-        this.objectiveValue += objectiveValue * weight;
+    /**
+     * Adds the product of the weight and value of the objective to the objective value.
+     * @param objectiveFunctionId Id of the objective function.
+     * @param weight              Weight of the objective.
+     * @param value               Value of the objective.
+     */
+    @Override
+    public void incrementObjective(String objectiveFunctionId, double weight, double value) {
+        this.objectiveValue += value * weight;
     }
 
-    protected ObjectiveAbstract initializeNewObjective() {
+    @Override
+    public IObjective initializeNewObjective() {
         return new WeightedObjective(objectiveValue);
     }
 
-    public int dominates(ObjectiveAbstract other) {
-        if (this.objectiveValue < other.objectiveValue) {
-            return -1;
-        } else if (this.objectiveValue > other.objectiveValue)
-            return 1;
-        else
-            return 0;
+    @Override
+    public double getObjectiveValue() {
+        return objectiveValue;
     }
+
+    @Override
+    public int dominates(IObjective other) {
+        return Double.compare(this.objectiveValue, other.getObjectiveValue());
+    }
+
 
 }

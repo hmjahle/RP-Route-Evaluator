@@ -2,6 +2,7 @@ package com.visma.of.rp.routeevaluator.objectiveFunctions;
 
 
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.OvertimeObjectiveFunction;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjectiveStoreValues;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
@@ -47,6 +48,9 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
         RouteEvaluatorResult result = evaluateRoute(tasks);
 
         Assert.assertEquals("No overtime. ", 0, result.getObjectiveValue(), 1E-6);
+        WeightedObjectiveStoreValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(tasks);
+        Assert.assertEquals("Should have overtime. ", 0, objectiveStoreValues.getObjectiveFunctionValue("OverTime"), 1E-6);
+
     }
 
     @Test
@@ -54,15 +58,23 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(createStandardTask(10, 90, 100));
         travelTimeMatrix.addUndirectedConnection(office, tasks.get(0).getLocation(), 5);
-        RouteEvaluatorResult result = evaluateRoute(tasks);
 
+        RouteEvaluatorResult result = evaluateRoute(tasks);
         Assert.assertEquals("Should have overtime. ", 5, result.getObjectiveValue(), 1E-6);
+
+        WeightedObjectiveStoreValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(tasks);
+        Assert.assertEquals("Should have overtime. ", 5, objectiveStoreValues.getObjectiveFunctionValue("OverTime"), 1E-6);
+
     }
 
     @Test
     public void fiveTasksFeasible() {
         RouteEvaluatorResult result = evaluateRoute(allTasks);
         Assert.assertEquals("No overtime. ", 0, result.getObjectiveValue(), 1E-6);
+
+        WeightedObjectiveStoreValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(allTasks);
+        Assert.assertEquals("Should have overtime. ", 0, objectiveStoreValues.getObjectiveFunctionValue("OverTime"), 1E-6);
+
     }
 
     /**
@@ -79,6 +91,8 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
         RouteEvaluatorResult result = evaluateRoute(tasks);
 
         Assert.assertEquals("Should have overtime. ", 1, result.getObjectiveValue(), 1E-6);
+        WeightedObjectiveStoreValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(tasks);
+        Assert.assertEquals("Should have overtime. ", 1, objectiveStoreValues.getObjectiveFunctionValue("OverTime"), 1E-6);
 
     }
 
@@ -96,6 +110,8 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
         RouteEvaluatorResult result = evaluateRoute(tasks);
 
         Assert.assertEquals("No overtime. ", 0, result.getObjectiveValue(), 1E-6);
+        WeightedObjectiveStoreValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(tasks);
+        Assert.assertEquals("Should have overtime. ", 0, objectiveStoreValues.getObjectiveFunctionValue("OverTime"), 1E-6);
 
     }
 
@@ -138,8 +154,19 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
     }
 
     private RouteEvaluatorResult evaluateRoute(List<ITask> tasks) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        routeEvaluator.addObjectiveIntraShift(new OvertimeObjectiveFunction());
+        RouteEvaluator routeEvaluator = getRouteEvaluator(tasks);
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+    }
+
+    private WeightedObjectiveStoreValues evaluateRouteReturnIndividualObjectiveValues(List<ITask> tasks) {
+        RouteEvaluator routeEvaluator = getRouteEvaluator(tasks);
+        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksReturnStoreObjectiveValues(tasks, shift);
+        return (WeightedObjectiveStoreValues) result.getObjective();
+    }
+
+    private RouteEvaluator getRouteEvaluator(List<ITask> tasks) {
+        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
+        routeEvaluator.addObjectiveIntraShift("OverTime",1,new OvertimeObjectiveFunction());
+        return routeEvaluator;
     }
 }

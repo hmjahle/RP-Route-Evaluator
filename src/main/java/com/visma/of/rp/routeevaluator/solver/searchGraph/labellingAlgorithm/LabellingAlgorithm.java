@@ -2,7 +2,6 @@ package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints.ConstraintsIntraRouteHandler;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ConstraintInfo;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.ObjectiveAbstract;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.ObjectiveFunctionsIntraRouteHandler;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
@@ -30,7 +29,7 @@ public class LabellingAlgorithm {
     private long endOfShift;
     private long robustnessTimeSeconds;
 
-    public LabellingAlgorithm(SearchGraph graph,ObjectiveFunctionsIntraRouteHandler objectiveFunctions,ConstraintsIntraRouteHandler constraints) {
+    public LabellingAlgorithm(SearchGraph graph, ObjectiveFunctionsIntraRouteHandler objectiveFunctions, ConstraintsIntraRouteHandler constraints) {
         this.graph = graph;
         this.objectiveFunctions = objectiveFunctions;
         this.constraints = constraints;
@@ -50,7 +49,7 @@ public class LabellingAlgorithm {
      * @param employeeWorkShift    Employee to simulate route for.
      * @return Total fitness value, null if infeasible.
      */
-    public Double runAlgorithm(ObjectiveAbstract objective,IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime, IShift employeeWorkShift) {
+    public Label runAlgorithm(IObjective objective, IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime, IShift employeeWorkShift) {
         this.labelLists.clear();
         IResource startResource = nodeExtendInfo.createEmptyResource();
         Label startLabel = createStartLabel(objective, employeeWorkShift.getStartTime(), startResource);
@@ -58,8 +57,7 @@ public class LabellingAlgorithm {
         this.syncedNodesStartTime = syncedNodesStartTime;
         this.endOfShift = employeeWorkShift.getEndTime();
         solveLabellingAlgorithm(startLabel);
-        Label bestLabel = this.labelsOnDestinationNode.peek();
-        return bestLabel == null ? null : bestLabel.getObjective().getObjectiveValue();
+        return this.labelsOnDestinationNode.peek();
     }
 
     /**
@@ -70,27 +68,24 @@ public class LabellingAlgorithm {
      * @param employeeWorkShift    Employee to simulate route for.
      * @return RouteEvaluatorResult or null if route is infeasible.
      */
-    public RouteEvaluatorResult solveRouteEvaluatorResult(ObjectiveAbstract initialObjective,IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime, IShift employeeWorkShift) {
-        Double totalFitness = runAlgorithm(initialObjective,nodeExtendInfo, syncedNodesStartTime, employeeWorkShift);
-        if (totalFitness == null)
+    public RouteEvaluatorResult solveRouteEvaluatorResult(IObjective initialObjective, IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime, IShift employeeWorkShift) {
+        Label bestLabel = runAlgorithm(initialObjective, nodeExtendInfo, syncedNodesStartTime, employeeWorkShift);
+        if (bestLabel == null)
             return null;
-        return buildRouteEvaluatorResult(totalFitness, employeeWorkShift);
+        return buildRouteEvaluatorResult(bestLabel, employeeWorkShift);
     }
 
     /**
      * Extract the solution from the labels and builds the route evaluator results and the visits with the respective information.
      *
-     * @param objectiveValue    Weighted objective value of the intra route objectives.
+     * @param bestLabel         Label representing the best route for the employee work shift.
      * @param employeeWorkShift Work shift for the employee for which the route is calculated.
      * @return Results of the route.
      */
-    private RouteEvaluatorResult buildRouteEvaluatorResult(double objectiveValue, IShift employeeWorkShift) {
-        Label bestLabel = labelsOnDestinationNode.peek();
-        RouteEvaluatorResult evaluatorResult = new RouteEvaluatorResult(employeeWorkShift);
-        int visitCnt = extractVisitsAndSyncedStartTime(bestLabel, evaluatorResult);
-        evaluatorResult.setObjectiveValue(objectiveValue);
-        evaluatorResult.addVisits(visits, visitCnt);
-        evaluatorResult.updateTimeOfOfficeReturn(labels[0].getCurrentTime());
+    private RouteEvaluatorResult buildRouteEvaluatorResult(Label bestLabel, IShift employeeWorkShift) {
+        RouteEvaluatorResult evaluatorResult = new RouteEvaluatorResult(employeeWorkShift, bestLabel.getObjective());
+        evaluatorResult.updateTimeOfOfficeReturn(bestLabel.getCurrentTime());
+        extractVisitsAndSyncedStartTime(bestLabel, evaluatorResult);
         return evaluatorResult;
     }
 
@@ -152,7 +147,7 @@ public class LabellingAlgorithm {
     private Label buildNewLabel(Label thisLabel, ExtendToInfo extendToInfo, Node nextNode, int newLocation, long travelTime,
                                 long startOfServiceNextTask, long canLeaveLocationAt, long syncedTaskLatestStartTime) {
 
-        ObjectiveAbstract objective = extend(thisLabel.getObjective(),nextNode, travelTime, startOfServiceNextTask,
+        IObjective objective = extend(thisLabel.getObjective(), nextNode, travelTime, startOfServiceNextTask,
                 syncedTaskLatestStartTime, endOfShift);
 
         IResource resources = thisLabel.getResources().extend(extendToInfo);
@@ -160,8 +155,9 @@ public class LabellingAlgorithm {
         return new Label(thisLabel, nextNode, newLocation, objective, resources, startOfServiceNextTask, travelTime,
                 canLeaveLocationAt);
     }
-    public ObjectiveAbstract extend(ObjectiveAbstract currentObjective,Node toNode, long travelTime, long startOfServiceNextTask, long syncedTaskLatestStartTime,
-                                    long endOfShift) {
+
+    public IObjective extend(IObjective currentObjective, Node toNode, long travelTime, long startOfServiceNextTask, long syncedTaskLatestStartTime,
+                             long endOfShift) {
         ITask task = toNode.getTask();
         long visitEnd = task != null ? startOfServiceNextTask + task.getDuration() : 0;
         return objectiveFunctions.calculateObjectiveValue(currentObjective, travelTime, task,
@@ -176,7 +172,7 @@ public class LabellingAlgorithm {
         return currentLabel;
     }
 
-    private Label createStartLabel(ObjectiveAbstract objective, long startTime, IResource emptyResource) {
+    private Label createStartLabel(IObjective objective, long startTime, IResource emptyResource) {
         return new Label(null, graph.getOrigin(), graph.getOrigin().getLocationId(),
                 objective, emptyResource, startTime, 0, startTime);
     }
@@ -244,18 +240,14 @@ public class LabellingAlgorithm {
                 labelsOnDestinationNode.peek().getObjective().getObjectiveValue() < currentLabel.getObjective().getObjectiveValue();
     }
 
-    private int extractVisitsAndSyncedStartTime(Label bestLabel, RouteEvaluatorResult result) {
+    private void extractVisitsAndSyncedStartTime(Label bestLabel, RouteEvaluatorResult evaluatorResult) {
         int labelCnt = collectLabels(bestLabel);
-        long totalTravelTime = 0;
         int visitCnt = 0;
         for (int i = labelCnt - 1; i > 0; i--) {
             bestLabel = labels[i];
             visitCnt = addVisit(visitCnt, bestLabel);
-            totalTravelTime += bestLabel.getTravelTime();
         }
-        totalTravelTime += labels[0].getTravelTime();
-//        result.updateTotalTravelTime(totalTravelTime);
-        return visitCnt;
+        evaluatorResult.addVisits(visits, visitCnt);
     }
 
     private int collectLabels(Label currentLabel) {

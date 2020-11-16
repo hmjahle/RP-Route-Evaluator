@@ -1,9 +1,9 @@
 package com.visma.of.rp.routeevaluator.solver;
 
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints.ConstraintsIntraRouteHandler;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.ObjectiveAbstract;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.ObjectiveFunctionsIntraRouteHandler;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjective;
+import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjectiveStoreValues;
 import com.visma.of.rp.routeevaluator.publicInterfaces.*;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.*;
@@ -31,7 +31,6 @@ public class RouteEvaluator {
     private NodeList firstNodeList;
     private NodeList secondNodeList;
     private long[] syncedNodesStartTime;
-    private ObjectiveAbstract initialObjective;
 
     public RouteEvaluator(long robustTimeSeconds, ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks, ILocation officePosition) {
         this(robustTimeSeconds, distanceMatrixMatrix, tasks, officePosition, officePosition);
@@ -45,7 +44,6 @@ public class RouteEvaluator {
         this.firstNodeList = new NodeList(graph.getNodes().size());
         this.secondNodeList = new NodeList(graph.getNodes().size());
         this.syncedNodesStartTime = new long[graph.getNodes().size()];
-        this.initialObjective = new WeightedObjective();
     }
 
 
@@ -53,7 +51,10 @@ public class RouteEvaluator {
         updateFirstTaskList(tasks, syncedTasksStartTime);
         ExtendInfoOneElement nodeExtendInfoOneElement = new ExtendInfoOneElement();
         nodeExtendInfoOneElement.update(firstNodeList);
-        return algorithm.runAlgorithm(initialObjective, nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
+        Label bestLabel =
+                        algorithm.runAlgorithm(new WeightedObjective(), nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
+    return  bestLabel == null ? null : bestLabel.getObjective().getObjectiveValue();
+
     }
 
     public Double evaluateRouteObjective(List<ITask> tasks, IShift employeeWorkShift) {
@@ -69,14 +70,54 @@ public class RouteEvaluator {
      * @return A routeSimulator result for the simulated route.
      */
     public RouteEvaluatorResult evaluateRouteByTheOrderOfTasks(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
+        return calcRouteEvaluatorResult(new WeightedObjective(), tasks, syncedTasksStartTime, employeeWorkShift);
+    }
+
+    /**
+     * Simulates the route given by the tasks input, the order of the tasks is the order of the route.
+     * For routes with no synced tasks.
+     *
+     * @param tasks             The route to be simulated, the order of the list is the order of the route.
+     * @param employeeWorkShift Employee the route applies to.
+     * @return A routeSimulator result for the simulated route.
+     */
+    public RouteEvaluatorResult evaluateRouteByTheOrderOfTasks(List<ITask> tasks, IShift employeeWorkShift) {
+        return calcRouteEvaluatorResult(new WeightedObjective(), tasks, null, employeeWorkShift);
+    }
+
+    /**
+     * Simulates the route given by the tasks input, the order of the tasks is the order of the route.
+     * Returns an objective that also contains the individual objective values for the different objective
+     * functions in the route evaluator.
+     * For routes with no synced tasks.
+     *
+     * @param tasks             The route to be simulated, the order of the list is the order of the route.
+     * @param employeeWorkShift Employee the route applies to.
+     * @return A routeSimulator result for the simulated route.
+     */
+    public RouteEvaluatorResult evaluateRouteByTheOrderOfTasksReturnStoreObjectiveValues(List<ITask> tasks, IShift employeeWorkShift) {
+        return calcRouteEvaluatorResult(new WeightedObjectiveStoreValues(), tasks, null, employeeWorkShift);
+    }
+
+    /**
+     * Simulates the route given by the tasks input, the order of the tasks is the order of the route.
+     * Returns an objective that also contains the individual objective values for the different objective
+     * functions in the route evaluator.
+     *
+     * @param tasks                The route to be simulated, the order of the list is the order of the route.
+     * @param syncedTasksStartTime Map of ALL synced tasks and their start times.
+     * @param employeeWorkShift    Employee the route applies to.
+     * @return A routeSimulator result for the simulated route.
+     */
+    public RouteEvaluatorResult evaluateRouteByTheOrderOfTasksReturnStoreObjectiveValues(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
+        return calcRouteEvaluatorResult(new WeightedObjectiveStoreValues(), tasks, syncedTasksStartTime, employeeWorkShift);
+    }
+
+    private RouteEvaluatorResult calcRouteEvaluatorResult(IObjective objective, List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
         updateFirstTaskList(tasks, syncedTasksStartTime);
         ExtendInfoOneElement nodeExtendInfoOneElement = new ExtendInfoOneElement();
         nodeExtendInfoOneElement.update(firstNodeList);
-        return algorithm.solveRouteEvaluatorResult(initialObjective, nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
-    }
-
-    public RouteEvaluatorResult evaluateRouteByTheOrderOfTasks(List<ITask> tasks, IShift employeeWorkShift) {
-        return evaluateRouteByTheOrderOfTasks(tasks, null, employeeWorkShift);
+        return algorithm.solveRouteEvaluatorResult(objective, nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
     }
 
     /**
@@ -102,8 +143,8 @@ public class RouteEvaluator {
     /**
      * Adds an objective function to the route evaluator.
      *
-     * @param objectiveFunctionId
-     * @param objectiveWeight
+     * @param objectiveFunctionId The id, must be unique.
+     * @param objectiveWeight     Weight of the objective.
      * @param objectiveIntraShift The objective function to be added.
      */
     public void addObjectiveIntraShift(String objectiveFunctionId, double objectiveWeight, IObjectiveFunctionIntraRoute objectiveIntraShift) {

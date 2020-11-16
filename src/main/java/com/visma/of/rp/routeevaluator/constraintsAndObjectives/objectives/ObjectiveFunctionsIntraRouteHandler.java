@@ -3,6 +3,7 @@ package com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives;
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ObjectiveInfo;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveFunctionIntraRoute;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
+import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.IObjective;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,16 +20,16 @@ public class ObjectiveFunctionsIntraRouteHandler {
         objectiveFunctions.put(objectiveFunctionId, new WeightObjectivePair(weight, objectiveIntraShift));
     }
 
-    public ObjectiveAbstract calculateObjectiveValue(ObjectiveAbstract currentObjective, long travelTime, ITask task, long startOfServiceNextTask,
+    public IObjective calculateObjectiveValue(IObjective currentObjective, long travelTime, ITask task, long startOfServiceNextTask,
                                                      long visitEnd, long syncedTaskLatestStartTime, long endOfShift) {
 
-        ObjectiveAbstract newObjective = currentObjective.initializeNewObjective();
+        IObjective newObjective = currentObjective.initializeNewObjective();
         ObjectiveInfo objectiveInfo = new ObjectiveInfo(travelTime, task, visitEnd, startOfServiceNextTask,
                 syncedTaskLatestStartTime, endOfShift);
 
         for (Map.Entry<String, WeightObjectivePair> kvp : objectiveFunctions.entrySet()) {
             WeightObjectivePair objectivePair = kvp.getValue();
-            newObjective.updateObjective(kvp.getKey(), objectivePair.getWeight(), objectivePair.calcObjectiveValue(objectiveInfo));
+            newObjective.incrementObjective(kvp.getKey(), objectivePair.getWeight(), objectivePair.calcObjectiveValue(objectiveInfo));
         }
         return newObjective;
     }
