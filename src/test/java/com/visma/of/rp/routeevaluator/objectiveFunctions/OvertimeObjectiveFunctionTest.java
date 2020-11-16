@@ -160,7 +160,7 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
 
     private WeightedObjectiveWithValues evaluateRouteReturnIndividualObjectiveValues(List<ITask> tasks) {
         RouteEvaluator routeEvaluator = getRouteEvaluator(tasks);
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksReturnStoredObjectiveValues(tasks, shift);
+        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByOrderOfTasksWithObjectiveValues(tasks, shift);
         return (WeightedObjectiveWithValues) result.getObjective();
     }
 

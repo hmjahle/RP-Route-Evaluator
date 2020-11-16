@@ -94,7 +94,7 @@ public class RouteEvaluator {
      * @param employeeWorkShift Employee the route applies to.
      * @return A routeEvaluator result for the evaluated route.
      */
-    public RouteEvaluatorResult evaluateRouteByTheOrderOfTasksReturnStoredObjectiveValues(List<ITask> tasks, IShift employeeWorkShift) {
+    public RouteEvaluatorResult evaluateRouteByOrderOfTasksWithObjectiveValues(List<ITask> tasks, IShift employeeWorkShift) {
         return calcRouteEvaluatorResult(new WeightedObjectiveWithValues(), tasks, null, employeeWorkShift);
     }
 
@@ -108,7 +108,7 @@ public class RouteEvaluator {
      * @param employeeWorkShift    Employee the route applies to.
      * @return A routeEvaluator result for the evaluated route.
      */
-    public RouteEvaluatorResult evaluateRouteByTheOrderOfTasksReturnStoredObjectiveValues(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
+    public RouteEvaluatorResult evaluateRouteByOrderOfTasksWithObjectiveValues(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
         return calcRouteEvaluatorResult(new WeightedObjectiveWithValues(), tasks, syncedTasksStartTime, employeeWorkShift);
     }
 

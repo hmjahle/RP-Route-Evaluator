@@ -165,7 +165,7 @@ public class IObjectiveTest extends JUnitTestAbstract {
 
     private WeightedObjectiveWithValues evaluateRouteStoreObjectiveValues(RouteEvaluator routeEvaluator, List<ITask> tasks,
                                                                           Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksReturnStoredObjectiveValues(tasks,
+        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByOrderOfTasksWithObjectiveValues(tasks,
                 syncedTasksStartTime, employeeWorkShift);
         return (WeightedObjectiveWithValues) result.getObjective();
     }
