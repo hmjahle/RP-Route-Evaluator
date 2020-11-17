@@ -45,7 +45,7 @@ public class LabelLists {
                 return true;
             if (dominates == 1) {
                 labelsDominated.add(i);
-                elements[nodeId][i].close(true);
+                elements[nodeId][i].close();
             }
         }
         return false;

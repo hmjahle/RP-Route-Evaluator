@@ -8,9 +8,12 @@ import com.visma.of.rp.routeevaluator.publicInterfaces.*;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * The route evaluator calculates the fitness of a route.
@@ -32,10 +35,12 @@ public class RouteEvaluator {
     private NodeList secondNodeList;
     private long[] syncedNodesStartTime;
 
+
     public RouteEvaluator(long robustTimeSeconds, ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks,
                           ILocation officePosition) {
         this(robustTimeSeconds, distanceMatrixMatrix, tasks, officePosition, officePosition);
     }
+
 
     public RouteEvaluator(long robustTimeSeconds, ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks,
                           ILocation origin, ILocation destination) {
@@ -65,6 +70,7 @@ public class RouteEvaluator {
 
     }
 
+
     /**
      * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
      * Only returns objective value, no route details is returned.
@@ -78,6 +84,7 @@ public class RouteEvaluator {
         return evaluateRouteObjective(tasks, null, employeeWorkShift);
     }
 
+
     /**
      * Used to initialize the route evaluator when
      */
@@ -86,6 +93,7 @@ public class RouteEvaluator {
         setFirstNodeList(tasks);
         return new ExtendInfoOneElement(firstNodeList);
     }
+
 
     /**
      * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
@@ -99,6 +107,26 @@ public class RouteEvaluator {
                                                                IShift employeeWorkShift) {
         return calcRouteEvaluatorResult(new WeightedObjective(), tasks, syncedTasksStartTime, employeeWorkShift);
     }
+
+    /**
+     * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
+     * The route given is split in two based on the criteria, the two lists of tasks are then merged into
+     * a new route. This is performed such that each task is inserted in the optimal position in the route.
+     *
+     * @param tasks                The route to be evaluated.
+     * @param syncedTasksStartTime Map of ALL synced tasks and their start times.
+     * @param employeeWorkShift    Employee the route applies to.
+     * @param criteriaFunction     The function that determines if a tasks should be re-inserted.
+     * @return A routeEvaluator result for the evaluated route.
+     */
+    public RouteEvaluatorResult evaluateRouteByTheOrderOfReInsertBasedOnCriteriaTasks(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime,
+                                                                                      IShift employeeWorkShift, Function<ITask, Boolean> criteriaFunction) {
+        List<ITask> fitsCriteria = tasks.stream().filter(criteriaFunction::apply).collect(Collectors.toList());
+        List<ITask> doesNotFitCriteria = new ArrayList<>(tasks);
+        doesNotFitCriteria.removeAll(fitsCriteria);
+        return calcRouteEvaluatorResult(new WeightedObjective(), doesNotFitCriteria, fitsCriteria, syncedTasksStartTime, employeeWorkShift);
+    }
+
 
     /**
      * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
