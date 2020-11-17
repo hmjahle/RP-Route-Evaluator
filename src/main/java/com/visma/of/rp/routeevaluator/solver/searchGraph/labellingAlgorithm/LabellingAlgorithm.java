@@ -5,6 +5,7 @@ import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluat
 import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.ObjectiveFunctionsIntraRouteHandler;
 import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
+import com.visma.of.rp.routeevaluator.routeResult.Route;
 import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.routeResult.Visit;
 
@@ -83,10 +84,10 @@ public class LabellingAlgorithm {
      * @return Results of the route.
      */
     private RouteEvaluatorResult buildRouteEvaluatorResult(Label bestLabel, IShift employeeWorkShift) {
-        RouteEvaluatorResult evaluatorResult = new RouteEvaluatorResult(employeeWorkShift, bestLabel.getObjective());
-        evaluatorResult.updateTimeOfOfficeReturn(bestLabel.getCurrentTime());
-        extractVisitsAndSyncedStartTime(bestLabel, evaluatorResult);
-        return evaluatorResult;
+        Route route = new Route(employeeWorkShift);
+        route.setTimeOfOfficeReturn(bestLabel.getCurrentTime());
+        extractVisitsAndSyncedStartTime(bestLabel, route);
+        return new RouteEvaluatorResult(bestLabel.getObjective(), route);
     }
 
     private void solveLabellingAlgorithm(Label startLabel) {
@@ -240,14 +241,14 @@ public class LabellingAlgorithm {
                 labelsOnDestinationNode.peek().getObjective().getObjectiveValue() < currentLabel.getObjective().getObjectiveValue();
     }
 
-    private void extractVisitsAndSyncedStartTime(Label bestLabel, RouteEvaluatorResult evaluatorResult) {
+    private void extractVisitsAndSyncedStartTime(Label bestLabel, Route route) {
         int labelCnt = collectLabels(bestLabel);
         int visitCnt = 0;
         for (int i = labelCnt - 1; i > 0; i--) {
             bestLabel = labels[i];
             visitCnt = addVisit(visitCnt, bestLabel);
         }
-        evaluatorResult.addVisits(visits, visitCnt);
+        route.addVisits(visits, visitCnt);
     }
 
     private int collectLabels(Label currentLabel) {

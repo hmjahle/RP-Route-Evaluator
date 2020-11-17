@@ -4,8 +4,9 @@ import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
 import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Route {
@@ -14,34 +15,22 @@ public class Route {
     private List<Visit> visitSolution;
     private long timeOfOfficeReturn;
 
-    public void setTimeOfOfficeReturn(long timeOfOfficeReturn) {
-        this.timeOfOfficeReturn = timeOfOfficeReturn;
-    }
-
     public Route(IShift employeeWorkShift) {
         this.employeeWorkShift = employeeWorkShift;
         this.visitSolution = new ArrayList<>();
         this.timeOfOfficeReturn = 0L;
     }
 
-    Route(Route copy) {
-        this.visitSolution = new ArrayList<>(copy.visitSolution);
-        this.employeeWorkShift = copy.employeeWorkShift;
-        this.timeOfOfficeReturn = copy.timeOfOfficeReturn;
-    }
-
     public void addVisits(Visit[] visits, int visitsCnt) {
-        for (int i = 0; i < visitsCnt; i++) {
-            addVisitToVisitSolution(visits[i]);
-        }
+        visitSolution.addAll(Arrays.asList(visits).subList(0, visitsCnt));
     }
 
-    public void updateTimeOfOfficeReturn(long timeOfOfficeReturn) {
+    public void setTimeOfOfficeReturn(long timeOfOfficeReturn) {
         this.timeOfOfficeReturn = timeOfOfficeReturn;
     }
 
-    private void addVisitToVisitSolution(Visit visit) {
-        visitSolution.add(visit);
+    public long getTimeOfOfficeReturn() {
+        return timeOfOfficeReturn;
     }
 
     public IShift getEmployeeWorkShift() {
@@ -52,19 +41,32 @@ public class Route {
         return visitSolution;
     }
 
-    public long getTimeOfOfficeReturn() {
-        return timeOfOfficeReturn;
-    }
-
-    public List<ITask> extractEmployeeRoute() {
+    /**
+     * Extracts the tasks from the route, they are returned in the correct order.
+     *
+     * @return List of tasks, can be empty.
+     */
+    public List<ITask> extractEmployeeTasks() {
         return this.getVisitSolution().stream().map(Visit::getTask).collect(Collectors.toList());
     }
 
-    public Collection<Visit> extractSyncedVisits() {
+    /**
+     * Extracts the visits, where the task is synced, from the route,
+     * they are returned as a set and hence no order is guaranteed.
+     *
+     * @return The set of visits, can be empty.
+     */
+    public Set<Visit> extractSyncedVisits() {
         return this.getVisitSolution().stream().filter(i -> i.getTask().isSynced()).collect(Collectors.toSet());
     }
 
-    public Collection<Visit> extractStrictVisits() {
-        return this.getVisitSolution().stream().filter(i -> i.getTask().isStrict()).collect(Collectors.toList());
+    /**
+     * Extracts the visits, where the task is strict, from the route,
+     * they are returned as a set and hence no order is guaranteed.
+     *
+     * @return The set of visits, can be empty.
+     */
+    public Set<Visit> extractStrictVisits() {
+        return this.getVisitSolution().stream().filter(i -> i.getTask().isStrict()).collect(Collectors.toSet());
     }
 }

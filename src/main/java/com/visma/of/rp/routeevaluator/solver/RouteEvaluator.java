@@ -32,11 +32,13 @@ public class RouteEvaluator {
     private NodeList secondNodeList;
     private long[] syncedNodesStartTime;
 
-    public RouteEvaluator(long robustTimeSeconds, ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks, ILocation officePosition) {
+    public RouteEvaluator(long robustTimeSeconds, ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks,
+                          ILocation officePosition) {
         this(robustTimeSeconds, distanceMatrixMatrix, tasks, officePosition, officePosition);
     }
 
-    public RouteEvaluator(long robustTimeSeconds, ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks, ILocation origin, ILocation destination) {
+    public RouteEvaluator(long robustTimeSeconds, ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks,
+                          ILocation origin, ILocation destination) {
         this.graph = new SearchGraph(distanceMatrixMatrix, tasks, origin, destination, robustTimeSeconds);
         this.objectiveFunctions = new ObjectiveFunctionsIntraRouteHandler();
         this.constraints = new ConstraintsIntraRouteHandler();
@@ -46,19 +48,43 @@ public class RouteEvaluator {
         this.syncedNodesStartTime = new long[graph.getNodes().size()];
     }
 
-
+    /**
+     * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
+     * Only returns objective value, no route details is returned.
+     *
+     * @param tasks                The route to be evaluated, the order of the list is the order of the route.
+     * @param syncedTasksStartTime Map of ALL synced tasks and their start times.
+     * @param employeeWorkShift    Employee the route applies to.
+     * @return A double value representing the objective value of the route.
+     */
     public Double evaluateRouteObjective(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
-        setSyncedNodesStartTime(syncedTasksStartTime);
-        updateFirstTaskList(tasks);
-        ExtendInfoOneElement nodeExtendInfoOneElement = new ExtendInfoOneElement();
-        nodeExtendInfoOneElement.update(firstNodeList);
-        Label bestLabel = algorithm.runAlgorithm(new WeightedObjective(), nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
+        ExtendInfoOneElement nodeExtendInfoOneElement = initializeOneElementEvaluator(tasks, syncedTasksStartTime);
+        Label bestLabel = algorithm.
+                runAlgorithm(new WeightedObjective(), nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
         return bestLabel == null ? null : bestLabel.getObjective().getObjectiveValue();
 
     }
 
+    /**
+     * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
+     * Only returns objective value, no route details is returned.
+     * For routes with no synced tasks.
+     *
+     * @param tasks             The route to be evaluated, the order of the list is the order of the route.
+     * @param employeeWorkShift Employee the route applies to.
+     * @return A double value representing the objective value of the route.
+     */
     public Double evaluateRouteObjective(List<ITask> tasks, IShift employeeWorkShift) {
         return evaluateRouteObjective(tasks, null, employeeWorkShift);
+    }
+
+    /**
+     * Used to initialize the route evaluator when
+     */
+    private ExtendInfoOneElement initializeOneElementEvaluator(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime) {
+        setSyncedNodesStartTime(syncedTasksStartTime);
+        setFirstNodeList(tasks);
+        return new ExtendInfoOneElement(firstNodeList);
     }
 
     /**
@@ -69,7 +95,8 @@ public class RouteEvaluator {
      * @param employeeWorkShift    Employee the route applies to.
      * @return A routeEvaluator result for the evaluated route.
      */
-    public RouteEvaluatorResult evaluateRouteByTheOrderOfTasks(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
+    public RouteEvaluatorResult evaluateRouteByTheOrderOfTasks(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime,
+                                                               IShift employeeWorkShift) {
         return calcRouteEvaluatorResult(new WeightedObjective(), tasks, syncedTasksStartTime, employeeWorkShift);
     }
 
@@ -109,7 +136,9 @@ public class RouteEvaluator {
      * @param employeeWorkShift    Employee the route applies to.
      * @return A routeEvaluator result for the evaluated route.
      */
-    public RouteEvaluatorResult evaluateRouteByOrderOfTasksWithObjectiveValues(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
+    public RouteEvaluatorResult evaluateRouteByOrderOfTasksWithObjectiveValues(List<ITask> tasks,
+                                                                               Map<ITask, Long> syncedTasksStartTime,
+                                                                               IShift employeeWorkShift) {
         return calcRouteEvaluatorResult(new WeightedObjectiveWithValues(), tasks, syncedTasksStartTime, employeeWorkShift);
     }
 
@@ -124,7 +153,8 @@ public class RouteEvaluator {
      * @param employeeWorkShift    Employee the route applies to.
      * @return A routeEvaluator result for the evaluated route.
      */
-    public RouteEvaluatorResult evaluateRouteByTheOrderOfTasksInsertTask(List<ITask> tasks, ITask insertTask, Map<ITask, Long> syncedTasksStartTime,IShift employeeWorkShift) {
+    public RouteEvaluatorResult evaluateRouteByTheOrderOfTasksInsertTask(List<ITask> tasks, ITask insertTask,
+                                                                         Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
         return calcRouteEvaluatorResult(new WeightedObjective(), tasks, insertTask, syncedTasksStartTime, employeeWorkShift);
     }
 
@@ -135,32 +165,45 @@ public class RouteEvaluator {
      *
      * @param tasks             The route to be evaluated, the order of the list is the order of the route.
      * @param insertTask        The task to be inserted into the route.
-     * @param insertTask        The task to be inserted into the route.
      * @param employeeWorkShift Employee the route applies to.
      * @return A routeEvaluator result for the evaluated route.
      */
-    public RouteEvaluatorResult evaluateRouteByTheOrderOfTasksInsertTask(List<ITask> tasks, ITask insertTask, IShift employeeWorkShift) {
+    public RouteEvaluatorResult evaluateRouteByTheOrderOfTasksInsertTask(List<ITask> tasks, ITask insertTask,
+                                                                         IShift employeeWorkShift) {
         return calcRouteEvaluatorResult(new WeightedObjective(), tasks, insertTask, null, employeeWorkShift);
     }
 
-    private RouteEvaluatorResult calcRouteEvaluatorResult(IObjective objective, List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
-        setSyncedNodesStartTime(syncedTasksStartTime);
-        updateFirstTaskList(tasks);
-        ExtendInfoOneElement nodeExtendInfoOneElement = new ExtendInfoOneElement();
-        nodeExtendInfoOneElement.update(firstNodeList);
-        return algorithm.solveRouteEvaluatorResult(objective, nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
+    /**
+     * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
+     * At the same time it finds the optimal position in the route to insert the new tasks provided.
+     * For routes with no synced tasks, the new task to be inserted cannot be synced either.
+     *
+     * @param tasks                The route to be evaluated, the order of the list is the order of the route.
+     * @param insertTasks          The list of tasks to be inserted into the route.
+     * @param syncedTasksStartTime Map of ALL synced tasks and their start times.
+     * @param employeeWorkShift    Employee the route applies to.
+     * @return A routeEvaluator result for the evaluated route.
+     */
+    public RouteEvaluatorResult evaluateRouteByTheOrderOfTasksInsertTasks(List<ITask> tasks, List<ITask> insertTasks,
+                                                                          Map<ITask, Long> syncedTasksStartTime,
+                                                                          IShift employeeWorkShift) {
+        return calcRouteEvaluatorResult(new WeightedObjective(), tasks, insertTasks, syncedTasksStartTime, employeeWorkShift);
     }
 
-    private RouteEvaluatorResult calcRouteEvaluatorResult(IObjective objective, List<ITask> tasks, ITask insertTask, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
-        if (syncedTasksStartTime != null)
-            setSyncedNodesStartTime(syncedTasksStartTime);
-        updateFirstTaskList(tasks);
-        updateSecondTaskList(insertTask);
-
-        ExtendInfoTwoElements nodeExtendInfoTwoElements = new ExtendInfoTwoElements(firstNodeList, secondNodeList);
-        return algorithm.solveRouteEvaluatorResult(objective, nodeExtendInfoTwoElements, syncedNodesStartTime, employeeWorkShift);
+    /**
+     * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
+     * At the same time it finds the optimal position in the route to insert the new tasks provided.
+     * For routes with no synced tasks, the new task to be inserted cannot be synced either.
+     *
+     * @param tasks             The route to be evaluated, the order of the list is the order of the route.
+     * @param insertTasks       The list of tasks to be inserted into the route.
+     * @param employeeWorkShift Employee the route applies to.
+     * @return A routeEvaluator result for the evaluated route.
+     */
+    public RouteEvaluatorResult evaluateRouteByTheOrderOfTasksInsertTasks(List<ITask> tasks, List<ITask> insertTasks,
+                                                                          IShift employeeWorkShift) {
+        return calcRouteEvaluatorResult(new WeightedObjective(), tasks, insertTasks, null, employeeWorkShift);
     }
-
 
     /**
      * Updates the start location used to evaluate routes. The location must be present
@@ -189,7 +232,8 @@ public class RouteEvaluator {
      * @param objectiveWeight     Weight of the objective.
      * @param objectiveIntraShift The objective function to be added.
      */
-    public void addObjectiveIntraShift(String objectiveFunctionId, double objectiveWeight, IObjectiveFunctionIntraRoute objectiveIntraShift) {
+    public void addObjectiveIntraShift(String objectiveFunctionId, double objectiveWeight,
+                                       IObjectiveFunctionIntraRoute objectiveIntraShift) {
         objectiveFunctions.addIntraShiftObjectiveFunction(objectiveFunctionId, objectiveWeight, objectiveIntraShift);
     }
 
@@ -199,7 +243,8 @@ public class RouteEvaluator {
      * @param objectiveIntraShift The objective function to be added.
      */
     public void addObjectiveIntraShift(IObjectiveFunctionIntraRoute objectiveIntraShift) {
-        objectiveFunctions.addIntraShiftObjectiveFunction(objectiveIntraShift.getClass().getSimpleName(), 1.0, objectiveIntraShift);
+        objectiveFunctions.addIntraShiftObjectiveFunction(
+                objectiveIntraShift.getClass().getSimpleName(), 1.0, objectiveIntraShift);
     }
 
     /**
@@ -211,16 +256,37 @@ public class RouteEvaluator {
         constraints.addConstraint(constraint);
     }
 
-    private void updateFirstTaskList(List<ITask> tasks) {
+    /**
+     * Used to calculate routes without inserting new tasks.
+     */
+    private RouteEvaluatorResult calcRouteEvaluatorResult(IObjective objective, List<ITask> tasks,
+                                                          Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
+        ExtendInfoOneElement nodeExtendInfoOneElement = initializeOneElementEvaluator(tasks, syncedTasksStartTime);
+        return algorithm.solveRouteEvaluatorResult(objective, nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
+    }
+
+    /**
+     * Used to calculate routes when inserting one new task
+     */
+    private RouteEvaluatorResult calcRouteEvaluatorResult(IObjective objective, List<ITask> tasks, ITask insertTask,
+                                                          Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
+        setSyncedNodesStartTime(syncedTasksStartTime);
         setFirstNodeList(tasks);
+        setSecondNodeList(insertTask);
+        ExtendInfoTwoElements nodeExtendInfoTwoElements = new ExtendInfoTwoElements(firstNodeList, secondNodeList);
+        return algorithm.solveRouteEvaluatorResult(objective, nodeExtendInfoTwoElements, syncedNodesStartTime, employeeWorkShift);
     }
 
-    private void updateSecondTaskList(List<ITask> taskSetTwo) {
-        setSecondNodeList(taskSetTwo);
-    }
-
-    private void updateSecondTaskList(ITask task) {
-        setSecondNodeList(task);
+    /**
+     * Used to calculate routes when inserting multiple new tasks.
+     */
+    private RouteEvaluatorResult calcRouteEvaluatorResult(IObjective objective, List<ITask> tasks, List<ITask> insertTasks,
+                                                          Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
+        setSyncedNodesStartTime(syncedTasksStartTime);
+        setFirstNodeList(tasks);
+        setSecondNodeList(insertTasks);
+        ExtendInfoTwoElements nodeExtendInfoTwoElements = new ExtendInfoTwoElements(firstNodeList, secondNodeList);
+        return algorithm.solveRouteEvaluatorResult(objective, nodeExtendInfoTwoElements, syncedNodesStartTime, employeeWorkShift);
     }
 
     private void setFirstNodeList(List<ITask> tasks) {
@@ -233,7 +299,6 @@ public class RouteEvaluator {
 
     private void setSecondNodeList(List<ITask> syncedTasks) {
         secondNodeList.setNodes(graph, syncedTasks);
-        graph.updateNodeType(syncedTasks);
     }
 
     private void setSyncedNodesStartTime(Map<ITask, Long> syncedTasksStartTime) {
@@ -244,7 +309,6 @@ public class RouteEvaluator {
     }
 
     private void setStartTime(ITask task, long startTime) {
-        graph.updateNodeType(task);
         Node node = graph.getNode(task);
         syncedNodesStartTime[node.getNodeId()] = startTime;
     }
