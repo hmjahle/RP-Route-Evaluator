@@ -42,16 +42,15 @@ public class LabelFunctionTest extends JUnitTestAbstract {
 
     @Test
     public void equals() {
+
         Assert.assertEquals("Label A should equal label B", labelA, labelB);
         Assert.assertEquals("Label B should equal label A", labelB, labelA);
 
-        Assert.assertEquals("Label A should equal label C", labelA, labelC);
-        Assert.assertEquals("Label C should equal  label A", labelC, labelA);
+        Assert.assertNotEquals("Label A should not equal label C", labelA, labelC);
+        Assert.assertEquals("Label C should not equal  label A", labelC, labelA);
 
-
-        Assert.assertNotEquals("Label A is worse than label D when equals", labelA, labelD);
-        Assert.assertNotEquals("Label D is better than label A when equals", labelD, labelA);
-
+        Assert.assertNotEquals("Label A should not equal label D", labelA, labelD);
+        Assert.assertNotEquals("Label D should not equal label A", labelD, labelA);
     }
 
     @Test
@@ -111,7 +110,7 @@ public class LabelFunctionTest extends JUnitTestAbstract {
         closedLabels = labels.stream().filter(Label::isClosed).count();
         Assert.assertEquals("Should be two closed labels:", 2, closedLabels);
 
-        labels.add(new Label(null,null,0,null,null,0,0));
+        labels.add(new Label(null, null, 0, null, null, 0, 0));
         closedLabels = labels.stream().filter(Label::isClosed).count();
         Assert.assertEquals("Should be two closed labels:", 2, closedLabels);
     }
