@@ -325,8 +325,8 @@ public class RouteEvaluator {
         secondNodeList.setNode(graph, task);
     }
 
-    private void setSecondNodeList(List<ITask> syncedTasks) {
-        secondNodeList.setNodes(graph, syncedTasks);
+    private void setSecondNodeList(List<ITask> tasks) {
+        secondNodeList.setNodes(graph, tasks);
     }
 
     private void setSyncedNodesStartTime(Map<ITask, Long> syncedTasksStartTime) {
