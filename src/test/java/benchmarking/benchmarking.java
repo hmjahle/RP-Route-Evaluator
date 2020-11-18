@@ -146,7 +146,7 @@ public class benchmarking extends JUnitTestAbstract {
     }
 
     public static void printResult(RouteEvaluatorResult result) {
-        System.out.println("\nObjective: " + result.getObjectiveValue() + "\tReturn to office at: " + result.getTimeOfOfficeReturn());
+        System.out.println("\nObjective: " + result.getObjectiveValue() + "\tReturn to office at: " + result.getTimeOfArrivalAtDestination());
         String visitString = "Visits: " + result.getVisitSolution().size() + "\n";
         for (Visit visit : result.getVisitSolution()) {
             visitString += "\t" + printVisit(visit, 0);

@@ -161,7 +161,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
 
         Assert.assertEquals("Start time visit 2 should be: ", 40, result.getVisitSolution().get(1).getStartTime());
 
-        Assert.assertEquals("Office return should be: ", 47, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Office return should be: ", 47, result.getTimeOfArrivalAtDestination().longValue());
         Assert.assertEquals("Cost should be: ", 47, result.getObjectiveValue(), 1E-6);
     }
 
@@ -187,7 +187,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
 
         Assert.assertEquals("Start time visit 8 should be: ", 73, result.getVisitSolution().get(7).getStartTime());
 
-        Assert.assertEquals("Office return should be: ", 80, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Office return should be: ", 80, result.getTimeOfArrivalAtDestination().longValue());
         Assert.assertEquals("Cost should be: ", 82, result.getObjectiveValue(), 1E-6);
     }
 
@@ -216,7 +216,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
         Assert.assertEquals("Start time visit 8 should be: ", 73, result.getVisitSolution().get(7).getStartTime());
         Assert.assertTrue("Task type visit 8 should be strict: ", result.getVisitSolution().get(7).getTask().isStrict());
 
-        Assert.assertEquals("Office return should be: ", 80, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Office return should be: ", 80, result.getTimeOfArrivalAtDestination().longValue());
         Assert.assertEquals("Cost should be: ", 80, result.getObjectiveValue(), 1E-6);
     }
 
@@ -229,7 +229,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
 
         Assert.assertEquals("Start time visit 2 should be: ", 40, result.getVisitSolution().get(1).getStartTime());
 
-        Assert.assertEquals("Office return should be: ", 47, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Office return should be: ", 47, result.getTimeOfArrivalAtDestination().longValue());
         Assert.assertEquals("Cost should be: ", 47, result.getObjectiveValue(), 1E-6);
     }
 
@@ -257,7 +257,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
 
         Assert.assertEquals("Start time should be: ", 79, result.getVisitSolution().get(7).getStartTime());
 
-        Assert.assertEquals("Office return should be: ", 86, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Office return should be: ", 86, result.getTimeOfArrivalAtDestination().longValue());
         Assert.assertEquals("Cost should be: ", 86, result.getObjectiveValue(), 1E-6);
     }
 
@@ -268,7 +268,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
         Assert.assertEquals("Start time visit 2 should be: ", 26, result.getVisitSolution().get(1).getStartTime());
         Assert.assertEquals("Start time visit 3 should be: ", 40, result.getVisitSolution().get(2).getStartTime());
         Assert.assertEquals("Start time visit 3 should be: ", 46, result.getVisitSolution().get(3).getStartTime());
-        Assert.assertEquals("Office return should be: ", 53, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Office return should be: ", 53, result.getTimeOfArrivalAtDestination().longValue());
         Assert.assertEquals("Cost should be: ", 53, result.getObjectiveValue(), 1E-6);
     }
 

@@ -47,7 +47,7 @@ public class EvaluateSharedLocationsTest extends JUnitTestAbstract {
         Assert.assertEquals("Start time should be: ", 1, result.getVisitSolution().get(1).getTravelTime());
         Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(2).getTravelTime());
         Assert.assertEquals("Start time should be: ", 1, result.getVisitSolution().get(3).getTravelTime());
-        Assert.assertEquals("Office return should be: ", 18, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Office return should be: ", 18, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     @Test
@@ -61,7 +61,7 @@ public class EvaluateSharedLocationsTest extends JUnitTestAbstract {
         Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(1).getTravelTime());
         Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(2).getTravelTime());
         Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(3).getTravelTime());
-        Assert.assertEquals("Office return should be: ", 16, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Office return should be: ", 16, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     @Test
@@ -75,7 +75,7 @@ public class EvaluateSharedLocationsTest extends JUnitTestAbstract {
         Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(1).getTravelTime());
         Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(2).getTravelTime());
         Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(3).getTravelTime());
-        Assert.assertEquals("Office return should be: ", 4, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Office return should be: ", 4, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     private ITravelTimeMatrix createTravelTimeMatrix(ILocation origin, ILocation destination, Collection<ILocation> locations) {

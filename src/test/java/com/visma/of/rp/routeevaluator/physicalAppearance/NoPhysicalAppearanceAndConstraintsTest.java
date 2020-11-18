@@ -59,7 +59,7 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         Assert.assertNotNull("Must be feasible. ", result);
         Assert.assertEquals(10, getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
-        Assert.assertEquals("Must return to office at: ", 22, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", 22, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     @Test

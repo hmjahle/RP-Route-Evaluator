@@ -39,7 +39,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
 
-        Assert.assertEquals("Must return at correct time!", 5, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return at correct time!", 5, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     @Test
@@ -52,7 +52,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
 
         Assert.assertEquals("Number of visits should be: ", 1, result.getVisitSolution().size());
         Assert.assertEquals("Start time should be: ", 30, result.getVisitSolution().get(0).getStartTime());
-        Assert.assertEquals("Office return should be: ", 33, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Office return should be: ", 33, result.getTimeOfArrivalAtDestination().longValue());
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
         double objective = routeEvaluator.evaluateRouteObjective(tasks, shift);
         Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
@@ -71,7 +71,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Start time should be: ", 40, result.getVisitSolution().get(2).getStartTime());
         Assert.assertEquals("Start time should be: ", 42, result.getVisitSolution().get(3).getStartTime());
         Assert.assertEquals("Start time should be: ", 44, result.getVisitSolution().get(4).getStartTime());
-        Assert.assertEquals("Office return should be: ", 47, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Office return should be: ", 47, result.getTimeOfArrivalAtDestination().longValue());
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
         double objective = routeEvaluator.evaluateRouteObjective(tasks, shift);
         Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
@@ -93,7 +93,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Start time should be: ", 20, result.getVisitSolution().get(0).getStartTime());
         Assert.assertEquals("Start time should be: ", 60, result.getVisitSolution().get(1).getStartTime());
         Assert.assertEquals("Start time should be: ", 80, result.getVisitSolution().get(2).getStartTime());
-        Assert.assertEquals("Office return should be: ", 83, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Office return should be: ", 83, result.getTimeOfArrivalAtDestination().longValue());
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
         double objective = routeEvaluator.evaluateRouteObjective(tasks, syncedTasksStartTime, shift);
         Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
@@ -116,7 +116,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Start time should be: ", 80, result.getVisitSolution().get(5).getStartTime());
         Assert.assertEquals("Start time should be: ", 82, result.getVisitSolution().get(6).getStartTime());
         Assert.assertEquals("Start time should be: ", 84, result.getVisitSolution().get(7).getStartTime());
-        Assert.assertEquals("Office return should be: ", 87, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Office return should be: ", 87, result.getTimeOfArrivalAtDestination().longValue());
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
         double objective = routeEvaluator.evaluateRouteObjective(allTasks, syncedTasksStartTime, shift);
         Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
@@ -138,7 +138,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Start time should be: ", 80, result.getVisitSolution().get(5).getStartTime());
         Assert.assertEquals("Start time should be: ", 87, result.getVisitSolution().get(6).getStartTime());
         Assert.assertEquals("Start time should be: ", 94, result.getVisitSolution().get(7).getStartTime());
-        Assert.assertEquals("Office return should be: ", 102, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Office return should be: ", 102, result.getTimeOfArrivalAtDestination().longValue());
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
         double objective = routeEvaluator.evaluateRouteObjective(allTasks, syncedTasksStartTime, shift);
         Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
@@ -167,7 +167,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Start time should be: ", 40, result.getVisitSolution().get(0).getStartTime());
         Assert.assertEquals("Start time should be: ", 52, result.getVisitSolution().get(1).getStartTime());
         Assert.assertEquals("Start time should be: ", 64, result.getVisitSolution().get(2).getStartTime());
-        Assert.assertEquals("Office return should be: ", 77, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Office return should be: ", 77, result.getTimeOfArrivalAtDestination().longValue());
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
         double objective = routeEvaluator.evaluateRouteObjective(tasks, shift);
         Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);

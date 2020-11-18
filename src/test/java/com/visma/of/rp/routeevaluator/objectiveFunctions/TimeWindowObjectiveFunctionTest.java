@@ -53,7 +53,7 @@ public class TimeWindowObjectiveFunctionTest extends JUnitTestAbstract {
         Assert.assertEquals("Objective value for the standard time window must be.", 0, result.getObjectiveValue(), 1E-6);
         Assert.assertEquals("Objective value for the low/high time window must be.", 0, resultLowHigh.getObjectiveValue(), 1E-6);
         Assert.assertEquals(9, getVisitTravelTime(result, 0));
-        Assert.assertEquals("Must return to office at: ", 19, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", 19, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     @Test
@@ -67,7 +67,7 @@ public class TimeWindowObjectiveFunctionTest extends JUnitTestAbstract {
         Assert.assertEquals("Objective value for the standard time window must be.", 1, result.getObjectiveValue(), 1E-6);
         Assert.assertEquals("Objective value for the low/high time window must be.", 100, resultLowHigh.getObjectiveValue(), 1E-6);
         Assert.assertEquals(10, getVisitTravelTime(result, 0));
-        Assert.assertEquals("Must return to office at: ", 21, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", 21, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     private void initTest() {
@@ -90,7 +90,7 @@ public class TimeWindowObjectiveFunctionTest extends JUnitTestAbstract {
         Assert.assertNotNull("Must be feasible. ", result);
         Assert.assertEquals("Objective value for the standard time window must be.", 70, result.getObjectiveValue(), 1E-6);
         Assert.assertEquals("Objective value for the low/high time window must be.", 39031, resultLowHigh.getObjectiveValue(), 1E-6);
-        Assert.assertEquals("Must return to office at: ", 54, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", 54, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     @Test
@@ -122,7 +122,7 @@ public class TimeWindowObjectiveFunctionTest extends JUnitTestAbstract {
         Assert.assertNotNull("Must be feasible. ", result);
         Assert.assertEquals("Objective value for the standard time window must be.", 0, result.getObjectiveValue(), 1E-6);
         Assert.assertEquals("Objective value for the low/high time window must be.", 0, resultLowHigh.getObjectiveValue(), 1E-6);
-        Assert.assertEquals("Must return to office at: ", 54, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", 54, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     private RouteEvaluatorResult evaluateRouteStandardTimeWindow(TestTask task1, TestTask task2, TestTask task3, TestTask task4) {
