@@ -49,14 +49,14 @@ public class TimeWindowCustomCriteriaObjectiveFunctionTest extends JUnitTestAbst
         tasks.add(task1);
         travelTimeMatrix.addUndirectedConnection(office, task1.getLocation(), 10);
 
-        RouteEvaluatorResult result = evaluateRoute(tasks, i -> !i.isDestination() && i.getTask().isStrict());
+        RouteEvaluatorResult result = evaluateRoute(tasks, i -> !i.isDestination() && i.isStrict());
         Assert.assertEquals("ObjectiveAbstract value must be.", 1, result.getObjectiveValue(), 1E-6);
         task1.setStrict(false);
 
-        result = evaluateRoute(tasks, i -> !i.isDestination() && i.getTask().isStrict());
+        result = evaluateRoute(tasks, i -> !i.isDestination() && i.isStrict());
         Assert.assertEquals("ObjectiveAbstract value must be.", 0, result.getObjectiveValue(), 1E-6);
 
-        result = evaluateRoute(tasks, i -> !i.isDestination() && i.getTask().isSynced());
+        result = evaluateRoute(tasks, i -> !i.isDestination() && i.isSynced());
         Assert.assertEquals("ObjectiveAbstract value must be.", 1, result.getObjectiveValue(), 1E-6);
     }
 
@@ -75,14 +75,14 @@ public class TimeWindowCustomCriteriaObjectiveFunctionTest extends JUnitTestAbst
 
     @Test
     public void syncedTaskCustomCriteria() {
-        RouteEvaluatorResult result = evaluateRoute(allTasks, i -> !i.isDestination() && i.getTask().isSynced());
+        RouteEvaluatorResult result = evaluateRoute(allTasks, i -> !i.isDestination() && i.isSynced());
         Assert.assertEquals("Two is strict.", 2, result.getObjectiveValue(), 1E-6);
     }
 
 
     @Test
     public void strictTaskCustomCriteria() {
-        RouteEvaluatorResult result = evaluateRoute(allTasks, i -> !i.isDestination() && i.getTask().isStrict());
+        RouteEvaluatorResult result = evaluateRoute(allTasks, i -> !i.isDestination() && i.isStrict());
         Assert.assertEquals("Three is strict.", 3, result.getObjectiveValue(), 1E-6);
     }
 
