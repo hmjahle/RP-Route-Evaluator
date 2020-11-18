@@ -51,8 +51,8 @@ public class Label implements Comparable<Label> {
         return resources;
     }
 
-    public void close(boolean close) {
-        closed = close;
+    public void close() {
+        closed = true;
     }
 
     public int getCurrentLocationId() {
@@ -83,18 +83,18 @@ public class Label implements Comparable<Label> {
      * @return Integer indicating which label is dominated.
      */
     public int dominates(Label other) {
-        long currentTime = Long.compare(this.currentTime, other.currentTime);
-        long canLeaveLocationAt = Long.compare(this.canLeaveLocationAtTime, other.canLeaveLocationAtTime);
-        int objective = this.objective.dominates(other.objective);
-        int resources = this.resources.dominates(other.resources);
+        int compCurrentTime = Long.compare(this.currentTime, other.currentTime);
+        int compCanLeaveLocationAtTime = Long.compare(this.canLeaveLocationAtTime, other.canLeaveLocationAtTime);
+        int compObjective = this.objective.dominates(other.objective);
+        int compResources = this.resources.dominates(other.resources);
 
-        if (resources == 2)
+        if (compResources == 2)
             return 2;
-        else if (currentTime == 0 && objective == 0 && resources == 0 && canLeaveLocationAt == 0)
+        else if (compCurrentTime == 0 && compObjective == 0 && compResources == 0 && compCanLeaveLocationAtTime == 0)
             return 0;
-        else if (currentTime <= 0 && objective <= 0 && resources <= 0 && canLeaveLocationAt <= 0)
+        else if (compCurrentTime <= 0 && compObjective <= 0 && compResources <= 0 && compCanLeaveLocationAtTime <= 0)
             return -1;
-        else if (currentTime >= 0 && objective >= 0 && resources >= 0 && canLeaveLocationAt >= 0)
+        else if (compCurrentTime >= 0 && compObjective >= 0 && compResources >= 0 && compCanLeaveLocationAtTime >= 0)
             return 1;
         else
             return 2;
@@ -106,8 +106,15 @@ public class Label implements Comparable<Label> {
     }
 
     @Override
+    public boolean equals(Object other) {
+        if (other instanceof Label)
+            return objective.getObjectiveValue() == ((Label) other).objective.getObjectiveValue();
+        return false;
+    }
+
+    @Override
     public String toString() {
-        return node.getNodeId() + ", " + objective + ", " + resources;
+        return node.getNodeId() + ", " + objective.getObjectiveValue() + ", " + resources;
     }
 
 }

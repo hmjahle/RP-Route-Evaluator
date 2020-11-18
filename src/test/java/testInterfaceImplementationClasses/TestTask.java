@@ -22,6 +22,11 @@ public class TestTask implements ITask {
     int requiredSkillLevel;
     long syncedWithIntervalDiffSeconds;
     ILocation location;
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     String id;
 
     public TestTask(long duration, long startTime, long endTime, boolean isStrict, boolean isSynced, boolean requirePhysicalAppearance, int requiredSkillLevel, long syncedWithIntervalDiffSeconds, ILocation location, String id) {

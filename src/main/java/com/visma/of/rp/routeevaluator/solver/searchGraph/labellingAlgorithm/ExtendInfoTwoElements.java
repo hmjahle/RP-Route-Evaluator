@@ -5,23 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class implement the INodeExtendSets, it has two elements.
+ * This class implement the IExtendInfo, it has two elements.
  */
 public class ExtendInfoTwoElements implements IExtendInfo {
+
     NodeList nodeListOne;
     NodeList nodeListTwo;
     List<ExtendToInfo> extendToInfo;
 
-    ExtendInfoTwoElements() {
+    public ExtendInfoTwoElements(NodeList nodeListOne, NodeList nodeListTwo) {
         extendToInfo = new ArrayList<>();
-    }
-
-    ExtendInfoTwoElements(NodeList nodeListOne, NodeList nodeListTwo) {
-        extendToInfo = new ArrayList<>();
-        update(nodeListOne, nodeListTwo);
-    }
-
-    void update(NodeList nodeListOne, NodeList nodeListTwo) {
         this.nodeListOne = nodeListOne;
         this.nodeListTwo = nodeListTwo;
     }
@@ -38,7 +31,6 @@ public class ExtendInfoTwoElements implements IExtendInfo {
         if (node != null) {
             extendToInfo.add(new ExtendToInfo(node, 2));
         }
-
         return extendToInfo;
     }
 

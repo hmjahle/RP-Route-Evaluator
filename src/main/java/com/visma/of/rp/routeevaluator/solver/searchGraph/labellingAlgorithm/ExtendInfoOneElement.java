@@ -4,17 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class implement the INodeExtendSets, it has two elements.
+ * This class implement the IExtendInfo, it has two elements.
  */
 public class ExtendInfoOneElement implements IExtendInfo {
+
     NodeList nodeListOne;
     List<ExtendToInfo> extendToInfo;
 
-    public ExtendInfoOneElement() {
-        extendToInfo = new ArrayList<>();
-    }
-
-    public void update(NodeList nodeListOne) {
+    public ExtendInfoOneElement(NodeList nodeListOne) {
+        this.extendToInfo = new ArrayList<>();
         this.nodeListOne = nodeListOne;
     }
 

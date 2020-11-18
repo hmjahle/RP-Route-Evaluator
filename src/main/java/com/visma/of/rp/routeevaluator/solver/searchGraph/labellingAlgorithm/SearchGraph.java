@@ -128,15 +128,6 @@ public class SearchGraph {
         this.travelTimeMatrix[fromId][toId] = travelTime;
     }
 
-    public void updateNodeType(ITask task) {
-        taskToNodes.get(task).setSynced(task.isSynced());
-    }
-
-    public void updateNodeType(Collection<ITask> tasks) {
-        for (ITask task : tasks)
-            taskToNodes.get(task).setSynced(task.isSynced());
-    }
-
     public Node getOrigin() {
         return origin;
     }
