@@ -17,11 +17,11 @@ public class NodeList {
         return i > nodesCnt - 1 ? null : nodes[i];
     }
 
-    int size() {
+    public int size() {
         return nodesCnt;
     }
 
-    void clear() {
+    public void clear() {
         nodesCnt = 0;
     }
 
@@ -37,7 +37,7 @@ public class NodeList {
         nodes[0] = graph.getNode(task);
     }
 
-    void addNode(SearchGraph graph, ITask task) {
+    public void addNode(SearchGraph graph, ITask task) {
         nodes[nodesCnt] = graph.getNode(task);
         nodesCnt++;
     }

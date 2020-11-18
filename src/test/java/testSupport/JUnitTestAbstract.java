@@ -37,6 +37,10 @@ public abstract class JUnitTestAbstract {
         return new TestTask(duration, startTime, endTime, false, false, true, 0, 0, new TestLocation(false), "x");
     }
 
+    protected ITask createStandardTask(long duration, long startTime, long endTime, String id) {
+        return new TestTask(duration, startTime, endTime, false, false, true, 0, 0, new TestLocation(false), id);
+    }
+
     protected ITask createSyncedTask(long duration, long startTime, long endTime) {
         return new TestTask(duration, startTime, endTime, false, true, true, 0, 0, new TestLocation(false), "x");
     }
