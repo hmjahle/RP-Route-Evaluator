@@ -19,8 +19,6 @@ import testSupport.JUnitTestAbstract;
 
 import java.util.*;
 
-import static benchmarking.benchmarking.printResult;
-
 
 /**
  * The route evaluator functionality where a route is split based on a custom criteria (function for a task).
@@ -112,12 +110,12 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
 
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfReInsertBasedOnCriteriaTasks(
                 tasks, syncedTasksStartTime, shift, ITask::isSynced);
-        printResult(result);
+
         assertTwoTasksSynced(result);
 
         result = routeEvaluator.evaluateRouteByTheOrderOfReInsertBasedOnCriteriaTasks(
                 tasks, syncedTasksStartTime, shift, i -> !i.isSynced());
-        printResult(result);
+
         assertTwoTasksSynced(result);
     }
 

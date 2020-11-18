@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static benchmarking.benchmarking.printResult;
-
 public class InsertMultipleTasksIntoRouteTest extends JUnitTestAbstract {
 
     ILocation office;
@@ -59,8 +57,6 @@ public class InsertMultipleTasksIntoRouteTest extends JUnitTestAbstract {
         insertTasks.add(allTasks.get(0));
         insertTasks.add(allTasks.get(2));
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTasks(tasks, insertTasks, shift);
-
-        printResult(result);
 
         Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());

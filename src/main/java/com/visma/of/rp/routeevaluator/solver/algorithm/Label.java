@@ -1,6 +1,7 @@
 package com.visma.of.rp.routeevaluator.solver.algorithm;
 
-public class Label implements Comparable<Label> {
+
+public class Label {
     private Label previous;
     private Node node;
     private IObjective objective;
@@ -104,17 +105,6 @@ public class Label implements Comparable<Label> {
             return 2;
     }
 
-    @Override
-    public int compareTo(Label other) {
-        return Double.compare(objective.getObjectiveValue(), other.objective.getObjectiveValue());
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other instanceof Label)
-            return objective.getObjectiveValue() == ((Label) other).objective.getObjectiveValue();
-        return false;
-    }
 
     @Override
     public String toString() {

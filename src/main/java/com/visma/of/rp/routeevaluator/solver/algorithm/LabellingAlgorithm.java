@@ -10,6 +10,8 @@ import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.results.Visit;
 
 import java.util.PriorityQueue;
+import java.util.Queue;
+
 
 /**
  * The labelling algorithm is a resource constrained shortest path algorithm.
@@ -20,10 +22,10 @@ public class LabellingAlgorithm {
     private SearchGraph graph;
     private ObjectiveFunctionsIntraRouteHandler objectiveFunctions;
     private ConstraintsIntraRouteHandler constraints;
-    private PriorityQueue<Label> unExtendedLabels;
+    private Queue<Label> unExtendedLabels;
     private Label[] labels;
     private Visit[] visits;
-    private PriorityQueue<Label> labelsOnDestinationNode;
+    private Queue<Label> labelsOnDestinationNode;
     private LabelLists labelLists;
     private IExtendInfo nodeExtendInfo;
     private long[] syncedNodesStartTime;
@@ -34,11 +36,11 @@ public class LabellingAlgorithm {
         this.graph = graph;
         this.objectiveFunctions = objectiveFunctions;
         this.constraints = constraints;
-        this.unExtendedLabels = new PriorityQueue<>();
         this.labels = new Label[graph.getNodes().size()];
         this.visits = new Visit[graph.getNodes().size()];
         this.labelLists = new LabelLists(graph.getNodes().size(), graph.getNodes().size() * 10);
-        this.labelsOnDestinationNode = new PriorityQueue<>();
+        this.unExtendedLabels = new PriorityQueue<>(new LabelObjectiveValueComparer());
+        this.labelsOnDestinationNode = new PriorityQueue<>(new LabelObjectiveValueComparer());
         this.robustnessTimeSeconds = graph.getRobustTimeSeconds();
     }
 
@@ -123,7 +125,7 @@ public class LabellingAlgorithm {
                 startOfServiceNextTask, syncedTaskLatestStartTime, taskRequirePhysicalAppearance);
     }
 
-    private void extendLabelToAllPossibleTasks(Label label, PriorityQueue<Label> labelsOnDestinationNode) {
+    private void extendLabelToAllPossibleTasks(Label label, Queue<Label> labelsOnDestinationNode) {
         boolean returnToDestinationNode = true;
         for (ExtendToInfo extendToInfo : nodeExtendInfo.extend(label)) {
             returnToDestinationNode = false;

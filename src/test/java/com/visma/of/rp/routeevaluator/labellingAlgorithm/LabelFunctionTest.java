@@ -2,6 +2,7 @@ package com.visma.of.rp.routeevaluator.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.evaluation.objectives.WeightedObjective;
 import com.visma.of.rp.routeevaluator.solver.algorithm.Label;
+import com.visma.of.rp.routeevaluator.solver.algorithm.LabelObjectiveValueComparer;
 import com.visma.of.rp.routeevaluator.solver.algorithm.ResourceTwoElements;
 import org.junit.Assert;
 import org.junit.Before;
@@ -11,27 +12,29 @@ import testSupport.JUnitTestAbstract;
 import java.util.ArrayList;
 import java.util.List;
 
+import static benchmarking.benchmarking.printResult;
+
 public class LabelFunctionTest extends JUnitTestAbstract {
 
     Label labelA;
     Label labelB;
     Label labelC;
     Label labelD;
+    LabelObjectiveValueComparer comparer;
 
     @Before
     public void initialize() {
 
+        comparer = new LabelObjectiveValueComparer();
         WeightedObjective costA = new WeightedObjective(1);
         WeightedObjective costB = new WeightedObjective(1);
-        WeightedObjective costC = new WeightedObjective(1);
         WeightedObjective costD = new WeightedObjective(0);
         ResourceTwoElements resourcesA = new ResourceTwoElements(1, 1);
-        ResourceTwoElements resourcesB = new ResourceTwoElements(1, 1);
         ResourceTwoElements resourcesC = new ResourceTwoElements(1, 2);
         ResourceTwoElements resourcesD = new ResourceTwoElements(1, 0);
 
         labelA = new Label(null, null, 0, costA, resourcesA, 2, 0);
-        labelB = new Label(null, null, 0, costC, resourcesB, 2, 0);
+        labelB = new Label(null, null, 0, costA, resourcesA, 2, 0);
         labelC = new Label(null, null, 0, costB, resourcesC, 2, 0);
         labelD = new Label(null, null, 0, costD, resourcesD, 1, 0);
         labelA.setCanLeaveLocationAtTime(2);
@@ -40,31 +43,36 @@ public class LabelFunctionTest extends JUnitTestAbstract {
         labelD.setCanLeaveLocationAtTime(3);
     }
 
+    /**
+     * The equals function is not overridden so labels should only be equal if they are the same object.
+     * Label A and B has equal values but should not be equal.
+     */
     @Test
     public void equals() {
-        Assert.assertEquals("Label A should equal label B", labelA, labelB);
-        Assert.assertEquals("Label B should equal label A", labelB, labelA);
 
-        Assert.assertEquals("Label A should equal label C", labelA, labelC);
-        Assert.assertEquals("Label C should equal  label A", labelC, labelA);
+        Assert.assertEquals("Label A should equal label A", labelA, labelA);
+        Assert.assertEquals("Label B should equal label B", labelB, labelB);
 
 
-        Assert.assertNotEquals("Label A is worse than label D when equals", labelA, labelD);
-        Assert.assertNotEquals("Label D is better than label A when equals", labelD, labelA);
+        Assert.assertNotEquals("Label A should equal label A", labelA, labelB);
+        Assert.assertNotEquals("Label B should equal label B", labelB, labelA);
+
+        Assert.assertNotEquals("Label A should equal label C", labelA, labelC);
+        Assert.assertNotEquals("Label C should equal  label A", labelC, labelA);
 
     }
 
     @Test
     public void compareTo() {
 
-        Assert.assertEquals("Label A should equal label B when compared", 0, labelA.compareTo(labelB));
-        Assert.assertEquals("Label B should equal label A when compared", 0, labelB.compareTo(labelA));
+        Assert.assertEquals("Label A should equal label B when compared", 0, comparer.compare(labelA, labelB));
+        Assert.assertEquals("Label B should equal label A when compared", 0, comparer.compare(labelB, labelA));
 
-        Assert.assertEquals("Label A is equal label C when compared", 0, labelA.compareTo(labelC));
-        Assert.assertEquals("Label C is equal label A when compared", 0, labelC.compareTo(labelA));
+        Assert.assertEquals("Label A is equal label C when compared", 0, comparer.compare(labelA, labelC));
+        Assert.assertEquals("Label C is equal label A when compared", 0, comparer.compare(labelC, labelA));
 
-        Assert.assertEquals("Label A is worse than label D when compared", 1, labelA.compareTo(labelD));
-        Assert.assertEquals("Label D is better than label A when compared", -1, labelD.compareTo(labelA));
+        Assert.assertEquals("Label A is worse than label D when compared", 1, comparer.compare(labelA, labelD));
+        Assert.assertEquals("Label D is better than label A when compared", -1, comparer.compare(labelD, labelA));
     }
 
     @Test
@@ -82,7 +90,6 @@ public class LabelFunctionTest extends JUnitTestAbstract {
 
     @Test
     public void string() {
-
         Assert.assertNotNull("Should print string. ", labelA.toString());
         Assert.assertNotNull("Should print string. ", labelB.toString());
         Assert.assertNotNull("Should print string. ", labelC.toString());
@@ -111,7 +118,7 @@ public class LabelFunctionTest extends JUnitTestAbstract {
         closedLabels = labels.stream().filter(Label::isClosed).count();
         Assert.assertEquals("Should be two closed labels:", 2, closedLabels);
 
-        labels.add(new Label(null,null,0,null,null,0,0));
+        labels.add(new Label(null, null, 0, null, null, 0, 0));
         closedLabels = labels.stream().filter(Label::isClosed).count();
         Assert.assertEquals("Should be two closed labels:", 2, closedLabels);
     }
