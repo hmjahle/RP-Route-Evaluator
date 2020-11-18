@@ -39,8 +39,8 @@ public class LabellingAlgorithm {
         this.labels = new Label[graph.getNodes().size()];
         this.visits = new Visit[graph.getNodes().size()];
         this.labelLists = new LabelLists(graph.getNodes().size(), graph.getNodes().size() * 10);
-        this.unExtendedLabels = new PriorityQueue<>(new LabelObjectiveValueComparer());
-        this.labelsOnDestinationNode = new PriorityQueue<>(new LabelObjectiveValueComparer());
+        this.unExtendedLabels = new PriorityQueue<>();
+        this.labelsOnDestinationNode = new PriorityQueue<>();
         this.robustnessTimeSeconds = graph.getRobustTimeSeconds();
     }
 

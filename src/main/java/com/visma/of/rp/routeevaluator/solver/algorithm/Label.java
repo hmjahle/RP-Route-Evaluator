@@ -1,7 +1,7 @@
 package com.visma.of.rp.routeevaluator.solver.algorithm;
 
 
-public class Label {
+public class Label implements Comparable<Label> {
     private Label previous;
     private Node node;
     private IObjective objective;
@@ -105,6 +105,30 @@ public class Label {
             return 2;
     }
 
+
+    @Override
+    public int compareTo(Label other) {
+        return Double.compare(objective.getObjectiveValue(), other.objective.getObjectiveValue());
+    }
+
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof Label)
+            return this.dominates(((Label) other)) == 0;
+        return false;
+    }
+
+
+    @Override
+    public int hashCode() {
+        int hash = (int) currentTime;
+        hash += ((int) canLeaveLocationAtTime << 2);
+        hash += ((int) travelTime << 4);
+        hash += ((int) objective.getObjectiveValue() * 1E+6);
+        hash += (node.getNodeId() << 6);
+        return hash;
+    }
 
     @Override
     public String toString() {
