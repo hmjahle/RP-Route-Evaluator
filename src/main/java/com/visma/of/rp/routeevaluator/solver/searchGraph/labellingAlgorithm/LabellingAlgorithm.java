@@ -85,7 +85,7 @@ public class LabellingAlgorithm {
      */
     private RouteEvaluatorResult buildRouteEvaluatorResult(Label bestLabel, IShift employeeWorkShift) {
         Route route = new Route(employeeWorkShift);
-        route.setTimeOfOfficeReturn(bestLabel.getCurrentTime());
+        route.setTimeOfArrivalAtDestination(bestLabel.getCurrentTime());
         extractVisitsAndSyncedStartTime(bestLabel, route);
         return new RouteEvaluatorResult(bestLabel.getObjective(), route);
     }

@@ -13,24 +13,24 @@ public class Route {
 
     private IShift employeeWorkShift;
     private List<Visit> visitSolution;
-    private long timeOfOfficeReturn;
+    private long timeOfArrivalAtDestination;
 
     public Route(IShift employeeWorkShift) {
         this.employeeWorkShift = employeeWorkShift;
         this.visitSolution = new ArrayList<>();
-        this.timeOfOfficeReturn = 0L;
+        this.timeOfArrivalAtDestination = 0L;
     }
 
     public void addVisits(Visit[] visits, int visitsCnt) {
         visitSolution.addAll(Arrays.asList(visits).subList(0, visitsCnt));
     }
 
-    public void setTimeOfOfficeReturn(long timeOfOfficeReturn) {
-        this.timeOfOfficeReturn = timeOfOfficeReturn;
+    public void setTimeOfArrivalAtDestination(long timeOfArrivalAtDestination) {
+        this.timeOfArrivalAtDestination = timeOfArrivalAtDestination;
     }
 
-    public long getTimeOfOfficeReturn() {
-        return timeOfOfficeReturn;
+    public long getTimeOfArrivalAtDestination() {
+        return timeOfArrivalAtDestination;
     }
 
     public IShift getEmployeeWorkShift() {
