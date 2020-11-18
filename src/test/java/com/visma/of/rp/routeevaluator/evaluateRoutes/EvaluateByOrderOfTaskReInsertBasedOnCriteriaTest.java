@@ -156,10 +156,10 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
     private void assertStrictTwoTasks(RouteEvaluatorResult result) {
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
 
-        Assert.assertEquals("Start time visit 1 should be: ", 20, result.getVisitSolution().get(0).getStart());
+        Assert.assertEquals("Start time visit 1 should be: ", 20, result.getVisitSolution().get(0).getStartTime());
         Assert.assertTrue("Task type 1 should be strict: ", result.getVisitSolution().get(0).getTask().isStrict());
 
-        Assert.assertEquals("Start time visit 2 should be: ", 40, result.getVisitSolution().get(1).getStart());
+        Assert.assertEquals("Start time visit 2 should be: ", 40, result.getVisitSolution().get(1).getStartTime());
 
         Assert.assertEquals("Office return should be: ", 47, result.getTimeOfOfficeReturn().longValue());
         Assert.assertEquals("Cost should be: ", 47, result.getObjectiveValue(), 1E-6);
@@ -169,23 +169,23 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
     private void assertAllStrict(RouteEvaluatorResult result) {
         Assert.assertEquals("Number of visits should be: ", 8, result.getVisitSolution().size());
 
-        Assert.assertEquals("Start time visit 1 should be: ", 20, result.getVisitSolution().get(0).getStart());
+        Assert.assertEquals("Start time visit 1 should be: ", 20, result.getVisitSolution().get(0).getStartTime());
         Assert.assertTrue("Task type visit 1 should be strict: ", result.getVisitSolution().get(0).getTask().isStrict());
 
-        Assert.assertEquals("Start time visit 2 should be: ", 26, result.getVisitSolution().get(1).getStart());
+        Assert.assertEquals("Start time visit 2 should be: ", 26, result.getVisitSolution().get(1).getStartTime());
 
-        Assert.assertEquals("Start time visit 3 should be: ", 40, result.getVisitSolution().get(2).getStart());
+        Assert.assertEquals("Start time visit 3 should be: ", 40, result.getVisitSolution().get(2).getStartTime());
 
-        Assert.assertEquals("Start time visit 4 should be: ", 46, result.getVisitSolution().get(3).getStart());
+        Assert.assertEquals("Start time visit 4 should be: ", 46, result.getVisitSolution().get(3).getStartTime());
 
-        Assert.assertEquals("Start time visit 5 should be: ", 55, result.getVisitSolution().get(4).getStart());
+        Assert.assertEquals("Start time visit 5 should be: ", 55, result.getVisitSolution().get(4).getStartTime());
         Assert.assertTrue("Task type visit 5 should be strict: ", result.getVisitSolution().get(4).getTask().isStrict());
 
-        Assert.assertEquals("Start time visit 6 should be: ", 61, result.getVisitSolution().get(5).getStart());
+        Assert.assertEquals("Start time visit 6 should be: ", 61, result.getVisitSolution().get(5).getStartTime());
 
-        Assert.assertEquals("Start time visit 7 should be: ", 67, result.getVisitSolution().get(6).getStart());
+        Assert.assertEquals("Start time visit 7 should be: ", 67, result.getVisitSolution().get(6).getStartTime());
 
-        Assert.assertEquals("Start time visit 8 should be: ", 73, result.getVisitSolution().get(7).getStart());
+        Assert.assertEquals("Start time visit 8 should be: ", 73, result.getVisitSolution().get(7).getStartTime());
 
         Assert.assertEquals("Office return should be: ", 80, result.getTimeOfOfficeReturn().longValue());
         Assert.assertEquals("Cost should be: ", 82, result.getObjectiveValue(), 1E-6);
@@ -195,25 +195,25 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
     private void assertAllStrictAndSynced(RouteEvaluatorResult result) {
         Assert.assertEquals("Number of visits should be: ", 8, result.getVisitSolution().size());
 
-        Assert.assertEquals("Start time visit 1 should be: ", 20, result.getVisitSolution().get(0).getStart());
+        Assert.assertEquals("Start time visit 1 should be: ", 20, result.getVisitSolution().get(0).getStartTime());
         Assert.assertTrue("Task type visit 1 should be synced: ", result.getVisitSolution().get(0).getTask().isSynced());
 
-        Assert.assertEquals("Start time visit 2 should be: ", 26, result.getVisitSolution().get(1).getStart());
+        Assert.assertEquals("Start time visit 2 should be: ", 26, result.getVisitSolution().get(1).getStartTime());
         Assert.assertTrue("Task type visit 2 should be strict: ", result.getVisitSolution().get(1).getTask().isStrict());
 
-        Assert.assertEquals("Start time visit 3 should be: ", 40, result.getVisitSolution().get(2).getStart());
+        Assert.assertEquals("Start time visit 3 should be: ", 40, result.getVisitSolution().get(2).getStartTime());
 
-        Assert.assertEquals("Start time visit 4 should be: ", 46, result.getVisitSolution().get(3).getStart());
+        Assert.assertEquals("Start time visit 4 should be: ", 46, result.getVisitSolution().get(3).getStartTime());
 
-        Assert.assertEquals("Start time visit 5 should be: ", 55, result.getVisitSolution().get(4).getStart());
+        Assert.assertEquals("Start time visit 5 should be: ", 55, result.getVisitSolution().get(4).getStartTime());
         Assert.assertTrue("Task type visit 5 should be synced: ", result.getVisitSolution().get(4).getTask().isSynced());
 
-        Assert.assertEquals("Start time visit 6 should be: ", 61, result.getVisitSolution().get(5).getStart());
+        Assert.assertEquals("Start time visit 6 should be: ", 61, result.getVisitSolution().get(5).getStartTime());
 
-        Assert.assertEquals("Start time visit 7 should be: ", 67, result.getVisitSolution().get(6).getStart());
+        Assert.assertEquals("Start time visit 7 should be: ", 67, result.getVisitSolution().get(6).getStartTime());
         Assert.assertTrue("Task type visit 7 should be synced: ", result.getVisitSolution().get(6).getTask().isSynced());
 
-        Assert.assertEquals("Start time visit 8 should be: ", 73, result.getVisitSolution().get(7).getStart());
+        Assert.assertEquals("Start time visit 8 should be: ", 73, result.getVisitSolution().get(7).getStartTime());
         Assert.assertTrue("Task type visit 8 should be strict: ", result.getVisitSolution().get(7).getTask().isStrict());
 
         Assert.assertEquals("Office return should be: ", 80, result.getTimeOfOfficeReturn().longValue());
@@ -224,10 +224,10 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
     private void assertTwoTasksSynced(RouteEvaluatorResult result) {
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
 
-        Assert.assertEquals("Start time visit 1 should be: ", 20, result.getVisitSolution().get(0).getStart());
+        Assert.assertEquals("Start time visit 1 should be: ", 20, result.getVisitSolution().get(0).getStartTime());
         Assert.assertTrue("Task type visit 1 should be synced: ", result.getVisitSolution().get(0).getTask().isSynced());
 
-        Assert.assertEquals("Start time visit 2 should be: ", 40, result.getVisitSolution().get(1).getStart());
+        Assert.assertEquals("Start time visit 2 should be: ", 40, result.getVisitSolution().get(1).getStartTime());
 
         Assert.assertEquals("Office return should be: ", 47, result.getTimeOfOfficeReturn().longValue());
         Assert.assertEquals("Cost should be: ", 47, result.getObjectiveValue(), 1E-6);
@@ -237,25 +237,25 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
     private void assertAllTasks(RouteEvaluatorResult result) {
         Assert.assertEquals("Number of visits should be: ", 8, result.getVisitSolution().size());
 
-        Assert.assertEquals("Start time should be: ", 20, result.getVisitSolution().get(0).getStart());
+        Assert.assertEquals("Start time should be: ", 20, result.getVisitSolution().get(0).getStartTime());
         Assert.assertTrue("Task type should be synced: ", result.getVisitSolution().get(0).getTask().isSynced());
 
-        Assert.assertEquals("Start time should be: ", 26, result.getVisitSolution().get(1).getStart());
+        Assert.assertEquals("Start time should be: ", 26, result.getVisitSolution().get(1).getStartTime());
         Assert.assertTrue("Task type should be strict: ", result.getVisitSolution().get(1).getTask().isStrict());
 
-        Assert.assertEquals("Start time should be: ", 40, result.getVisitSolution().get(2).getStart());
-        Assert.assertEquals("Start time should be: ", 46, result.getVisitSolution().get(3).getStart());
+        Assert.assertEquals("Start time should be: ", 40, result.getVisitSolution().get(2).getStartTime());
+        Assert.assertEquals("Start time should be: ", 46, result.getVisitSolution().get(3).getStartTime());
 
-        Assert.assertEquals("Start time should be: ", 55, result.getVisitSolution().get(4).getStart());
+        Assert.assertEquals("Start time should be: ", 55, result.getVisitSolution().get(4).getStartTime());
         Assert.assertTrue("Task type should be synced: ", result.getVisitSolution().get(4).getTask().isSynced());
 
-        Assert.assertEquals("Start time should be: ", 67, result.getVisitSolution().get(5).getStart());
+        Assert.assertEquals("Start time should be: ", 67, result.getVisitSolution().get(5).getStartTime());
         Assert.assertTrue("Task type should be synced: ", result.getVisitSolution().get(5).getTask().isSynced());
 
-        Assert.assertEquals("Start time should be: ", 73, result.getVisitSolution().get(6).getStart());
+        Assert.assertEquals("Start time should be: ", 73, result.getVisitSolution().get(6).getStartTime());
         Assert.assertTrue("Task type should be strict:: ", result.getVisitSolution().get(6).getTask().isStrict());
 
-        Assert.assertEquals("Start time should be: ", 79, result.getVisitSolution().get(7).getStart());
+        Assert.assertEquals("Start time should be: ", 79, result.getVisitSolution().get(7).getStartTime());
 
         Assert.assertEquals("Office return should be: ", 86, result.getTimeOfOfficeReturn().longValue());
         Assert.assertEquals("Cost should be: ", 86, result.getObjectiveValue(), 1E-6);
@@ -264,10 +264,10 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
 
     private void assertStrictAndSynced(RouteEvaluatorResult result) {
         Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
-        Assert.assertEquals("Start time visit 1 should be: ", 20, result.getVisitSolution().get(0).getStart());
-        Assert.assertEquals("Start time visit 2 should be: ", 26, result.getVisitSolution().get(1).getStart());
-        Assert.assertEquals("Start time visit 3 should be: ", 40, result.getVisitSolution().get(2).getStart());
-        Assert.assertEquals("Start time visit 3 should be: ", 46, result.getVisitSolution().get(3).getStart());
+        Assert.assertEquals("Start time visit 1 should be: ", 20, result.getVisitSolution().get(0).getStartTime());
+        Assert.assertEquals("Start time visit 2 should be: ", 26, result.getVisitSolution().get(1).getStartTime());
+        Assert.assertEquals("Start time visit 3 should be: ", 40, result.getVisitSolution().get(2).getStartTime());
+        Assert.assertEquals("Start time visit 3 should be: ", 46, result.getVisitSolution().get(3).getStartTime());
         Assert.assertEquals("Office return should be: ", 53, result.getTimeOfOfficeReturn().longValue());
         Assert.assertEquals("Cost should be: ", 53, result.getObjectiveValue(), 1E-6);
     }

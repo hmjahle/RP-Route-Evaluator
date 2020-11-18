@@ -263,8 +263,7 @@ public class LabellingAlgorithm {
     private int addVisit(int visitCnt, Label currentLabel) {
         visits[visitCnt++] = new Visit(currentLabel.getNode().getTask(), currentLabel.getCurrentTime(), currentLabel.getCurrentTime() +
                 currentLabel.getNode().getTask().getDuration(),
-                currentLabel.getTravelTime(),
-                robustnessTimeSeconds);
+                currentLabel.getTravelTime());
         return visitCnt;
     }
 

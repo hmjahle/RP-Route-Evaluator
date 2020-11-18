@@ -5,54 +5,31 @@ import com.visma.of.rp.routeevaluator.interfaces.ITask;
 public class Visit {
 
     private final ITask task;
-    private long start;
-    private long end;
-    private long travelTimeWithParking;
-    private long robustnessTimeSeconds;
+    private long startTime;
+    private long endTime;
+    private long travelTime;
 
-    public Visit(ITask task, long start, long end,
-                 long travelTimeWithParking, long robustnessTimeSeconds) {
+    public Visit(ITask task, long startTime, long endTime, long travelTime) {
         this.task = task;
-        this.start = start;
-        this.end = end;
-        this.travelTimeWithParking = travelTimeWithParking;
-        this.robustnessTimeSeconds = robustnessTimeSeconds;
-    }
-
-    public Visit(Visit copy) {
-        this.task = copy.task;
-        this.start = copy.start;
-        this.end = copy.end;
-        this.travelTimeWithParking = copy.travelTimeWithParking;
-        this.robustnessTimeSeconds = copy.robustnessTimeSeconds;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.travelTime = travelTime;
     }
 
     public ITask getTask() {
         return task;
     }
 
-    public long getStart() {
-        return start;
+    public long getStartTime() {
+        return startTime;
     }
 
-    public long getEnd() {
-        return end;
+    public long getEndTime() {
+        return endTime;
     }
 
-    public void setStart(long start) {
-        this.start = start;
-    }
-
-    public void setEnd(long end) {
-        this.end = end;
-    }
-
-    public long getTravelTimeWithParking() {
-        return travelTimeWithParking;
-    }
-
-    public long getRobustnessTimeSeconds() {
-        return robustnessTimeSeconds;
+    public long getTravelTime() {
+        return travelTime;
     }
 
 }

@@ -58,7 +58,7 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
 
         Assert.assertEquals("Number of visits should be: ", 1, result.getVisitSolution().size());
-        Assert.assertEquals("Start time should be: ", 30, result.getVisitSolution().get(0).getStart());
+        Assert.assertEquals("Start time should be: ", 30, result.getVisitSolution().get(0).getStartTime());
         Assert.assertEquals("Office return should be: ", 41, result.getTimeOfOfficeReturn().longValue());
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
     }
@@ -69,10 +69,10 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
 
         Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
-        Assert.assertEquals("Start time should be: ", 10, result.getVisitSolution().get(0).getStart());
-        Assert.assertEquals("Start time should be: ", 20, result.getVisitSolution().get(1).getStart());
-        Assert.assertEquals("Start time should be: ", 30, result.getVisitSolution().get(2).getStart());
-        Assert.assertEquals("Start time should be: ", 40, result.getVisitSolution().get(3).getStart());
+        Assert.assertEquals("Start time should be: ", 10, result.getVisitSolution().get(0).getStartTime());
+        Assert.assertEquals("Start time should be: ", 20, result.getVisitSolution().get(1).getStartTime());
+        Assert.assertEquals("Start time should be: ", 30, result.getVisitSolution().get(2).getStartTime());
+        Assert.assertEquals("Start time should be: ", 40, result.getVisitSolution().get(3).getStartTime());
         Assert.assertEquals("Office return should be: ", 51, result.getTimeOfOfficeReturn().longValue());
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
     }

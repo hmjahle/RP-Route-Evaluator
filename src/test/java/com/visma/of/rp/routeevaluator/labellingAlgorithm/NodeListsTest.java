@@ -19,7 +19,7 @@ import java.util.List;
  * Tests the node list class that is used within the labelling algorithm.
  * The class uses an array to store nodes from a search graph. The array is not changed.
  * During use hence logic around over writing old nodes and keeping track of data in the
- * list is tested here. 
+ * list is tested here.
  */
 public class NodeListsTest extends JUnitTestAbstract {
 

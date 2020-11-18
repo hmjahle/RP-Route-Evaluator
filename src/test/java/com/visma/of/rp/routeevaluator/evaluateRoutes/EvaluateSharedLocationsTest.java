@@ -43,10 +43,10 @@ public class EvaluateSharedLocationsTest extends JUnitTestAbstract {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, origin, destination);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
 
-        Assert.assertEquals("Start time should be: ", 2, result.getVisitSolution().get(0).getTravelTimeWithParking());
-        Assert.assertEquals("Start time should be: ", 1, result.getVisitSolution().get(1).getTravelTimeWithParking());
-        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(2).getTravelTimeWithParking());
-        Assert.assertEquals("Start time should be: ", 1, result.getVisitSolution().get(3).getTravelTimeWithParking());
+        Assert.assertEquals("Start time should be: ", 2, result.getVisitSolution().get(0).getTravelTime());
+        Assert.assertEquals("Start time should be: ", 1, result.getVisitSolution().get(1).getTravelTime());
+        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(2).getTravelTime());
+        Assert.assertEquals("Start time should be: ", 1, result.getVisitSolution().get(3).getTravelTime());
         Assert.assertEquals("Office return should be: ", 18, result.getTimeOfOfficeReturn().longValue());
     }
 
@@ -57,10 +57,10 @@ public class EvaluateSharedLocationsTest extends JUnitTestAbstract {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, origin, destination);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
 
-        Assert.assertEquals("Start time should be: ", 2, result.getVisitSolution().get(0).getTravelTimeWithParking());
-        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(1).getTravelTimeWithParking());
-        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(2).getTravelTimeWithParking());
-        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(3).getTravelTimeWithParking());
+        Assert.assertEquals("Start time should be: ", 2, result.getVisitSolution().get(0).getTravelTime());
+        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(1).getTravelTime());
+        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(2).getTravelTime());
+        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(3).getTravelTime());
         Assert.assertEquals("Office return should be: ", 16, result.getTimeOfOfficeReturn().longValue());
     }
 
@@ -71,10 +71,10 @@ public class EvaluateSharedLocationsTest extends JUnitTestAbstract {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, locations.get(0),locations.get(0));
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
 
-        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(0).getTravelTimeWithParking());
-        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(1).getTravelTimeWithParking());
-        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(2).getTravelTimeWithParking());
-        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(3).getTravelTimeWithParking());
+        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(0).getTravelTime());
+        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(1).getTravelTime());
+        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(2).getTravelTime());
+        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(3).getTravelTime());
         Assert.assertEquals("Office return should be: ", 4, result.getTimeOfOfficeReturn().longValue());
     }
 

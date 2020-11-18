@@ -45,13 +45,29 @@ public abstract class JUnitTestAbstract {
         return new TestTask(duration, startTime, endTime, false, true, true, 0, 0, new TestLocation(false), "x");
     }
 
+    protected ITask createSyncedTask(long duration, long startTime, long endTime, String id) {
+        return new TestTask(duration, startTime, endTime, false, true, true, 0, 0, new TestLocation(false), id);
+    }
+
+    protected ITask createSyncedStrictTask(long duration, long startTime, long endTime) {
+        return new TestTask(duration, startTime, endTime, true, true, true, 0, 0, new TestLocation(false), "x");
+    }
+
+    protected ITask createSyncedStrictTask(long duration, long startTime, long endTime, String id ) {
+        return new TestTask(duration, startTime, endTime, true, true, true, 0, 0, new TestLocation(false), id);
+    }
+
     protected ITask createStrictTask(long duration, long startTime, long endTime) {
         return new TestTask(duration, startTime, endTime, true, false, true, 0, 0, new TestLocation(false), "x");
     }
 
+    protected ITask createStrictTask(long duration, long startTime, long endTime, String id) {
+        return new TestTask(duration, startTime, endTime, true, false, true, 0, 0, new TestLocation(false), id);
+    }
+
     protected long getVisitTravelTime(RouteEvaluatorResult result, int visitNo) {
         Visit visitTask1 = result.getVisitSolution().get(visitNo);
-        return visitTask1.getTravelTimeWithParking();
+        return visitTask1.getTravelTime();
     }
 
 }
