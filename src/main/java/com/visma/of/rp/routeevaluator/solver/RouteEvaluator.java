@@ -57,7 +57,8 @@ public class RouteEvaluator {
      * Only returns objective value, no route details is returned.
      *
      * @param tasks                The route to be evaluated, the order of the list is the order of the route.
-     * @param syncedTasksStartTime Map of ALL synced tasks and their start times.
+     * @param syncedTasksStartTime Map of ALL synced tasks in the route and their start times. Should not contain tasks
+     *                             that are not in the route, this will reduce performance
      * @param employeeWorkShift    Employee the route applies to.
      * @return A double value representing the objective value of the route.
      */
@@ -98,7 +99,8 @@ public class RouteEvaluator {
      * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
      *
      * @param tasks                The route to be evaluated, the order of the list is the order of the route.
-     * @param syncedTasksStartTime Map of ALL synced tasks and their start times.
+     * @param syncedTasksStartTime Map of ALL synced tasks in the route and their start times. Should not contain tasks
+     *                             that are not in the route, this will reduce performance
      * @param employeeWorkShift    Employee the route applies to.
      * @return A routeEvaluator result for the evaluated route.
      */
@@ -113,7 +115,8 @@ public class RouteEvaluator {
      * a new route. This is performed such that each task is inserted in the optimal position in the route.
      *
      * @param tasks                The route to be evaluated.
-     * @param syncedTasksStartTime Map of ALL synced tasks and their start times.
+     * @param syncedTasksStartTime Map of ALL synced tasks in the route and their start times. Should not contain tasks
+     *                             that are not in the route, this will reduce performance
      * @param employeeWorkShift    Employee the route applies to.
      * @param criteriaFunction     The function that determines if a tasks should be re-inserted.
      * @return A routeEvaluator result for the evaluated route.
@@ -159,7 +162,8 @@ public class RouteEvaluator {
      * functions in the route evaluator.
      *
      * @param tasks                The route to be evaluated, the order of the list is the order of the route.
-     * @param syncedTasksStartTime Map of ALL synced tasks and their start times.
+     * @param syncedTasksStartTime Map of ALL synced tasks in the route and their start times. Should not contain tasks
+     *                             that are not in the route, this will reduce performance
      * @param employeeWorkShift    Employee the route applies to.
      * @return A routeEvaluator result for the evaluated route.
      */
@@ -176,7 +180,8 @@ public class RouteEvaluator {
      *
      * @param tasks                The route to be evaluated, the order of the list is the order of the route.
      * @param insertTask           The task to be inserted into the route.
-     * @param syncedTasksStartTime Map of ALL synced tasks and their start times.
+     * @param syncedTasksStartTime Map of ALL synced tasks in the route and their start times. Should not contain tasks
+     *                             that are not in the route, this will reduce performance
      * @param employeeWorkShift    Employee the route applies to.
      * @return A routeEvaluator result for the evaluated route.
      */
@@ -207,7 +212,8 @@ public class RouteEvaluator {
      *
      * @param tasks                The route to be evaluated, the order of the list is the order of the route.
      * @param insertTasks          The list of tasks to be inserted into the route.
-     * @param syncedTasksStartTime Map of ALL synced tasks and their start times.
+     * @param syncedTasksStartTime Map of ALL synced tasks in the route and their start times. Should not contain tasks
+     *                             that are not in the route, this will reduce performance
      * @param employeeWorkShift    Employee the route applies to.
      * @return A routeEvaluator result for the evaluated route.
      */
