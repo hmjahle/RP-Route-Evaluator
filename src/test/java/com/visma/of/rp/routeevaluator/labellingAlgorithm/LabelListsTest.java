@@ -1,10 +1,10 @@
 package com.visma.of.rp.routeevaluator.labellingAlgorithm;
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjective;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Label;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.LabelLists;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Node;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ResourceTwoElements;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.WeightedObjective;
+import com.visma.of.rp.routeevaluator.solver.algorithm.Label;
+import com.visma.of.rp.routeevaluator.solver.algorithm.LabelLists;
+import com.visma.of.rp.routeevaluator.solver.algorithm.Node;
+import com.visma.of.rp.routeevaluator.solver.algorithm.ResourceTwoElements;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -111,7 +111,7 @@ public class LabelListsTest {
 
     private Label createLabel(WeightedObjective cost1, ResourceTwoElements resourcesA) {
         return new Label(null, null, 0,
-                cost1, resourcesA, 3, 0, 2);
+                cost1, resourcesA, 3, 0);
     }
 
 }

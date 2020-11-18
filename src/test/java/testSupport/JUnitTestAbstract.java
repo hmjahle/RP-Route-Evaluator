@@ -1,13 +1,13 @@
 package testSupport;
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjective;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
-import com.visma.of.rp.routeevaluator.routeResult.Visit;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Label;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ResourceOneElement;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.SearchGraph;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.WeightedObjective;
+import com.visma.of.rp.routeevaluator.interfaces.ILocation;
+import com.visma.of.rp.routeevaluator.interfaces.ITask;
+import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
+import com.visma.of.rp.routeevaluator.results.Visit;
+import com.visma.of.rp.routeevaluator.solver.algorithm.Label;
+import com.visma.of.rp.routeevaluator.solver.algorithm.ResourceOneElement;
+import com.visma.of.rp.routeevaluator.solver.algorithm.SearchGraph;
 import testInterfaceImplementationClasses.TestLocation;
 import testInterfaceImplementationClasses.TestTask;
 
@@ -26,7 +26,7 @@ public abstract class JUnitTestAbstract {
     }
 
     protected Label createStartLabel(SearchGraph graph) {
-        return new Label(null, graph.getOrigin(), graph.getOrigin().getLocationId(), new WeightedObjective(0), new ResourceOneElement(0), 0, 0, 0);
+        return new Label(null, graph.getOrigin(), graph.getOrigin().getLocationId(), new WeightedObjective(0), new ResourceOneElement(0), 0, 0);
     }
 
     protected ILocation createOffice() {

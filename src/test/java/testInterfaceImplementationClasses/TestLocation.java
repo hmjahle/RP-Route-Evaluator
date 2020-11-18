@@ -1,6 +1,6 @@
 package testInterfaceImplementationClasses;
 
-import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
+import com.visma.of.rp.routeevaluator.interfaces.ILocation;
 
 /**
  * Implements the ILocation interface and uses it to test methods in the route evaluator.

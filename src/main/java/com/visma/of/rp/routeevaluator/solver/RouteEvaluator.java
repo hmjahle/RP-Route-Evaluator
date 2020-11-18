@@ -1,12 +1,12 @@
 package com.visma.of.rp.routeevaluator.solver;
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints.ConstraintsIntraRouteHandler;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.ObjectiveFunctionsIntraRouteHandler;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjective;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.WeightedObjectiveWithValues;
-import com.visma.of.rp.routeevaluator.publicInterfaces.*;
-import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.*;
+import com.visma.of.rp.routeevaluator.evaluation.constraints.ConstraintsIntraRouteHandler;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.ObjectiveFunctionsIntraRouteHandler;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.WeightedObjective;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.WeightedObjectiveWithValues;
+import com.visma.of.rp.routeevaluator.interfaces.*;
+import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
+import com.visma.of.rp.routeevaluator.solver.algorithm.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,7 +40,6 @@ public class RouteEvaluator {
                           ILocation officePosition) {
         this(robustTimeSeconds, distanceMatrixMatrix, tasks, officePosition, officePosition);
     }
-
 
     public RouteEvaluator(long robustTimeSeconds, ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks,
                           ILocation origin, ILocation destination) {

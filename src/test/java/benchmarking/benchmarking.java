@@ -1,13 +1,13 @@
 package benchmarking;
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.SyncedTaskStartTimeObjectiveFunction;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TimeWindowObjectiveFunction;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TravelTimeObjectiveFunction;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
-import com.visma.of.rp.routeevaluator.routeResult.Visit;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.SyncedTaskStartTimeObjectiveFunction;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.TimeWindowObjectiveFunction;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.TravelTimeObjectiveFunction;
+import com.visma.of.rp.routeevaluator.interfaces.ILocation;
+import com.visma.of.rp.routeevaluator.interfaces.IShift;
+import com.visma.of.rp.routeevaluator.interfaces.ITask;
+import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
+import com.visma.of.rp.routeevaluator.results.Visit;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
 import testInterfaceImplementationClasses.TestLocation;
 import testInterfaceImplementationClasses.TestShift;

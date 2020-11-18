@@ -1,13 +1,13 @@
 package com.visma.of.rp.routeevaluator.objectiveFunctions;
 
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TimeWindowLowHighObjectiveFunction;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TimeWindowObjectiveFunction;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITravelTimeMatrix;
-import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.TimeWindowLowHighObjectiveFunction;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.TimeWindowObjectiveFunction;
+import com.visma.of.rp.routeevaluator.interfaces.ILocation;
+import com.visma.of.rp.routeevaluator.interfaces.IShift;
+import com.visma.of.rp.routeevaluator.interfaces.ITask;
+import com.visma.of.rp.routeevaluator.interfaces.ITravelTimeMatrix;
+import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
 import org.junit.Assert;
 import org.junit.Before;

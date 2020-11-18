@@ -1,7 +1,7 @@
 package testInterfaceImplementationClasses;
 
-import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
+import com.visma.of.rp.routeevaluator.interfaces.ILocation;
+import com.visma.of.rp.routeevaluator.interfaces.ITask;
 
 /**
  * Implements the ITask interface and uses it to test methods in the route evaluator.
