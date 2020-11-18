@@ -1,7 +1,7 @@
-package com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints;
+package com.visma.of.rp.routeevaluator.evaluation.constraints;
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ConstraintInfo;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IConstraintIntraRoute;
+import com.visma.of.rp.routeevaluator.evaluation.info.ConstraintInfo;
+import com.visma.of.rp.routeevaluator.interfaces.IConstraintIntraRoute;
 
 
 public class SyncedTasksConstraint implements IConstraintIntraRoute {

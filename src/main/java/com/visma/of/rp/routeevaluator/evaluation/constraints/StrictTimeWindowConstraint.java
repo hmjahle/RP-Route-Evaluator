@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints;
+package com.visma.of.rp.routeevaluator.evaluation.constraints;
 
 
 public class StrictTimeWindowConstraint extends CustomCriteriaConstraint {

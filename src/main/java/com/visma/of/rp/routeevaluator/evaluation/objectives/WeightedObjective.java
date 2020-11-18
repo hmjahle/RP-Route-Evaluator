@@ -1,6 +1,6 @@
-package com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives;
+package com.visma.of.rp.routeevaluator.evaluation.objectives;
 
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.IObjective;
+import com.visma.of.rp.routeevaluator.solver.algorithm.IObjective;
 
 /**
  * A weighted objective calculates the objectives value by adding the sum of weights multiplied by the values of the objectives.

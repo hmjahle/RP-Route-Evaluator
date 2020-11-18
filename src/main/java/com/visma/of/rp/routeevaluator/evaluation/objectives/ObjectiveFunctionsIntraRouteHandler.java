@@ -1,9 +1,9 @@
-package com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives;
+package com.visma.of.rp.routeevaluator.evaluation.objectives;
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ObjectiveInfo;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IObjectiveFunctionIntraRoute;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.IObjective;
+import com.visma.of.rp.routeevaluator.evaluation.info.ObjectiveInfo;
+import com.visma.of.rp.routeevaluator.interfaces.IObjectiveFunctionIntraRoute;
+import com.visma.of.rp.routeevaluator.interfaces.ITask;
+import com.visma.of.rp.routeevaluator.solver.algorithm.IObjective;
 
 import java.util.HashMap;
 import java.util.Map;

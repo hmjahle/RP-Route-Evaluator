@@ -1,13 +1,13 @@
-package com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm;
+package com.visma.of.rp.routeevaluator.solver.algorithm;
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints.ConstraintsIntraRouteHandler;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ConstraintInfo;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.ObjectiveFunctionsIntraRouteHandler;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.routeResult.Route;
-import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
-import com.visma.of.rp.routeevaluator.routeResult.Visit;
+import com.visma.of.rp.routeevaluator.evaluation.constraints.ConstraintsIntraRouteHandler;
+import com.visma.of.rp.routeevaluator.evaluation.info.ConstraintInfo;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.ObjectiveFunctionsIntraRouteHandler;
+import com.visma.of.rp.routeevaluator.interfaces.IShift;
+import com.visma.of.rp.routeevaluator.interfaces.ITask;
+import com.visma.of.rp.routeevaluator.results.Route;
+import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
+import com.visma.of.rp.routeevaluator.results.Visit;
 
 import java.util.PriorityQueue;
 

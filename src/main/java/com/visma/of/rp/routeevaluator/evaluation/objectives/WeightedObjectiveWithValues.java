@@ -1,6 +1,6 @@
-package com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives;
+package com.visma.of.rp.routeevaluator.evaluation.objectives;
 
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.IObjective;
+import com.visma.of.rp.routeevaluator.solver.algorithm.IObjective;
 
 import java.util.HashMap;
 import java.util.Map;

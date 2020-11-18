@@ -1,10 +1,10 @@
-package com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints;
+package com.visma.of.rp.routeevaluator.evaluation.constraints;
 
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.CustomCriteriaAbstract;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.ConstraintInfo;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.intraRouteEvaluationInfo.RouteEvaluationInfoAbstract;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IConstraintIntraRoute;
+import com.visma.of.rp.routeevaluator.evaluation.CustomCriteriaAbstract;
+import com.visma.of.rp.routeevaluator.evaluation.info.ConstraintInfo;
+import com.visma.of.rp.routeevaluator.evaluation.info.RouteEvaluationInfoAbstract;
+import com.visma.of.rp.routeevaluator.interfaces.IConstraintIntraRoute;
 
 import java.util.function.Function;
 

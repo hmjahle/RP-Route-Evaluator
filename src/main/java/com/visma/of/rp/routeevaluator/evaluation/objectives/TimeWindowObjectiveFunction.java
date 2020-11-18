@@ -1,4 +1,4 @@
-package com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives;
+package com.visma.of.rp.routeevaluator.evaluation.objectives;
 
 public class TimeWindowObjectiveFunction extends CustomCriteriaObjectiveFunction {
 
