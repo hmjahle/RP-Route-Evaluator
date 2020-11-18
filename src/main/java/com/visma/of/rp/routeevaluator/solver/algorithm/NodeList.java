@@ -25,14 +25,14 @@ public class NodeList {
         nodesCnt = 0;
     }
 
-    public void setNodes(SearchGraph graph, List<ITask> tasks) {
+    public void initializeWithNodes(SearchGraph graph, List<ITask> tasks) {
         nodesCnt = tasks.size();
         for (int i = 0; i < tasks.size(); i++) {
             nodes[i] = graph.getNode(tasks.get(i));
         }
     }
 
-    public void setNode(SearchGraph graph, ITask task) {
+    public void initializeWithNode(SearchGraph graph, ITask task) {
         nodesCnt = 1;
         nodes[0] = graph.getNode(task);
     }

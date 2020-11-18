@@ -27,7 +27,7 @@ public class RouteEvaluatorResult {
     }
 
     public Long getTimeOfOfficeReturn() {
-        return route.getTimeOfOfficeReturn();
+        return route.getTimeOfArrivalAtDestination();
     }
 
     public IObjective getObjective() {

@@ -89,7 +89,7 @@ public class RouteEvaluator {
      */
     private ExtendInfoOneElement initializeOneElementEvaluator(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime) {
         setSyncedNodesStartTime(syncedTasksStartTime);
-        setFirstNodeList(tasks);
+        updateFirstNodeList(tasks);
         return new ExtendInfoOneElement(firstNodeList);
     }
 
@@ -298,8 +298,8 @@ public class RouteEvaluator {
     private RouteEvaluatorResult calcRouteEvaluatorResult(IObjective objective, List<ITask> tasks, ITask insertTask,
                                                           Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
         setSyncedNodesStartTime(syncedTasksStartTime);
-        setFirstNodeList(tasks);
-        setSecondNodeList(insertTask);
+        updateFirstNodeList(tasks);
+        updateSecondNodeList(insertTask);
         ExtendInfoTwoElements nodeExtendInfoTwoElements = new ExtendInfoTwoElements(firstNodeList, secondNodeList);
         return algorithm.solveRouteEvaluatorResult(objective, nodeExtendInfoTwoElements, syncedNodesStartTime, employeeWorkShift);
     }
@@ -310,22 +310,22 @@ public class RouteEvaluator {
     private RouteEvaluatorResult calcRouteEvaluatorResult(IObjective objective, List<ITask> tasks, List<ITask> insertTasks,
                                                           Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
         setSyncedNodesStartTime(syncedTasksStartTime);
-        setFirstNodeList(tasks);
-        setSecondNodeList(insertTasks);
+        updateFirstNodeList(tasks);
+        updateSecondNodeList(insertTasks);
         ExtendInfoTwoElements nodeExtendInfoTwoElements = new ExtendInfoTwoElements(firstNodeList, secondNodeList);
         return algorithm.solveRouteEvaluatorResult(objective, nodeExtendInfoTwoElements, syncedNodesStartTime, employeeWorkShift);
     }
 
-    private void setFirstNodeList(List<ITask> tasks) {
-        firstNodeList.setNodes(graph, tasks);
+    private void updateFirstNodeList(List<ITask> tasks) {
+        firstNodeList.initializeWithNodes(graph, tasks);
     }
 
-    private void setSecondNodeList(ITask task) {
-        secondNodeList.setNode(graph, task);
+    private void updateSecondNodeList(ITask task) {
+        secondNodeList.initializeWithNode(graph, task);
     }
 
-    private void setSecondNodeList(List<ITask> syncedTasks) {
-        secondNodeList.setNodes(graph, syncedTasks);
+    private void updateSecondNodeList(List<ITask> tasks) {
+        secondNodeList.initializeWithNodes(graph, tasks);
     }
 
     private void setSyncedNodesStartTime(Map<ITask, Long> syncedTasksStartTime) {
