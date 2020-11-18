@@ -36,14 +36,6 @@ public class Node {
         return task == null ? 0 : task.getStartTime();
     }
 
-    long getEndTime() {
-        return task == null ? 0 : task.getEndTime();
-    }
-
-    void setSynced(boolean isSynced) {
-        this.isSynced = isSynced;
-    }
-
     public boolean isSynced() {
         return isSynced;
     }
