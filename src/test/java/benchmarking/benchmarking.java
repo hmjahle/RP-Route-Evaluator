@@ -75,14 +75,8 @@ public class benchmarking extends JUnitTestAbstract {
 
         mergeTasks.add(tasks.get(3));
         mergeTasks.add(tasks.get(84));
-//        mergeTasks.add(tasks.get(44));
-        mergeTasks.add(tasks.get(55));
-//        mergeTasks.add(tasks.get(23));
         mergeTasks.add(tasks.get(10));
-//        mergeTasks.add(tasks.get(54));
-//        mergeTasks.add(tasks.get(40));
         mergeTasks.add(tasks.get(27));
-//        mergeTasks.add(tasks.get(137));
         mergeTasks.add(tasks.get(179));
 
 
@@ -113,17 +107,16 @@ public class benchmarking extends JUnitTestAbstract {
         IShift shift = new TestShift(3600 * 8, 3600 * 8, 3600 * 16);
         for (int i = 0; i < 20000; i++) {
             for (int j = 0; j < 100; j++) {
-                RouteEvaluatorResult result1 = routeEvaluator1.evaluateRouteByTheOrderOfTasks(newTasks, syncedTasksNewStartTime, shift);
-                RouteEvaluatorResult result2 = routeEvaluator2.evaluateRouteByTheOrderOfTasks(newTasks, syncedTasksNewStartTime, shift);
-                RouteEvaluatorResult result3 = routeEvaluator3.evaluateRouteByTheOrderOfTasks(newTasks, syncedTasksNewStartTime, shift);
-
-                RouteEvaluatorResult result4 = routeEvaluator1.evaluateRouteByTheOrderOfTasksInsertTask(newTasks, mergeTasks.get(0), syncedTasksNewStartTime, shift);
-                RouteEvaluatorResult result5 = routeEvaluator2.evaluateRouteByTheOrderOfTasksInsertTask(newTasks, mergeTasks.get(1), syncedTasksNewStartTime, shift);
-                RouteEvaluatorResult result6 = routeEvaluator3.evaluateRouteByTheOrderOfTasksInsertTask(newTasks, mergeTasks.get(2), syncedTasksNewStartTime, shift);
+                routeEvaluator1.evaluateRouteByTheOrderOfTasks(newTasks, syncedTasksNewStartTime, shift);
+                routeEvaluator2.evaluateRouteByTheOrderOfTasks(newTasks, syncedTasksNewStartTime, shift);
+                routeEvaluator3.evaluateRouteByTheOrderOfTasks(newTasks, syncedTasksNewStartTime, shift);
+                routeEvaluator1.evaluateRouteByTheOrderOfTasksInsertTask(newTasks, mergeTasks.get(0), syncedTasksNewStartTime, shift);
+                routeEvaluator2.evaluateRouteByTheOrderOfTasksInsertTask(newTasks, mergeTasks.get(1), syncedTasksNewStartTime, shift);
+                routeEvaluator3.evaluateRouteByTheOrderOfTasksInsertTask(newTasks, mergeTasks.get(2), syncedTasksNewStartTime, shift);
             }
-            RouteEvaluatorResult result7 = routeEvaluator1.evaluateRouteByTheOrderOfTasksInsertTasks(newTasks, mergeTasks, syncedTasksAllStartTime, shift);
-            RouteEvaluatorResult result8 = routeEvaluator2.evaluateRouteByTheOrderOfTasksInsertTasks(newTasks, mergeTasks, syncedTasksAllStartTime, shift);
-            RouteEvaluatorResult result9 = routeEvaluator3.evaluateRouteByTheOrderOfTasksInsertTasks(newTasks, mergeTasks, syncedTasksAllStartTime, shift);
+            routeEvaluator1.evaluateRouteByTheOrderOfTasksInsertTasks(newTasks, mergeTasks, syncedTasksAllStartTime, shift);
+            routeEvaluator2.evaluateRouteByTheOrderOfTasksInsertTasks(newTasks, mergeTasks, syncedTasksAllStartTime, shift);
+            routeEvaluator3.evaluateRouteByTheOrderOfTasksInsertTasks(newTasks, mergeTasks, syncedTasksAllStartTime, shift);
         }
     }
 
