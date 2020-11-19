@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -122,8 +122,8 @@ public class RouteEvaluator {
      * @return A routeEvaluator result for the evaluated route.
      */
     public RouteEvaluatorResult evaluateRouteByTheOrderOfReInsertBasedOnCriteriaTasks(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime,
-                                                                                      IShift employeeWorkShift, Function<ITask, Boolean> criteriaFunction) {
-        List<ITask> fitsCriteria = tasks.stream().filter(criteriaFunction::apply).collect(Collectors.toList());
+                                                                                      IShift employeeWorkShift, Predicate<ITask> criteriaFunction) {
+        List<ITask> fitsCriteria = tasks.stream().filter(criteriaFunction).collect(Collectors.toList());
         List<ITask> doesNotFitCriteria = new ArrayList<>(tasks);
         doesNotFitCriteria.removeAll(fitsCriteria);
         return calcRouteEvaluatorResult(new WeightedObjective(), doesNotFitCriteria, fitsCriteria, syncedTasksStartTime, employeeWorkShift);
