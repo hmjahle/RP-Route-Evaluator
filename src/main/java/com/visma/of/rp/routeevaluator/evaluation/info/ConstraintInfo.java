@@ -21,12 +21,6 @@ public class ConstraintInfo extends RouteEvaluationInfoAbstract {
         return earliestOfficeReturn;
     }
 
-    @Override
-    public boolean isStrict() {
-        return task != null && task.isStrict();
-    }
-
-
     public long getStartOfServiceNextTask() {
         return startOfServiceNextTask;
     }
