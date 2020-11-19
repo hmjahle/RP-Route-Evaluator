@@ -24,10 +24,6 @@ public class Visit {
         return startTime;
     }
 
-    public long getEndTime() {
-        return endTime;
-    }
-
     public long getTravelTime() {
         return travelTime;
     }
