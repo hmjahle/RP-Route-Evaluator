@@ -51,6 +51,8 @@ public class LabelFunctionTest extends JUnitTestAbstract {
 
         Assert.assertNotEquals("Label A should not equal label D", labelA, labelD);
         Assert.assertNotEquals("Label D should not equal label A", labelD, labelA);
+
+        Assert.assertNotEquals("Should not equal other class.",labelA, 1);
     }
 
     @Test
