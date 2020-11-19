@@ -75,18 +75,17 @@ public class LabellingAlgorithm {
         Label bestLabel = runAlgorithm(initialObjective, nodeExtendInfo, syncedNodesStartTime, employeeWorkShift);
         if (bestLabel == null)
             return null;
-        return buildRouteEvaluatorResult(bestLabel, employeeWorkShift);
+        return buildRouteEvaluatorResult(bestLabel);
     }
 
     /**
      * Extract the solution from the labels and builds the route evaluator results and the visits with the respective information.
      *
      * @param bestLabel         Label representing the best route for the employee work shift.
-     * @param employeeWorkShift Work shift for the employee for which the route is calculated.
      * @return Results of the route.
      */
-    private RouteEvaluatorResult buildRouteEvaluatorResult(Label bestLabel, IShift employeeWorkShift) {
-        Route route = new Route(employeeWorkShift);
+    private RouteEvaluatorResult buildRouteEvaluatorResult(Label bestLabel) {
+        Route route = new Route();
         route.setTimeOfArrivalAtDestination(bestLabel.getCurrentTime());
         extractVisitsAndSyncedStartTime(bestLabel, route);
         return new RouteEvaluatorResult(bestLabel.getObjective(), route);
@@ -256,8 +255,7 @@ public class LabellingAlgorithm {
     }
 
     private int addVisit(int visitCnt, Label currentLabel) {
-        visits[visitCnt++] = new Visit(currentLabel.getNode().getTask(), currentLabel.getCurrentTime(), currentLabel.getCurrentTime() +
-                currentLabel.getNode().getTask().getDuration(),
+        visits[visitCnt++] = new Visit(currentLabel.getNode().getTask(), currentLabel.getCurrentTime(),
                 currentLabel.getTravelTime());
         return visitCnt;
     }

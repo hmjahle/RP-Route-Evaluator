@@ -6,13 +6,11 @@ public class Visit {
 
     private final ITask task;
     private long startTime;
-    private long endTime;
     private long travelTime;
 
-    public Visit(ITask task, long startTime, long endTime, long travelTime) {
+    public Visit(ITask task, long startTime, long travelTime) {
         this.task = task;
         this.startTime = startTime;
-        this.endTime = endTime;
         this.travelTime = travelTime;
     }
 
