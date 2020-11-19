@@ -1,13 +1,13 @@
 package com.visma.of.rp.routeevaluator.objectiveFunctions;
 
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TimeWindowLowHighObjectiveFunction;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TimeWindowObjectiveFunction;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITravelTimeMatrix;
-import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.TimeWindowLowHighObjectiveFunction;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.TimeWindowObjectiveFunction;
+import com.visma.of.rp.routeevaluator.interfaces.ILocation;
+import com.visma.of.rp.routeevaluator.interfaces.IShift;
+import com.visma.of.rp.routeevaluator.interfaces.ITask;
+import com.visma.of.rp.routeevaluator.interfaces.ITravelTimeMatrix;
+import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
 import org.junit.Assert;
 import org.junit.Before;
@@ -53,7 +53,7 @@ public class TimeWindowObjectiveFunctionTest extends JUnitTestAbstract {
         Assert.assertEquals("Objective value for the standard time window must be.", 0, result.getObjectiveValue(), 1E-6);
         Assert.assertEquals("Objective value for the low/high time window must be.", 0, resultLowHigh.getObjectiveValue(), 1E-6);
         Assert.assertEquals(9, getVisitTravelTime(result, 0));
-        Assert.assertEquals("Must return to office at: ", 19, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", 19, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     @Test
@@ -67,7 +67,7 @@ public class TimeWindowObjectiveFunctionTest extends JUnitTestAbstract {
         Assert.assertEquals("Objective value for the standard time window must be.", 1, result.getObjectiveValue(), 1E-6);
         Assert.assertEquals("Objective value for the low/high time window must be.", 100, resultLowHigh.getObjectiveValue(), 1E-6);
         Assert.assertEquals(10, getVisitTravelTime(result, 0));
-        Assert.assertEquals("Must return to office at: ", 21, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", 21, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     private void initTest() {
@@ -90,7 +90,7 @@ public class TimeWindowObjectiveFunctionTest extends JUnitTestAbstract {
         Assert.assertNotNull("Must be feasible. ", result);
         Assert.assertEquals("Objective value for the standard time window must be.", 70, result.getObjectiveValue(), 1E-6);
         Assert.assertEquals("Objective value for the low/high time window must be.", 39031, resultLowHigh.getObjectiveValue(), 1E-6);
-        Assert.assertEquals("Must return to office at: ", 54, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", 54, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     @Test
@@ -122,7 +122,7 @@ public class TimeWindowObjectiveFunctionTest extends JUnitTestAbstract {
         Assert.assertNotNull("Must be feasible. ", result);
         Assert.assertEquals("Objective value for the standard time window must be.", 0, result.getObjectiveValue(), 1E-6);
         Assert.assertEquals("Objective value for the low/high time window must be.", 0, resultLowHigh.getObjectiveValue(), 1E-6);
-        Assert.assertEquals("Must return to office at: ", 54, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", 54, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     private RouteEvaluatorResult evaluateRouteStandardTimeWindow(TestTask task1, TestTask task2, TestTask task3, TestTask task4) {

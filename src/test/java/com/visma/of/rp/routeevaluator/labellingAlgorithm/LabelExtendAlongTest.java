@@ -1,14 +1,14 @@
 package com.visma.of.rp.routeevaluator.labellingAlgorithm;
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints.ConstraintsIntraRouteHandler;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.ObjectiveFunctionsIntraRouteHandler;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITravelTimeMatrix;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.ExtendToInfo;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.Label;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.LabellingAlgorithm;
-import com.visma.of.rp.routeevaluator.solver.searchGraph.labellingAlgorithm.SearchGraph;
+import com.visma.of.rp.routeevaluator.evaluation.constraints.ConstraintsIntraRouteHandler;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.ObjectiveFunctionsIntraRouteHandler;
+import com.visma.of.rp.routeevaluator.interfaces.ILocation;
+import com.visma.of.rp.routeevaluator.interfaces.ITask;
+import com.visma.of.rp.routeevaluator.interfaces.ITravelTimeMatrix;
+import com.visma.of.rp.routeevaluator.solver.algorithm.ExtendToInfo;
+import com.visma.of.rp.routeevaluator.solver.algorithm.Label;
+import com.visma.of.rp.routeevaluator.solver.algorithm.LabellingAlgorithm;
+import com.visma.of.rp.routeevaluator.solver.algorithm.SearchGraph;
 import org.junit.Assert;
 import org.junit.Test;
 import testInterfaceImplementationClasses.TestTravelTimeMatrix;

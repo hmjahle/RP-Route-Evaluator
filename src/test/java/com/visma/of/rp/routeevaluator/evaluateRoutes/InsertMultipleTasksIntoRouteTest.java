@@ -1,11 +1,11 @@
 package com.visma.of.rp.routeevaluator.evaluateRoutes;
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TimeWindowObjectiveFunction;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITravelTimeMatrix;
-import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.TimeWindowObjectiveFunction;
+import com.visma.of.rp.routeevaluator.interfaces.ILocation;
+import com.visma.of.rp.routeevaluator.interfaces.IShift;
+import com.visma.of.rp.routeevaluator.interfaces.ITask;
+import com.visma.of.rp.routeevaluator.interfaces.ITravelTimeMatrix;
+import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,8 +19,6 @@ import testSupport.JUnitTestAbstract;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import static benchmarking.benchmarking.printResult;
 
 public class InsertMultipleTasksIntoRouteTest extends JUnitTestAbstract {
 
@@ -59,8 +57,6 @@ public class InsertMultipleTasksIntoRouteTest extends JUnitTestAbstract {
         insertTasks.add(allTasks.get(0));
         insertTasks.add(allTasks.get(2));
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTasks(tasks, insertTasks, shift);
-
-        printResult(result);
 
         Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());

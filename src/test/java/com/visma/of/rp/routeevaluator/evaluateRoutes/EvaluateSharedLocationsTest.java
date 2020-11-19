@@ -1,10 +1,10 @@
 package com.visma.of.rp.routeevaluator.evaluateRoutes;
 
-import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITravelTimeMatrix;
-import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
+import com.visma.of.rp.routeevaluator.interfaces.ILocation;
+import com.visma.of.rp.routeevaluator.interfaces.IShift;
+import com.visma.of.rp.routeevaluator.interfaces.ITask;
+import com.visma.of.rp.routeevaluator.interfaces.ITravelTimeMatrix;
+import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
 import org.junit.Assert;
 import org.junit.Before;
@@ -43,11 +43,11 @@ public class EvaluateSharedLocationsTest extends JUnitTestAbstract {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, origin, destination);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
 
-        Assert.assertEquals("Start time should be: ", 2, result.getVisitSolution().get(0).getTravelTimeWithParking());
-        Assert.assertEquals("Start time should be: ", 1, result.getVisitSolution().get(1).getTravelTimeWithParking());
-        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(2).getTravelTimeWithParking());
-        Assert.assertEquals("Start time should be: ", 1, result.getVisitSolution().get(3).getTravelTimeWithParking());
-        Assert.assertEquals("Office return should be: ", 18, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Start time should be: ", 2, result.getVisitSolution().get(0).getTravelTime());
+        Assert.assertEquals("Start time should be: ", 1, result.getVisitSolution().get(1).getTravelTime());
+        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(2).getTravelTime());
+        Assert.assertEquals("Start time should be: ", 1, result.getVisitSolution().get(3).getTravelTime());
+        Assert.assertEquals("Office return should be: ", 18, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     @Test
@@ -57,11 +57,11 @@ public class EvaluateSharedLocationsTest extends JUnitTestAbstract {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, origin, destination);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
 
-        Assert.assertEquals("Start time should be: ", 2, result.getVisitSolution().get(0).getTravelTimeWithParking());
-        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(1).getTravelTimeWithParking());
-        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(2).getTravelTimeWithParking());
-        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(3).getTravelTimeWithParking());
-        Assert.assertEquals("Office return should be: ", 16, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Start time should be: ", 2, result.getVisitSolution().get(0).getTravelTime());
+        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(1).getTravelTime());
+        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(2).getTravelTime());
+        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(3).getTravelTime());
+        Assert.assertEquals("Office return should be: ", 16, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     @Test
@@ -71,11 +71,11 @@ public class EvaluateSharedLocationsTest extends JUnitTestAbstract {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, locations.get(0),locations.get(0));
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
 
-        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(0).getTravelTimeWithParking());
-        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(1).getTravelTimeWithParking());
-        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(2).getTravelTimeWithParking());
-        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(3).getTravelTimeWithParking());
-        Assert.assertEquals("Office return should be: ", 4, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(0).getTravelTime());
+        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(1).getTravelTime());
+        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(2).getTravelTime());
+        Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(3).getTravelTime());
+        Assert.assertEquals("Office return should be: ", 4, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     private ITravelTimeMatrix createTravelTimeMatrix(ILocation origin, ILocation destination, Collection<ILocation> locations) {

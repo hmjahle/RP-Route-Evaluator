@@ -1,11 +1,11 @@
 package com.visma.of.rp.routeevaluator.evaluateRoutes;
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TravelTimeObjectiveFunction;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITravelTimeMatrix;
-import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.TravelTimeObjectiveFunction;
+import com.visma.of.rp.routeevaluator.interfaces.ILocation;
+import com.visma.of.rp.routeevaluator.interfaces.IShift;
+import com.visma.of.rp.routeevaluator.interfaces.ITask;
+import com.visma.of.rp.routeevaluator.interfaces.ITravelTimeMatrix;
+import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
 import org.junit.Assert;
 import org.junit.Before;
@@ -45,7 +45,7 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
 
         Assert.assertEquals("There should be no visits in the solution: ", 0, result.getVisitSolution().size());
-        Assert.assertEquals("Must return at correct time!", 100, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return at correct time!", 100, result.getTimeOfArrivalAtDestination().longValue());
         Assert.assertEquals("Cost should be: ", 50.0, result.getObjectiveValue(), 1E-6);
     }
 
@@ -58,8 +58,8 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
 
         Assert.assertEquals("Number of visits should be: ", 1, result.getVisitSolution().size());
-        Assert.assertEquals("Start time should be: ", 30, result.getVisitSolution().get(0).getStart());
-        Assert.assertEquals("Office return should be: ", 41, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Start time should be: ", 30, result.getVisitSolution().get(0).getStartTime());
+        Assert.assertEquals("Office return should be: ", 41, result.getTimeOfArrivalAtDestination().longValue());
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
     }
 
@@ -69,11 +69,11 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
 
         Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
-        Assert.assertEquals("Start time should be: ", 10, result.getVisitSolution().get(0).getStart());
-        Assert.assertEquals("Start time should be: ", 20, result.getVisitSolution().get(1).getStart());
-        Assert.assertEquals("Start time should be: ", 30, result.getVisitSolution().get(2).getStart());
-        Assert.assertEquals("Start time should be: ", 40, result.getVisitSolution().get(3).getStart());
-        Assert.assertEquals("Office return should be: ", 51, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Start time should be: ", 10, result.getVisitSolution().get(0).getStartTime());
+        Assert.assertEquals("Start time should be: ", 20, result.getVisitSolution().get(1).getStartTime());
+        Assert.assertEquals("Start time should be: ", 30, result.getVisitSolution().get(2).getStartTime());
+        Assert.assertEquals("Start time should be: ", 40, result.getVisitSolution().get(3).getStartTime());
+        Assert.assertEquals("Office return should be: ", 51, result.getTimeOfArrivalAtDestination().longValue());
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
     }
 
@@ -84,46 +84,46 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
 
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, origin, destination);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
-        Assert.assertEquals("Office return should be: ", 19, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Office return should be: ", 19, result.getTimeOfArrivalAtDestination().longValue());
 
         routeEvaluator.updateOrigin(destination);
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
-        Assert.assertEquals("When starting at the destination office return should be: ", 27, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("When starting at the destination office return should be: ", 27, result.getTimeOfArrivalAtDestination().longValue());
 
         routeEvaluator.updateOrigin(allTasks.get(0).getLocation());
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
-        Assert.assertEquals("When starting at the first node office return should be: ", 17, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("When starting at the first node office return should be: ", 17, result.getTimeOfArrivalAtDestination().longValue());
 
         routeEvaluator.updateOrigin(allTasks.get(2).getLocation());
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
-        Assert.assertEquals("When starting at another node office return should be: ", 18, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("When starting at another node office return should be: ", 18, result.getTimeOfArrivalAtDestination().longValue());
 
         routeEvaluator.updateOrigin(origin);
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
-        Assert.assertEquals("When starting at the destination office return should be: ", 19, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("When starting at the destination office return should be: ", 19, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     @Test
     public void multipleTasksUpdateDestination() {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, origin, destination);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
-        Assert.assertEquals("Office return should be: ", 51, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Office return should be: ", 51, result.getTimeOfArrivalAtDestination().longValue());
 
         routeEvaluator.updateDestination(origin);
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
-        Assert.assertEquals("When returning to origin office return should be: ", 43, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("When returning to origin office return should be: ", 43, result.getTimeOfArrivalAtDestination().longValue());
 
         routeEvaluator.updateDestination(allTasks.get(1).getLocation());
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
-        Assert.assertEquals("When returning to another node office return should be: ", 42, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("When returning to another node office return should be: ", 42, result.getTimeOfArrivalAtDestination().longValue());
 
         routeEvaluator.updateDestination(allTasks.get(3).getLocation());
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
-        Assert.assertEquals("When returning to the previous node office return should be: ", 41, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("When returning to the previous node office return should be: ", 41, result.getTimeOfArrivalAtDestination().longValue());
 
         routeEvaluator.updateDestination(destination);
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
-        Assert.assertEquals("When returning to destination office return should be: ", 51, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("When returning to destination office return should be: ", 51, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     private ITravelTimeMatrix createTravelTimeMatrix(ILocation origin, ILocation destination, Collection<ITask> tasks) {

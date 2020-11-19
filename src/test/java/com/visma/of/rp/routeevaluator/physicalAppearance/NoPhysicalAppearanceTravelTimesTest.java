@@ -1,9 +1,9 @@
 package com.visma.of.rp.routeevaluator.physicalAppearance;
 
-import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
+import com.visma.of.rp.routeevaluator.interfaces.ILocation;
+import com.visma.of.rp.routeevaluator.interfaces.IShift;
+import com.visma.of.rp.routeevaluator.interfaces.ITask;
+import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
 import org.junit.Assert;
 import org.junit.Before;
@@ -50,7 +50,7 @@ public class NoPhysicalAppearanceTravelTimesTest extends JUnitTestAbstract {
         Assert.assertEquals(getTime(0, 6, 28), getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
         Assert.assertEquals(getTime(0, 2, 23), getVisitTravelTime(result, 2));
-        Assert.assertEquals("Must return to office at: ", getTime(10, 25, 40), result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", getTime(10, 25, 40), result.getTimeOfArrivalAtDestination().longValue());
     }
 
     @Test
@@ -65,7 +65,7 @@ public class NoPhysicalAppearanceTravelTimesTest extends JUnitTestAbstract {
         Assert.assertEquals(getTime(0, 6, 28), getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
         Assert.assertEquals(getTime(0, 2, 7), getVisitTravelTime(result, 2));
-        Assert.assertEquals("Must return to office at: ", getTime(10, 28, 51), result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", getTime(10, 28, 51), result.getTimeOfArrivalAtDestination().longValue());
     }
 
 
@@ -81,7 +81,7 @@ public class NoPhysicalAppearanceTravelTimesTest extends JUnitTestAbstract {
         Assert.assertEquals(getTime(0, 6, 28), getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
         Assert.assertEquals(getTime(0, 2, 7), getVisitTravelTime(result, 2));
-        Assert.assertEquals("Must return to office at: ", getTime(10, 26, 44), result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", getTime(10, 26, 44), result.getTimeOfArrivalAtDestination().longValue());
     }
 
     @Test
@@ -96,7 +96,7 @@ public class NoPhysicalAppearanceTravelTimesTest extends JUnitTestAbstract {
         Assert.assertEquals(getTime(0, 6, 28), getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
         Assert.assertEquals(getTime(0, 2, 23), getVisitTravelTime(result, 2));
-        Assert.assertEquals("Must return to office at: ", getTime(10, 25, 40), result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", getTime(10, 25, 40), result.getTimeOfArrivalAtDestination().longValue());
     }
 
     @Test
@@ -110,7 +110,7 @@ public class NoPhysicalAppearanceTravelTimesTest extends JUnitTestAbstract {
         Assert.assertEquals(getTime(0, 6, 28), getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
         Assert.assertEquals(getTime(0, 2, 7), getVisitTravelTime(result, 2));
-        Assert.assertEquals("Must return to office at: ", getTime(10, 27, 51), result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", getTime(10, 27, 51), result.getTimeOfArrivalAtDestination().longValue());
     }
 
     private List<ILocation> createLocations() {

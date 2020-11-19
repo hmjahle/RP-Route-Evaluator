@@ -1,11 +1,11 @@
 package com.visma.of.rp.routeevaluator.evaluateRoutes;
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TimeWindowObjectiveFunction;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITravelTimeMatrix;
-import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.TimeWindowObjectiveFunction;
+import com.visma.of.rp.routeevaluator.interfaces.ILocation;
+import com.visma.of.rp.routeevaluator.interfaces.IShift;
+import com.visma.of.rp.routeevaluator.interfaces.ITask;
+import com.visma.of.rp.routeevaluator.interfaces.ITravelTimeMatrix;
+import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,8 +17,6 @@ import testInterfaceImplementationClasses.TestTravelTimeMatrix;
 import testSupport.JUnitTestAbstract;
 
 import java.util.*;
-
-import static benchmarking.benchmarking.printResult;
 
 public class InsertMultipleTasksIntoRouteSyncedTest extends JUnitTestAbstract {
 
@@ -44,7 +42,6 @@ public class InsertMultipleTasksIntoRouteSyncedTest extends JUnitTestAbstract {
         List<ITask> tasks = new ArrayList<>(allTasks.subList(3, 4));
         List<ITask> insertTasks = new ArrayList<>(allTasks.subList(0, 1));
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTasks(tasks, insertTasks, syncedTaskStartTimes, shift);
-        printResult(result);
 
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
@@ -61,8 +58,6 @@ public class InsertMultipleTasksIntoRouteSyncedTest extends JUnitTestAbstract {
         insertTasks.add(allTasks.get(2));
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTasks(tasks, insertTasks, syncedTaskStartTimes, shift);
 
-        printResult(result);
-
         Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "2", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "1", result.getVisitSolution().get(1).getTask().getId());
@@ -78,7 +73,6 @@ public class InsertMultipleTasksIntoRouteSyncedTest extends JUnitTestAbstract {
         List<ITask> insertTasks = new ArrayList<>(allTasks.subList(1, 2));
 
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTasks(tasks, insertTasks, syncedTaskStartTimes, shift);
-        printResult(result);
 
         Assert.assertEquals("Number of visits should be: ", 3, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "2", result.getVisitSolution().get(0).getTask().getId());
@@ -91,7 +85,7 @@ public class InsertMultipleTasksIntoRouteSyncedTest extends JUnitTestAbstract {
         List<ITask> tasks = new ArrayList<>(allTasks.subList(0, 2));
         List<ITask> insertTasks = new ArrayList<>(allTasks.subList(2, 4));
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTasks(tasks, insertTasks, syncedTaskStartTimes, shift);
-        printResult(result);
+
         Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "2", result.getVisitSolution().get(1).getTask().getId());

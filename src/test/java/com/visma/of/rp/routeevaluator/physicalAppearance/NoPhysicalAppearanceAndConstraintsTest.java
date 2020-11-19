@@ -1,13 +1,13 @@
 package com.visma.of.rp.routeevaluator.physicalAppearance;
 
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints.OvertimeConstraint;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints.StrictTimeWindowConstraint;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.constraints.SyncedTasksConstraint;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
+import com.visma.of.rp.routeevaluator.evaluation.constraints.OvertimeConstraint;
+import com.visma.of.rp.routeevaluator.evaluation.constraints.StrictTimeWindowConstraint;
+import com.visma.of.rp.routeevaluator.evaluation.constraints.SyncedTasksConstraint;
+import com.visma.of.rp.routeevaluator.interfaces.ILocation;
+import com.visma.of.rp.routeevaluator.interfaces.IShift;
+import com.visma.of.rp.routeevaluator.interfaces.ITask;
+import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
 import org.junit.Assert;
 import org.junit.Before;
@@ -59,7 +59,7 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         Assert.assertNotNull("Must be feasible. ", result);
         Assert.assertEquals(10, getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
-        Assert.assertEquals("Must return to office at: ", 22, result.getTimeOfOfficeReturn().longValue());
+        Assert.assertEquals("Must return to office at: ", 22, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     @Test

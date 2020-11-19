@@ -1,13 +1,14 @@
 package benchmarking;
 
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.SyncedTaskStartTimeObjectiveFunction;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TimeWindowObjectiveFunction;
-import com.visma.of.rp.routeevaluator.constraintsAndObjectives.objectives.TravelTimeObjectiveFunction;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ILocation;
-import com.visma.of.rp.routeevaluator.publicInterfaces.IShift;
-import com.visma.of.rp.routeevaluator.publicInterfaces.ITask;
-import com.visma.of.rp.routeevaluator.routeResult.RouteEvaluatorResult;
-import com.visma.of.rp.routeevaluator.routeResult.Visit;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.OvertimeObjectiveFunction;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.SyncedTaskStartTimeObjectiveFunction;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.TimeWindowObjectiveFunction;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.TravelTimeObjectiveFunction;
+import com.visma.of.rp.routeevaluator.interfaces.ILocation;
+import com.visma.of.rp.routeevaluator.interfaces.IShift;
+import com.visma.of.rp.routeevaluator.interfaces.ITask;
+import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
+import com.visma.of.rp.routeevaluator.results.Visit;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
 import testInterfaceImplementationClasses.TestLocation;
 import testInterfaceImplementationClasses.TestShift;
@@ -16,10 +17,7 @@ import testInterfaceImplementationClasses.TestTravelTimeMatrix;
 import testSupport.JUnitTestAbstract;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 import static java.lang.Math.*;
 
@@ -56,6 +54,7 @@ public class benchmarking extends JUnitTestAbstract {
         RouteEvaluator routeEvaluator2 = new RouteEvaluator(0, travelTimeMatrices.get(1), tasks, office);
         RouteEvaluator routeEvaluator3 = new RouteEvaluator(0, travelTimeMatrices.get(2), tasks, office);
         List<ITask> newTasks = new ArrayList<>();
+        List<ITask> mergeTasks = new ArrayList<>();
 
         TestTask testTask = (TestTask) tasks.get(125);
         testTask.setRequirePhysicalAppearance(false);
@@ -67,14 +66,23 @@ public class benchmarking extends JUnitTestAbstract {
         newTasks.add(tasks.get(195));
         newTasks.add(tasks.get(2));
         newTasks.add(tasks.get(133));
-        newTasks.add(tasks.get(111));
+        newTasks.add(tasks.get(120));
         newTasks.add(tasks.get(39));
-        newTasks.add(tasks.get(45));
+        newTasks.add(tasks.get(160));
         newTasks.add(tasks.get(155));
         newTasks.add(tasks.get(77));
 
+
+        mergeTasks.add(tasks.get(3));
+        mergeTasks.add(tasks.get(84));
+        mergeTasks.add(tasks.get(10));
+        mergeTasks.add(tasks.get(27));
+        mergeTasks.add(tasks.get(179));
+
+
         routeEvaluator1.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
         routeEvaluator1.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
+        routeEvaluator1.addObjectiveIntraShift(new OvertimeObjectiveFunction());
         routeEvaluator1.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction(1));
 
         routeEvaluator2.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
@@ -85,16 +93,31 @@ public class benchmarking extends JUnitTestAbstract {
         routeEvaluator3.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
         routeEvaluator3.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction(1));
 
-        IShift shift = new TestShift(3600 * 8, 3600 * 8, 3600 * 16);
-        for (int i = 0; i < 3000000; i++) {
+        Map<ITask, Long> syncedTasksAllStartTime = new HashMap<>();
+        Map<ITask, Long> syncedTasksNewStartTime = new HashMap<>();
+        for (ITask task : newTasks)
+            if (task.isSynced()) {
+                syncedTasksAllStartTime.put(task, task.getStartTime());
+                syncedTasksNewStartTime.put(task, task.getStartTime());
+            }
+        for (ITask task : mergeTasks)
+            if (task.isSynced())
+                syncedTasksAllStartTime.put(task, task.getStartTime());
 
-            RouteEvaluatorResult result1 = routeEvaluator1.evaluateRouteByTheOrderOfTasks(newTasks, null, shift);
-            RouteEvaluatorResult result2 = routeEvaluator2.evaluateRouteByTheOrderOfTasks(newTasks, null, shift);
-            RouteEvaluatorResult result3 = routeEvaluator3.evaluateRouteByTheOrderOfTasks(newTasks, null, shift);
+        IShift shift = new TestShift(3600 * 8, 3600 * 8, 3600 * 16);
+        for (int i = 0; i < 20000; i++) {
+            for (int j = 0; j < 100; j++) {
+                routeEvaluator1.evaluateRouteByTheOrderOfTasks(newTasks, syncedTasksNewStartTime, shift);
+                routeEvaluator2.evaluateRouteByTheOrderOfTasks(newTasks, syncedTasksNewStartTime, shift);
+                routeEvaluator3.evaluateRouteByTheOrderOfTasks(newTasks, syncedTasksNewStartTime, shift);
+                routeEvaluator1.evaluateRouteByTheOrderOfTasksInsertTask(newTasks, mergeTasks.get(0), syncedTasksNewStartTime, shift);
+                routeEvaluator2.evaluateRouteByTheOrderOfTasksInsertTask(newTasks, mergeTasks.get(1), syncedTasksNewStartTime, shift);
+                routeEvaluator3.evaluateRouteByTheOrderOfTasksInsertTask(newTasks, mergeTasks.get(2), syncedTasksNewStartTime, shift);
+            }
+            routeEvaluator1.evaluateRouteByTheOrderOfTasksInsertTasks(newTasks, mergeTasks, syncedTasksAllStartTime, shift);
+            routeEvaluator2.evaluateRouteByTheOrderOfTasksInsertTasks(newTasks, mergeTasks, syncedTasksAllStartTime, shift);
+            routeEvaluator3.evaluateRouteByTheOrderOfTasksInsertTasks(newTasks, mergeTasks, syncedTasksAllStartTime, shift);
         }
-//        printResult(result1);
-//        printResult(result2);
-//        printResult(result3);
     }
 
     private static List<TestLocation> createLocationsGridCircle(int numberOfTasks, List<TestLocation> locationsCircle, List<TestLocation> locationsGrid) {
@@ -134,8 +157,12 @@ public class benchmarking extends JUnitTestAbstract {
         long endTime = 3600 * 16;
         List<ITask> tasks = new ArrayList<>();
         int taskId = 0;
-        for (ILocation location : locations)
-            tasks.add(new TestTask(duration, startTime, endTime, false, false, true, 0, 0, location, "t-" + (taskId++)));
+        for (ILocation location : locations) {
+            boolean synced = false;
+            if (taskId % 10 == 0)
+                synced = true;
+            tasks.add(new TestTask(duration, startTime, endTime, false, synced, true, 0, 0, location, "t-" + (taskId++)));
+        }
         return tasks;
     }
 
@@ -146,7 +173,7 @@ public class benchmarking extends JUnitTestAbstract {
     }
 
     public static void printResult(RouteEvaluatorResult result) {
-        System.out.println("\nObjective: " + result.getObjectiveValue() + "\tReturn to office at: " + result.getTimeOfOfficeReturn());
+        System.out.println("\nObjective: " + result.getObjectiveValue() + "\tReturn to office at: " + result.getTimeOfArrivalAtDestination());
         String visitString = "Visits: " + result.getVisitSolution().size() + "\n";
         for (Visit visit : result.getVisitSolution()) {
             visitString += "\t" + printVisit(visit, 0);
@@ -158,7 +185,7 @@ public class benchmarking extends JUnitTestAbstract {
 
     private static String printVisit(Visit visit, long robustnessTime) {
         return "[Strict=" + visit.getTask().isStrict() + ", Synced=" + visit.getTask().isSynced() + ", Appearance=" + visit.getTask().getRequirePhysicalAppearance() + "\t"
-                + getFormattedTime(visit.getTravelTimeWithParking() + robustnessTime) + " -> " + getFormattedTime(visit.getStart()) + "-" + getFormattedTime(visit.getEnd()) + "(" + getFormattedTime(visit.getTask().getStartTime()) + "-" + getFormattedTime(visit.getTask().getEndTime()) + ")" + "]"
+                + getFormattedTime(visit.getTravelTime() + robustnessTime) + " -> " + getFormattedTime(visit.getStartTime()) + "-" + getFormattedTime(visit.getEndTime()) + "(" + getFormattedTime(visit.getTask().getStartTime()) + "-" + getFormattedTime(visit.getTask().getEndTime()) + ")" + "]"
                 + "\tTaskId=: " + visit.getTask().getId();
     }
 
