@@ -2,6 +2,7 @@ package com.visma.of.rp.routeevaluator.labellingAlgorithm;
 
 import com.visma.of.rp.routeevaluator.evaluation.objectives.WeightedObjective;
 import com.visma.of.rp.routeevaluator.solver.algorithm.Label;
+import com.visma.of.rp.routeevaluator.solver.algorithm.Node;
 import com.visma.of.rp.routeevaluator.solver.algorithm.ResourceTwoElements;
 import org.junit.Assert;
 import org.junit.Before;
@@ -42,16 +43,17 @@ public class LabelFunctionTest extends JUnitTestAbstract {
 
     @Test
     public void equals() {
+
         Assert.assertEquals("Label A should equal label B", labelA, labelB);
         Assert.assertEquals("Label B should equal label A", labelB, labelA);
 
-        Assert.assertEquals("Label A should equal label C", labelA, labelC);
-        Assert.assertEquals("Label C should equal  label A", labelC, labelA);
+        Assert.assertNotEquals("Label A should not equal label C", labelA, labelC);
+        Assert.assertNotEquals("Label C should not equal label A", labelC, labelA);
 
+        Assert.assertNotEquals("Label A should not equal label D", labelA, labelD);
+        Assert.assertNotEquals("Label D should not equal label A", labelD, labelA);
 
-        Assert.assertNotEquals("Label A is worse than label D when equals", labelA, labelD);
-        Assert.assertNotEquals("Label D is better than label A when equals", labelD, labelA);
-
+        Assert.assertNotEquals("Should not equal other class.", labelA, 1);
     }
 
     @Test
@@ -87,8 +89,36 @@ public class LabelFunctionTest extends JUnitTestAbstract {
         Assert.assertNotNull("Should print string. ", labelB.toString());
         Assert.assertNotNull("Should print string. ", labelC.toString());
         Assert.assertNotNull("Should print string. ", labelD.toString());
+
+        Label label = new Label(null, null, 0, null, null, 0, 0);
+        Assert.assertEquals("'Empty' label should print. ", "-1, 0.0", label.toString());
+
+        label = new Label(null, new Node(3, null, 7), 0,
+                new WeightedObjective(5.0), null, 0, 0);
+        Assert.assertEquals("Label should print. ", "3, 5.0", label.toString());
+
     }
 
+    @Test
+    public void overriddenHashCode() {
+
+        Label label = new Label(null, null, 0, null, null, 0, 0);
+        Assert.assertEquals("'Empty' label should have hash code of 0. ", 0, label.hashCode());
+
+        WeightedObjective obj = new WeightedObjective(5);
+        ResourceTwoElements res = new ResourceTwoElements(1, 1);
+        Node node = new Node(3, null, 7);
+        label = new Label(null, node, node.getLocationId(), obj, res, 2, 4);
+        label.setCanLeaveLocationAtTime(2);
+        int hash = (res.hashCode() // resource hash code.
+                + 2 //Current time.
+                + 2 * (int) Math.pow(2, 2)  //canLeaveLocationAtTime.
+                + 4 * (int) Math.pow(2, 4) //travelTime.
+                + 3 * (int) Math.pow(2, 6) //node id.
+                + 7 * (int) Math.pow(2, 8) //location id.
+                + 5 * (int) Math.pow(2, 10)); //objectiveValue.
+        Assert.assertEquals("Hash code should be correct. ", hash, label.hashCode());
+    }
 
     @Test
     public void closed() {
@@ -111,7 +141,7 @@ public class LabelFunctionTest extends JUnitTestAbstract {
         closedLabels = labels.stream().filter(Label::isClosed).count();
         Assert.assertEquals("Should be two closed labels:", 2, closedLabels);
 
-        labels.add(new Label(null,null,0,null,null,0,0));
+        labels.add(new Label(null, null, 0, null, null, 0, 0));
         closedLabels = labels.stream().filter(Label::isClosed).count();
         Assert.assertEquals("Should be two closed labels:", 2, closedLabels);
     }

@@ -11,12 +11,10 @@ import java.util.stream.Collectors;
 
 public class Route {
 
-    private IShift employeeWorkShift;
     private List<Visit> visitSolution;
     private long timeOfArrivalAtDestination;
 
-    public Route(IShift employeeWorkShift) {
-        this.employeeWorkShift = employeeWorkShift;
+    public Route() {
         this.visitSolution = new ArrayList<>();
         this.timeOfArrivalAtDestination = 0L;
     }
@@ -31,10 +29,6 @@ public class Route {
 
     public long getTimeOfArrivalAtDestination() {
         return timeOfArrivalAtDestination;
-    }
-
-    public IShift getEmployeeWorkShift() {
-        return employeeWorkShift;
     }
 
     public List<Visit> getVisitSolution() {

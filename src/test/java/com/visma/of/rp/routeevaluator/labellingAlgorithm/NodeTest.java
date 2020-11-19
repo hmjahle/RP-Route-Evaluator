@@ -19,13 +19,14 @@ public class NodeTest extends JUnitTestAbstract {
         Node nodeB = new Node(1, task1, 1);
         Node nodeC = new Node(1, task2, 2);
         Node nodeD = new Node(2, task2, 3);
-
         Assert.assertEquals("A and A must be equal", nodeA, nodeA);
         Assert.assertEquals("A and B must be equal", nodeA, nodeB);
         Assert.assertEquals("A and C must be equal", nodeA, nodeC);
         Assert.assertEquals("B and C must be equal", nodeA, nodeC);
         Assert.assertNotEquals("A and D must not be equal", nodeA, nodeD);
         Assert.assertNotEquals("B and D must not be equal", nodeB, nodeD);
+
+        Assert.assertNotEquals("Should not equal other class.",nodeA, 1);
     }
 
     @Test
