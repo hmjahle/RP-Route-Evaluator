@@ -7,7 +7,7 @@ public class Node {
     private int nodeId;
     private ITask task;
     private int locationId;
-    private boolean isSynced; //ToDo: Test consequence of removing field
+    private boolean isSynced;
 
     public Node(int nodeId, ITask task, int locationId) {
         this.task = task;

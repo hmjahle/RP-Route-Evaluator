@@ -75,18 +75,17 @@ public class LabellingAlgorithm {
         Label bestLabel = runAlgorithm(initialObjective, nodeExtendInfo, syncedNodesStartTime, employeeWorkShift);
         if (bestLabel == null)
             return null;
-        return buildRouteEvaluatorResult(bestLabel, employeeWorkShift);
+        return buildRouteEvaluatorResult(bestLabel);
     }
 
     /**
      * Extract the solution from the labels and builds the route evaluator results and the visits with the respective information.
      *
      * @param bestLabel         Label representing the best route for the employee work shift.
-     * @param employeeWorkShift Work shift for the employee for which the route is calculated.
      * @return Results of the route.
      */
-    private RouteEvaluatorResult buildRouteEvaluatorResult(Label bestLabel, IShift employeeWorkShift) {
-        Route route = new Route(employeeWorkShift);
+    private RouteEvaluatorResult buildRouteEvaluatorResult(Label bestLabel) {
+        Route route = new Route();
         route.setTimeOfArrivalAtDestination(bestLabel.getCurrentTime());
         extractVisitsAndSyncedStartTime(bestLabel, route);
         return new RouteEvaluatorResult(bestLabel.getObjective(), route);
@@ -118,11 +117,20 @@ public class LabellingAlgorithm {
         long travelTime = getTravelTime(thisLabel, nextNode, newLocation);
         long startOfServiceNextTask = calcStartOfServiceNextTask(thisLabel, nextNode, taskRequirePhysicalAppearance, travelTime);
         long earliestOfficeReturn = calcEarliestPossibleReturnToOfficeTime(nextNode, newLocation, startOfServiceNextTask);
-        long syncedTaskLatestStartTime = nextNode.isSynced() ? syncedNodesStartTime[nextNode.getNodeId()] : -1;
-        if (!isFeasible(earliestOfficeReturn, nextNode.getTask(), startOfServiceNextTask, syncedTaskLatestStartTime))
+        IObjective objective = evaluateFeasibilityAndObjective(thisLabel, earliestOfficeReturn, nextNode, startOfServiceNextTask, travelTime);
+
+        if (objective == null)
             return null;
-        return buildNewLabel(thisLabel, extendToInfo, nextNode, newLocation, travelTime,
-                startOfServiceNextTask, syncedTaskLatestStartTime, taskRequirePhysicalAppearance);
+        IResource resources = thisLabel.getResources().extend(extendToInfo);
+        if (taskRequirePhysicalAppearance)
+            return new Label(thisLabel, nextNode, newLocation, objective, resources, startOfServiceNextTask, travelTime);
+        else {
+            long canLeaveLocationAt = updateCanLeaveLocationAt(thisLabel);
+            Label newLabel = new Label(thisLabel, nextNode, newLocation, objective, resources, startOfServiceNextTask, travelTime);
+            newLabel.setCanLeaveLocationAtTime(canLeaveLocationAt);
+            return newLabel;
+        }
+
     }
 
     private void extendLabelToAllPossibleTasks(Label label, Queue<Label> labelsOnDestinationNode) {
@@ -145,24 +153,6 @@ public class LabellingAlgorithm {
 
     }
 
-    private Label buildNewLabel(Label thisLabel, ExtendToInfo extendToInfo, Node nextNode, int newLocation, long travelTime,
-                                long startOfServiceNextTask, long syncedTaskLatestStartTime, boolean taskRequirePhysicalAppearance) {
-
-        IObjective objective = extend(thisLabel.getObjective(), nextNode, travelTime, startOfServiceNextTask,
-                syncedTaskLatestStartTime, endOfShift);
-
-        IResource resources = thisLabel.getResources().extend(extendToInfo);
-
-        if (taskRequirePhysicalAppearance)
-            return new Label(thisLabel, nextNode, newLocation, objective, resources, startOfServiceNextTask, travelTime);
-        else {
-            long canLeaveLocationAt = updateCanLeaveLocationAt(thisLabel);
-            Label newLabel = new Label(thisLabel, nextNode, newLocation, objective, resources, startOfServiceNextTask, travelTime);
-            newLabel.setCanLeaveLocationAtTime(canLeaveLocationAt);
-            return newLabel;
-        }
-    }
-
     public IObjective extend(IObjective currentObjective, Node toNode, long travelTime, long startOfServiceNextTask, long syncedTaskLatestStartTime,
                              long endOfShift) {
         ITask task = toNode.getTask();
@@ -170,7 +160,6 @@ public class LabellingAlgorithm {
         return objectiveFunctions.calculateObjectiveValue(currentObjective, travelTime, task,
                 startOfServiceNextTask, visitEnd, syncedTaskLatestStartTime, endOfShift);
     }
-
 
     private Label findNextLabel() {
         Label currentLabel = unExtendedLabels.poll();
@@ -202,9 +191,12 @@ public class LabellingAlgorithm {
         return Math.max(arrivalTimeNextTask, earliestStartTimeNextTask);
     }
 
-    private boolean isFeasible(long earliestOfficeReturn, ITask task, long startOfServiceNextTask, long syncedLatestStart) {
-        ConstraintInfo constraintInfo = new ConstraintInfo(endOfShift, earliestOfficeReturn, task, startOfServiceNextTask, syncedLatestStart);
-        return constraints.isFeasible(constraintInfo);
+    private IObjective evaluateFeasibilityAndObjective(Label thisLabel, long earliestOfficeReturn, Node nextNode, long startOfServiceNextTask, long travelTime) {
+        long syncedTaskLatestStartTime = nextNode.isSynced() ? syncedNodesStartTime[nextNode.getNodeId()] : -1;
+        ConstraintInfo constraintInfo = new ConstraintInfo(endOfShift, earliestOfficeReturn, nextNode.getTask(), startOfServiceNextTask, syncedTaskLatestStartTime);
+        if (!constraints.isFeasible(constraintInfo))
+            return null;
+        return extend(thisLabel.getObjective(), nextNode, travelTime, startOfServiceNextTask, syncedTaskLatestStartTime, endOfShift);
     }
 
     private long getTravelTime(Label thisLabel, Node nextNode, int newLocation) {
@@ -263,8 +255,7 @@ public class LabellingAlgorithm {
     }
 
     private int addVisit(int visitCnt, Label currentLabel) {
-        visits[visitCnt++] = new Visit(currentLabel.getNode().getTask(), currentLabel.getCurrentTime(), currentLabel.getCurrentTime() +
-                currentLabel.getNode().getTask().getDuration(),
+        visits[visitCnt++] = new Visit(currentLabel.getNode().getTask(), currentLabel.getCurrentTime(),
                 currentLabel.getTravelTime());
         return visitCnt;
     }

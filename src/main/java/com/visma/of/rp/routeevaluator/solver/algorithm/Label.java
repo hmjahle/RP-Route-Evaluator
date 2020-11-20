@@ -125,8 +125,10 @@ public class Label implements Comparable<Label> {
         int hash = (int) currentTime;
         hash += ((int) canLeaveLocationAtTime << 2);
         hash += ((int) travelTime << 4);
-        hash += ((int) objective.getObjectiveValue() * 1E+6);
-        hash += (node.getNodeId() << 6);
+        hash += node != null ? (node.getNodeId() << 6) : 0;
+        hash += node != null ? (node.getLocationId() << 8) : 0;
+        hash += objective != null ? ((int) objective.getObjectiveValue() << 10) : 0;
+        hash += resources != null ? resources.hashCode() : 0;
         return hash;
     }
 
