@@ -36,7 +36,7 @@ public class LabelListsTest {
         labels.add(labelA);
 
         for (Label label : labels) {
-            list.addAndReturnTrueIfAdded(node, label);
+            list.addLabelOnNode(node, label);
         }
 
         Assert.assertEquals("Size", 1, list.findLabels(node).size());
@@ -78,33 +78,33 @@ public class LabelListsTest {
         Assert.assertEquals("List length wrong", 0, list.size(node));
         Assert.assertEquals("List capacity wrong", 4, list.getLabelCapacity(node));
 
-        list.addAndReturnTrueIfAdded(node, labelA);
-        list.addAndReturnTrueIfAdded(node, labelB);
+        list.addLabelOnNode(node, labelA);
+        list.addLabelOnNode(node, labelB);
         Assert.assertEquals("List length wrong", 2, list.size(node));
         Assert.assertEquals("List capacity wrong", 4, list.getLabelCapacity(node));
 
-        list.addAndReturnTrueIfAdded(node, labelC);
+        list.addLabelOnNode(node, labelC);
         Assert.assertEquals("List length wrong", 3, list.size(node));
         Assert.assertEquals("List capacity wrong", 8, list.getLabelCapacity(node));
-        list.addAndReturnTrueIfAdded(node, labelD);
-        list.addAndReturnTrueIfAdded(node, labelE);
+        list.addLabelOnNode(node, labelD);
+        list.addLabelOnNode(node, labelE);
         Assert.assertEquals("List length wrong", 5, list.size(node));
         Assert.assertEquals("List capacity wrong", 16, list.getLabelCapacity(node));
 
-        list.addAndReturnTrueIfAdded(node, labelF);
-        list.addAndReturnTrueIfAdded(node, labelG);
-        list.addAndReturnTrueIfAdded(node, labelH);
+        list.addLabelOnNode(node, labelF);
+        list.addLabelOnNode(node, labelG);
+        list.addLabelOnNode(node, labelH);
         Assert.assertEquals("List length wrong", 8, list.size(node));
         Assert.assertEquals("List capacity wrong", 16, list.getLabelCapacity(node));
 
-        list.addAndReturnTrueIfAdded(node, labelA);
-        list.addAndReturnTrueIfAdded(node, labelB);
-        list.addAndReturnTrueIfAdded(node, labelC);
-        list.addAndReturnTrueIfAdded(node, labelD);
-        list.addAndReturnTrueIfAdded(node, labelE);
-        list.addAndReturnTrueIfAdded(node, labelF);
-        list.addAndReturnTrueIfAdded(node, labelG);
-        list.addAndReturnTrueIfAdded(node, labelH);
+        list.addLabelOnNode(node, labelA);
+        list.addLabelOnNode(node, labelB);
+        list.addLabelOnNode(node, labelC);
+        list.addLabelOnNode(node, labelD);
+        list.addLabelOnNode(node, labelE);
+        list.addLabelOnNode(node, labelF);
+        list.addLabelOnNode(node, labelG);
+        list.addLabelOnNode(node, labelH);
         Assert.assertEquals("List length wrong", 8, list.size(node));
         Assert.assertEquals("List capacity wrong", 16, list.getLabelCapacity(node));
     }

@@ -148,7 +148,7 @@ public class LabellingAlgorithm {
 
     private void extendLabel(Label label, ExtendToInfo extendToInfo) {
         Label newLabel = extendLabelToNextNode(label, extendToInfo);
-        if (newLabel != null && labelLists.addAndReturnTrueIfAdded(newLabel.getNode(), newLabel))
+        if (newLabel != null && labelLists.addLabelOnNode(newLabel.getNode(), newLabel))
             unExtendedLabels.add(newLabel);
 
     }

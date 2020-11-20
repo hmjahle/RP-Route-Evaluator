@@ -1,10 +1,16 @@
 package com.visma.of.rp.routeevaluator.solver.algorithm;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * The label lists class is used within the labelling algorithm to handle labels on the node.
+ * The class handles the labels on the nodes, when new labels are considered to be added it is checked whether
+ * they are dominated by existing labels. If they are, they are not added otherwise they are added.
+ * If they dominate other labels those labels are removed from the list.
+ */
 public class LabelLists {
+
     private Label[][] elements;
     private int[] elementCnt;
     private int[] labelCapacity;
@@ -16,41 +22,58 @@ public class LabelLists {
         this.elementCnt = new int[nodes];
     }
 
-    public boolean addAndReturnTrueIfAdded(Node node, Label label) {
+    /**
+     * Attempts to add a label to a node, if the label is added, i.e., not dominated by and existing
+     * label it returns true, otherwise false.
+     *
+     * @param node  The node to which the label should be added.
+     * @param label The label to be added.
+     * @return True if the label is added, otherwise false.
+     */
+    public boolean addLabelOnNode(Node node, Label label) {
         int nodeId = node.getNodeId();
-        List<Integer> labelsDominated = new ArrayList<>();
-        if (isDominated(label, nodeId, labelsDominated))
+        if (!canBeAdded(label, nodeId))
             return false;
-        addLabel(label, nodeId, labelsDominated);
+        updateArrayLength(nodeId);
+        elements[nodeId][elementCnt[nodeId]++] = label;
         return true;
     }
 
-    public void addLabel(Label label, int nodeId, List<Integer> labelsDominated) {
-        if (labelsDominated.isEmpty()) {
-            updateArrayLength(nodeId);
-            elements[nodeId][elementCnt[nodeId]++] = label;
-        } else {
-            elements[nodeId][labelsDominated.get(0)] = label;
-            for (int i = 1; i < labelsDominated.size(); i++) {
-                elements[nodeId][labelsDominated.get(i)] = elements[nodeId][elementCnt[nodeId] - 1];
-                elementCnt[nodeId]--;
-            }
-        }
-    }
-
-    public boolean isDominated(Label label, int nodeId, List<Integer> labelsDominated) {
-        for (int i = 0; i < elementCnt[nodeId]; i++) {
-            int dominates = elements[nodeId][i].dominates(label);
+    /**
+     * Check if it is possible to add the label, i.e., if it is dominated.
+     * At the same time labels that it might dominate are deleted.
+     *
+     * @param label  Label to be added.
+     * @param nodeId Node to add the label to.
+     * @return True if the label can be added to the node, otherwise false.
+     */
+    private boolean canBeAdded(Label label, int nodeId) {
+        int labelCnt = elementCnt[nodeId];
+        int i = 0;
+        Label currentLabel = elements[nodeId][i];
+        while (i < labelCnt) {
+            int dominates = currentLabel.dominates(label);
             if (dominates <= 0)
-                return true;
+                return false;
             if (dominates == 1) {
-                labelsDominated.add(i);
-                elements[nodeId][i].close();
+                currentLabel.close();
+                currentLabel = elements[nodeId][labelCnt - 1];
+                elements[nodeId][i] = currentLabel;
+                labelCnt--;
+            } else {
+                currentLabel = ++i < labelCnt ? elements[nodeId][i] : null;
             }
         }
-        return false;
+        elementCnt[nodeId] = labelCnt;
+        return true;
     }
 
+    /**
+     * Check if there is enough capacity in the label list for the given node.
+     * If not the array capacity is doubled.
+     *
+     * @param nodeId Node to check.
+     */
     private void updateArrayLength(int nodeId) {
         if (elementCnt[nodeId] >= labelCapacity[nodeId] / 2) {
             labelCapacity[nodeId] *= 2;
@@ -75,4 +98,5 @@ public class LabelLists {
     public int getLabelCapacity(Node node) {
         return labelCapacity[node.getNodeId()];
     }
+
 }
