@@ -185,7 +185,7 @@ public class benchmarking extends JUnitTestAbstract {
 
     private static String printVisit(Visit visit, long robustnessTime) {
         return "[Strict=" + visit.getTask().isStrict() + ", Synced=" + visit.getTask().isSynced() + ", Appearance=" + visit.getTask().getRequirePhysicalAppearance() + "\t"
-                + getFormattedTime(visit.getTravelTime() + robustnessTime) + " -> " + getFormattedTime(visit.getStartTime()) + "-" + getFormattedTime(visit.getEndTime()) + "(" + getFormattedTime(visit.getTask().getStartTime()) + "-" + getFormattedTime(visit.getTask().getEndTime()) + ")" + "]"
+                + getFormattedTime(visit.getTravelTime() + robustnessTime) + " -> " + getFormattedTime(visit.getStartTime()) + "-" + getFormattedTime(visit.getStartTime() + visit.getTask().getDuration()) + "(" + getFormattedTime(visit.getTask().getStartTime()) + "-" + getFormattedTime(visit.getTask().getEndTime()) + ")" + "]"
                 + "\tTaskId=: " + visit.getTask().getId();
     }
 
