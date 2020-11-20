@@ -7,13 +7,11 @@ public class Node {
     private int nodeId;
     private ITask task;
     private int locationId;
-    private boolean isSynced;
 
     public Node(int nodeId, ITask task, int locationId) {
         this.task = task;
         this.nodeId = nodeId;
         this.locationId = locationId;
-        this.isSynced = (this.task != null && this.task.isSynced());
     }
 
     public int getLocationId() {
@@ -37,7 +35,7 @@ public class Node {
     }
 
     public boolean isSynced() {
-        return isSynced;
+        return task != null && task.isSynced();
     }
 
     @Override
