@@ -4,12 +4,12 @@ import com.visma.of.rp.routeevaluator.solver.algorithm.IObjective;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Extends the weighted objective and stores the objective values in addition.
  */
 public class WeightedObjectiveWithValues extends WeightedObjective {
-
 
     Map<String, Double> objectiveFunctionValues;
 
@@ -58,5 +58,10 @@ public class WeightedObjectiveWithValues extends WeightedObjective {
      */
     public Double getObjectiveFunctionValue(String objectiveFunctionId) {
         return objectiveFunctionValues.getOrDefault(objectiveFunctionId, null);
+    }
+
+
+    public Set<Map.Entry<String, Double>> getObjectiveFunctionValues() {
+        return objectiveFunctionValues.entrySet();
     }
 }

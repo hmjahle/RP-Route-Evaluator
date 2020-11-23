@@ -1,9 +1,8 @@
 package benchmarking;
 
-import com.visma.of.rp.routeevaluator.evaluation.objectives.OvertimeObjectiveFunction;
-import com.visma.of.rp.routeevaluator.evaluation.objectives.SyncedTaskStartTimeObjectiveFunction;
-import com.visma.of.rp.routeevaluator.evaluation.objectives.TimeWindowObjectiveFunction;
-import com.visma.of.rp.routeevaluator.evaluation.objectives.TravelTimeObjectiveFunction;
+import com.visma.of.rp.routeevaluator.evaluation.constraints.OvertimeConstraint;
+import com.visma.of.rp.routeevaluator.evaluation.constraints.StrictTimeWindowConstraint;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.*;
 import com.visma.of.rp.routeevaluator.interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.interfaces.IShift;
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
@@ -26,9 +25,9 @@ public class benchmarking extends JUnitTestAbstract {
     public static void main(String[] args) {
 
         int numberOfTasks = 200;
-        int gridMaxDistanceWidth = 500;
-        int minDistanceToCenter = 100;
-        int maxDistanceToCenter = 500;
+        int gridMaxDistanceWidth = 200;
+        int minDistanceToCenter = 25;
+        int maxDistanceToCenter = 200;
 
         List<TestLocation> locationsCircle = createLocationsOnCircle(numberOfTasks, minDistanceToCenter, maxDistanceToCenter);
         List<TestLocation> locationsGrid = createGridLocations(numberOfTasks, gridMaxDistanceWidth);
@@ -38,9 +37,9 @@ public class benchmarking extends JUnitTestAbstract {
         test(locationsCircle, 0, 0);
         test(locationsGrid, 0, 0);
         test(locationsGridCircle, 0, 0);
-        test(locationsCircle, -200, -300);
-        test(locationsGrid, -400, 0);
-        test(locationsGridCircle, 200, 200);
+        test(locationsCircle, -150, -150);
+        test(locationsGrid, -200, 0);
+        test(locationsGridCircle, 100, 100);
         long endTime = System.currentTimeMillis();
         System.out.println("Runtime: " + (endTime - startTime));
     }
@@ -53,70 +52,108 @@ public class benchmarking extends JUnitTestAbstract {
         RouteEvaluator routeEvaluator1 = new RouteEvaluator(0, travelTimeMatrices.get(0), tasks, office);
         RouteEvaluator routeEvaluator2 = new RouteEvaluator(0, travelTimeMatrices.get(1), tasks, office);
         RouteEvaluator routeEvaluator3 = new RouteEvaluator(0, travelTimeMatrices.get(2), tasks, office);
+        RouteEvaluator routeEvaluator4 = new RouteEvaluator(0, travelTimeMatrices.get(2), tasks, office);
         List<ITask> newTasks = new ArrayList<>();
+        List<ITask> newTasks2 = new ArrayList<>();
         List<ITask> mergeTasks = new ArrayList<>();
 
         TestTask testTask = (TestTask) tasks.get(125);
         testTask.setRequirePhysicalAppearance(false);
         testTask = (TestTask) tasks.get(155);
         testTask.setRequirePhysicalAppearance(false);
-        newTasks.add(tasks.get(1));
-        newTasks.add(tasks.get(85));
-        newTasks.add(tasks.get(125));
-        newTasks.add(tasks.get(195));
-        newTasks.add(tasks.get(2));
-        newTasks.add(tasks.get(133));
-        newTasks.add(tasks.get(120));
-        newTasks.add(tasks.get(39));
         newTasks.add(tasks.get(160));
-        newTasks.add(tasks.get(155));
         newTasks.add(tasks.get(77));
+        newTasks.add(tasks.get(85));
+        newTasks.add(tasks.get(120));
+        newTasks.add(tasks.get(1));
+        newTasks.add(tasks.get(2));
+        newTasks.add(tasks.get(195));
+        newTasks.add(tasks.get(125));
+        newTasks.add(tasks.get(39));
+        newTasks.add(tasks.get(133));
+        newTasks.add(tasks.get(155));
 
+        newTasks2.add(tasks.get(21));
+        newTasks2.add(tasks.get(145));
+        newTasks2.add(tasks.get(115));
+        newTasks2.add(tasks.get(31));
+        newTasks2.add(tasks.get(33));
+        newTasks2.add(tasks.get(75));
 
-        mergeTasks.add(tasks.get(3));
         mergeTasks.add(tasks.get(84));
-        mergeTasks.add(tasks.get(10));
-        mergeTasks.add(tasks.get(27));
-        mergeTasks.add(tasks.get(179));
+        mergeTasks.add(tasks.get(28));
+        mergeTasks.add(tasks.get(1));
+        mergeTasks.add(tasks.get(182));
+        mergeTasks.add(tasks.get(3));
 
 
         routeEvaluator1.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
         routeEvaluator1.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
-        routeEvaluator1.addObjectiveIntraShift(new OvertimeObjectiveFunction());
+        routeEvaluator1.addConstraint(new OvertimeConstraint());
         routeEvaluator1.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction(1));
 
         routeEvaluator2.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
+        routeEvaluator2.addObjectiveIntraShift(new OvertimeObjectiveFunction());
         routeEvaluator2.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
         routeEvaluator2.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction(1));
 
         routeEvaluator3.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
         routeEvaluator3.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
+        routeEvaluator3.addObjectiveIntraShift(new CustomCriteriaObjectiveFunction(objectiveInfo -> !objectiveInfo.isDestination() && objectiveInfo.isStrict(),
+                (objectiveInfo -> (double) Math.max(0, objectiveInfo.getVisitEnd() -
+                        objectiveInfo.getTask().getEndTime()))));
+
         routeEvaluator3.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction(1));
+
+        routeEvaluator4.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
+        routeEvaluator4.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
+        routeEvaluator4.addObjectiveIntraShift(new OvertimeObjectiveFunction());
+        routeEvaluator4.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction(1));
+        routeEvaluator4.addConstraint(new StrictTimeWindowConstraint());
 
         Map<ITask, Long> syncedTasksAllStartTime = new HashMap<>();
         Map<ITask, Long> syncedTasksNewStartTime = new HashMap<>();
+        syncedTasksNewStartTime.put(tasks.get(120), (3 * 60) * 60L);
+        syncedTasksNewStartTime.put(tasks.get(160), 15 * 60L);
         for (ITask task : newTasks)
             if (task.isSynced()) {
                 syncedTasksAllStartTime.put(task, task.getStartTime());
-                syncedTasksNewStartTime.put(task, task.getStartTime());
             }
         for (ITask task : mergeTasks)
             if (task.isSynced())
                 syncedTasksAllStartTime.put(task, task.getStartTime());
 
-        IShift shift = new TestShift(3600 * 8, 3600 * 8, 3600 * 16);
-        for (int i = 0; i < 5000; i++) {
-            for (int j = 0; j < 100; j++) {
-                routeEvaluator1.evaluateRouteByTheOrderOfTasks(newTasks, syncedTasksNewStartTime, shift);
-                routeEvaluator2.evaluateRouteByTheOrderOfTasks(newTasks, syncedTasksNewStartTime, shift);
-                routeEvaluator3.evaluateRouteByTheOrderOfTasks(newTasks, syncedTasksNewStartTime, shift);
-                routeEvaluator1.evaluateRouteByTheOrderOfTasksInsertTask(newTasks, mergeTasks.get(0), syncedTasksNewStartTime, shift);
-                routeEvaluator2.evaluateRouteByTheOrderOfTasksInsertTask(newTasks, mergeTasks.get(1), syncedTasksNewStartTime, shift);
-                routeEvaluator3.evaluateRouteByTheOrderOfTasksInsertTask(newTasks, mergeTasks.get(2), syncedTasksNewStartTime, shift);
+        IShift shift = new TestShift(3600 * 10, 0, 3600 * 10);
+        for (int i = 0; i < 1; i++) {
+            for (int j = 0; j < 1; j++) {
+                routeEvaluator1.evaluateRouteByOrderOfTasksWithObjectiveValues(newTasks, syncedTasksNewStartTime, shift);
+
+                routeEvaluator2.evaluateRouteByOrderOfTasksWithObjectiveValues(newTasks, syncedTasksNewStartTime, shift);
+
+                routeEvaluator3.evaluateRouteByOrderOfTasksWithObjectiveValues(newTasks, syncedTasksNewStartTime, shift);
+
+                ITask reInsert = tasks.get(120);
+                List<ITask> removeOneTask = new ArrayList<>(newTasks);
+                removeOneTask.remove(tasks.get(120));
+                routeEvaluator1.evaluateRouteByTheOrderOfTasksInsertTask(removeOneTask, reInsert, syncedTasksNewStartTime, shift);
+
+                reInsert = tasks.get(133);
+                removeOneTask = new ArrayList<>(newTasks);
+                removeOneTask.remove(tasks.get(133));
+                routeEvaluator2.evaluateRouteByTheOrderOfTasksInsertTask(removeOneTask, reInsert, syncedTasksNewStartTime, shift);
+
+                reInsert = tasks.get(125);
+                removeOneTask = new ArrayList<>(newTasks);
+                removeOneTask.remove(tasks.get(125));
+                routeEvaluator3.evaluateRouteByTheOrderOfTasksInsertTask(removeOneTask, reInsert, syncedTasksNewStartTime, shift);
             }
-            routeEvaluator1.evaluateRouteByTheOrderOfTasksInsertTasks(newTasks, mergeTasks, syncedTasksAllStartTime, shift);
             routeEvaluator2.evaluateRouteByTheOrderOfTasksInsertTasks(newTasks, mergeTasks, syncedTasksAllStartTime, shift);
-            routeEvaluator3.evaluateRouteByTheOrderOfTasksInsertTasks(newTasks, mergeTasks, syncedTasksAllStartTime, shift);
+
+            routeEvaluator3.evaluateRouteByTheOrderOfTasksInsertTasks(newTasks2, mergeTasks, syncedTasksAllStartTime, shift);
+
+            List<ITask> removeOneTask = new ArrayList<>(newTasks);
+            removeOneTask.remove(tasks.get(125));
+            routeEvaluator4.evaluateRouteByTheOrderOfReInsertBasedOnCriteriaTasks(removeOneTask, syncedTasksNewStartTime, shift, ITask::isStrict);
         }
     }
 
@@ -152,16 +189,38 @@ public class benchmarking extends JUnitTestAbstract {
     }
 
     private static List<ITask> createTasks(List<TestLocation> locations) {
-        long duration = 3600;
-        long startTime = 3600 * 8;
-        long endTime = 3600 * 16;
+        long duration = 10 * 60;
+        long startTime;
+        long endTime;
         List<ITask> tasks = new ArrayList<>();
         int taskId = 0;
         for (ILocation location : locations) {
             boolean synced = false;
+            boolean strict = false;
             if (taskId % 10 == 0)
                 synced = true;
-            tasks.add(new TestTask(duration, startTime, endTime, false, synced, true, 0, 0, location, "t-" + (taskId++)));
+            if (taskId % 10 == 5)
+                strict = true;
+            if (taskId % 3 == 1)
+                duration = 20 * 60;
+            else if (taskId % 3 == 2)
+                duration = 30 * 60;
+
+            if (taskId % 4 == 0) {
+                startTime = 0;
+                endTime = (30 + 2 * 60) * 60;
+            } else if (taskId % 4 == 1) {
+                startTime = (30 + 2 * 60) * 60;
+                endTime = 5 * 60 * 60;
+            } else if (taskId % 4 == 2) {
+                startTime = 5 * 60 * 60;
+                endTime = (30 + 7 * 60) * 60;
+            } else {
+                startTime = (30 + 7 * 60) * 60;
+                endTime = 10 * 60 * 60;
+            }
+
+            tasks.add(new TestTask(duration, startTime, endTime, strict, synced, true, 0, 0, location, "t-" + (taskId++)));
         }
         return tasks;
     }
@@ -173,7 +232,20 @@ public class benchmarking extends JUnitTestAbstract {
     }
 
     public static void printResult(RouteEvaluatorResult result) {
-        System.out.println("\nObjective: " + result.getObjectiveValue() + "\tReturn to office at: " + result.getTimeOfArrivalAtDestination());
+        if (result == null) {
+            System.out.println();
+            System.out.println("No result!");
+            System.out.println();
+            return;
+        }
+
+        System.out.println("\nObjective: " + result.getObjectiveValue() + "\tReturn to office at: " + getFormattedTime(result.getTimeOfArrivalAtDestination()));
+        if (result.getObjective() instanceof WeightedObjectiveWithValues) {
+            WeightedObjectiveWithValues objectiveWithValues = (WeightedObjectiveWithValues) result.getObjective();
+            for (Map.Entry<String, Double> stringDoubleEntry : objectiveWithValues.getObjectiveFunctionValues())
+                System.out.println(stringDoubleEntry.getKey() + "\t\t:" + stringDoubleEntry.getValue());
+        }
+
         String visitString = "Visits: " + result.getVisitSolution().size() + "\n";
         for (Visit visit : result.getVisitSolution()) {
             visitString += "\t" + printVisit(visit, 0);
