@@ -60,7 +60,7 @@ public class LabellingAlgorithm {
         this.syncedNodesStartTime = syncedNodesStartTime;
         this.endOfShift = employeeWorkShift.getEndTime();
         solveLabellingAlgorithm(startLabel);
-        return this.labelsOnDestinationNode.peek();
+        return this.labelsOnDestinationNode.poll();
     }
 
     /**
@@ -148,7 +148,7 @@ public class LabellingAlgorithm {
 
     private void extendLabel(Label label, ExtendToInfo extendToInfo) {
         Label newLabel = extendLabelToNextNode(label, extendToInfo);
-        if (newLabel != null && labelLists.addAndReturnTrueIfAdded(newLabel.getNode(), newLabel))
+        if (newLabel != null && labelLists.addLabelOnNode(newLabel.getNode(), newLabel))
             unExtendedLabels.add(newLabel);
 
     }
@@ -163,7 +163,7 @@ public class LabellingAlgorithm {
 
     private Label findNextLabel() {
         Label currentLabel = unExtendedLabels.poll();
-        while (!unExtendedLabels.isEmpty() && currentLabel != null && currentLabel.isClosed())
+        while (currentLabel != null && currentLabel.isClosed())
             currentLabel = unExtendedLabels.poll();
         return currentLabel;
     }

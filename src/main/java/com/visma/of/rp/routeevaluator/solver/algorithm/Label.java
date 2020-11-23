@@ -88,14 +88,15 @@ public class Label implements Comparable<Label> {
      * @return Integer indicating which label is dominated.
      */
     public int dominates(Label other) {
+        int compResources = this.resources.dominates(other.resources);
+        if (compResources == 2)
+            return 2;
+
         int compCurrentTime = Long.compare(this.currentTime, other.currentTime);
         int compCanLeaveLocationAtTime = Long.compare(this.canLeaveLocationAtTime, other.canLeaveLocationAtTime);
         int compObjective = this.objective.dominates(other.objective);
-        int compResources = this.resources.dominates(other.resources);
 
-        if (compResources == 2)
-            return 2;
-        else if (compCurrentTime == 0 && compObjective == 0 && compResources == 0 && compCanLeaveLocationAtTime == 0)
+        if (compCurrentTime == 0 && compObjective == 0 && compResources == 0 && compCanLeaveLocationAtTime == 0)
             return 0;
         else if (compCurrentTime <= 0 && compObjective <= 0 && compResources <= 0 && compCanLeaveLocationAtTime <= 0)
             return -1;
