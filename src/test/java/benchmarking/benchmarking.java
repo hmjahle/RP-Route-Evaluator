@@ -126,11 +126,11 @@ public class benchmarking extends JUnitTestAbstract {
         IShift shift = new TestShift(3600 * 10, 0, 3600 * 10);
         for (int i = 0; i < 10000; i++) {
             for (int j = 0; j < 100; j++) {
-                routeEvaluator1.evaluateRouteByOrderOfTasksWithObjectiveValues(newTasks, syncedTasksNewStartTime, shift);
+                routeEvaluator1.evaluateRouteObjective(newTasks, syncedTasksNewStartTime, shift);
 
-                routeEvaluator2.evaluateRouteByOrderOfTasksWithObjectiveValues(newTasks, syncedTasksNewStartTime, shift);
+                routeEvaluator2.evaluateRouteObjective(newTasks, syncedTasksNewStartTime, shift);
 
-                routeEvaluator3.evaluateRouteByOrderOfTasksWithObjectiveValues(newTasks, syncedTasksNewStartTime, shift);
+                routeEvaluator3.evaluateRouteObjective(newTasks, syncedTasksNewStartTime, shift);
 
                 ITask reInsert = tasks.get(120);
                 List<ITask> removeOneTask = new ArrayList<>(newTasks);
