@@ -124,8 +124,8 @@ public class benchmarking extends JUnitTestAbstract {
                 syncedTasksAllStartTime.put(task, task.getStartTime());
 
         IShift shift = new TestShift(3600 * 10, 0, 3600 * 10);
-        for (int i = 0; i < 1; i++) {
-            for (int j = 0; j < 1; j++) {
+        for (int i = 0; i < 10000; i++) {
+            for (int j = 0; j < 100; j++) {
                 routeEvaluator1.evaluateRouteByOrderOfTasksWithObjectiveValues(newTasks, syncedTasksNewStartTime, shift);
 
                 routeEvaluator2.evaluateRouteByOrderOfTasksWithObjectiveValues(newTasks, syncedTasksNewStartTime, shift);
