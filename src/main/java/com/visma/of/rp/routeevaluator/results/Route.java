@@ -1,6 +1,5 @@
 package com.visma.of.rp.routeevaluator.results;
 
-import com.visma.of.rp.routeevaluator.interfaces.IShift;
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
 
 import java.util.ArrayList;
