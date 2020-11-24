@@ -9,9 +9,6 @@ import com.visma.of.rp.routeevaluator.results.Route;
 import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.results.Visit;
 
-import java.util.PriorityQueue;
-import java.util.Queue;
-
 
 /**
  * The labelling algorithm is a resource constrained shortest path algorithm.
@@ -22,10 +19,10 @@ public class LabellingAlgorithm {
     private SearchGraph graph;
     private ObjectiveFunctionsIntraRouteHandler objectiveFunctions;
     private ConstraintsIntraRouteHandler constraints;
-    private Queue<Label> unExtendedLabels;
+    private LabelQueue unExtendedLabels;
     private Label[] labels;
     private Visit[] visits;
-    private Queue<Label> labelsOnDestinationNode;
+    private Label bestLabelOnDestination;
     private LabelLists labelLists;
     private IExtendInfo nodeExtendInfo;
     private long[] syncedNodesStartTime;
@@ -39,8 +36,8 @@ public class LabellingAlgorithm {
         this.labels = new Label[graph.getNodes().size()];
         this.visits = new Visit[graph.getNodes().size()];
         this.labelLists = new LabelLists(graph.getNodes().size(), graph.getNodes().size() * 10);
-        this.unExtendedLabels = new PriorityQueue<>();
-        this.labelsOnDestinationNode = new PriorityQueue<>();
+        this.unExtendedLabels = new LabelQueue();
+        this.bestLabelOnDestination = null;
         this.robustnessTimeSeconds = graph.getRobustTimeSeconds();
     }
 
@@ -60,7 +57,7 @@ public class LabellingAlgorithm {
         this.syncedNodesStartTime = syncedNodesStartTime;
         this.endOfShift = employeeWorkShift.getEndTime();
         solveLabellingAlgorithm(startLabel);
-        return this.labelsOnDestinationNode.poll();
+        return this.bestLabelOnDestination;
     }
 
     /**
@@ -81,7 +78,7 @@ public class LabellingAlgorithm {
     /**
      * Extract the solution from the labels and builds the route evaluator results and the visits with the respective information.
      *
-     * @param bestLabel         Label representing the best route for the employee work shift.
+     * @param bestLabel Label representing the best route for the employee work shift.
      * @return Results of the route.
      */
     private RouteEvaluatorResult buildRouteEvaluatorResult(Label bestLabel) {
@@ -93,10 +90,10 @@ public class LabellingAlgorithm {
 
     private void solveLabellingAlgorithm(Label startLabel) {
         unExtendedLabels.clear();
-        labelsOnDestinationNode.clear();
+        bestLabelOnDestination = null;
         Label currentLabel = startLabel;
         while (currentLabel != null) {
-            extendLabelToAllPossibleTasks(currentLabel, labelsOnDestinationNode);
+            extendLabelToAllPossibleTasks(currentLabel);
             currentLabel = findNextLabel();
             if (optimalSolutionFound(currentLabel))
                 break;
@@ -133,7 +130,7 @@ public class LabellingAlgorithm {
 
     }
 
-    private void extendLabelToAllPossibleTasks(Label label, Queue<Label> labelsOnDestinationNode) {
+    private void extendLabelToAllPossibleTasks(Label label) {
         boolean returnToDestinationNode = true;
         for (ExtendToInfo extendToInfo : nodeExtendInfo.extend(label)) {
             returnToDestinationNode = false;
@@ -141,16 +138,15 @@ public class LabellingAlgorithm {
         }
         if (returnToDestinationNode) {
             Label newLabel = extendLabelToNextNode(label, new ExtendToInfo(graph.getDestination(), 0));
-            if (newLabel != null)
-                labelsOnDestinationNode.add(newLabel);
+            if (newLabel != null && (bestLabelOnDestination == null || newLabel.compareTo(bestLabelOnDestination) < 0))
+                bestLabelOnDestination = newLabel;
         }
     }
 
     private void extendLabel(Label label, ExtendToInfo extendToInfo) {
         Label newLabel = extendLabelToNextNode(label, extendToInfo);
         if (newLabel != null && labelLists.addLabelOnNode(newLabel.getNode(), newLabel))
-            unExtendedLabels.add(newLabel);
-
+            unExtendedLabels.addLabel(newLabel);
     }
 
     public IObjective extend(IObjective currentObjective, Node toNode, long travelTime, long startOfServiceNextTask, long syncedTaskLatestStartTime,
@@ -231,8 +227,8 @@ public class LabellingAlgorithm {
     }
 
     private boolean optimalSolutionFound(Label currentLabel) {
-        return labelsOnDestinationNode.peek() != null && currentLabel != null &&
-                labelsOnDestinationNode.peek().getObjective().getObjectiveValue() < currentLabel.getObjective().getObjectiveValue();
+        return bestLabelOnDestination != null && currentLabel != null &&
+                bestLabelOnDestination.getObjective().getObjectiveValue() < currentLabel.getObjective().getObjectiveValue();
     }
 
     private void extractVisitsAndSyncedStartTime(Label bestLabel, Route route) {

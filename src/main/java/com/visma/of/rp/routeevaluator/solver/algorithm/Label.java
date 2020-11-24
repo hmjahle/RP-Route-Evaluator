@@ -137,7 +137,8 @@ public class Label implements Comparable<Label> {
     public String toString() {
         int nodeId = node != null ? node.getNodeId() : -1;
         double objectiveValue = objective != null ? objective.getObjectiveValue() : 0.0;
-        return nodeId + ", " + objectiveValue;
+        String resourcesString = (resources != null ? " " + resources.toString() : "");
+        return nodeId + ", " + objectiveValue + resourcesString;
     }
 
 }
