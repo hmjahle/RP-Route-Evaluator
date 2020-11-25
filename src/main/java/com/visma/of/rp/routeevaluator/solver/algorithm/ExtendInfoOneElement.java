@@ -8,7 +8,7 @@ import java.util.Enumeration;
 public class ExtendInfoOneElement implements IExtendInfo {
 
     NodeList nodeListOne;
-    Node node = null;
+    Node node;
 
     public ExtendInfoOneElement(NodeList nodeListOne) {
         this.nodeListOne = nodeListOne;

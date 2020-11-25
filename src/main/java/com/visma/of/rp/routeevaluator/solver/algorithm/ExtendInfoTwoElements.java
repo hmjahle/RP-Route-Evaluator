@@ -9,7 +9,7 @@ public class ExtendInfoTwoElements implements IExtendInfo {
 
     NodeList nodeListOne;
     NodeList nodeListTwo;
-    ExtendToInfo[] nodeInfo = new ExtendToInfo[2];
+    ExtendToInfo[] extendToInfo = new ExtendToInfo[2];
     int size;
 
     public ExtendInfoTwoElements(NodeList nodeListOne, NodeList nodeListTwo) {
@@ -30,13 +30,13 @@ public class ExtendInfoTwoElements implements IExtendInfo {
         Node nodeOne = nodeListOne.getNode(resourceTwoElements.getElementOneCount());
         Node nodeTwo = nodeListTwo.getNode(resourceTwoElements.getElementTwoCount());
         if (nodeOne != null) {
-            nodeInfo[0] = new ExtendToInfo(nodeOne, 1);
+            extendToInfo[0] = new ExtendToInfo(nodeOne, 1);
             size = 1;
         } else {
             size = 0;
         }
         if (nodeTwo != null) {
-            nodeInfo[size++] = new ExtendToInfo(nodeTwo, 2);
+            extendToInfo[size++] = new ExtendToInfo(nodeTwo, 2);
         }
 
         return new ExtendInfoTwoElementsEnumerator();
@@ -68,7 +68,7 @@ public class ExtendInfoTwoElements implements IExtendInfo {
 
         @Override
         public ExtendToInfo nextElement() {
-            return nodeInfo[next++];
+            return extendToInfo[next++];
         }
     }
 }
