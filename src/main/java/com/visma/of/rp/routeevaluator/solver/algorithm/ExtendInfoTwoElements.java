@@ -1,8 +1,7 @@
 package com.visma.of.rp.routeevaluator.solver.algorithm;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Enumeration;
 
 /**
  * This class implement the IExtendInfo, it has two elements.
@@ -11,30 +10,51 @@ public class ExtendInfoTwoElements implements IExtendInfo {
 
     NodeList nodeListOne;
     NodeList nodeListTwo;
-    List<ExtendToInfo> extendToInfo;
+    ExtendToInfo[] nodeInfo = new ExtendToInfo[2];
+    int size;
 
     public ExtendInfoTwoElements(NodeList nodeListOne, NodeList nodeListTwo) {
-        extendToInfo = new ArrayList<>();
         this.nodeListOne = nodeListOne;
         this.nodeListTwo = nodeListTwo;
     }
 
-    public List<ExtendToInfo> extend(Label label) {
+    @Override
+    public Enumeration<ExtendToInfo> extend(Label label) {
         ResourceTwoElements resourceTwoElements = (ResourceTwoElements) label.getResources();
-        extendToInfo.clear();
+        Node nodeOne = nodeListOne.getNode(resourceTwoElements.getElementOneCount());
+        Node nodeTwo = nodeListTwo.getNode(resourceTwoElements.getElementTwoCount());
+        if (nodeOne != null) {
+            nodeInfo[0] = new ExtendToInfo(nodeOne, 1);
+            size = 1;
+        } else {
+            size = 0;
+        }
+        if (nodeTwo != null) {
+            nodeInfo[size++] = new ExtendToInfo(nodeTwo, 2);
+        }
 
-        Node node = nodeListOne.getNode(resourceTwoElements.getElementOneCount());
-        if (node != null) {
-            extendToInfo.add(new ExtendToInfo(node, 1));
-        }
-        node = nodeListTwo.getNode(resourceTwoElements.getElementTwoCount());
-        if (node != null) {
-            extendToInfo.add(new ExtendToInfo(node, 2));
-        }
-        return extendToInfo;
+        return new ExtendInfoTwoElementsEnumerator();
     }
 
+
+    @Override
     public IResource createEmptyResource() {
         return new ResourceTwoElements(0, 0);
+    }
+
+
+    private class ExtendInfoTwoElementsEnumerator implements Enumeration<ExtendToInfo> {
+
+        int next;
+
+        @Override
+        public boolean hasMoreElements() {
+            return next != size;
+        }
+
+        @Override
+        public ExtendToInfo nextElement() {
+            return nodeInfo[next++];
+        }
     }
 }

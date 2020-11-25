@@ -9,6 +9,7 @@ import com.visma.of.rp.routeevaluator.results.Route;
 import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.results.Visit;
 
+import java.util.Enumeration;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -81,7 +82,7 @@ public class LabellingAlgorithm {
     /**
      * Extract the solution from the labels and builds the route evaluator results and the visits with the respective information.
      *
-     * @param bestLabel         Label representing the best route for the employee work shift.
+     * @param bestLabel Label representing the best route for the employee work shift.
      * @return Results of the route.
      */
     private RouteEvaluatorResult buildRouteEvaluatorResult(Label bestLabel) {
@@ -130,14 +131,14 @@ public class LabellingAlgorithm {
             newLabel.setCanLeaveLocationAtTime(canLeaveLocationAt);
             return newLabel;
         }
-
     }
 
     private void extendLabelToAllPossibleTasks(Label label, Queue<Label> labelsOnDestinationNode) {
         boolean returnToDestinationNode = true;
-        for (ExtendToInfo extendToInfo : nodeExtendInfo.extend(label)) {
+        Enumeration<ExtendToInfo> enumerator = nodeExtendInfo.extend(label);
+        while (enumerator.hasMoreElements()) {
             returnToDestinationNode = false;
-            extendLabel(label, extendToInfo);
+            extendLabel(label, enumerator.nextElement());
         }
         if (returnToDestinationNode) {
             Label newLabel = extendLabelToNextNode(label, new ExtendToInfo(graph.getDestination(), 0));

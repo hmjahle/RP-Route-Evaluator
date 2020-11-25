@@ -1,6 +1,6 @@
 package com.visma.of.rp.routeevaluator.solver.algorithm;
 
-import java.util.List;
+import java.util.Enumeration;
 
 /**
  * The interface is used to find nodes to extend a label to this is returned as a part of the ExtendToInfo along with
@@ -8,7 +8,7 @@ import java.util.List;
  */
   interface IExtendInfo {
 
-    List<ExtendToInfo> extend(Label label);
+    Enumeration<ExtendToInfo> extend(Label label);
 
     IResource createEmptyResource();
 }
