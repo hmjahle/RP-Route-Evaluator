@@ -14,20 +14,34 @@ public class ExtendInfoOneElement implements IExtendInfo {
         this.nodeListOne = nodeListOne;
     }
 
+    /**
+     * Check if there is a node that corresponds to the resource count, if not it
+     * can be interpreted as if all nodes on the nodeListOne has been visited.
+     *
+     * @param label Label to extend.
+     * @return Enumeration.
+     */
     @Override
     public Enumeration<ExtendToInfo> extend(Label label) {
         node = nodeListOne.getNode(((ResourceOneElement) label.getResources()).getElementOneCount());
-
         return new ExtendInfoOneElementEnumerator();
-
     }
 
+    /**
+     * Creates an resource with one element, corresponding to one nodeList. This points to the first node
+     * on the first nodeList.
+     *
+     * @return ResourceOneElement.
+     */
     @Override
     public IResource createEmptyResource() {
         return new ResourceOneElement(0);
     }
 
-
+    /**
+     * An private implementation of enumeration. If there is a node to extend to,
+     * then ExtendInfo is returned for that node. There can only be one or zero elements.
+     */
     private class ExtendInfoOneElementEnumerator implements Enumeration<ExtendToInfo> {
 
         boolean next = (node != null);
@@ -42,6 +56,5 @@ public class ExtendInfoOneElement implements IExtendInfo {
             next = false;
             return new ExtendToInfo(node, 1);
         }
-
     }
 }
