@@ -216,7 +216,7 @@ public class LabellingAlgorithm {
     }
 
     private int findNewLocation(Label thisLabel, boolean requirePhysicalAppearance, Node nextNode) {
-        return requirePhysicalAppearance || nextNode.getRequirePhysicalAppearance() ? nextNode.getLocationId() : thisLabel.getCurrentLocationId();
+        return requirePhysicalAppearance  ? nextNode.getLocationId() : thisLabel.getCurrentLocationId();
     }
 
     private long findEarliestStartTimeNextTask(Node toNode) {
