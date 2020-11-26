@@ -73,11 +73,6 @@ public class TestTask implements ITask {
     }
 
     @Override
-    public int getRequiredSkillLevel() {
-        return requiredSkillLevel;
-    }
-
-    @Override
     public long getSyncedWithIntervalDiff() {
         return syncedWithIntervalDiffSeconds;
     }
