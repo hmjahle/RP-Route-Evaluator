@@ -1,7 +1,6 @@
 package com.visma.of.rp.routeevaluator.solver.algorithm;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Enumeration;
 
 /**
  * This class implement the IExtendInfo, it has two elements.
@@ -9,24 +8,53 @@ import java.util.List;
 public class ExtendInfoOneElement implements IExtendInfo {
 
     NodeList nodeListOne;
-    List<ExtendToInfo> extendToInfo;
+    Node node;
 
     public ExtendInfoOneElement(NodeList nodeListOne) {
-        this.extendToInfo = new ArrayList<>();
         this.nodeListOne = nodeListOne;
     }
 
-    public List<ExtendToInfo> extend(Label label) {
-        ResourceOneElement resourceOneElement = (ResourceOneElement) label.getResources();
-        extendToInfo.clear();
-        Node node = nodeListOne.getNode(resourceOneElement.getElementOneCount());
-        if (node != null) {
-            extendToInfo.add(new ExtendToInfo(node, 1));
-        }
-        return extendToInfo;
+    /**
+     * Check if there is a node that corresponds to the resource count, if not it
+     * can be interpreted as if all nodes on the nodeListOne has been visited.
+     *
+     * @param label Label to extend.
+     * @return Enumeration.
+     */
+    @Override
+    public Enumeration<ExtendToInfo> extend(Label label) {
+        node = nodeListOne.getNode(((ResourceOneElement) label.getResources()).getElementOneCount());
+        return new ExtendInfoOneElementEnumerator();
     }
 
+    /**
+     * Creates an resource with one element, corresponding to one nodeList. This points to the first node
+     * on the first nodeList.
+     *
+     * @return ResourceOneElement.
+     */
+    @Override
     public IResource createEmptyResource() {
         return new ResourceOneElement(0);
+    }
+
+    /**
+     * An private implementation of enumeration. If there is a node to extend to,
+     * then ExtendInfo is returned for that node. There can only be one or zero elements.
+     */
+    private class ExtendInfoOneElementEnumerator implements Enumeration<ExtendToInfo> {
+
+        boolean next = (node != null);
+
+        @Override
+        public boolean hasMoreElements() {
+            return next;
+        }
+
+        @Override
+        public ExtendToInfo nextElement() {
+            next = false;
+            return new ExtendToInfo(node, 1);
+        }
     }
 }

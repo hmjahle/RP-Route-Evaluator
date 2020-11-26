@@ -9,6 +9,7 @@ import com.visma.of.rp.routeevaluator.results.Route;
 import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.results.Visit;
 
+import java.util.Enumeration;
 
 /**
  * The labelling algorithm is a resource constrained shortest path algorithm.
@@ -127,14 +128,14 @@ public class LabellingAlgorithm {
             newLabel.setCanLeaveLocationAtTime(canLeaveLocationAt);
             return newLabel;
         }
-
     }
 
     private void extendLabelToAllPossibleTasks(Label label) {
         boolean returnToDestinationNode = true;
-        for (ExtendToInfo extendToInfo : nodeExtendInfo.extend(label)) {
+        Enumeration<ExtendToInfo> enumerator = nodeExtendInfo.extend(label);
+        while (enumerator.hasMoreElements()) {
             returnToDestinationNode = false;
-            extendLabel(label, extendToInfo);
+            extendLabel(label, enumerator.nextElement());
         }
         if (returnToDestinationNode) {
             Label newLabel = extendLabelToNextNode(label, new ExtendToInfo(graph.getDestination(), 0));
