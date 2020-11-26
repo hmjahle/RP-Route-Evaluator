@@ -35,7 +35,7 @@ public class NoPhysicalAppearanceTravelTimesTest extends JUnitTestAbstract {
         locations = createLocations();
         allTasks = createTasks(locations);
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
-        shift = new TestShift( getTime(8), getTime(16));
+        shift = new TestShift(getTime(8), getTime(16));
     }
 
     @Test

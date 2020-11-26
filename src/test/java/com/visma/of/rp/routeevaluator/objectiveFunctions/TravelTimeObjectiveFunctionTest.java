@@ -36,7 +36,7 @@ public class TravelTimeObjectiveFunctionTest extends JUnitTestAbstract {
     public void oneTask() {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(allTasks.get(2));
-        RouteEvaluatorResult result = evaluateRoute( tasks, null);
+        RouteEvaluatorResult result = evaluateRoute(tasks, null);
         Assert.assertEquals("Cost should be: ", 4, result.getObjectiveValue(), 1E-6);
     }
 
@@ -44,7 +44,7 @@ public class TravelTimeObjectiveFunctionTest extends JUnitTestAbstract {
     public void fiveTaskNonSynced() {
         List<ITask> tasks = allTasks.stream().filter(i -> !i.isSynced()).collect(Collectors.toList());
 
-        RouteEvaluatorResult result = evaluateRoute( tasks, null);
+        RouteEvaluatorResult result = evaluateRoute(tasks, null);
 
         Assert.assertEquals("Cost should be: ", 8, result.getObjectiveValue(), 1E-6);
     }
@@ -94,7 +94,7 @@ public class TravelTimeObjectiveFunctionTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(2));
         tasks.add(allTasks.get(3));
         travelTimeMatrix.addUndirectedConnection(office, allTasks.get(7).getLocation(), 10);
-        RouteEvaluatorResult result = evaluateRoute( tasks, null);
+        RouteEvaluatorResult result = evaluateRoute(tasks, null);
 
         Assert.assertEquals("Cost should be: ", 14, result.getObjectiveValue(), 1E-6);
     }

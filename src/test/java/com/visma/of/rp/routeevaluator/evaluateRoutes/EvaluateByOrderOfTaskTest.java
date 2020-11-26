@@ -36,7 +36,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(allTasks.get(0));
 
-        RouteEvaluator routeEvaluator = new RouteEvaluator( travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
 
         Assert.assertEquals("Must return at correct time!", 5, result.getTimeOfArrivalAtDestination().longValue());
@@ -47,7 +47,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(allTasks.get(2));
 
-        RouteEvaluator routeEvaluator = new RouteEvaluator( travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
 
         Assert.assertEquals("Number of visits should be: ", 1, result.getVisitSolution().size());
@@ -62,7 +62,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
     public void fiveTaskNonSynced() {
         List<ITask> tasks = allTasks.stream().filter(i -> !i.isSynced()).collect(Collectors.toList());
 
-        RouteEvaluator routeEvaluator = new RouteEvaluator( travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
 
         Assert.assertEquals("Number of visits should be: ", 5, result.getVisitSolution().size());
@@ -86,7 +86,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
 
         Map<ITask, Long> syncedTasksStartTime = getSyncedStartTime();
 
-        RouteEvaluator routeEvaluator = new RouteEvaluator( travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTasksStartTime, shift);
 
         Assert.assertEquals("Number of visits should be: ", 3, result.getVisitSolution().size());
@@ -104,7 +104,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
     public void allTasks() {
         Map<ITask, Long> syncedTasksStartTime = getSyncedStartTime();
 
-        RouteEvaluator routeEvaluator = new RouteEvaluator( travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTasksStartTime, shift);
 
         Assert.assertEquals("Number of visits should be: ", 8, result.getVisitSolution().size());
