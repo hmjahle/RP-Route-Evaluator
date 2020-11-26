@@ -39,7 +39,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
         office = createOffice();
         allTasks = createTasks();
         travelTimeMatrix = createTravelTimeMatrix(office, allTasks);
-        shift = new TestShift(100, 0, 100);
+        shift = new TestShift(0, 100);
         routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
         routeEvaluator.addObjectiveIntraShift(new CustomCriteriaObjectiveFunction(
                 RouteEvaluationInfoAbstract::isDestination, x -> (double) x.getStartOfServiceNextTask()));

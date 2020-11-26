@@ -35,7 +35,7 @@ public class SyncedTaskConstraintTest extends JUnitTestAbstract {
         locations = createLocations();
         allTasks = createTasks(locations);
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
-        shift = new TestShift(150, 0, 150);
+        shift = new TestShift(0, 150);
     }
 
     @Test

@@ -37,7 +37,7 @@ public class OvertimeTaskConstraintTest extends JUnitTestAbstract {
         locations = createLocations();
         allTasks = createTasks(locations);
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
-        shift = new TestShift(100, 0, 100);
+        shift = new TestShift(0, 100);
     }
 
     @Test

@@ -33,7 +33,7 @@ public class EvaluateSharedLocationsTest extends JUnitTestAbstract {
         destination = createOffice();
         locations = createLocations();
         travelTimeMatrix = createTravelTimeMatrix(origin, destination, locations);
-        shift = new TestShift(100, 0, 100);
+        shift = new TestShift(0, 100);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class EvaluateSharedLocationsTest extends JUnitTestAbstract {
     public void multipleTasksAllAtOffice() {
         List<ITask> tasks = createTasksAllSame();
 
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, locations.get(0),locations.get(0));
+        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, locations.get(0), locations.get(0));
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
 
         Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(0).getTravelTime());

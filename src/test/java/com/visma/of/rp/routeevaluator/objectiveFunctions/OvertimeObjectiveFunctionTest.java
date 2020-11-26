@@ -38,7 +38,7 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
         locations = createLocations();
         allTasks = createTasks(locations);
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
-        shift = new TestShift(100, 0, 100);
+        shift = new TestShift(0, 100);
     }
 
     @Test
@@ -166,7 +166,7 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
 
     private RouteEvaluator getRouteEvaluator(List<ITask> tasks) {
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
-        routeEvaluator.addObjectiveIntraShift("OverTime",1,new OvertimeObjectiveFunction());
+        routeEvaluator.addObjectiveIntraShift("OverTime", 1, new OvertimeObjectiveFunction());
         return routeEvaluator;
     }
 }

@@ -33,7 +33,7 @@ public class InsertMultipleTasksIntoRouteTest extends JUnitTestAbstract {
         office = createOffice();
         allTasks = createTasks();
         travelTimeMatrix = createTravelTimeMatrix(office, allTasks);
-        shift = new TestShift(100, 0, 100);
+        shift = new TestShift(0, 100);
         routeEvaluator = createRouteEvaluator();
     }
 

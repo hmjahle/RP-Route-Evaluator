@@ -32,13 +32,13 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
         destination = createOffice();
         allTasks = createTasks();
         travelTimeMatrix = createTravelTimeMatrix(origin, destination, allTasks);
-        shift = new TestShift(100, 0, 100);
+        shift = new TestShift(0, 100);
     }
 
     @Test
     public void noTasks() {
         List<ITask> tasks = new ArrayList<>();
-        shift = new TestShift(100, 50, 150);
+        shift = new TestShift(50, 150);
 
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, origin, destination);
         routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
@@ -80,7 +80,7 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
     @Test
     public void multipleTasksUpdateStart() {
         allTasks = createTasksNoTW();
-        travelTimeMatrix = createTravelTimeMatrix(origin,destination,allTasks);
+        travelTimeMatrix = createTravelTimeMatrix(origin, destination, allTasks);
 
         RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, origin, destination);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);

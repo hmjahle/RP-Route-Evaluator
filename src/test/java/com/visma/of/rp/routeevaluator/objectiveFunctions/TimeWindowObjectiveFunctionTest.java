@@ -38,7 +38,7 @@ public class TimeWindowObjectiveFunctionTest extends JUnitTestAbstract {
         locations = createLocations();
         allTasks = createTaskList();
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
-        shift = new TestShift(100, 0, 100);
+        shift = new TestShift(0, 100);
     }
 
     @Test
