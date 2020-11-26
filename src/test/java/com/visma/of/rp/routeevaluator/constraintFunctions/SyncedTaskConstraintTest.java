@@ -35,7 +35,7 @@ public class SyncedTaskConstraintTest extends JUnitTestAbstract {
         locations = createLocations();
         allTasks = createTasks(locations);
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
-        shift = new TestShift(150, 0, 150);
+        shift = new TestShift(0, 150);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class SyncedTaskConstraintTest extends JUnitTestAbstract {
         syncedTaskStartTimes.put(allTasks.get(0), 40L);
         syncedTaskStartTimes.put(allTasks.get(2), 55L);
         travelTimeMatrix.addUndirectedConnection(allTasks.get(0).getLocation(), allTasks.get(2).getLocation(), 6);
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
         routeEvaluator.addConstraint(new SyncedTasksConstraint(1));
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
         Assert.assertNotNull("Must be feasible. ", result);
@@ -166,7 +166,7 @@ public class SyncedTaskConstraintTest extends JUnitTestAbstract {
     }
 
     private RouteEvaluatorResult evaluateRoute(List<ITask> tasks, Map<ITask, Long> syncedTaskStartTimes) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
         routeEvaluator.addConstraint(new SyncedTasksConstraint());
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
     }

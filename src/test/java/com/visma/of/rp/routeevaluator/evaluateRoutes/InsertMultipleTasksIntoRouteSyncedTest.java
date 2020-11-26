@@ -32,7 +32,7 @@ public class InsertMultipleTasksIntoRouteSyncedTest extends JUnitTestAbstract {
         office = createOffice();
         allTasks = createTasks();
         travelTimeMatrix = createTravelTimeMatrix(office, allTasks);
-        shift = new TestShift(100, 0, 100);
+        shift = new TestShift(0, 100);
         syncedTaskStartTimes = createSyncedTaskStartTime();
         routeEvaluator = createRouteEvaluator();
     }
@@ -136,7 +136,7 @@ public class InsertMultipleTasksIntoRouteSyncedTest extends JUnitTestAbstract {
     }
 
     private RouteEvaluator createRouteEvaluator() {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
         return routeEvaluator;
     }

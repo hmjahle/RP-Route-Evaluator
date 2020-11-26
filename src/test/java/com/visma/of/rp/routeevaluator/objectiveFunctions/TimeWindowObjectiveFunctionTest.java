@@ -38,7 +38,7 @@ public class TimeWindowObjectiveFunctionTest extends JUnitTestAbstract {
         locations = createLocations();
         allTasks = createTaskList();
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
-        shift = new TestShift(100, 0, 100);
+        shift = new TestShift(0, 100);
     }
 
     @Test
@@ -143,7 +143,7 @@ public class TimeWindowObjectiveFunctionTest extends JUnitTestAbstract {
         allTasks.add(task3);
         allTasks.add(task4);
         ITravelTimeMatrix travelTimeMatrix = createTravelTimeMatrix(office, allTasks);
-        return new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
+        return new RouteEvaluator(travelTimeMatrix, allTasks, office);
     }
 
     private TestTravelTimeMatrix createTravelTimeMatrix(List<ILocation> locations, ILocation office) {
@@ -164,13 +164,13 @@ public class TimeWindowObjectiveFunctionTest extends JUnitTestAbstract {
     }
 
     private RouteEvaluatorResult evaluateRouteStandardTimeWindow(List<ITask> tasks) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
         routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }
 
     private RouteEvaluatorResult evaluateRouteLowHighTimeWindow(List<ITask> tasks, double highMultiplier, long highCutOff) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
         routeEvaluator.addObjectiveIntraShift(new TimeWindowLowHighObjectiveFunction(highCutOff, highMultiplier));
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }

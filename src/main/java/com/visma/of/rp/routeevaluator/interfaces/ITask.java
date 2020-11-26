@@ -44,12 +44,6 @@ public interface ITask {
     boolean getRequirePhysicalAppearance();
 
     /**
-     * The necessary skill level to carry out the task.
-     * @return Skill level.
-     */
-    int getRequiredSkillLevel();
-
-    /**
      * The maximum difference from the start time of the task that the task is synced with.
      * @return Time difference in seconds.
      */

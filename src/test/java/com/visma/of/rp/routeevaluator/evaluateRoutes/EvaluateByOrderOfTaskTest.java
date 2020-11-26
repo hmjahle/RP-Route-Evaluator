@@ -28,7 +28,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
         office = createOffice();
         allTasks = createTasks();
         travelTimeMatrix = createTravelTimeMatrix(office, allTasks);
-        shift = new TestShift(100, 0, 100);
+        shift = new TestShift(0, 100);
     }
 
     @Test
@@ -36,7 +36,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(allTasks.get(0));
 
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
 
         Assert.assertEquals("Must return at correct time!", 5, result.getTimeOfArrivalAtDestination().longValue());
@@ -47,7 +47,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(allTasks.get(2));
 
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
 
         Assert.assertEquals("Number of visits should be: ", 1, result.getVisitSolution().size());
@@ -62,7 +62,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
     public void fiveTaskNonSynced() {
         List<ITask> tasks = allTasks.stream().filter(i -> !i.isSynced()).collect(Collectors.toList());
 
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
 
         Assert.assertEquals("Number of visits should be: ", 5, result.getVisitSolution().size());
@@ -86,7 +86,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
 
         Map<ITask, Long> syncedTasksStartTime = getSyncedStartTime();
 
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTasksStartTime, shift);
 
         Assert.assertEquals("Number of visits should be: ", 3, result.getVisitSolution().size());
@@ -104,7 +104,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
     public void allTasks() {
         Map<ITask, Long> syncedTasksStartTime = getSyncedStartTime();
 
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTasksStartTime, shift);
 
         Assert.assertEquals("Number of visits should be: ", 8, result.getVisitSolution().size());
@@ -122,55 +122,12 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
-    @Test
-    public void allTasksRobustness() {
-        Map<ITask, Long> syncedTasksStartTime = getSyncedStartTime();
-
-        RouteEvaluator routeEvaluator = new RouteEvaluator(5, travelTimeMatrix, allTasks, office);
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTasksStartTime, shift);
-
-        Assert.assertEquals("Number of visits should be: ", 8, result.getVisitSolution().size());
-        Assert.assertEquals("Start time should be: ", 20, result.getVisitSolution().get(0).getStartTime());
-        Assert.assertEquals("Start time should be: ", 27, result.getVisitSolution().get(1).getStartTime());
-        Assert.assertEquals("Start time should be: ", 34, result.getVisitSolution().get(2).getStartTime());
-        Assert.assertEquals("Start time should be: ", 41, result.getVisitSolution().get(3).getStartTime());
-        Assert.assertEquals("Start time should be: ", 60, result.getVisitSolution().get(4).getStartTime());
-        Assert.assertEquals("Start time should be: ", 80, result.getVisitSolution().get(5).getStartTime());
-        Assert.assertEquals("Start time should be: ", 87, result.getVisitSolution().get(6).getStartTime());
-        Assert.assertEquals("Start time should be: ", 94, result.getVisitSolution().get(7).getStartTime());
-        Assert.assertEquals("Office return should be: ", 102, result.getTimeOfArrivalAtDestination().longValue());
-        Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
-        double objective = routeEvaluator.evaluateRouteObjective(allTasks, syncedTasksStartTime, shift);
-        Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
-    }
-
     private Map<ITask, Long> getSyncedStartTime() {
         Map<ITask, Long> syncedTasksStartTime = new HashMap<>();
         syncedTasksStartTime.put(allTasks.get(0), 20L);
         syncedTasksStartTime.put(allTasks.get(4), 60L);
         syncedTasksStartTime.put(allTasks.get(5), 80L);
         return syncedTasksStartTime;
-    }
-
-
-    @Test
-    public void standardTasksWithRobustness() {
-        List<ITask> tasks = new ArrayList<>();
-        tasks.add(allTasks.get(7));
-        tasks.add(allTasks.get(2));
-        tasks.add(allTasks.get(3));
-
-        RouteEvaluator routeEvaluator = new RouteEvaluator(10, travelTimeMatrix, allTasks, office);
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
-
-        Assert.assertEquals("Number of visits should be: ", 3, result.getVisitSolution().size());
-        Assert.assertEquals("Start time should be: ", 40, result.getVisitSolution().get(0).getStartTime());
-        Assert.assertEquals("Start time should be: ", 52, result.getVisitSolution().get(1).getStartTime());
-        Assert.assertEquals("Start time should be: ", 64, result.getVisitSolution().get(2).getStartTime());
-        Assert.assertEquals("Office return should be: ", 77, result.getTimeOfArrivalAtDestination().longValue());
-        Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
-        double objective = routeEvaluator.evaluateRouteObjective(tasks, shift);
-        Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
     private ITravelTimeMatrix createTravelTimeMatrix(ILocation office, Collection<ITask> tasks) {

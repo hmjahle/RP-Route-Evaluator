@@ -28,9 +28,9 @@ public class RouteEvaluatorResultTest extends JUnitTestAbstract {
         allTasks = createTasks();
         ILocation office = createOffice();
         ITravelTimeMatrix travelTimeMatrix = createTravelTimeMatrix(office, allTasks);
-        IShift shift = new TestShift(100, 0, 100);
+        IShift shift = new TestShift(0, 100);
         Map<ITask, Long> syncedTasksStartTime = getSyncedStartTime(allTasks);
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTasksStartTime, shift);
     }
 

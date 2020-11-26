@@ -36,7 +36,7 @@ public class StrictTimeWindowTaskConstraintTest extends JUnitTestAbstract {
         locations = createLocations();
         allTasks = createTasks(locations);
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
-        shift = new TestShift(150, 0, 150);
+        shift = new TestShift(0, 150);
     }
 
     @Test
@@ -117,7 +117,7 @@ public class StrictTimeWindowTaskConstraintTest extends JUnitTestAbstract {
     }
 
     private RouteEvaluatorResult evaluateRoute(List<ITask> tasks) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
         routeEvaluator.addConstraint(new StrictTimeWindowConstraint());
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }

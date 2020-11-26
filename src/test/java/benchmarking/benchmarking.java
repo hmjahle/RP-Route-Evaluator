@@ -49,10 +49,10 @@ public class benchmarking extends JUnitTestAbstract {
         TestLocation office = addOffice(locations, officeLong, officeLat);
         List<ITask> tasks = createTasks(locations);
         List<TestTravelTimeMatrix> travelTimeMatrices = getTestTravelTimeMatrices(locations);
-        RouteEvaluator routeEvaluator1 = new RouteEvaluator(0, travelTimeMatrices.get(0), tasks, office);
-        RouteEvaluator routeEvaluator2 = new RouteEvaluator(0, travelTimeMatrices.get(1), tasks, office);
-        RouteEvaluator routeEvaluator3 = new RouteEvaluator(0, travelTimeMatrices.get(2), tasks, office);
-        RouteEvaluator routeEvaluator4 = new RouteEvaluator(0, travelTimeMatrices.get(2), tasks, office);
+        RouteEvaluator routeEvaluator1 = new RouteEvaluator(travelTimeMatrices.get(0), tasks, office);
+        RouteEvaluator routeEvaluator2 = new RouteEvaluator(travelTimeMatrices.get(1), tasks, office);
+        RouteEvaluator routeEvaluator3 = new RouteEvaluator(travelTimeMatrices.get(2), tasks, office);
+        RouteEvaluator routeEvaluator4 = new RouteEvaluator(travelTimeMatrices.get(2), tasks, office);
         List<ITask> newTasks = new ArrayList<>();
         List<ITask> newTasks2 = new ArrayList<>();
         List<ITask> mergeTasks = new ArrayList<>();
@@ -123,7 +123,7 @@ public class benchmarking extends JUnitTestAbstract {
             if (task.isSynced())
                 syncedTasksAllStartTime.put(task, task.getStartTime());
 
-        IShift shift = new TestShift(3600 * 10, 0, 3600 * 10);
+        IShift shift = new TestShift(0, 3600 * 10);
         for (int i = 0; i < 20000; i++) {
             for (int j = 0; j < 100; j++) {
                 routeEvaluator1.evaluateRouteObjective(newTasks, syncedTasksNewStartTime, shift);

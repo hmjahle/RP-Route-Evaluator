@@ -40,7 +40,7 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         locations = createLocations();
         allTasks = createTaskList();
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
-        shift = new TestShift(100, 0, 100);
+        shift = new TestShift( 0, 100);
     }
 
     @Test
@@ -52,7 +52,7 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(office, task1.getLocation(), 10);
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task1.getLocation(), 1);
         travelTimeMatrix.addUndirectedConnection(office, task2.getLocation(), 100);
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new OvertimeConstraint());
 
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
@@ -72,7 +72,7 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(office, task1.getLocation(), 50);
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task1.getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(office, task2.getLocation(), 20);
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new OvertimeConstraint());
 
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
@@ -90,7 +90,7 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(office, task1.getLocation(), 20);
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task1.getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(office, task2.getLocation(), 50);
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new StrictTimeWindowConstraint());
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
 
@@ -107,7 +107,7 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(office, task1.getLocation(), 20);
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task1.getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(office, task2.getLocation(), 50);
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new StrictTimeWindowConstraint());
 
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
@@ -129,7 +129,7 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(task1.getLocation(), task2.getLocation(), 25);
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task3.getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(office, task3.getLocation(), 45);
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new SyncedTasksConstraint());
 
         Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();
@@ -154,7 +154,7 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(task1.getLocation(), task3.getLocation(), 15);
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task3.getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(office, task3.getLocation(), 20);
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new SyncedTasksConstraint());
 
         Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();
@@ -177,7 +177,7 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task1.getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task3.getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(office, task2.getLocation(), 45);
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new SyncedTasksConstraint());
         Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();
         syncedTaskStartTimes.put(task1, 40L);
@@ -203,7 +203,7 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(task1.getLocation(), task2.getLocation(), 25);
         travelTimeMatrix.addUndirectedConnection(task1.getLocation(), task3.getLocation(), 25);
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task3.getLocation(), 5);
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new SyncedTasksConstraint());
 
         Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();

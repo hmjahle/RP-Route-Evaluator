@@ -15,11 +15,9 @@ public class SearchGraph {
     private Long[][] travelTimeMatrix;
     private int nodeIdCounter;
     private int locationIdCounter;
-    private long robustTimeSeconds;
     private Map<ILocation, Integer> locationToLocationIds;
 
-    public SearchGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<ITask> tasks, ILocation originLocation, ILocation destinationLocation, long robustTimeSeconds) {
-        this.robustTimeSeconds = robustTimeSeconds;
+    public SearchGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<ITask> tasks, ILocation originLocation, ILocation destinationLocation) {
         this.nodes = new ArrayList<>();
         this.taskToNodes = new HashMap<>();
         this.locationToLocationIds = new HashMap<>();
@@ -140,7 +138,4 @@ public class SearchGraph {
         return taskToNodes.get(task);
     }
 
-    public long getRobustTimeSeconds() {
-        return robustTimeSeconds;
-    }
 }
