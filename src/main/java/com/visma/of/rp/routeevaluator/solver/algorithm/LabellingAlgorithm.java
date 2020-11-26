@@ -28,7 +28,6 @@ public class LabellingAlgorithm {
     private IExtendInfo nodeExtendInfo;
     private long[] syncedNodesStartTime;
     private long endOfShift;
-    private long robustnessTimeSeconds;
 
     public LabellingAlgorithm(SearchGraph graph, ObjectiveFunctionsIntraRouteHandler objectiveFunctions, ConstraintsIntraRouteHandler constraints) {
         this.graph = graph;
