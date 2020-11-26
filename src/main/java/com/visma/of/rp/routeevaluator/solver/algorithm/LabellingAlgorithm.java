@@ -39,7 +39,6 @@ public class LabellingAlgorithm {
         this.labelLists = new LabelLists(graph.getNodes().size(), graph.getNodes().size() * 10);
         this.unExtendedLabels = new LabelQueue();
         this.bestLabelOnDestination = null;
-        this.robustnessTimeSeconds = graph.getRobustTimeSeconds();
     }
 
     /**

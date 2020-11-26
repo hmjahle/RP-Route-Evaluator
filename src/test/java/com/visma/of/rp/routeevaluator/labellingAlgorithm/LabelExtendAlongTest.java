@@ -42,6 +42,6 @@ public class LabelExtendAlongTest extends JUnitTestAbstract {
     }
 
     private SearchGraph buildGraph(ILocation office, Collection<ITask> tasks, ITravelTimeMatrix distanceMatrix) {
-        return new SearchGraph(distanceMatrix, tasks, office, office, 0);
+        return new SearchGraph(distanceMatrix, tasks, office, office);
     }
 }

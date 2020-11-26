@@ -49,10 +49,10 @@ public class benchmarking extends JUnitTestAbstract {
         TestLocation office = addOffice(locations, officeLong, officeLat);
         List<ITask> tasks = createTasks(locations);
         List<TestTravelTimeMatrix> travelTimeMatrices = getTestTravelTimeMatrices(locations);
-        RouteEvaluator routeEvaluator1 = new RouteEvaluator(0, travelTimeMatrices.get(0), tasks, office);
-        RouteEvaluator routeEvaluator2 = new RouteEvaluator(0, travelTimeMatrices.get(1), tasks, office);
-        RouteEvaluator routeEvaluator3 = new RouteEvaluator(0, travelTimeMatrices.get(2), tasks, office);
-        RouteEvaluator routeEvaluator4 = new RouteEvaluator(0, travelTimeMatrices.get(2), tasks, office);
+        RouteEvaluator routeEvaluator1 = new RouteEvaluator(travelTimeMatrices.get(0), tasks, office);
+        RouteEvaluator routeEvaluator2 = new RouteEvaluator(travelTimeMatrices.get(1), tasks, office);
+        RouteEvaluator routeEvaluator3 = new RouteEvaluator(travelTimeMatrices.get(2), tasks, office);
+        RouteEvaluator routeEvaluator4 = new RouteEvaluator(travelTimeMatrices.get(2), tasks, office);
         List<ITask> newTasks = new ArrayList<>();
         List<ITask> newTasks2 = new ArrayList<>();
         List<ITask> mergeTasks = new ArrayList<>();

@@ -33,7 +33,7 @@ public class NodeListsTest extends JUnitTestAbstract {
         office = createOffice();
         allTasks = createTasks();
         travelTimeMatrix = createTravelTimeMatrix(office, allTasks);
-        graph = new SearchGraph(travelTimeMatrix, allTasks, office, office, 0);
+        graph = new SearchGraph(travelTimeMatrix, allTasks, office, office);
     }
 
     @Test

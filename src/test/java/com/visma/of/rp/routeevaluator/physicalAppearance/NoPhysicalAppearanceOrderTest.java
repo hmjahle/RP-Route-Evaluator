@@ -169,7 +169,7 @@ public class NoPhysicalAppearanceOrderTest extends JUnitTestAbstract {
     }
 
     private RouteEvaluatorResult evaluateRoute(List<ITask> tasks) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }
 }

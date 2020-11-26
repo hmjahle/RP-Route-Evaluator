@@ -117,7 +117,7 @@ public class TimeWindowCustomCriteriaObjectiveFunctionTest extends JUnitTestAbst
     }
 
     private RouteEvaluatorResult evaluateRoute(List<ITask> tasks, Function<RouteEvaluationInfoAbstract, Boolean> criteriaFunction) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, tasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
         routeEvaluator.addObjectiveIntraShift(new CustomCriteriaObjectiveFunction(criteriaFunction, objectiveInfo -> Math.max(0.0, objectiveInfo.getVisitEnd() - objectiveInfo.getTask().getEndTime())));
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }

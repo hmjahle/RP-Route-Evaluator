@@ -136,7 +136,7 @@ public class InsertMultipleTasksIntoRouteSyncedTest extends JUnitTestAbstract {
     }
 
     private RouteEvaluator createRouteEvaluator() {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(0, travelTimeMatrix, allTasks, office);
+        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
         return routeEvaluator;
     }
