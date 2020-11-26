@@ -172,11 +172,11 @@ public class LabellingAlgorithm {
         if (requirePhysicalAppearance) {
             actualTravelTime = Math.max(travelTime - (thisLabel.getCurrentTime() - thisLabel.getCanLeaveLocationAtTime()), 0);
         }
-        return actualTravelTime + thisLabel.getCurrentTime() + thisLabel.getNode().getDurationSeconds() + robustnessTimeSeconds;
+        return actualTravelTime + thisLabel.getCurrentTime() + thisLabel.getNode().getDurationSeconds();
     }
 
     private long updateCanLeaveLocationAt(Label thisLabel) {
-        return thisLabel.getCanLeaveLocationAtTime() + thisLabel.getNode().getDurationSeconds() + robustnessTimeSeconds;
+        return thisLabel.getCanLeaveLocationAtTime() + thisLabel.getNode().getDurationSeconds();
     }
 
     private long calcStartOfServiceNextTask(Label thisLabel, Node nextNode, boolean taskRequirePhysicalAppearance, long travelTime, boolean nextNodeIsSynced) {
