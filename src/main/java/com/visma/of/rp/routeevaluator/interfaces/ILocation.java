@@ -5,10 +5,4 @@ package com.visma.of.rp.routeevaluator.interfaces;
  */
 public interface ILocation {
 
-    /**
-     * Check whether the location is an office.
-     *
-     * @return True if the location is an office.
-     */
-    boolean isOffice();
 }
