@@ -44,8 +44,4 @@ public class TestLocation implements ILocation {
         return (" Name: " + name + "\tLong: " + longitude + "\tLat: " + latitude);
     }
 
-    @Override
-    public boolean isOffice() {
-        return false;
-    }
 }
