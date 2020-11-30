@@ -62,7 +62,7 @@ public class RouteEvaluator {
      * @param employeeWorkShift    Employee the route applies to.
      * @return A double value representing the objective value of the route.
      */
-    public Double evaluateRouteObjective(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
+    public Double evaluateRouteObjective(List<? extends ITask> tasks, Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
         ExtendInfoOneElement nodeExtendInfoOneElement = initializeOneElementEvaluator(tasks, syncedTasksStartTime);
         Label bestLabel = algorithm.
                 runAlgorithm(new WeightedObjective(), nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
@@ -80,7 +80,7 @@ public class RouteEvaluator {
      * @param employeeWorkShift Employee the route applies to.
      * @return A double value representing the objective value of the route.
      */
-    public Double evaluateRouteObjective(List<ITask> tasks, IShift employeeWorkShift) {
+    public Double evaluateRouteObjective(List<? extends ITask> tasks, IShift employeeWorkShift) {
         return evaluateRouteObjective(tasks, null, employeeWorkShift);
     }
 
@@ -88,7 +88,7 @@ public class RouteEvaluator {
     /**
      * Used to initialize the route evaluator when
      */
-    private ExtendInfoOneElement initializeOneElementEvaluator(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime) {
+    private ExtendInfoOneElement initializeOneElementEvaluator(List<? extends ITask> tasks, Map<ITask, Long> syncedTasksStartTime) {
         setSyncedNodesStartTime(syncedTasksStartTime);
         updateFirstNodeList(tasks);
         return new ExtendInfoOneElement(firstNodeList);
@@ -322,7 +322,7 @@ public class RouteEvaluator {
         return algorithm.solveRouteEvaluatorResult(objective, nodeExtendInfoTwoElements, syncedNodesStartTime, employeeWorkShift);
     }
 
-    private void updateFirstNodeList(List<ITask> tasks) {
+    private void updateFirstNodeList(List<? extends ITask> tasks) {
         firstNodeList.initializeWithNodes(graph, tasks);
     }
 
