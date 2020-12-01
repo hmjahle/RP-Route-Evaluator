@@ -67,21 +67,12 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
         assertOneTask(tasks, routeEvaluator);
     }
 
-    private void assertOneTask(List<ITask> tasks, RouteEvaluator routeEvaluator) {
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
-        Assert.assertEquals("Number of visits should be: ", 1, result.getVisitSolution().size());
-        Assert.assertEquals("Start time should be: ", 30, result.getVisitSolution().get(0).getStartTime());
-        Assert.assertEquals("Office return should be: ", 41, result.getTimeOfArrivalAtDestination().longValue());
-        Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
-    }
-
     @Test
     public void multipleTasks() {
         RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, origin, destination);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
         assertMultipleTasks(result);
     }
-
 
     @Test
     public void multipleTasksNoStartDestination() {
@@ -90,16 +81,6 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
         routeEvaluator.updateDestination(destination);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
         assertMultipleTasks(result);
-    }
-
-    private void assertMultipleTasks(RouteEvaluatorResult result) {
-        Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
-        Assert.assertEquals("Start time should be: ", 10, result.getVisitSolution().get(0).getStartTime());
-        Assert.assertEquals("Start time should be: ", 20, result.getVisitSolution().get(1).getStartTime());
-        Assert.assertEquals("Start time should be: ", 30, result.getVisitSolution().get(2).getStartTime());
-        Assert.assertEquals("Start time should be: ", 40, result.getVisitSolution().get(3).getStartTime());
-        Assert.assertEquals("Office return should be: ", 51, result.getTimeOfArrivalAtDestination().longValue());
-        Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
     }
 
     @Test
@@ -151,8 +132,24 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
         Assert.assertEquals("When returning to destination office return should be: ", 51, result.getTimeOfArrivalAtDestination().longValue());
     }
 
+    private void assertOneTask(List<ITask> tasks, RouteEvaluator routeEvaluator) {
+        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        Assert.assertEquals("Number of visits should be: ", 1, result.getVisitSolution().size());
+        Assert.assertEquals("Start time should be: ", 30, result.getVisitSolution().get(0).getStartTime());
+        Assert.assertEquals("Office return should be: ", 41, result.getTimeOfArrivalAtDestination().longValue());
+        Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
+    }
 
-
+    private void assertMultipleTasks(RouteEvaluatorResult result) {
+        Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
+        Assert.assertEquals("Start time should be: ", 10, result.getVisitSolution().get(0).getStartTime());
+        Assert.assertEquals("Start time should be: ", 20, result.getVisitSolution().get(1).getStartTime());
+        Assert.assertEquals("Start time should be: ", 30, result.getVisitSolution().get(2).getStartTime());
+        Assert.assertEquals("Start time should be: ", 40, result.getVisitSolution().get(3).getStartTime());
+        Assert.assertEquals("Office return should be: ", 51, result.getTimeOfArrivalAtDestination().longValue());
+        Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
+    }
+    
     private ITravelTimeMatrix createTravelTimeMatrix(ILocation origin, ILocation destination, Collection<ITask> tasks) {
         TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
         travelTimeMatrix.addUndirectedConnection(origin, destination, 50);
