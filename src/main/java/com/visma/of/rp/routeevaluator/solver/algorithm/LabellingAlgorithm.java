@@ -38,6 +38,7 @@ public class LabellingAlgorithm {
         this.labelLists = new LabelLists(graph.getNodes().size(), graph.getNodes().size() * 10);
         this.unExtendedLabels = new LabelQueue();
         this.bestLabelOnDestination = null;
+
     }
 
     /**
@@ -46,6 +47,7 @@ public class LabellingAlgorithm {
      * @param nodeExtendInfo       Information on how to extend labels and which resources to use.
      * @param syncedNodesStartTime Intended start time of synced tasks.
      * @param employeeWorkShift    Employee to simulate route for.
+     * @param objective            Starting objective.
      * @return Total fitness value, null if infeasible.
      */
     public Label runAlgorithm(IObjective objective, IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime, IShift employeeWorkShift) {
@@ -65,6 +67,7 @@ public class LabellingAlgorithm {
      * @param nodeExtendInfo       Information on how to extend labels and which resources to use.
      * @param syncedNodesStartTime Intended start time of synced tasks.
      * @param employeeWorkShift    Employee to simulate route for.
+     * @param initialObjective     Starting objective.
      * @return RouteEvaluatorResult or null if route is infeasible.
      */
     public RouteEvaluatorResult solveRouteEvaluatorResult(IObjective initialObjective, IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime, IShift employeeWorkShift) {
@@ -257,6 +260,3 @@ public class LabellingAlgorithm {
     }
 
 }
-
-
-

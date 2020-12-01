@@ -47,6 +47,7 @@ public class Label implements Comparable<Label> {
 
     /**
      * The start of service of the current task.
+     * @return Time in seconds
      */
     public long getCurrentTime() {
         return currentTime;
@@ -68,6 +69,7 @@ public class Label implements Comparable<Label> {
      * The time from which it is possible to calculate the travel time from a physical location to the next.
      * E.g. it is the start of service time of a task + duration of all tasks performed at that location
      * or on the way to the next location.
+     * @return Time in seconds
      */
     public long getCanLeaveLocationAtTime() {
         return canLeaveLocationAtTime;
@@ -75,6 +77,7 @@ public class Label implements Comparable<Label> {
 
     /**
      * Travel time from the previous location.
+     * @return Time in seconds
      */
     public long getTravelTime() {
         return travelTime;
