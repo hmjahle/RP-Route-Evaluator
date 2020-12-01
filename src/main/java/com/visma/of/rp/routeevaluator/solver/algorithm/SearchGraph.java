@@ -17,7 +17,8 @@ public class SearchGraph {
     private int locationIdCounter;
     private Map<ILocation, Integer> locationToLocationIds;
 
-    public SearchGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<ITask> tasks, ILocation originLocation, ILocation destinationLocation) {
+    public SearchGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<ITask> tasks,
+                       ILocation originLocation, ILocation destinationLocation) {
         this.nodes = new ArrayList<>();
         this.taskToNodes = new HashMap<>();
         this.locationToLocationIds = new HashMap<>();
@@ -70,12 +71,28 @@ public class SearchGraph {
     }
 
     private void initializeOriginDestination(ILocation originLocation, ILocation destinationLocation) {
-        this.origin = new Node(getNewNodeId(), null, getLocationId(originLocation));
-        this.destination = new Node(getNewNodeId(), null, getLocationId(destinationLocation));
+        initializeOrigin(originLocation);
+        initializeDestination(destinationLocation);
         nodes.add(origin);
         nodes.add(destination);
-        locationToLocationIds.put(originLocation, origin.getLocationId());
-        locationToLocationIds.put(destinationLocation, destination.getLocationId());
+    }
+
+    private void initializeOrigin(ILocation originLocation) {
+        if (originLocation != null) {
+            this.origin = new Node(getNewNodeId(), null, getLocationId(originLocation));
+            locationToLocationIds.put(originLocation, origin.getLocationId());
+        } else {
+            this.origin = new Node(getNewNodeId(), null, -1);
+        }
+    }
+
+    private void initializeDestination(ILocation destinationLocation) {
+        if (destinationLocation != null) {
+            this.destination = new Node(getNewNodeId(), null, getLocationId(destinationLocation));
+            locationToLocationIds.put(destinationLocation, destination.getLocationId());
+        } else {
+            this.destination = new Node(getNewNodeId(), null, -1);
+        }
     }
 
     private void addNodesToGraph(Collection<ITask> tasks) {
