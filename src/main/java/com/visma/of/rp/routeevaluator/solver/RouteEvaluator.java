@@ -36,12 +36,15 @@ public class RouteEvaluator {
     private long[] syncedNodesStartTime;
 
 
-    public RouteEvaluator(ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks,
-                          ILocation officePosition) {
+    public RouteEvaluator(ITravelTimeMatrix distanceMatrixMatrix, Collection<? extends ITask> tasks) {
+        this(distanceMatrixMatrix, tasks, null, null);
+    }
+
+    public RouteEvaluator(ITravelTimeMatrix distanceMatrixMatrix, Collection<? extends ITask> tasks, ILocation officePosition) {
         this(distanceMatrixMatrix, tasks, officePosition, officePosition);
     }
 
-    public RouteEvaluator(ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks,
+    public RouteEvaluator(ITravelTimeMatrix distanceMatrixMatrix, Collection<? extends ITask> tasks,
                           ILocation origin, ILocation destination) {
         this.graph = new SearchGraph(distanceMatrixMatrix, tasks, origin, destination);
         this.objectiveFunctions = new ObjectiveFunctionsIntraRouteHandler();
@@ -70,7 +73,6 @@ public class RouteEvaluator {
 
     }
 
-
     /**
      * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
      * Only returns objective value, no route details is returned.
@@ -84,7 +86,6 @@ public class RouteEvaluator {
         return evaluateRouteObjective(tasks, null, employeeWorkShift);
     }
 
-
     /**
      * Used to initialize the route evaluator when
      */
@@ -93,7 +94,6 @@ public class RouteEvaluator {
         updateFirstNodeList(tasks);
         return new ExtendInfoOneElement(firstNodeList);
     }
-
 
     /**
      * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
