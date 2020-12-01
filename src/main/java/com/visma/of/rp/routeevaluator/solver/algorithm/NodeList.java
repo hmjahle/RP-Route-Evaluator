@@ -25,7 +25,7 @@ public class NodeList {
         nodesCnt = 0;
     }
 
-    public void initializeWithNodes(SearchGraph graph, List<ITask> tasks) {
+    public void initializeWithNodes(SearchGraph graph, List<? extends ITask> tasks) {
         nodesCnt = tasks.size();
         for (int i = 0; i < tasks.size(); i++) {
             nodes[i] = graph.getNode(tasks.get(i));
