@@ -17,7 +17,7 @@ public class SearchGraph {
     private int locationIdCounter;
     private Map<ILocation, Integer> locationToLocationIds;
 
-    public SearchGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<ITask> tasks,
+    public SearchGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<? extends ITask> tasks,
                        ILocation originLocation, ILocation destinationLocation) {
         this.nodes = new ArrayList<>();
         this.taskToNodes = new HashMap<>();
@@ -63,7 +63,7 @@ public class SearchGraph {
         return locationIdCounter++;
     }
 
-    private void populateGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<ITask> tasks, ILocation originLocation,
+    private void populateGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<? extends ITask> tasks, ILocation originLocation,
                                ILocation destinationLocation) {
         initializeOriginDestination(originLocation, destinationLocation);
         addNodesToGraph(tasks);
@@ -95,7 +95,7 @@ public class SearchGraph {
         }
     }
 
-    private void addNodesToGraph(Collection<ITask> tasks) {
+    private void addNodesToGraph(Collection<? extends ITask> tasks) {
         for (ITask task : tasks) {
             int locationId = getLocationId(task.getLocation());
             Node node = new Node(getNewNodeId(), task, locationId);

@@ -36,15 +36,15 @@ public class RouteEvaluator {
     private long[] syncedNodesStartTime;
 
 
-    public RouteEvaluator(ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks) {
+    public RouteEvaluator(ITravelTimeMatrix distanceMatrixMatrix, Collection<? extends ITask> tasks) {
         this(distanceMatrixMatrix, tasks, null, null);
     }
 
-    public RouteEvaluator(ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks, ILocation officePosition) {
+    public RouteEvaluator(ITravelTimeMatrix distanceMatrixMatrix, Collection<? extends ITask> tasks, ILocation officePosition) {
         this(distanceMatrixMatrix, tasks, officePosition, officePosition);
     }
 
-    public RouteEvaluator(ITravelTimeMatrix distanceMatrixMatrix, Collection<ITask> tasks,
+    public RouteEvaluator(ITravelTimeMatrix distanceMatrixMatrix, Collection<? extends ITask> tasks,
                           ILocation origin, ILocation destination) {
         this.graph = new SearchGraph(distanceMatrixMatrix, tasks, origin, destination);
         this.objectiveFunctions = new ObjectiveFunctionsIntraRouteHandler();
