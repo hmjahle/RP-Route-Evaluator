@@ -43,6 +43,11 @@ task incrementVersion {
     }
 }
 
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
 task printVersion {
     // any code that goes here is part of configuring the task
     // this code will always get run, even if the task is not executed
@@ -119,6 +124,9 @@ publishing {
             artifactId = "rp-route-evaluator"
             version = "${version}"
             from components.java
+            artifact (sourcesJar) {
+                classifier = 'sources'
+            }
         }
     }
 }
