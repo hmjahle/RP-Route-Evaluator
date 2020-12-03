@@ -56,7 +56,7 @@ public class TravelTimeObjectiveFunctionTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(4));
         tasks.add(allTasks.get(5));
 
-        Map<ITask, Long> syncedTasksStartTime = getSyncedStartTime();
+        Map<ITask, Integer> syncedTasksStartTime = getSyncedStartTime();
         RouteEvaluatorResult result = evaluateRoute(tasks, syncedTasksStartTime);
 
         Assert.assertEquals("Cost should be: ", 6, result.getObjectiveValue(), 1E-6);
@@ -80,7 +80,7 @@ public class TravelTimeObjectiveFunctionTest extends JUnitTestAbstract {
 
     @Test
     public void allTasks() {
-        Map<ITask, Long> syncedTasksStartTime = getSyncedStartTime();
+        Map<ITask, Integer> syncedTasksStartTime = getSyncedStartTime();
         RouteEvaluatorResult result = evaluateRoute(allTasks, syncedTasksStartTime);
 
         Assert.assertEquals("Cost should be: ", 11, result.getObjectiveValue(), 1E-6);
@@ -99,17 +99,17 @@ public class TravelTimeObjectiveFunctionTest extends JUnitTestAbstract {
         Assert.assertEquals("Cost should be: ", 14, result.getObjectiveValue(), 1E-6);
     }
 
-    private RouteEvaluatorResult evaluateRoute(List<ITask> tasks, Map<ITask, Long> syncedTasksStartTime) {
+    private RouteEvaluatorResult evaluateRoute(List<ITask> tasks, Map<ITask, Integer> syncedTasksStartTime) {
         RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTasksStartTime, shift);
     }
 
-    private Map<ITask, Long> getSyncedStartTime() {
-        Map<ITask, Long> syncedTasksStartTime = new HashMap<>();
-        syncedTasksStartTime.put(allTasks.get(0), 20L);
-        syncedTasksStartTime.put(allTasks.get(4), 60L);
-        syncedTasksStartTime.put(allTasks.get(5), 80L);
+    private Map<ITask, Integer> getSyncedStartTime() {
+        Map<ITask, Integer> syncedTasksStartTime = new HashMap<>();
+        syncedTasksStartTime.put(allTasks.get(0), 20);
+        syncedTasksStartTime.put(allTasks.get(4), 60);
+        syncedTasksStartTime.put(allTasks.get(5), 80);
         return syncedTasksStartTime;
     }
 

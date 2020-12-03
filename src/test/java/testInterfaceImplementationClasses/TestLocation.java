@@ -18,25 +18,25 @@ public class TestLocation implements ILocation {
     }
     boolean isOffice;
 
-    long longitude;
+    int longitude;
 
-    public TestLocation(boolean isOffice, long longitude, long latitude) {
+    public TestLocation(boolean isOffice, int longitude, int latitude) {
         this.isOffice = isOffice;
         this.longitude = longitude;
         this.latitude = latitude;
     }
 
-    public long getLongitude() {
+    public int getLongitude() {
         return longitude;
     }
 
 
-    public long getLatitude() {
+    public int getLatitude() {
         return latitude;
     }
 
 
-    long latitude;
+    int latitude;
 
     @Override
     public String toString()

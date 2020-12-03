@@ -44,9 +44,9 @@ public class benchmarking extends JUnitTestAbstract {
         System.out.println("Runtime: " + (endTime - startTime));
     }
 
-    private static void test(List<TestLocation> locations, long officeLong, long officeLat) {
+    private static void test(List<TestLocation> locations, int officeInteger, int officeLat) {
 
-        TestLocation office = addOffice(locations, officeLong, officeLat);
+        TestLocation office = addOffice(locations, officeInteger, officeLat);
         List<ITask> tasks = createTasks(locations);
         List<TestTravelTimeMatrix> travelTimeMatrices = getTestTravelTimeMatrices(locations);
         RouteEvaluator routeEvaluator1 = new RouteEvaluator(travelTimeMatrices.get(0), tasks, office);
@@ -111,10 +111,10 @@ public class benchmarking extends JUnitTestAbstract {
         routeEvaluator4.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction(1));
         routeEvaluator4.addConstraint(new StrictTimeWindowConstraint());
 
-        Map<ITask, Long> syncedTasksAllStartTime = new HashMap<>();
-        Map<ITask, Long> syncedTasksNewStartTime = new HashMap<>();
-        syncedTasksNewStartTime.put(tasks.get(120), (3 * 60) * 60L);
-        syncedTasksNewStartTime.put(tasks.get(160), 15 * 60L);
+        Map<ITask, Integer> syncedTasksAllStartTime = new HashMap<>();
+        Map<ITask, Integer> syncedTasksNewStartTime = new HashMap<>();
+        syncedTasksNewStartTime.put(tasks.get(120), (3 * 60) * 60);
+        syncedTasksNewStartTime.put(tasks.get(160), 15 * 60);
         for (ITask task : newTasks)
             if (task.isSynced()) {
                 syncedTasksAllStartTime.put(task, task.getStartTime());
@@ -170,8 +170,8 @@ public class benchmarking extends JUnitTestAbstract {
 
     private static List<TestLocation> createGridLocations(int numberOfTasks, int gridMaxDistanceWidth) {
         List<TestLocation> locations = new ArrayList<>();
-        long diff = (long) Math.sqrt(numberOfTasks);
-        long increment = gridMaxDistanceWidth / diff;
+        int diff = (int) Math.sqrt(numberOfTasks);
+        int increment = gridMaxDistanceWidth / diff;
         int i = 0;
         int lat = 0;
         while (i < numberOfTasks) {
@@ -189,9 +189,9 @@ public class benchmarking extends JUnitTestAbstract {
     }
 
     private static List<ITask> createTasks(List<TestLocation> locations) {
-        long duration = 10 * 60;
-        long startTime;
-        long endTime;
+        int duration = 10 * 60;
+        int startTime;
+        int endTime;
         List<ITask> tasks = new ArrayList<>();
         int taskId = 0;
         for (ILocation location : locations) {
@@ -225,7 +225,7 @@ public class benchmarking extends JUnitTestAbstract {
         return tasks;
     }
 
-    private static TestLocation addOffice(List<TestLocation> locations, long lon, long lat) {
+    private static TestLocation addOffice(List<TestLocation> locations, int lon, int lat) {
         TestLocation office = new TestLocation(true, lon, lat);
         locations.add(office);
         return office;
@@ -255,13 +255,13 @@ public class benchmarking extends JUnitTestAbstract {
     }
 
 
-    private static String printVisit(Visit visit, long robustnessTime) {
+    private static String printVisit(Visit visit, int robustnessTime) {
         return "[Strict=" + visit.getTask().isStrict() + ", Synced=" + visit.getTask().isSynced() + ", Appearance=" + visit.getTask().getRequirePhysicalAppearance() + "\t"
                 + getFormattedTime(visit.getTravelTime() + robustnessTime) + " -> " + getFormattedTime(visit.getStartTime()) + "-" + getFormattedTime(visit.getStartTime() + visit.getTask().getDuration()) + "(" + getFormattedTime(visit.getTask().getStartTime()) + "-" + getFormattedTime(visit.getTask().getEndTime()) + ")" + "]"
                 + "\tTaskId=: " + visit.getTask().getId();
     }
 
-    private static String getFormattedTime(long time) {
+    private static String getFormattedTime(int time) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm.ss");
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         Date visitStart = new Date((time) * 1000L);
@@ -304,37 +304,37 @@ public class benchmarking extends JUnitTestAbstract {
         return locations;
     }
 
-    private static TestLocation createTestLocationOnCircle(double centerLat, double centerLong, double radius, double angle) {
-        long lat = (long) (centerLat + radius * cos(angle));
-        long lon = (long) (centerLong + radius * sin(angle));
+    private static TestLocation createTestLocationOnCircle(double centerLat, double centerInteger, double radius, double angle) {
+        int lat = (int) (centerLat + radius * cos(angle));
+        int lon = (int) (centerInteger + radius * sin(angle));
         return new TestLocation(false, lon, lat);
     }
 
-    public static long calculateEuclideanTravelTime(TestLocation from, TestLocation to) {
-        long lat1 = from.getLatitude();
-        long lat2 = to.getLatitude();
-        long lon1 = from.getLongitude();
-        long lon2 = to.getLongitude();
+    public static int calculateEuclideanTravelTime(TestLocation from, TestLocation to) {
+        int lat1 = from.getLatitude();
+        int lat2 = to.getLatitude();
+        int lon1 = from.getLongitude();
+        int lon2 = to.getLatitude();
         return euclidean(lat1, lat2, lon1, lon2);
     }
 
-    private static long euclidean(long lat1, long lat2, long lon1, long lon2) {
-        long latDistance = (lat2 - lat1) * (lat2 - lat1);
-        long lonDistance = (lon2 - lon1) * (lon2 - lon1);
-        return (long) Math.sqrt(latDistance + lonDistance);
+    private static int euclidean(int lat1, int lat2, int lon1, int lon2) {
+        int latDistance = (lat2 - lat1) * (lat2 - lat1);
+        int lonDistance = (lon2 - lon1) * (lon2 - lon1);
+        return (int) Math.sqrt(latDistance + lonDistance);
     }
 
-    public static long calculateManhattanTravelTime(TestLocation from, TestLocation to) {
+    public static int calculateManhattanTravelTime(TestLocation from, TestLocation to) {
         return manhattan(from.getLatitude(), to.getLatitude(), from.getLongitude(), to.getLongitude());
     }
 
-    private static long manhattan(long lat1, long lat2, long lon1, long lon2) {
+    private static int manhattan(int lat1, int lat2, int lon1, int lon2) {
         return abs(lat1 - lat2) + abs(lon1 - lon2);
     }
 
-    public static long calculateEuclideanManhattanCombinationTravelTime(TestLocation from, TestLocation to) {
-        long travelTimeManhattan = manhattan(from.getLatitude(), to.getLatitude(), from.getLongitude(), to.getLongitude());
-        long travelTimeEuclidean = euclidean(from.getLatitude(), to.getLatitude(), from.getLongitude(), to.getLongitude());
+    public static int calculateEuclideanManhattanCombinationTravelTime(TestLocation from, TestLocation to) {
+        int travelTimeManhattan = manhattan(from.getLatitude(), to.getLatitude(), from.getLongitude(), to.getLongitude());
+        int travelTimeEuclidean = euclidean(from.getLatitude(), to.getLatitude(), from.getLongitude(), to.getLongitude());
         return (travelTimeEuclidean + travelTimeManhattan) / 2;
     }
 }

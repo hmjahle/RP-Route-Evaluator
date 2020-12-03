@@ -26,7 +26,7 @@ public interface ITravelTimeMatrix {
      * @param to   Location where travel ends.
      * @return TravelTime between the two points.
      */
-    long getTravelTime(ILocation from, ILocation to);
+    int getTravelTime(ILocation from, ILocation to);
 
     /**
      * Get all locations in the travel time matrix.

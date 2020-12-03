@@ -13,15 +13,15 @@ import testInterfaceImplementationClasses.TestTask;
 
 public abstract class JUnitTestAbstract {
 
-    protected long getTime(long hours, long minutes, long seconds) {
+    protected int getTime(int hours, int minutes, int seconds) {
         return hours * 3600 + minutes * 60 + seconds;
     }
 
-    protected long getTime(long hours, long minutes) {
+    protected int getTime(int hours, int minutes) {
         return hours * 3600 + minutes * 60;
     }
 
-    protected long getTime(long hours) {
+    protected int getTime(int hours) {
         return hours * 3600;
     }
 
@@ -33,39 +33,39 @@ public abstract class JUnitTestAbstract {
         return new TestLocation(true);
     }
 
-    protected ITask createStandardTask(long duration, long startTime, long endTime) {
+    protected ITask createStandardTask(int duration, int startTime, int endTime) {
         return new TestTask(duration, startTime, endTime, false, false, true, 0, 0, new TestLocation(false), "x");
     }
 
-    protected ITask createStandardTask(long duration, long startTime, long endTime, String id) {
+    protected ITask createStandardTask(int duration, int startTime, int endTime, String id) {
         return new TestTask(duration, startTime, endTime, false, false, true, 0, 0, new TestLocation(false), id);
     }
 
-    protected ITask createSyncedTask(long duration, long startTime, long endTime) {
+    protected ITask createSyncedTask(int duration, int startTime, int endTime) {
         return new TestTask(duration, startTime, endTime, false, true, true, 0, 0, new TestLocation(false), "x");
     }
 
-    protected ITask createSyncedTask(long duration, long startTime, long endTime, String id) {
+    protected ITask createSyncedTask(int duration, int startTime, int endTime, String id) {
         return new TestTask(duration, startTime, endTime, false, true, true, 0, 0, new TestLocation(false), id);
     }
 
-    protected ITask createSyncedStrictTask(long duration, long startTime, long endTime) {
+    protected ITask createSyncedStrictTask(int duration, int startTime, int endTime) {
         return new TestTask(duration, startTime, endTime, true, true, true, 0, 0, new TestLocation(false), "x");
     }
 
-    protected ITask createSyncedStrictTask(long duration, long startTime, long endTime, String id ) {
+    protected ITask createSyncedStrictTask(int duration, int startTime, int endTime, String id ) {
         return new TestTask(duration, startTime, endTime, true, true, true, 0, 0, new TestLocation(false), id);
     }
 
-    protected ITask createStrictTask(long duration, long startTime, long endTime) {
+    protected ITask createStrictTask(int duration, int startTime, int endTime) {
         return new TestTask(duration, startTime, endTime, true, false, true, 0, 0, new TestLocation(false), "x");
     }
 
-    protected ITask createStrictTask(long duration, long startTime, long endTime, String id) {
+    protected ITask createStrictTask(int duration, int startTime, int endTime, String id) {
         return new TestTask(duration, startTime, endTime, true, false, true, 0, 0, new TestLocation(false), id);
     }
 
-    protected long getVisitTravelTime(RouteEvaluatorResult result, int visitNo) {
+    protected int getVisitTravelTime(RouteEvaluatorResult result, int visitNo) {
         Visit visitTask1 = result.getVisitSolution().get(visitNo);
         return visitTask1.getTravelTime();
     }

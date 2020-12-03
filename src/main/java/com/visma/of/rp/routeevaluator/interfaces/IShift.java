@@ -10,7 +10,7 @@ public interface IShift {
      *
      * @return Duration in seconds.
      */
-    long getDuration();
+    int getDuration();
 
 
     /**
@@ -18,12 +18,12 @@ public interface IShift {
      *
      * @return Start time in seconds.
      */
-    long getStartTime();
+    int getStartTime();
 
     /**
      * The end time of the shift.
      *
      * @return End time in seconds.
      */
-    long getEndTime();
+    int getEndTime();
 }

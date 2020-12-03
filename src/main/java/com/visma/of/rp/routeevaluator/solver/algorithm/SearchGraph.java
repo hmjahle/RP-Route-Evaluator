@@ -12,7 +12,7 @@ public class SearchGraph {
     private Node destination;
     private List<Node> nodes;
     private Map<ITask, Node> taskToNodes;
-    private Long[][] travelTimeMatrix;
+    private Integer[][] travelTimeMatrix;
     private int nodeIdCounter;
     private int locationIdCounter;
     private Map<ILocation, Integer> locationToLocationIds;
@@ -51,7 +51,7 @@ public class SearchGraph {
         return nodes;
     }
 
-    public Long getTravelTime(int locationIdA, int locationIdB) {
+    public Integer getTravelTime(int locationIdA, int locationIdB) {
         return travelTimeMatrix[locationIdA][locationIdB];
     }
 
@@ -106,7 +106,7 @@ public class SearchGraph {
 
     private void updateTravelTimeInformation(ITravelTimeMatrix travelTimeMatrixInput) {
         int n = potentialLocations(travelTimeMatrixInput);
-        this.travelTimeMatrix = new Long[n][n];
+        this.travelTimeMatrix = new Integer[n][n];
         for (ILocation locationA : travelTimeMatrixInput.getLocations()) {
             for (ILocation locationB : travelTimeMatrixInput.getLocations()) {
                 if (locationA != locationB) {
@@ -139,7 +139,7 @@ public class SearchGraph {
 
         if (!travelTimeMatrixInput.connected(fromLocation, toLocation))
             return;
-        long travelTime = travelTimeMatrixInput.getTravelTime(fromLocation, toLocation);
+        int travelTime = travelTimeMatrixInput.getTravelTime(fromLocation, toLocation);
         this.travelTimeMatrix[fromId][toId] = travelTime;
     }
 
