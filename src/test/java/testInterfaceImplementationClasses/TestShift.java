@@ -7,26 +7,26 @@ import com.visma.of.rp.routeevaluator.interfaces.IShift;
  */
 public class TestShift implements IShift {
 
-    long startTime;
-    long endTime;
+    int startTime;
+    int endTime;
 
-    public TestShift(long startTime, long endTime) {
+    public TestShift(int startTime, int endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
     @Override
-    public long getDuration() {
+    public int getDuration() {
         return endTime - startTime;
     }
 
     @Override
-    public long getStartTime() {
+    public int getStartTime() {
         return startTime;
     }
 
     @Override
-    public long getEndTime() {
+    public int getEndTime() {
         return endTime;
     }
 

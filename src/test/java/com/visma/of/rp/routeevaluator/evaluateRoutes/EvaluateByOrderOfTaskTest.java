@@ -84,7 +84,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(4));
         tasks.add(allTasks.get(5));
 
-        Map<ITask, Long> syncedTasksStartTime = getSyncedStartTime();
+        Map<ITask, Integer> syncedTasksStartTime = getSyncedStartTime();
 
         RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTasksStartTime, shift);
@@ -102,7 +102,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
 
     @Test
     public void allTasks() {
-        Map<ITask, Long> syncedTasksStartTime = getSyncedStartTime();
+        Map<ITask, Integer> syncedTasksStartTime = getSyncedStartTime();
 
         RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTasksStartTime, shift);
@@ -122,11 +122,11 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
-    private Map<ITask, Long> getSyncedStartTime() {
-        Map<ITask, Long> syncedTasksStartTime = new HashMap<>();
-        syncedTasksStartTime.put(allTasks.get(0), 20L);
-        syncedTasksStartTime.put(allTasks.get(4), 60L);
-        syncedTasksStartTime.put(allTasks.get(5), 80L);
+    private Map<ITask, Integer> getSyncedStartTime() {
+        Map<ITask, Integer> syncedTasksStartTime = new HashMap<>();
+        syncedTasksStartTime.put(allTasks.get(0), 20);
+        syncedTasksStartTime.put(allTasks.get(4), 60);
+        syncedTasksStartTime.put(allTasks.get(5), 80);
         return syncedTasksStartTime;
     }
 

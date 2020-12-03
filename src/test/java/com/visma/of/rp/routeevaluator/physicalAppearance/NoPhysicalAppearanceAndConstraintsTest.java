@@ -132,9 +132,9 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new SyncedTasksConstraint());
 
-        Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();
-        syncedTaskStartTimes.put(task2, 10L);
-        syncedTaskStartTimes.put(task3, 50L);
+        Map<ITask, Integer> syncedTaskStartTimes = new HashMap<>();
+        syncedTaskStartTimes.put(task2, 10);
+        syncedTaskStartTimes.put(task3, 50);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
 
         Assert.assertNotNull("Must be feasible. ", result);
@@ -157,9 +157,9 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new SyncedTasksConstraint());
 
-        Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();
-        syncedTaskStartTimes.put(task1, 10L);
-        syncedTaskStartTimes.put(task3, 40L);
+        Map<ITask, Integer> syncedTaskStartTimes = new HashMap<>();
+        syncedTaskStartTimes.put(task1, 10);
+        syncedTaskStartTimes.put(task3, 40);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
         Assert.assertNull("Must be infeasible. ", result);
     }
@@ -179,9 +179,9 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(office, task2.getLocation(), 45);
         RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new SyncedTasksConstraint());
-        Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();
-        syncedTaskStartTimes.put(task1, 40L);
-        syncedTaskStartTimes.put(task3, 60L);
+        Map<ITask, Integer> syncedTaskStartTimes = new HashMap<>();
+        syncedTaskStartTimes.put(task1, 40);
+        syncedTaskStartTimes.put(task3, 60);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
 
         Assert.assertNotNull("Must be feasible. ", result);
@@ -206,10 +206,10 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new SyncedTasksConstraint());
 
-        Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();
-        syncedTaskStartTimes.put(task1, 10L);
-        syncedTaskStartTimes.put(task2, 15L);
-        syncedTaskStartTimes.put(task3, 20L);
+        Map<ITask, Integer> syncedTaskStartTimes = new HashMap<>();
+        syncedTaskStartTimes.put(task1, 10);
+        syncedTaskStartTimes.put(task2, 15);
+        syncedTaskStartTimes.put(task3, 20);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
 
         Assert.assertNotNull("Must be feasible. ", result);

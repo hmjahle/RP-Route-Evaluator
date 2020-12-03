@@ -7,17 +7,17 @@ public class Label implements Comparable<Label> {
     private IObjective objective;
     private IResource resources;
     private int currentLocationId;
-    private long currentTime;
-    private long travelTime;
-    private long canLeaveLocationAtTime;
+    private int currentTime;
+    private int travelTime;
+    private int canLeaveLocationAtTime;
     private boolean closed;
 
-    public void setCanLeaveLocationAtTime(long canLeaveLocationAtTime) {
+    public void setCanLeaveLocationAtTime(int canLeaveLocationAtTime) {
         this.canLeaveLocationAtTime = canLeaveLocationAtTime;
     }
 
     public Label(Label previous, Node currentNode, int currentLocationId, IObjective objective,
-                 IResource resources, long currentTime, long travelTime) {
+                 IResource resources, int currentTime, int travelTime) {
         this.previous = previous;
         this.node = currentNode;
         this.objective = objective;
@@ -49,7 +49,7 @@ public class Label implements Comparable<Label> {
      * The start of service of the current task.
      * @return Time in seconds
      */
-    public long getCurrentTime() {
+    public int getCurrentTime() {
         return currentTime;
     }
 
@@ -71,7 +71,7 @@ public class Label implements Comparable<Label> {
      * or on the way to the next location.
      * @return Time in seconds
      */
-    public long getCanLeaveLocationAtTime() {
+    public int getCanLeaveLocationAtTime() {
         return canLeaveLocationAtTime;
     }
 
@@ -79,7 +79,7 @@ public class Label implements Comparable<Label> {
      * Travel time from the previous location.
      * @return Time in seconds
      */
-    public long getTravelTime() {
+    public int getTravelTime() {
         return travelTime;
     }
 

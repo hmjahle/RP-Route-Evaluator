@@ -7,21 +7,21 @@ public interface ITask {
      *
      * @return Duration in seconds.
      */
-    long getDuration();
+    int getDuration();
 
     /**
      * The start time of the task.
      *
      * @return Start time in seconds.
      */
-    long getStartTime();
+    int getStartTime();
 
     /**
      * The end time of the shift.
      *
      * @return End time in seconds.
      */
-    long getEndTime();
+    int getEndTime();
 
     /**
      * Whether the task has a strict time-window.
@@ -47,7 +47,7 @@ public interface ITask {
      * The maximum difference from the start time of the task that the task is synced with.
      * @return Time difference in seconds.
      */
-    long getSyncedWithIntervalDiff();
+    int getSyncedWithIntervalDiff();
 
     /**
      * The location where the task has to be performed.

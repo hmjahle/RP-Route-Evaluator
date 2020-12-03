@@ -8,9 +8,9 @@ import com.visma.of.rp.routeevaluator.interfaces.ITask;
  */
 public class TestTask implements ITask {
 
-    long duration;
-    long startTime;
-    long endTime;
+    int duration;
+    int startTime;
+    int endTime;
     boolean isStrict;
     boolean isSynced;
 
@@ -20,7 +20,7 @@ public class TestTask implements ITask {
 
     boolean requirePhysicalAppearance;
     int requiredSkillLevel;
-    long syncedWithIntervalDiffSeconds;
+    int syncedWithIntervalDiffSeconds;
     ILocation location;
 
     public void setId(String id) {
@@ -29,7 +29,7 @@ public class TestTask implements ITask {
 
     String id;
 
-    public TestTask(long duration, long startTime, long endTime, boolean isStrict, boolean isSynced, boolean requirePhysicalAppearance, int requiredSkillLevel, long syncedWithIntervalDiffSeconds, ILocation location, String id) {
+    public TestTask(int duration, int startTime, int endTime, boolean isStrict, boolean isSynced, boolean requirePhysicalAppearance, int requiredSkillLevel, int syncedWithIntervalDiffSeconds, ILocation location, String id) {
         this.duration = duration;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -43,17 +43,17 @@ public class TestTask implements ITask {
     }
 
     @Override
-    public long getDuration() {
+    public int getDuration() {
         return duration;
     }
 
     @Override
-    public long getStartTime() {
+    public int getStartTime() {
         return startTime;
     }
 
     @Override
-    public long getEndTime() {
+    public int getEndTime() {
         return endTime;
     }
 
@@ -73,7 +73,7 @@ public class TestTask implements ITask {
     }
 
     @Override
-    public long getSyncedWithIntervalDiff() {
+    public int getSyncedWithIntervalDiff() {
         return syncedWithIntervalDiffSeconds;
     }
 

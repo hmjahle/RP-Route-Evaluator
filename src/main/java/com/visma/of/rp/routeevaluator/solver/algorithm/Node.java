@@ -26,11 +26,11 @@ public class Node {
         return task == null || task.getRequirePhysicalAppearance();
     }
 
-    public long getDurationSeconds() {
+    public int getDurationSeconds() {
         return task == null ? 0 : task.getDuration();
     }
 
-    public long getStartTime() {
+    public int getStartTime() {
         return task == null ? 0 : task.getStartTime();
     }
 

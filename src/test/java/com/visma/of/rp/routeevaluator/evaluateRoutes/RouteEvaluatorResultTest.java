@@ -29,7 +29,7 @@ public class RouteEvaluatorResultTest extends JUnitTestAbstract {
         ILocation office = createOffice();
         ITravelTimeMatrix travelTimeMatrix = createTravelTimeMatrix(office, allTasks);
         IShift shift = new TestShift(0, 100);
-        Map<ITask, Long> syncedTasksStartTime = getSyncedStartTime(allTasks);
+        Map<ITask, Integer> syncedTasksStartTime = getSyncedStartTime(allTasks);
         RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTasksStartTime, shift);
     }
@@ -85,11 +85,11 @@ public class RouteEvaluatorResultTest extends JUnitTestAbstract {
     }
 
 
-    private Map<ITask, Long> getSyncedStartTime(List<ITask> allTasks) {
-        Map<ITask, Long> syncedTasksStartTime = new HashMap<>();
-        syncedTasksStartTime.put(allTasks.get(0), 20L);
-        syncedTasksStartTime.put(allTasks.get(4), 60L);
-        syncedTasksStartTime.put(allTasks.get(5), 80L);
+    private Map<ITask, Integer> getSyncedStartTime(List<ITask> allTasks) {
+        Map<ITask, Integer> syncedTasksStartTime = new HashMap<>();
+        syncedTasksStartTime.put(allTasks.get(0), 20);
+        syncedTasksStartTime.put(allTasks.get(4), 60);
+        syncedTasksStartTime.put(allTasks.get(5), 80);
         return syncedTasksStartTime;
     }
 

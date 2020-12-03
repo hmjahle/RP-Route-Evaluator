@@ -5,10 +5,10 @@ import com.visma.of.rp.routeevaluator.interfaces.ITask;
 public class Visit {
 
     private final ITask task;
-    private long startTime;
-    private long travelTime;
+    private int startTime;
+    private int travelTime;
 
-    public Visit(ITask task, long startTime, long travelTime) {
+    public Visit(ITask task, int startTime, int travelTime) {
         this.task = task;
         this.startTime = startTime;
         this.travelTime = travelTime;
@@ -18,11 +18,11 @@ public class Visit {
         return task;
     }
 
-    public long getStartTime() {
+    public int getStartTime() {
         return startTime;
     }
 
-    public long getTravelTime() {
+    public int getTravelTime() {
         return travelTime;
     }
 

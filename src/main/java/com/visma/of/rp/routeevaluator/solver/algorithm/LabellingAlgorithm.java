@@ -26,8 +26,8 @@ public class LabellingAlgorithm {
     private Label bestLabelOnDestination;
     private LabelLists labelLists;
     private IExtendInfo nodeExtendInfo;
-    private long[] syncedNodesStartTime;
-    private long endOfShift;
+    private int[] syncedNodesStartTime;
+    private int endOfShift;
 
     public LabellingAlgorithm(SearchGraph graph, ObjectiveFunctionsIntraRouteHandler objectiveFunctions, ConstraintsIntraRouteHandler constraints) {
         this.graph = graph;
@@ -50,7 +50,7 @@ public class LabellingAlgorithm {
      * @param objective            Starting objective.
      * @return Total fitness value, null if infeasible.
      */
-    public Label runAlgorithm(IObjective objective, IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime, IShift employeeWorkShift) {
+    public Label runAlgorithm(IObjective objective, IExtendInfo nodeExtendInfo, int[] syncedNodesStartTime, IShift employeeWorkShift) {
         this.labelLists.clear();
         IResource startResource = nodeExtendInfo.createEmptyResource();
         Label startLabel = createStartLabel(objective, employeeWorkShift.getStartTime(), startResource);
@@ -70,7 +70,7 @@ public class LabellingAlgorithm {
      * @param initialObjective     Starting objective.
      * @return RouteEvaluatorResult or null if route is infeasible.
      */
-    public RouteEvaluatorResult solveRouteEvaluatorResult(IObjective initialObjective, IExtendInfo nodeExtendInfo, long[] syncedNodesStartTime, IShift employeeWorkShift) {
+    public RouteEvaluatorResult solveRouteEvaluatorResult(IObjective initialObjective, IExtendInfo nodeExtendInfo, int[] syncedNodesStartTime, IShift employeeWorkShift) {
         Label bestLabel = runAlgorithm(initialObjective, nodeExtendInfo, syncedNodesStartTime, employeeWorkShift);
         if (bestLabel == null)
             return null;
@@ -113,9 +113,9 @@ public class LabellingAlgorithm {
         Node nextNode = extendToInfo.getToNode();
         boolean taskRequirePhysicalAppearance = nextNode.getRequirePhysicalAppearance();
         int newLocation = findNewLocation(thisLabel, taskRequirePhysicalAppearance, nextNode);
-        long travelTime = getTravelTime(thisLabel, nextNode, newLocation);
+        int travelTime = getTravelTime(thisLabel, nextNode, newLocation);
         boolean nextNodeIsSynced = nextNode.isSynced();
-        long startOfServiceNextTask = calcStartOfServiceNextTask(thisLabel, nextNode, taskRequirePhysicalAppearance, travelTime, nextNodeIsSynced);
+        int startOfServiceNextTask = calcStartOfServiceNextTask(thisLabel, nextNode, taskRequirePhysicalAppearance, travelTime, nextNodeIsSynced);
         IObjective objective = evaluateFeasibilityAndObjective(thisLabel, nextNode, startOfServiceNextTask, travelTime, nextNodeIsSynced, newLocation);
         if (objective == null)
             return null;
@@ -123,7 +123,7 @@ public class LabellingAlgorithm {
         if (taskRequirePhysicalAppearance)
             return new Label(thisLabel, nextNode, newLocation, objective, resources, startOfServiceNextTask, travelTime);
         else {
-            long canLeaveLocationAt = updateCanLeaveLocationAt(thisLabel);
+            int canLeaveLocationAt = updateCanLeaveLocationAt(thisLabel);
             Label newLabel = new Label(thisLabel, nextNode, newLocation, objective, resources, startOfServiceNextTask, travelTime);
             newLabel.setCanLeaveLocationAtTime(canLeaveLocationAt);
             return newLabel;
@@ -150,10 +150,10 @@ public class LabellingAlgorithm {
             unExtendedLabels.addLabel(newLabel);
     }
 
-    public IObjective extend(IObjective currentObjective, Node toNode, long travelTime, long startOfServiceNextTask, long syncedTaskLatestStartTime,
-                             long endOfShift) {
+    public IObjective extend(IObjective currentObjective, Node toNode, int travelTime, int startOfServiceNextTask, int syncedTaskLatestStartTime,
+                             int endOfShift) {
         ITask task = toNode.getTask();
-        long visitEnd = task != null ? startOfServiceNextTask + task.getDuration() : 0;
+        int visitEnd = task != null ? startOfServiceNextTask + task.getDuration() : 0;
         return objectiveFunctions.calculateObjectiveValue(currentObjective, travelTime, task,
                 startOfServiceNextTask, visitEnd, syncedTaskLatestStartTime, endOfShift);
     }
@@ -165,55 +165,55 @@ public class LabellingAlgorithm {
         return currentLabel;
     }
 
-    private Label createStartLabel(IObjective objective, long startTime, IResource emptyResource) {
+    private Label createStartLabel(IObjective objective, int startTime, IResource emptyResource) {
         return new Label(null, graph.getOrigin(), graph.getOrigin().getLocationId(),
                 objective, emptyResource, startTime, 0);
     }
 
-    private long calcArrivalTimeNextTask(Label thisLabel, boolean requirePhysicalAppearance, long travelTime) {
-        long actualTravelTime = travelTime;
+    private int calcArrivalTimeNextTask(Label thisLabel, boolean requirePhysicalAppearance, int travelTime) {
+        int actualTravelTime = travelTime;
         if (requirePhysicalAppearance) {
             actualTravelTime = Math.max(travelTime - (thisLabel.getCurrentTime() - thisLabel.getCanLeaveLocationAtTime()), 0);
         }
         return actualTravelTime + thisLabel.getCurrentTime() + thisLabel.getNode().getDurationSeconds();
     }
 
-    private long updateCanLeaveLocationAt(Label thisLabel) {
+    private int updateCanLeaveLocationAt(Label thisLabel) {
         return thisLabel.getCanLeaveLocationAtTime() + thisLabel.getNode().getDurationSeconds();
     }
 
-    private long calcStartOfServiceNextTask(Label thisLabel, Node nextNode, boolean taskRequirePhysicalAppearance, long travelTime, boolean nextNodeIsSynced) {
-        long arrivalTimeNextTask = calcArrivalTimeNextTask(thisLabel, taskRequirePhysicalAppearance, travelTime);
-        long earliestStartTimeNextTask = findEarliestStartTimeNextTask(nextNode, nextNodeIsSynced);
+    private int calcStartOfServiceNextTask(Label thisLabel, Node nextNode, boolean taskRequirePhysicalAppearance, int travelTime, boolean nextNodeIsSynced) {
+        int arrivalTimeNextTask = calcArrivalTimeNextTask(thisLabel, taskRequirePhysicalAppearance, travelTime);
+        int earliestStartTimeNextTask = findEarliestStartTimeNextTask(nextNode, nextNodeIsSynced);
         return Math.max(arrivalTimeNextTask, earliestStartTimeNextTask);
     }
 
-    private IObjective evaluateFeasibilityAndObjective(Label thisLabel, Node nextNode, long startOfServiceNextTask,
-                                                       long travelTime, boolean nextNodeIsSynced, int newLocation) {
-        long syncedTaskLatestStartTime = nextNodeIsSynced ? syncedNodesStartTime[nextNode.getNodeId()] : -1;
-        long earliestOfficeReturn = calcEarliestPossibleReturnToOfficeTime(nextNode, newLocation, startOfServiceNextTask);
+    private IObjective evaluateFeasibilityAndObjective(Label thisLabel, Node nextNode, int startOfServiceNextTask,
+                                                       int travelTime, boolean nextNodeIsSynced, int newLocation) {
+        int syncedTaskLatestStartTime = nextNodeIsSynced ? syncedNodesStartTime[nextNode.getNodeId()] : -1;
+        int earliestOfficeReturn = calcEarliestPossibleReturnToOfficeTime(nextNode, newLocation, startOfServiceNextTask);
         ConstraintInfo constraintInfo = new ConstraintInfo(endOfShift, earliestOfficeReturn, nextNode.getTask(), startOfServiceNextTask, syncedTaskLatestStartTime);
         if (!constraints.isFeasible(constraintInfo))
             return null;
         return extend(thisLabel.getObjective(), nextNode, travelTime, startOfServiceNextTask, syncedTaskLatestStartTime, endOfShift);
     }
 
-    private long getTravelTime(Label thisLabel, Node nextNode, int newLocation) {
-        Long travelTime = newLocation == thisLabel.getCurrentLocationId() ? null : graph.getTravelTime(thisLabel.getCurrentLocationId(), nextNode.getLocationId());
+    private int getTravelTime(Label thisLabel, Node nextNode, int newLocation) {
+        Integer travelTime = newLocation == thisLabel.getCurrentLocationId() ? null : graph.getTravelTime(thisLabel.getCurrentLocationId(), nextNode.getLocationId());
         if (travelTime == null) {
             return 0;
         } else
             return travelTime;
     }
 
-    private long calcEarliestPossibleReturnToOfficeTime(Node nextNode, Integer currentLocation, long startOfServiceNextTask) {
+    private int calcEarliestPossibleReturnToOfficeTime(Node nextNode, Integer currentLocation, int startOfServiceNextTask) {
         return startOfServiceNextTask + nextNode.getDurationSeconds() + getTravelTimeToDestination(currentLocation);
     }
 
-    private long getTravelTimeToDestination(Integer node) {
+    private int getTravelTimeToDestination(Integer node) {
         if (node == graph.getDestination().getLocationId())
             return 0;
-        Long travelTime = graph.getTravelTime(node, graph.getDestination().getLocationId());
+        Integer travelTime = graph.getTravelTime(node, graph.getDestination().getLocationId());
         return travelTime == null ? 0 : travelTime;
     }
 
@@ -221,7 +221,7 @@ public class LabellingAlgorithm {
         return requirePhysicalAppearance ? nextNode.getLocationId() : thisLabel.getCurrentLocationId();
     }
 
-    private long findEarliestStartTimeNextTask(Node nextNode, boolean nextNodeIsSynced) {
+    private int findEarliestStartTimeNextTask(Node nextNode, boolean nextNodeIsSynced) {
         if (nextNodeIsSynced) {
             return syncedNodesStartTime[nextNode.getNodeId()];
         } else {

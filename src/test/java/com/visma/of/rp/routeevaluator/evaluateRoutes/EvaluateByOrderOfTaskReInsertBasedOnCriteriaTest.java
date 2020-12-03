@@ -32,7 +32,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
     ITravelTimeMatrix travelTimeMatrix;
     IShift shift;
     RouteEvaluator routeEvaluator;
-    Map<ITask, Long> syncedTasksStartTime;
+    Map<ITask, Integer> syncedTasksStartTime;
 
     @Before
     public void initialize() {
@@ -271,11 +271,11 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
     }
 
 
-    private Map<ITask, Long> createSyncedTaskStartTimes() {
-        Map<ITask, Long> syncedTasksStartTime = new HashMap<>();
-        syncedTasksStartTime.put(allTasks.get(0), 20L);
-        syncedTasksStartTime.put(allTasks.get(4), 55L);
-        syncedTasksStartTime.put(allTasks.get(5), 67L);
+    private Map<ITask, Integer> createSyncedTaskStartTimes() {
+        Map<ITask, Integer> syncedTasksStartTime = new HashMap<>();
+        syncedTasksStartTime.put(allTasks.get(0), 20);
+        syncedTasksStartTime.put(allTasks.get(4), 55);
+        syncedTasksStartTime.put(allTasks.get(5), 67);
         return syncedTasksStartTime;
     }
 

@@ -51,9 +51,9 @@ public class IObjectiveTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(0));
         TestTask newTask = new TestTask(10, 0, 100, false, true, true, 0, 10, locations.get(6), "7");
         tasks.add(newTask);
-        Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();
-        syncedTaskStartTimes.put(allTasks.get(0), 10L);
-        syncedTaskStartTimes.put(newTask, 35L);
+        Map<ITask, Integer> syncedTaskStartTimes = new HashMap<>();
+        syncedTaskStartTimes.put(allTasks.get(0), 10);
+        syncedTaskStartTimes.put(newTask, 35);
 
         RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
         RouteEvaluatorResult result = getRouteEvaluatorResult(tasks, syncedTaskStartTimes, routeEvaluator);
@@ -95,9 +95,9 @@ public class IObjectiveTest extends JUnitTestAbstract {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(allTasks.get(0));
         tasks.add(allTasks.get(2));
-        Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();
-        syncedTaskStartTimes.put(allTasks.get(0), 10L);
-        syncedTaskStartTimes.put(allTasks.get(2), 50L);
+        Map<ITask, Integer> syncedTaskStartTimes = new HashMap<>();
+        syncedTaskStartTimes.put(allTasks.get(0), 10);
+        syncedTaskStartTimes.put(allTasks.get(2), 50);
         travelTimeMatrix.addUndirectedConnection(allTasks.get(0).getLocation(), allTasks.get(2).getLocation(), 31);
 
 
@@ -119,10 +119,10 @@ public class IObjectiveTest extends JUnitTestAbstract {
 
     @Test
     public void sixMixedTasksRobustness() {
-        Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();
-        syncedTaskStartTimes.put(allTasks.get(0), 9L);
-        syncedTaskStartTimes.put(allTasks.get(2), 40L);
-        syncedTaskStartTimes.put(allTasks.get(4), 80L);
+        Map<ITask, Integer> syncedTaskStartTimes = new HashMap<>();
+        syncedTaskStartTimes.put(allTasks.get(0), 9);
+        syncedTaskStartTimes.put(allTasks.get(2), 40);
+        syncedTaskStartTimes.put(allTasks.get(4), 80);
         travelTimeMatrix.addUndirectedConnection(allTasks.get(0).getLocation(), allTasks.get(1).getLocation(), 7);
         travelTimeMatrix.addUndirectedConnection(allTasks.get(2).getLocation(), allTasks.get(3).getLocation(), 24);
 
@@ -144,7 +144,7 @@ public class IObjectiveTest extends JUnitTestAbstract {
     }
 
 
-    private RouteEvaluatorResult getRouteEvaluatorResult(List<ITask> tasks, Map<ITask, Long> syncedTaskStartTimes, RouteEvaluator routeEvaluator) {
+    private RouteEvaluatorResult getRouteEvaluatorResult(List<ITask> tasks, Map<ITask, Integer> syncedTaskStartTimes, RouteEvaluator routeEvaluator) {
         routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
         routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
         routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
@@ -152,7 +152,7 @@ public class IObjectiveTest extends JUnitTestAbstract {
     }
 
 
-    private RouteEvaluatorResult getRouteEvaluatorResult(List<ITask> tasks, Map<ITask, Long> syncedTaskStartTimes) {
+    private RouteEvaluatorResult getRouteEvaluatorResult(List<ITask> tasks, Map<ITask, Integer> syncedTaskStartTimes) {
         RouteEvaluator routeEvaluator = createRouteEvaluator(tasks);
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
     }
@@ -164,7 +164,7 @@ public class IObjectiveTest extends JUnitTestAbstract {
     }
 
     private WeightedObjectiveWithValues evaluateRouteStoreObjectiveValues(RouteEvaluator routeEvaluator, List<ITask> tasks,
-                                                                          Map<ITask, Long> syncedTasksStartTime, IShift employeeWorkShift) {
+                                                                          Map<ITask, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByOrderOfTasksWithObjectiveValues(tasks,
                 syncedTasksStartTime, employeeWorkShift);
         return (WeightedObjectiveWithValues) result.getObjective();

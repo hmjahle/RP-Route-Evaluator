@@ -26,7 +26,7 @@ public class RouteEvaluatorResult {
         return objective.getObjectiveValue();
     }
 
-    public Long getTimeOfArrivalAtDestination() {
+    public Integer getTimeOfArrivalAtDestination() {
         return route.getTimeOfArrivalAtDestination();
     }
 

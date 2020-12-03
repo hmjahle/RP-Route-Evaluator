@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class TestTravelTimeMatrix implements ITravelTimeMatrix {
 
-    private Map<ILocation, Map<ILocation, Long>> travelTimes;
+    private Map<ILocation, Map<ILocation, Integer>> travelTimes;
 
     public TestTravelTimeMatrix() {
         this.travelTimes = new HashMap<>();
@@ -24,7 +24,7 @@ public class TestTravelTimeMatrix implements ITravelTimeMatrix {
     }
 
     @Override
-    public long getTravelTime(ILocation from, ILocation to) {
+    public int getTravelTime(ILocation from, ILocation to) {
         return travelTimes.get(from).get(to);
     }
 
@@ -33,12 +33,12 @@ public class TestTravelTimeMatrix implements ITravelTimeMatrix {
         return travelTimes.keySet();
     }
 
-    public void addUndirectedConnection(ILocation locationA, ILocation locationB, long distance) {
+    public void addUndirectedConnection(ILocation locationA, ILocation locationB, int distance) {
         addDirectedConnection(locationA, locationB, distance);
         addDirectedConnection(locationB, locationA, distance);
     }
 
-    public void addDirectedConnection(ILocation locationA, ILocation locationB, long distance) {
+    public void addDirectedConnection(ILocation locationA, ILocation locationB, int distance) {
         travelTimes.putIfAbsent(locationA, new HashMap<>());
         travelTimes.get(locationA).put(locationB, distance);
     }

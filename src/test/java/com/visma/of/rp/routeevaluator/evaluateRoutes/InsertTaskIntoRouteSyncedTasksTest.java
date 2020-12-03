@@ -25,7 +25,7 @@ public class InsertTaskIntoRouteSyncedTasksTest extends JUnitTestAbstract {
     ITravelTimeMatrix travelTimeMatrix;
     RouteEvaluator routeEvaluator;
     IShift shift;
-    Map<ITask, Long> syncedTaskStartTimes;
+    Map<ITask, Integer> syncedTaskStartTimes;
 
     @Before
     public void initialize() {
@@ -129,10 +129,10 @@ public class InsertTaskIntoRouteSyncedTasksTest extends JUnitTestAbstract {
     }
 
 
-    private Map<ITask, Long> createSyncedTaskStartTime() {
-        Map<ITask, Long> syncedTaskStartTimes = new HashMap<>();
-        syncedTaskStartTimes.put(allTasks.get(0), 5L);
-        syncedTaskStartTimes.put(allTasks.get(2), 35L);
+    private Map<ITask, Integer> createSyncedTaskStartTime() {
+        Map<ITask, Integer> syncedTaskStartTimes = new HashMap<>();
+        syncedTaskStartTimes.put(allTasks.get(0), 5);
+        syncedTaskStartTimes.put(allTasks.get(2), 35);
         return syncedTaskStartTimes;
     }
 }
