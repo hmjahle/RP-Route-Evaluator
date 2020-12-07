@@ -62,4 +62,19 @@ public class Route {
     public Set<Visit> extractStrictVisits() {
         return this.getVisitSolution().stream().filter(i -> i.getTask().isStrict()).collect(Collectors.toSet());
     }
+
+    /**
+     * Finds the position of the task in the route.
+     *
+     * @param task Task to find the position for.
+     * @return Integer position, null if the task is not in the route.
+     */
+    public Integer findIndexInRoute(ITask task) {
+        int i = 0;
+        for (Visit visit : visitSolution)
+            if (visit.getTask() == task)
+                return i;
+            else i++;
+        return null;
+    }
 }
