@@ -1,6 +1,7 @@
 package com.visma.of.rp.routeevaluator.evaluateRoutes;
 
 import com.visma.of.rp.routeevaluator.evaluation.objectives.SyncedTaskStartTimeObjectiveFunction;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.TravelTimeObjectiveFunction;
 import com.visma.of.rp.routeevaluator.interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.interfaces.IShift;
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
@@ -35,6 +36,8 @@ public class InsertTaskIntoRouteSyncedTasksTest extends JUnitTestAbstract {
         shift = new TestShift(0, 100);
         routeEvaluator = createRouteEvaluator();
         syncedTaskStartTimes = createSyncedTaskStartTime();
+        routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
+        routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
     }
 
 
@@ -46,6 +49,9 @@ public class InsertTaskIntoRouteSyncedTasksTest extends JUnitTestAbstract {
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "4", result.getVisitSolution().get(1).getTask().getId());
+
+        Double objective = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTaskObjective(tasks, allTasks.get(2), syncedTaskStartTimes, shift);
+        Assert.assertEquals("Objectives must be equal: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
     @Test
@@ -56,6 +62,9 @@ public class InsertTaskIntoRouteSyncedTasksTest extends JUnitTestAbstract {
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "3", result.getVisitSolution().get(1).getTask().getId());
+
+        Double objective = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTaskObjective(tasks, allTasks.get(0), syncedTaskStartTimes, shift);
+        Assert.assertEquals("Objectives must be equal: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
     @Test
@@ -68,6 +77,9 @@ public class InsertTaskIntoRouteSyncedTasksTest extends JUnitTestAbstract {
         Assert.assertEquals("Second task id: ", "2", result.getVisitSolution().get(1).getTask().getId());
         Assert.assertEquals("Third task id: ", "3", result.getVisitSolution().get(2).getTask().getId());
         Assert.assertEquals("Fourth task id: ", "4", result.getVisitSolution().get(3).getTask().getId());
+
+        Double objective = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTaskObjective(tasks, allTasks.get(0), syncedTaskStartTimes, shift);
+        Assert.assertEquals("Objectives must be equal: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
     @Test
@@ -83,6 +95,10 @@ public class InsertTaskIntoRouteSyncedTasksTest extends JUnitTestAbstract {
         Assert.assertEquals("Second task id: ", "1", result.getVisitSolution().get(1).getTask().getId());
         Assert.assertEquals("Third task id: ", "3", result.getVisitSolution().get(2).getTask().getId());
         Assert.assertEquals("Fourth task id: ", "2", result.getVisitSolution().get(3).getTask().getId());
+
+        Double objective = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTaskObjective(tasks, allTasks.get(2), syncedTaskStartTimes, shift);
+        Assert.assertEquals("Objectives must be equal: ", result.getObjectiveValue(), objective, 1E-6);
+
     }
 
     @Test
@@ -95,6 +111,9 @@ public class InsertTaskIntoRouteSyncedTasksTest extends JUnitTestAbstract {
         Assert.assertEquals("Second task id: ", "4", result.getVisitSolution().get(1).getTask().getId());
         Assert.assertEquals("Third task id: ", "2", result.getVisitSolution().get(2).getTask().getId());
         Assert.assertEquals("Fourth task id: ", "3", result.getVisitSolution().get(3).getTask().getId());
+
+        Double objective = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTaskObjective(tasks, allTasks.get(3), syncedTaskStartTimes, shift);
+        Assert.assertEquals("Objectives must be equal: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
     private ITravelTimeMatrix createTravelTimeMatrix(ILocation office, Collection<ITask> tasks) {

@@ -1,6 +1,7 @@
 package com.visma.of.rp.routeevaluator.evaluateRoutes;
 
 import com.visma.of.rp.routeevaluator.evaluation.objectives.TimeWindowObjectiveFunction;
+import com.visma.of.rp.routeevaluator.evaluation.objectives.TravelTimeObjectiveFunction;
 import com.visma.of.rp.routeevaluator.interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.interfaces.IShift;
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
@@ -35,17 +36,19 @@ public class InsertTaskIntoRouteTest extends JUnitTestAbstract {
         travelTimeMatrix = createTravelTimeMatrix(office, allTasks);
         shift = new TestShift(0, 100);
         routeEvaluator = createRouteEvaluator();
+        routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
     }
 
     @Test
     public void oneTask() {
         List<ITask> tasks = new ArrayList<>(allTasks.subList(3, 4));
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(0), shift);
-
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "4", result.getVisitSolution().get(1).getTask().getId());
 
+        Double objective = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTaskObjective(tasks, allTasks.get(0), shift);
+        Assert.assertEquals("Objectives must be equal: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
     @Test
@@ -58,6 +61,9 @@ public class InsertTaskIntoRouteTest extends JUnitTestAbstract {
         Assert.assertEquals("Second task id: ", "2", result.getVisitSolution().get(1).getTask().getId());
         Assert.assertEquals("Third task id: ", "3", result.getVisitSolution().get(2).getTask().getId());
         Assert.assertEquals("Fourth task id: ", "4", result.getVisitSolution().get(3).getTask().getId());
+
+        Double objective = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTaskObjective(tasks, allTasks.get(0), shift);
+        Assert.assertEquals("Objectives must be equal: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
     @Test
@@ -71,6 +77,10 @@ public class InsertTaskIntoRouteTest extends JUnitTestAbstract {
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "2", result.getVisitSolution().get(1).getTask().getId());
         Assert.assertEquals("Third task id: ", "4", result.getVisitSolution().get(2).getTask().getId());
+       tasks.remove(0);
+        Double objective = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTaskObjective(tasks, allTasks.get(1), shift);
+        Assert.assertEquals("Objectives must be equal: ", result.getObjectiveValue(), objective, 1E-6);
+
     }
 
     @Test
@@ -83,6 +93,9 @@ public class InsertTaskIntoRouteTest extends JUnitTestAbstract {
         Assert.assertEquals("Second task id: ", "2", result.getVisitSolution().get(1).getTask().getId());
         Assert.assertEquals("Third task id: ", "3", result.getVisitSolution().get(2).getTask().getId());
         Assert.assertEquals("Fourth task id: ", "4", result.getVisitSolution().get(3).getTask().getId());
+
+        Double objective = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTaskObjective(tasks, allTasks.get(3), shift);
+        Assert.assertEquals("Objectives must be equal: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
     private ITravelTimeMatrix createTravelTimeMatrix(ILocation office, Collection<ITask> tasks) {
