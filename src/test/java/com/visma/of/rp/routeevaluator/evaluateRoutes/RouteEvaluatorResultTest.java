@@ -4,6 +4,7 @@ import com.visma.of.rp.routeevaluator.interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.interfaces.IShift;
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
 import com.visma.of.rp.routeevaluator.interfaces.ITravelTimeMatrix;
+import com.visma.of.rp.routeevaluator.results.Route;
 import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.results.Visit;
 import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
@@ -22,15 +23,18 @@ public class RouteEvaluatorResultTest extends JUnitTestAbstract {
 
     RouteEvaluatorResult result;
     List<ITask> allTasks;
+    RouteEvaluator routeEvaluator;
+    Map<ITask, Integer> syncedTasksStartTime;
+    IShift shift;
 
     @Before
     public void initialize() {
         allTasks = createTasks();
         ILocation office = createOffice();
         ITravelTimeMatrix travelTimeMatrix = createTravelTimeMatrix(office, allTasks);
-        IShift shift = new TestShift(0, 100);
-        Map<ITask, Integer> syncedTasksStartTime = getSyncedStartTime(allTasks);
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
+        shift = new TestShift(0, 100);
+        syncedTasksStartTime = getSyncedStartTime(allTasks);
+        routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTasksStartTime, shift);
     }
 
@@ -42,6 +46,21 @@ public class RouteEvaluatorResultTest extends JUnitTestAbstract {
             Assert.assertEquals("Task should be equal: ",
                     allTasks.get(i).getId(),
                     routeTasks.get(i).getId());
+    }
+
+    @Test
+    public void findIndex() {
+        List<ITask> tasks = new ArrayList<>(allTasks);
+        tasks.remove(2);
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTasksStartTime, shift);
+        Route route = result.getRoute();
+
+        Assert.assertNull("Should not be able to find null task: ", route.findIndexInRoute(null));
+        Assert.assertNull("Task 3 is not in the route: ", route.findIndexInRoute(allTasks.get(2)));
+        Assert.assertEquals("Task 0 must be in index 0: ", 0, route.findIndexInRoute(allTasks.get(0)).intValue());
+        Assert.assertEquals("Task 1 must be in index 1: ", 1, route.findIndexInRoute(allTasks.get(1)).intValue());
+        Assert.assertEquals("Task 3 must be in index 2: ", 2, route.findIndexInRoute(allTasks.get(3)).intValue());
+        Assert.assertEquals("Task 7 must be in index 6: ", 6, route.findIndexInRoute(allTasks.get(7)).intValue());
     }
 
     @Test
