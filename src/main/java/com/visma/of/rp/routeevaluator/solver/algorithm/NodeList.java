@@ -25,10 +25,36 @@ public class NodeList {
         nodesCnt = 0;
     }
 
+    /**
+     * Insert the nodes representing the tasks in the search graph. The tasks must have a node representing them in
+     * the graph provided.
+     *
+     * @param graph Graph from which the nodes should be found.
+     * @param tasks Tasks to be inserted.
+     */
     public void initializeWithNodes(SearchGraph graph, List<? extends ITask> tasks) {
         nodesCnt = tasks.size();
         for (int i = 0; i < tasks.size(); i++) {
             nodes[i] = graph.getNode(tasks.get(i));
+        }
+    }
+
+    /**
+     * Insert the nodes representing the tasks in the search graph. The tasks must have a node representing them in
+     * the graph provided. A task single in the list at a specific index is skipped.
+     *
+     * @param graph           Graph from which the nodes should be found.
+     * @param tasks           Tasks to be inserted.
+     * @param skipTaskAtIndex Index at which the task should be skipped.
+     */
+    public void initializeWithNodes(SearchGraph graph, List<? extends ITask> tasks, int skipTaskAtIndex) {
+        nodesCnt = tasks.size() - 1;
+        int insertAtIndex = 0;
+        for (int i = 0; i < tasks.size(); i++) {
+            if (i == skipTaskAtIndex)
+                continue;
+            nodes[insertAtIndex] = graph.getNode(tasks.get(i));
+            insertAtIndex++;
         }
     }
 

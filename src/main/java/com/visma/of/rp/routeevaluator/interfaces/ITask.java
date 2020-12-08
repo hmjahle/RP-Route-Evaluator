@@ -17,7 +17,7 @@ public interface ITask {
     int getStartTime();
 
     /**
-     * The end time of the shift.
+     * The end time of the task.
      *
      * @return End time in seconds.
      */

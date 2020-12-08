@@ -11,6 +11,8 @@ import com.visma.of.rp.routeevaluator.solver.algorithm.SearchGraph;
 import testInterfaceImplementationClasses.TestLocation;
 import testInterfaceImplementationClasses.TestTask;
 
+import java.util.List;
+
 public abstract class JUnitTestAbstract {
 
     protected int getTime(int hours, int minutes, int seconds) {
@@ -68,6 +70,17 @@ public abstract class JUnitTestAbstract {
     protected int getVisitTravelTime(RouteEvaluatorResult result, int visitNo) {
         Visit visitTask1 = result.getVisitSolution().get(visitNo);
         return visitTask1.getTravelTime();
+    }
+
+    protected void print(RouteEvaluatorResult result) {
+        List<ITask> tasks = result.getRoute().extractEmployeeTasks();
+        double objectiveValue = result.getObjectiveValue();
+        System.out.println("Objective: " + objectiveValue);
+        System.out.println("Route:");
+        StringBuilder printRoute = new StringBuilder("\tO");
+        for (ITask task : tasks) printRoute.append(" -> ").append(task.getId());
+        printRoute.append(" -> D");
+        System.out.println(printRoute);
     }
 
 }
