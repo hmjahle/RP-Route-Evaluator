@@ -70,14 +70,20 @@ public class NodeList {
         nodesCnt = tasks.size() - skipTasksAtIndices.size();
         int insertAtIndex = 0;
         int skipped = 0;
+        int skipValue = getSkipValue(skipTasksAtIndices, skipped);
         for (int i = 0; i < tasks.size(); i++) {
-            if (i == skipTasksAtIndices.get(skipped)) {
+            if (i == skipValue) {
                 skipped++;
+                skipValue = getSkipValue(skipTasksAtIndices, skipped);
                 continue;
             }
             nodes[insertAtIndex] = graph.getNode(tasks.get(i));
             insertAtIndex++;
         }
+    }
+
+    private int getSkipValue(List<Integer> skipTasksAtIndices, int skipped) {
+        return skipped < skipTasksAtIndices.size() ? skipTasksAtIndices.get(skipped) : -1;
     }
 
 
