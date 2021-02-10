@@ -115,6 +115,22 @@ public class RemoveTasksFromRouteTest extends JUnitTestAbstract {
     }
 
     /**
+     * Final route: O -> 0 -> 2 -> D (distance == 4), original route: O -> 0 -> 1 -> 2 -> D (distance == 34)
+     */
+    @Test
+    public void skipMiddleTask() {
+
+        List<ITask> tasks = new ArrayList<>(allTasks.subList(0, 3));
+        List<Integer> skipIndices = new ArrayList<>();
+        skipIndices.add(1);
+
+        Double objective = routeEvaluator.evaluateRouteByTheOrderOfTasksRemoveTaskObjective(tasks, skipIndices, null, shift);
+
+        Assert.assertNotNull("Must be feasible.", objective);
+        Assert.assertEquals("Objective must be 14.", 14, objective, 1E-6);
+    }
+
+    /**
      * Final route: O -> 1 -> D (distance == 4), original route: O -> 0 -> 1 -> 2 -> D (distance == 34)
      */
     @Test
