@@ -8,10 +8,7 @@ import com.visma.of.rp.routeevaluator.interfaces.*;
 import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.algorithm.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -117,6 +114,23 @@ public class RouteEvaluator {
                                                                     Map<ITask, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
         return calcObjectiveInsertTask(tasks, insertTask, syncedTasksStartTime, employeeWorkShift);
     }
+
+    /**
+     * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
+     * It evaluates the route where the task at the indices to be skipped is ignored, i.e., removed from the route.
+     * Only returns objective value, no route details is returned.
+     *
+     * @param tasks                The route to be evaluated, the order of the list is the order of the route.
+     * @param skipTasksAtIndices   The indices where the tasks to be removed are placed in the route.
+     * @param syncedTasksStartTime Map of ALL synced tasks in the route and their start times. Should not contain tasks
+     * @param employeeWorkShift    Employee the route applies to.
+     * @return A double value representing the objective value of the route.
+     */
+    public Double evaluateRouteByTheOrderOfTasksRemoveTaskObjective(List<? extends ITask> tasks, Set<Integer> skipTasksAtIndices,
+                                                                    Map<ITask, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
+        return calcObjectiveRemoveTask(tasks, skipTasksAtIndices, syncedTasksStartTime, employeeWorkShift);
+    }
+
 
     /**
      * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
@@ -282,6 +296,19 @@ public class RouteEvaluator {
     }
 
     /**
+     * Used to calculate objective of routes when removing multiple tasks
+     */
+    private Double calcObjectiveRemoveTask(List<? extends ITask> tasks, Set<Integer> skipTasksAtIndices,
+                                           Map<ITask, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
+        setSyncedNodesStartTime(syncedTasksStartTime);
+        updateFirstNodeList(tasks, skipTasksAtIndices);
+        ExtendInfoOneElement nodeExtendInfoOneElement = new ExtendInfoOneElement(firstNodeList);
+        Label bestLabel = algorithm.
+                runAlgorithm(new WeightedObjective(), nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
+        return bestLabel == null ? null : bestLabel.getObjective().getObjectiveValue();
+    }
+
+    /**
      * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
      * At the same time it finds the optimal position in the route to insert the new tasks provided.
      * For routes with no synced tasks, the new task to be inserted cannot be synced either.
@@ -404,6 +431,10 @@ public class RouteEvaluator {
 
     private void updateFirstNodeList(List<? extends ITask> tasks, int skipTaskAtIndex) {
         firstNodeList.initializeWithNodes(graph, tasks, skipTaskAtIndex);
+    }
+
+    private void updateFirstNodeList(List<? extends ITask> tasks, Set<Integer> skipTasksAtIndices) {
+        firstNodeList.initializeWithNodes(graph, tasks, skipTasksAtIndices);
     }
 
     private void updateSecondNodeList(ITask task) {

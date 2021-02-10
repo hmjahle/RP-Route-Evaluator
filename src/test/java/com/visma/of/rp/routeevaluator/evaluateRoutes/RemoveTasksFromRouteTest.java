@@ -16,7 +16,9 @@ import testInterfaceImplementationClasses.TestTravelTimeMatrix;
 import testSupport.JUnitTestAbstract;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Test the RouteEvaluator function of finding the objective value when removing a task by its index in a route.
@@ -96,6 +98,44 @@ public class RemoveTasksFromRouteTest extends JUnitTestAbstract {
         Assert.assertEquals("Objective must be equal travel time 14.", 14, objective1, 1E-6);
         Assert.assertEquals("Objectives must be equal", objective1, objective2, 1E-6);
     }
+
+    /**
+     * Skips all tasks and must therefore be feasible but have a zero objective.
+     */
+    @Test
+    public void skipAllTasks() {
+        List<ITask> tasks = new ArrayList<>(allTasks.subList(0, 3));
+        Set<Integer> skipIndices = new HashSet<>();
+        skipIndices.add(0);
+        skipIndices.add(1);
+        skipIndices.add(2);
+
+        Double objective = routeEvaluator.evaluateRouteByTheOrderOfTasksRemoveTaskObjective(tasks, skipIndices, null, shift);
+
+        Assert.assertNotNull("Must be feasible.", objective);
+        Assert.assertEquals("Objective must be 0, no tasks left in route.", 0, objective, 1E-6);
+    }
+
+    /**
+     * Final route: O -> 1 -> D (distance == 4), original route: O -> 0 -> 1 -> 2 -> D (distance == 34)
+     */
+    @Test
+    public void skipFirstAndLastTask() {
+        List<ITask> tasks1 = new ArrayList<>();
+        tasks1.add(allTasks.get(1));
+
+        List<ITask> tasks2 = new ArrayList<>(allTasks.subList(0, 3));
+        Set<Integer> skipIndices = new HashSet<>();
+        skipIndices.add(0);
+        skipIndices.add(2);
+        
+        Double objective1 = routeEvaluator.evaluateRouteObjective(tasks1, shift);
+        Double objective2 = routeEvaluator.evaluateRouteByTheOrderOfTasksRemoveTaskObjective(tasks2, skipIndices, null, shift);
+
+        Assert.assertEquals("Objective must be 4.", 4, objective2, 1E-6);
+        Assert.assertEquals("Objectives must be equal", objective1, objective2, 1E-6);
+    }
+
 
     private ITravelTimeMatrix createTravelTimeMatrix(ILocation office, List<ITask> tasks) {
         TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
