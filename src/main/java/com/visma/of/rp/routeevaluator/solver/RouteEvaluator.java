@@ -126,7 +126,7 @@ public class RouteEvaluator {
      * @param employeeWorkShift    Employee the route applies to.
      * @return A double value representing the objective value of the route.
      */
-    public Double evaluateRouteByTheOrderOfTasksRemoveTaskObjective(List<? extends ITask> tasks, Set<Integer> skipTasksAtIndices,
+    public Double evaluateRouteByTheOrderOfTasksRemoveTaskObjective(List<? extends ITask> tasks, List<Integer> skipTasksAtIndices,
                                                                     Map<ITask, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
         return calcObjectiveRemoveTask(tasks, skipTasksAtIndices, syncedTasksStartTime, employeeWorkShift);
     }
@@ -298,7 +298,7 @@ public class RouteEvaluator {
     /**
      * Used to calculate objective of routes when removing multiple tasks
      */
-    private Double calcObjectiveRemoveTask(List<? extends ITask> tasks, Set<Integer> skipTasksAtIndices,
+    private Double calcObjectiveRemoveTask(List<? extends ITask> tasks, List<Integer> skipTasksAtIndices,
                                            Map<ITask, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
         setSyncedNodesStartTime(syncedTasksStartTime);
         updateFirstNodeList(tasks, skipTasksAtIndices);
@@ -433,7 +433,7 @@ public class RouteEvaluator {
         firstNodeList.initializeWithNodes(graph, tasks, skipTaskAtIndex);
     }
 
-    private void updateFirstNodeList(List<? extends ITask> tasks, Set<Integer> skipTasksAtIndices) {
+    private void updateFirstNodeList(List<? extends ITask> tasks, List<Integer> skipTasksAtIndices) {
         firstNodeList.initializeWithNodes(graph, tasks, skipTasksAtIndices);
     }
 
