@@ -16,9 +16,7 @@ import testInterfaceImplementationClasses.TestTravelTimeMatrix;
 import testSupport.JUnitTestAbstract;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Test the RouteEvaluator function of finding the objective value when removing a task by its index in a route.
@@ -105,7 +103,7 @@ public class RemoveTasksFromRouteTest extends JUnitTestAbstract {
     @Test
     public void skipAllTasks() {
         List<ITask> tasks = new ArrayList<>(allTasks.subList(0, 3));
-        Set<Integer> skipIndices = new HashSet<>();
+        List<Integer> skipIndices = new ArrayList<>();
         skipIndices.add(0);
         skipIndices.add(1);
         skipIndices.add(2);
@@ -125,7 +123,7 @@ public class RemoveTasksFromRouteTest extends JUnitTestAbstract {
         tasks1.add(allTasks.get(1));
 
         List<ITask> tasks2 = new ArrayList<>(allTasks.subList(0, 3));
-        Set<Integer> skipIndices = new HashSet<>();
+        List<Integer> skipIndices = new ArrayList<>();
         skipIndices.add(0);
         skipIndices.add(2);
         
