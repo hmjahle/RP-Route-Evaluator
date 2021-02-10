@@ -3,6 +3,7 @@ package com.visma.of.rp.routeevaluator.solver.algorithm;
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
 
 import java.util.List;
+import java.util.Set;
 
 public class NodeList {
     private Node[] nodes;
@@ -57,6 +58,26 @@ public class NodeList {
             insertAtIndex++;
         }
     }
+
+    /**
+     * Insert the nodes representing the tasks in the search graph. The tasks must have a node representing them in
+     * the graph provided. Tasks in the list at specific indices are skipped.
+     *
+     * @param graph              Graph from which the nodes should be found.
+     * @param tasks              Tasks to be inserted.
+     * @param skipTasksAtIndices Indices at which the task should be skipped.
+     */
+    public void initializeWithNodes(SearchGraph graph, List<? extends ITask> tasks, Set<Integer> skipTasksAtIndices) {
+        nodesCnt = tasks.size() - skipTasksAtIndices.size();
+        int insertAtIndex = 0;
+        for (int i = 0; i < tasks.size(); i++) {
+            if (skipTasksAtIndices.contains(i))
+                continue;
+            nodes[insertAtIndex] = graph.getNode(tasks.get(i));
+            insertAtIndex++;
+        }
+    }
+
 
     public void initializeWithNode(SearchGraph graph, ITask task) {
         nodesCnt = 1;
