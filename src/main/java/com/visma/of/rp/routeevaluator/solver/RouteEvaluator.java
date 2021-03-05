@@ -361,6 +361,10 @@ public class RouteEvaluator {
         graph.updateDestination(destinationLocation);
     }
 
+    public void useOpenRoutes() {
+        graph.useOpenRoutes() ;
+    }
+
     /**
      * Adds an objective function to the route evaluator.
      *

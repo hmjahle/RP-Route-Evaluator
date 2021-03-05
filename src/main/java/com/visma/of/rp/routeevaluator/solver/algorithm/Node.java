@@ -4,9 +4,11 @@ import com.visma.of.rp.routeevaluator.interfaces.ITask;
 
 public class Node {
 
-    private int nodeId;
+    protected int nodeId;
     private ITask task;
     private int locationId;
+
+    protected Node(){}
 
     public Node(int nodeId, ITask task, int locationId) {
         this.task = task;

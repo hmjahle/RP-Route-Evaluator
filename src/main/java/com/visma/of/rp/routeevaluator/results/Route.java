@@ -11,23 +11,23 @@ import java.util.stream.Collectors;
 public class Route {
 
     private List<Visit> visitSolution;
-    private int timeOfArrivalAtDestination;
+    private int routeFinishedAtTime;
 
     public Route() {
         this.visitSolution = new ArrayList<>();
-        this.timeOfArrivalAtDestination = 0;
+        this.routeFinishedAtTime = 0;
     }
 
     public void addVisits(Visit[] visits, int visitsCnt) {
         visitSolution.addAll(Arrays.asList(visits).subList(0, visitsCnt));
     }
 
-    public void setTimeOfArrivalAtDestination(int timeOfArrivalAtDestination) {
-        this.timeOfArrivalAtDestination = timeOfArrivalAtDestination;
+    public void setRouteFinishedAtTime(int routeFinishedAtTime) {
+        this.routeFinishedAtTime = routeFinishedAtTime;
     }
 
-    public int getTimeOfArrivalAtDestination() {
-        return timeOfArrivalAtDestination;
+    public int getRouteFinishedAtTime() {
+        return routeFinishedAtTime;
     }
 
     public List<Visit> getVisitSolution() {

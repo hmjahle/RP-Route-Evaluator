@@ -23,4 +23,9 @@ public class ExtendToInfo {
     protected int getExtendNodeSetNumber() {
         return extendNodeSetNumber;
     }
+
+    @Override
+    public String toString(){
+        return toNode.getClass() + "\n" + toNode+ "\n" ;
+    }
 }

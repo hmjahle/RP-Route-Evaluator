@@ -85,7 +85,7 @@ public class LabellingAlgorithm {
      */
     private RouteEvaluatorResult buildRouteEvaluatorResult(Label bestLabel) {
         Route route = new Route();
-        route.setTimeOfArrivalAtDestination(bestLabel.getCurrentTime());
+        route.setRouteFinishedAtTime(bestLabel.getCurrentTime());
         extractVisitsAndSyncedStartTime(bestLabel, route);
         return new RouteEvaluatorResult(bestLabel.getObjective(), route);
     }
@@ -211,7 +211,7 @@ public class LabellingAlgorithm {
     }
 
     private int getTravelTimeToDestination(Integer node) {
-        if (node == graph.getDestination().getLocationId())
+        if (node == graph.getDestination().getLocationId() || graph.getDestination() instanceof UnknownLocationNode)
             return 0;
         Integer travelTime = graph.getTravelTime(node, graph.getDestination().getLocationId());
         return travelTime == null ? 0 : travelTime;

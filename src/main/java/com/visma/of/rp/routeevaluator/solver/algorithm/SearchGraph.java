@@ -155,4 +155,8 @@ public class SearchGraph {
         return taskToNodes.get(task);
     }
 
+    public void useOpenRoutes() {
+        if(!(destination instanceof UnknownLocationNode))
+            destination = new UnknownLocationNode();
+    }
 }
