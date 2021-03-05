@@ -43,7 +43,7 @@ public class EndAtTaskTest extends JUnitTestAbstract {
     @Test
     public void insertOneTask() {
         List<ITask> tasks = new ArrayList<>(allTasks.subList(3, 4));
-        routeEvaluator.useOpenRoutes();
+        routeEvaluator.useOpenEndedRoutes();
 
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(0), shift);
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
@@ -68,7 +68,7 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         RouteEvaluator routeEvaluator = createRouteEvaluatorOverTime(tasks);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
         Assert.assertEquals("Should have overtime. ", 5, result.getObjectiveValue(), 1E-6);
-        routeEvaluator.useOpenRoutes();
+        routeEvaluator.useOpenEndedRoutes();
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
         Assert.assertEquals("Should have no overtime. ", 0, result.getObjectiveValue(), 1E-6);
         Visit lastVisit = getLastVisit(result);
@@ -79,7 +79,7 @@ public class EndAtTaskTest extends JUnitTestAbstract {
     @Test
     public void allTasksInsertFirst() {
         List<ITask> tasks = new ArrayList<>(allTasks.subList(1, 4));
-        routeEvaluator.useOpenRoutes();
+        routeEvaluator.useOpenEndedRoutes();
 
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(0), shift);
 
@@ -99,7 +99,7 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(allTasks.get(0));
         tasks.add(allTasks.get(3));
-        routeEvaluator.useOpenRoutes();
+        routeEvaluator.useOpenEndedRoutes();
 
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
 
@@ -137,7 +137,7 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "2", result.getVisitSolution().get(1).getTask().getId());
 
-        routeEvaluator.useOpenRoutes();
+        routeEvaluator.useOpenEndedRoutes();
         result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
         print(result);
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
@@ -152,7 +152,7 @@ public class EndAtTaskTest extends JUnitTestAbstract {
     @Test
     public void allTasksInsertLast() {
         List<ITask> tasks = new ArrayList<>(allTasks.subList(0, 3));
-        routeEvaluator.useOpenRoutes();
+        routeEvaluator.useOpenEndedRoutes();
 
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(3), shift);
         Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());

@@ -2,6 +2,10 @@ package com.visma.of.rp.routeevaluator.solver.algorithm;
 
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
 
+/**
+ * Unknown location nodes can be used in the labelling algorithms as origin and destination nodes where the location is
+ * not yet determined. This can be in the case where the route has to start at the first task or end at the last task.
+ */
 public class UnknownLocationNode extends Node {
 
     public UnknownLocationNode() {
@@ -41,9 +45,14 @@ public class UnknownLocationNode extends Node {
         return other instanceof UnknownLocationNode;
     }
 
+    /**
+     * The hash code is overridden as the Node hash code is the node id. Hence a large negative number will likely not
+     * collide with the node id of any nodes.
+     * @return Hash code.
+     */
     @Override
     public int hashCode() {
-        return 313546544 << 3;
+        return -313546547;
     }
 
     @Override
@@ -56,7 +65,7 @@ public class UnknownLocationNode extends Node {
         return null;
     }
 
-    @
+    @Override
     public int getNodeId() {
         return nodeId;
     }

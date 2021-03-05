@@ -361,8 +361,14 @@ public class RouteEvaluator {
         graph.updateDestination(destinationLocation);
     }
 
-    public void useOpenRoutes() {
-        graph.useOpenRoutes() ;
+    /**
+     * Open ended routes ensures that the route ends at the last task in the route. Hence the route cannot have a
+     * destination.
+     * The destination of a route is overwritten when this is set. In the same way when the destination is updated the
+     * route is no longer considered to be open ended.
+     */
+    public void useOpenEndedRoutes() {
+        graph.useOpenEndedRoutes() ;
     }
 
     /**
