@@ -199,6 +199,8 @@ public class LabellingAlgorithm {
     }
 
     private int getTravelTime(Label thisLabel, Node nextNode, int newLocation) {
+        if (thisLabel.getCurrentLocationId() == -1)
+            return 0;
         Integer travelTime = newLocation == thisLabel.getCurrentLocationId() ? null : graph.getTravelTime(thisLabel.getCurrentLocationId(), nextNode.getLocationId());
         if (travelTime == null) {
             return 0;

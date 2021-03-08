@@ -8,7 +8,9 @@ public class Node {
     private ITask task;
     private int locationId;
 
-    protected Node(){}
+    protected Node(int nodeId) {
+        this.nodeId = nodeId;
+    }
 
     public Node(int nodeId, ITask task, int locationId) {
         this.task = task;

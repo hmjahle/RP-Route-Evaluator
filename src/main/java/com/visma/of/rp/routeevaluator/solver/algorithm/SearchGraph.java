@@ -14,6 +14,7 @@ public class SearchGraph {
     private Map<ITask, Node> taskToNodes;
     private Integer[][] travelTimeMatrix;
     private int nodeIdCounter;
+    private int sinkId;
     private int locationIdCounter;
     private Map<ILocation, Integer> locationToLocationIds;
 
@@ -67,6 +68,7 @@ public class SearchGraph {
                                ILocation destinationLocation) {
         initializeOriginDestination(originLocation, destinationLocation);
         addNodesToGraph(tasks);
+        sinkId = getNewNodeId();
         updateTravelTimeInformation(travelTimeMatrixInput);
     }
 
@@ -163,6 +165,7 @@ public class SearchGraph {
      */
     public void useOpenEndedRoutes() {
         if(!(destination instanceof UnknownLocationNode))
-            destination = new UnknownLocationNode();
+            destination = new UnknownLocationNode(sinkId);
     }
+
 }

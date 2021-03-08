@@ -8,8 +8,8 @@ import com.visma.of.rp.routeevaluator.interfaces.ITask;
  */
 public class UnknownLocationNode extends Node {
 
-    public UnknownLocationNode() {
-        super();
+    public UnknownLocationNode(int nodeId) {
+        super(nodeId);
     }
 
     @Override
@@ -41,32 +41,20 @@ public class UnknownLocationNode extends Node {
     }
 
     @Override
-    public boolean equals(Object other) {
-        return other instanceof UnknownLocationNode;
-    }
-
-    /**
-     * The hash code is overridden as the Node hash code is the node id. Hence a large negative number will likely not
-     * collide with the node id of any nodes.
-     * @return Hash code.
-     */
-    @Override
-    public int hashCode() {
-        return -313546547;
-    }
-
-    @Override
-    public String toString() {
-        return Integer.toString(nodeId);
-    }
-
-    @Override
     public ITask getTask() {
         return null;
     }
 
     @Override
-    public int getNodeId() {
+    public int hashCode() {
         return nodeId;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if ((other instanceof UnknownLocationNode))
+            return ((UnknownLocationNode) other).nodeId == this.nodeId;
+        else
+            return false;
     }
 }
