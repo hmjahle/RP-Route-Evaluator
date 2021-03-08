@@ -185,8 +185,8 @@ public class StartAtTaskTest extends JUnitTestAbstract {
         printRoute(result.getRoute());
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "5", result.getVisitSolution().get(0).getTask().getId());
-        Assert.assertEquals("Second task id: ", "2", result.getVisitSolution().get(1).getTask().getId());
-        Assert.assertEquals("Objective should be: ", 1, result.getObjectiveValue(), DELTA);
+        Assert.assertEquals("Second task id: ", "1", result.getVisitSolution().get(1).getTask().getId());
+        Assert.assertEquals("Objective should be: ", 2.0, result.getObjectiveValue(), DELTA);
     }
 
 

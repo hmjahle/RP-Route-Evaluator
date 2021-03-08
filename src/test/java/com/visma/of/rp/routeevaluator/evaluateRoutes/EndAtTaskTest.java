@@ -166,6 +166,22 @@ public class EndAtTaskTest extends JUnitTestAbstract {
                 lastVisit.getStartTime() + lastVisit.getTask().getDuration());
     }
 
+
+    @Test
+    public void noPhysicalAppearance() {
+        TestTask noPhys1 = new TestTask(1, 20, 30, false, false, false, 0, 0, new TestLocation(false), "5");
+        allTasks.add(0, noPhys1);
+        travelTimeMatrix = createTravelTimeMatrix(office, allTasks);
+        routeEvaluator = createRouteEvaluator(allTasks);
+        routeEvaluator.useOpenEndedRoutes();
+
+        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(allTasks.subList(0, 1), allTasks.get(1), shift);
+        Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
+        Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
+        Assert.assertEquals("Second task id: ", "5", result.getVisitSolution().get(1).getTask().getId());
+        Assert.assertEquals("Objective should be: ", 2.0, result.getObjectiveValue(), DELTA);
+    }
+
     private TestTravelTimeMatrix createTravelTimeMatrix(ILocation office, Collection<ITask> tasks) {
         TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
         for (ITask taskA : tasks) {
