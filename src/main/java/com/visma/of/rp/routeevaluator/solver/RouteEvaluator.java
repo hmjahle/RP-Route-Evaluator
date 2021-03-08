@@ -368,7 +368,12 @@ public class RouteEvaluator {
      * route is no longer considered to be open ended.
      */
     public void useOpenEndedRoutes() {
-        graph.useOpenEndedRoutes() ;
+        graph.useOpenEndedRoutes();
+    }
+
+
+    public void useOpenStartRoutes() {
+        graph.useStartRoutes();
     }
 
     /**
