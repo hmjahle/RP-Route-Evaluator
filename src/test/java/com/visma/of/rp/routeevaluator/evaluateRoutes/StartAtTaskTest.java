@@ -173,26 +173,20 @@ public class StartAtTaskTest extends JUnitTestAbstract {
     }
 
     @Test
-    public void noPhysicalAppearancew() {
-        List<ITask> tasks = new ArrayList<>(allTasks.subList(1, 4));
-
+    public void noPhysicalAppearance() {
         TestTask noPhys1 = new TestTask(1, 0, 10, false, false, false, 0, 0, new TestLocation(false), "5");
-        TestTask noPhys2 = new TestTask(1, 0, 10, false, false, false, 0, 0, new TestLocation(false), "6");
         allTasks.add(0, noPhys1);
-        allTasks.add(1, noPhys1);
-        allTasks.add(noPhys2);
         travelTimeMatrix = createTravelTimeMatrix(office, allTasks);
-        routeEvaluator.useOpenEndedRoutes();
+        routeEvaluator = createRouteEvaluator(allTasks);
+        routeEvaluator.useOpenStartRoutes();
 
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(0), shift);
-
-        Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
-        Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
+        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(allTasks.subList(0, 1), allTasks.get(1), shift);
+        print(result);
+        printRoute(result.getRoute());
+        Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
+        Assert.assertEquals("First task id: ", "5", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "2", result.getVisitSolution().get(1).getTask().getId());
-        Assert.assertEquals("Third task id: ", "3", result.getVisitSolution().get(2).getTask().getId());
-        Assert.assertEquals("Fourth task id: ", "4", result.getVisitSolution().get(3).getTask().getId());
-
-
+        Assert.assertEquals("Objective should be: ", 1, result.getObjectiveValue(), DELTA);
     }
 
 
