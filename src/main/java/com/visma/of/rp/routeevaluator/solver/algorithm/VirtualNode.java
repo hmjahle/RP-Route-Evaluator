@@ -6,9 +6,9 @@ import com.visma.of.rp.routeevaluator.interfaces.ITask;
  * Unknown location nodes can be used in the labelling algorithms as origin and destination nodes where the location is
  * not yet determined. This can be in the case where the route has to start at the first task or end at the last task.
  */
-public class UnknownLocationNode extends Node {
+public class VirtualNode extends Node {
 
-    public UnknownLocationNode(int nodeId) {
+    public VirtualNode(int nodeId) {
         super(nodeId);
     }
 
@@ -52,8 +52,8 @@ public class UnknownLocationNode extends Node {
 
     @Override
     public boolean equals(Object other) {
-        if ((other instanceof UnknownLocationNode))
-            return ((UnknownLocationNode) other).nodeId == this.nodeId;
+        if ((other instanceof VirtualNode))
+            return ((VirtualNode) other).nodeId == this.nodeId;
         else
             return false;
     }

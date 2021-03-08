@@ -215,7 +215,7 @@ public class LabellingAlgorithm {
     private int getTravelTimeToDestination(Integer currentLocation) {
         if (currentLocation == -1)
             return 0;
-        if (currentLocation == graph.getDestination().getLocationId() || graph.getDestination() instanceof UnknownLocationNode)
+        if (currentLocation == graph.getDestination().getLocationId() || graph.getDestination() instanceof VirtualNode)
             return 0;
         Integer travelTime = graph.getTravelTime(currentLocation, graph.getDestination().getLocationId());
         return travelTime == null ? 0 : travelTime;

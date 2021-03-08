@@ -161,8 +161,8 @@ public class SearchGraph {
 
 
     public void useStartRoutes() {
-        if (!(origin instanceof UnknownLocationNode))
-            origin = new UnknownLocationNode(sourceId);
+        if (!(origin instanceof VirtualNode))
+            origin = new VirtualNode(sourceId);
     }
 
     /**
@@ -172,7 +172,7 @@ public class SearchGraph {
      * route is no longer considered to be open ended.
      */
     public void useOpenEndedRoutes() {
-        if (!(destination instanceof UnknownLocationNode))
-            destination = new UnknownLocationNode(sinkId);
+        if (!(destination instanceof VirtualNode))
+            destination = new VirtualNode(sinkId);
     }
 }
