@@ -27,7 +27,7 @@ public class RouteEvaluatorResult {
     }
 
     public Integer getTimeOfArrivalAtDestination() {
-        return route.getTimeOfArrivalAtDestination();
+        return route.getRouteFinishedAtTime();
     }
 
     public IObjective getObjective() {

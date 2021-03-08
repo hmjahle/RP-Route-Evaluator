@@ -14,6 +14,7 @@ public class SearchGraph {
     private Map<ITask, Node> taskToNodes;
     private Integer[][] travelTimeMatrix;
     private int nodeIdCounter;
+    private int sinkId;
     private int locationIdCounter;
     private Map<ILocation, Integer> locationToLocationIds;
 
@@ -67,6 +68,7 @@ public class SearchGraph {
                                ILocation destinationLocation) {
         initializeOriginDestination(originLocation, destinationLocation);
         addNodesToGraph(tasks);
+        sinkId = getNewNodeId();
         updateTravelTimeInformation(travelTimeMatrixInput);
     }
 
@@ -153,6 +155,17 @@ public class SearchGraph {
 
     public Node getNode(ITask task) {
         return taskToNodes.get(task);
+    }
+
+    /**
+     * Open ended routes ensures that the route ends at the last task in the route. Hence the route cannot have a
+     * destination.
+     * The destination of a route is overwritten when this is set. In the same way when the destination is updated the
+     * route is no longer considered to be open ended.
+     */
+    public void useOpenEndedRoutes() {
+        if(!(destination instanceof UnknownLocationNode))
+            destination = new UnknownLocationNode(sinkId);
     }
 
 }

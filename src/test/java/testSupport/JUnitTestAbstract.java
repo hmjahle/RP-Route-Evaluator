@@ -3,6 +3,7 @@ package testSupport;
 import com.visma.of.rp.routeevaluator.evaluation.objectives.WeightedObjective;
 import com.visma.of.rp.routeevaluator.interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
+import com.visma.of.rp.routeevaluator.results.Route;
 import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.results.Visit;
 import com.visma.of.rp.routeevaluator.solver.algorithm.Label;
@@ -55,7 +56,7 @@ public abstract class JUnitTestAbstract {
         return new TestTask(duration, startTime, endTime, true, true, true, 0, 0, new TestLocation(false), "x");
     }
 
-    protected ITask createSyncedStrictTask(int duration, int startTime, int endTime, String id ) {
+    protected ITask createSyncedStrictTask(int duration, int startTime, int endTime, String id) {
         return new TestTask(duration, startTime, endTime, true, true, true, 0, 0, new TestLocation(false), id);
     }
 
@@ -83,4 +84,21 @@ public abstract class JUnitTestAbstract {
         System.out.println(printRoute);
     }
 
+    protected void printRoute(Route route) {
+        int i = 0;
+        for (Visit visit : route.getVisitSolution()) {
+            System.out.println("Visit no " + (i++) + " " + printVisit(visit));
+        }
+    }
+
+    protected String printVisit(Visit visit) {
+        return "Travel time to: " + visit.getTravelTime() + " start time: " +  visit.getStartTime() +
+                " \t" + printTask(visit.getTask());
+
+    }
+
+
+    protected String printTask(ITask task) {
+        return "Task id: " + task.getId();
+    }
 }
