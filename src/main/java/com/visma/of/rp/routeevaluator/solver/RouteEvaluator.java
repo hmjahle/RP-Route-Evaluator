@@ -8,10 +8,7 @@ import com.visma.of.rp.routeevaluator.interfaces.*;
 import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.algorithm.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -480,4 +477,13 @@ public class RouteEvaluator {
         Node node = graph.getNode(task);
         syncedNodesStartTime[node.getNodeId()] = startTime;
     }
+
+    public List<IObjectiveFunctionIntraRoute> getIObjectiveFunctionIntraRoute() {
+        return objectiveFunctions.getObjectiveFunctionIntraRoute();
+    }
+
+    public List<IConstraintIntraRoute> getIConstraintIntraRoute() {
+        return constraints.getConstraints();
+    }
+
 }
