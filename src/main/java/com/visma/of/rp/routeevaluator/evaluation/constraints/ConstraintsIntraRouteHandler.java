@@ -28,4 +28,8 @@ public class ConstraintsIntraRouteHandler {
     public void addConstraint(IConstraintIntraRoute constraint) {
         constraints.add(constraint);
     }
+
+    public List<IConstraintIntraRoute> getConstraints() {
+        return constraints;
+    }
 }

@@ -5,7 +5,9 @@ import com.visma.of.rp.routeevaluator.interfaces.IObjectiveFunctionIntraRoute;
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
 import com.visma.of.rp.routeevaluator.solver.algorithm.IObjective;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ObjectiveFunctionsIntraRouteHandler {
@@ -21,7 +23,7 @@ public class ObjectiveFunctionsIntraRouteHandler {
     }
 
     public IObjective calculateObjectiveValue(IObjective currentObjective, long travelTime, ITask task, long startOfServiceNextTask,
-                                                     long visitEnd, long syncedTaskLatestStartTime, long endOfShift) {
+                                              long visitEnd, long syncedTaskLatestStartTime, long endOfShift) {
 
         IObjective newObjective = currentObjective.initializeNewObjective();
         ObjectiveInfo objectiveInfo = new ObjectiveInfo(travelTime, task, visitEnd, startOfServiceNextTask,
@@ -51,5 +53,12 @@ public class ObjectiveFunctionsIntraRouteHandler {
         private double calcObjectiveValue(ObjectiveInfo objectiveInfo) {
             return objectiveFunction.calculateIncrementalObjectiveValueFor(objectiveInfo);
         }
+    }
+
+    public List<IObjectiveFunctionIntraRoute> extractIObjectiveFunctionIntraRoute() {
+        List<IObjectiveFunctionIntraRoute> objectiveFunctionIntraRoutes = new ArrayList<>();
+        for (WeightObjectivePair weightObjectivePair : objectiveFunctions.values())
+            objectiveFunctionIntraRoutes.add(weightObjectivePair.objectiveFunction);
+        return objectiveFunctionIntraRoutes;
     }
 }
