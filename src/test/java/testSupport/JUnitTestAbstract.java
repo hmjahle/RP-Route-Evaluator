@@ -16,6 +16,8 @@ import java.util.List;
 
 public abstract class JUnitTestAbstract {
 
+    public static final double DELTA = 1E-6;
+
     protected int getTime(int hours, int minutes, int seconds) {
         return hours * 3600 + minutes * 60 + seconds;
     }
@@ -92,7 +94,7 @@ public abstract class JUnitTestAbstract {
     }
 
     protected String printVisit(Visit visit) {
-        return "Travel time to: " + visit.getTravelTime() + " start time: " +  visit.getStartTime() +
+        return "Travel time to: " + visit.getTravelTime() + " start time: " + visit.getStartTime() +
                 " \t" + printTask(visit.getTask());
 
     }

@@ -14,6 +14,7 @@ public class SearchGraph {
     private Map<ITask, Node> taskToNodes;
     private Integer[][] travelTimeMatrix;
     private int nodeIdCounter;
+    private int sourceId;
     private int sinkId;
     private int locationIdCounter;
     private Map<ILocation, Integer> locationToLocationIds;
@@ -68,6 +69,7 @@ public class SearchGraph {
                                ILocation destinationLocation) {
         initializeOriginDestination(originLocation, destinationLocation);
         addNodesToGraph(tasks);
+        sourceId = getNewNodeId();
         sinkId = getNewNodeId();
         updateTravelTimeInformation(travelTimeMatrixInput);
     }
@@ -157,6 +159,12 @@ public class SearchGraph {
         return taskToNodes.get(task);
     }
 
+
+    public void useOpenStartRoutes() {
+        if (!(origin instanceof VirtualNode))
+            origin = new VirtualNode(sourceId);
+    }
+
     /**
      * Open ended routes ensures that the route ends at the last task in the route. Hence the route cannot have a
      * destination.
@@ -164,8 +172,7 @@ public class SearchGraph {
      * route is no longer considered to be open ended.
      */
     public void useOpenEndedRoutes() {
-        if(!(destination instanceof UnknownLocationNode))
-            destination = new UnknownLocationNode(sinkId);
+        if (!(destination instanceof VirtualNode))
+            destination = new VirtualNode(sinkId);
     }
-
 }

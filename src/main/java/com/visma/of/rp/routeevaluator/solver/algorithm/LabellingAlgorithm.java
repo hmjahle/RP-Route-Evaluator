@@ -212,10 +212,12 @@ public class LabellingAlgorithm {
         return startOfServiceNextTask + nextNode.getDurationSeconds() + getTravelTimeToDestination(currentLocation);
     }
 
-    private int getTravelTimeToDestination(Integer node) {
-        if (node == graph.getDestination().getLocationId() || graph.getDestination() instanceof UnknownLocationNode)
+    private int getTravelTimeToDestination(Integer currentLocation) {
+        if (currentLocation == -1)
             return 0;
-        Integer travelTime = graph.getTravelTime(node, graph.getDestination().getLocationId());
+        if (currentLocation == graph.getDestination().getLocationId() || graph.getDestination() instanceof VirtualNode)
+            return 0;
+        Integer travelTime = graph.getTravelTime(currentLocation, graph.getDestination().getLocationId());
         return travelTime == null ? 0 : travelTime;
     }
 

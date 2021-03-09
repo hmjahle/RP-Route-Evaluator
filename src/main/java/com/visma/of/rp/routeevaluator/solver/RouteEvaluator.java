@@ -8,7 +8,10 @@ import com.visma.of.rp.routeevaluator.interfaces.*;
 import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.algorithm.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -362,14 +365,25 @@ public class RouteEvaluator {
     }
 
     /**
-     * Open ended routes ensures that the route ends at the last task in the route. Hence the route cannot have a
-     * destination.
+     * Open start routes ensures that the route starts at the first task in the route (and not a predefined origin).
+     * Hence the route cannot have a origin.
+     * The origin of a route is overwritten when this is set. In the same way when the origin is updated the
+     * route is no longer considered to be an open start route.
+     */
+    public void useOpenStartRoutes() {
+        graph.useOpenStartRoutes();
+    }
+
+    /**
+     * Open ended routes ensures that the route ends at the last task (and not a predefined destination) in the route.
+     * Hence the route cannot have a destination.
      * The destination of a route is overwritten when this is set. In the same way when the destination is updated the
      * route is no longer considered to be open ended.
      */
     public void useOpenEndedRoutes() {
-        graph.useOpenEndedRoutes() ;
+        graph.useOpenEndedRoutes();
     }
+
 
     /**
      * Adds an objective function to the route evaluator.
