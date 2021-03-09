@@ -160,7 +160,7 @@ public class SearchGraph {
     }
 
 
-    public void useStartRoutes() {
+    public void useOpenStartRoutes() {
         if (!(origin instanceof VirtualNode))
             origin = new VirtualNode(sourceId);
     }
