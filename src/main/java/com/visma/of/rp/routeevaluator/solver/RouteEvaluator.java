@@ -478,8 +478,8 @@ public class RouteEvaluator {
         syncedNodesStartTime[node.getNodeId()] = startTime;
     }
 
-    public List<IObjectiveFunctionIntraRoute> getIObjectiveFunctionIntraRoute() {
-        return objectiveFunctions.getObjectiveFunctionIntraRoute();
+    public List<IObjectiveFunctionIntraRoute> extractIObjectiveFunctionIntraRoute() {
+        return objectiveFunctions.extractIObjectiveFunctionIntraRoute();
     }
 
     public List<IConstraintIntraRoute> getIConstraintIntraRoute() {
