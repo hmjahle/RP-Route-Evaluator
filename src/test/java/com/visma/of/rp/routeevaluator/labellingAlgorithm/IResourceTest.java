@@ -73,6 +73,6 @@ public class IResourceTest {
     public void resourceTwoElementsSecondNullDominate() {
         ResourceTwoElements resourceA = new ResourceTwoElements(1, 2);
         ResourceTwoElements resourceB = null;
-        Assert.assertEquals("Second is null, cannot determine must return two", 2, resourceA.dominates(resourceB));
+        Assert.assertEquals("Second is null, cannot determine must return two", 3, resourceA.dominates(resourceB));
     }
 }
