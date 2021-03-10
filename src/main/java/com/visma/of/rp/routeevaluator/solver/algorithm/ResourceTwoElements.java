@@ -43,15 +43,19 @@ public class ResourceTwoElements implements IResource {
             return 0;
         }
         //Other dominates
-        else if (other.elementOneCount >= this.elementOneCount && other.elementTwoCount >= this.elementTwoCount) {
+        else if (this.isEqualOrBetterOnBothElements(other)) {
             return 1;
         }
         //This dominates other
-        if (this.elementOneCount >= other.elementOneCount && this.elementTwoCount >= other.elementTwoCount) {
+        if (other.isEqualOrBetterOnBothElements(this)) {
             return -1;
         }
         //Neither dominates
         return 2;
+    }
+
+    private boolean isEqualOrBetterOnBothElements(ResourceTwoElements other) {
+        return other.elementOneCount >= this.elementOneCount && other.elementTwoCount >= this.elementTwoCount;
     }
 
     @Override
