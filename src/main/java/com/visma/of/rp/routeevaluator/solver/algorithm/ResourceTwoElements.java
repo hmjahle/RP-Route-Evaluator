@@ -31,6 +31,11 @@ public class ResourceTwoElements implements IResource {
         return elementTwoCount;
     }
 
+    /**
+     * Implements the dominates function see the IResource.
+     * @param resourceInterface Resource to check domination towards.
+     * @return  See the interface documentation for the return values.
+     */
     @Override
     public int dominates(IResource resourceInterface) {
         ResourceTwoElements other = (ResourceTwoElements) resourceInterface;

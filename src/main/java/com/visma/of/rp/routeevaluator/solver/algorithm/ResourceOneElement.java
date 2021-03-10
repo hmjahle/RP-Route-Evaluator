@@ -23,11 +23,16 @@ public class ResourceOneElement implements IResource {
         return elementOneCount;
     }
 
+    /**
+     * Implements the dominates function see the IResource.
+     * @param resourceInterface Resource to check domination towards.
+     * @return  See the interface documentation for the return values.
+     */
     @Override
     public int dominates(IResource resourceInterface) {
         ResourceOneElement other = (ResourceOneElement) resourceInterface;
         if (other == null)
-            return 2;
+            return 3;
         //Equals
         if (this.elementOneCount == other.elementOneCount)
             return 0;
