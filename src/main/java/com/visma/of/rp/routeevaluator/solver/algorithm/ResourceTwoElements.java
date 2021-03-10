@@ -34,17 +34,22 @@ public class ResourceTwoElements implements IResource {
     @Override
     public int dominates(IResource resourceInterface) {
         ResourceTwoElements other = (ResourceTwoElements) resourceInterface;
-        if (other == null)
-            return 2;
+        //Not proper resource type
+        if (other == null) {
+            return 3;
+        }
         //Equals
-        if (this.elementTwoCount == other.elementTwoCount && this.elementOneCount == other.elementOneCount)
+        if (this.elementOneCount == other.elementOneCount && this.elementTwoCount == other.elementTwoCount) {
             return 0;
-        //This dominates other
-        if (this.elementTwoCount >= other.elementTwoCount && this.elementOneCount >= other.elementOneCount)
-            return -1;
-            //Other dominates
-        else if (this.elementTwoCount <= other.elementTwoCount && this.elementOneCount <= other.elementOneCount)
+        }
+        //Other dominates
+        else if (other.elementOneCount >= this.elementOneCount && other.elementTwoCount >= this.elementTwoCount) {
             return 1;
+        }
+        //This dominates other
+        if (this.elementOneCount >= other.elementOneCount && this.elementTwoCount >= other.elementTwoCount) {
+            return -1;
+        }
         //Neither dominates
         return 2;
     }
