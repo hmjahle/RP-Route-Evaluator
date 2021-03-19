@@ -19,5 +19,5 @@ public class CustomCriteriaAbstract {
         return criteriaFunction.apply(info);
     }
 
-    
+
 }
