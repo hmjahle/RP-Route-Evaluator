@@ -28,5 +28,7 @@ public class ConstraintInfo extends RouteEvaluationInfoAbstract {
         return startOfServiceNextTask;
     }
 
-
+    public short getShiftId() {
+        return shiftId;
+    }
 }
