@@ -27,7 +27,7 @@ public class LabellingAlgorithm {
     private LabelLists labelLists;
     private IExtendInfo nodeExtendInfo;
     private int[] syncedNodesStartTime;
-    private int endOfShift;
+    private IShift employeeWorkShift;
 
     public LabellingAlgorithm(SearchGraph graph, ObjectiveFunctionsIntraRouteHandler objectiveFunctions, ConstraintsIntraRouteHandler constraints) {
         this.graph = graph;
@@ -38,7 +38,6 @@ public class LabellingAlgorithm {
         this.labelLists = new LabelLists(graph.getNodes().size(), graph.getNodes().size() * 10);
         this.unExtendedLabels = new LabelQueue();
         this.bestLabelOnDestination = null;
-
     }
 
     /**
@@ -56,7 +55,7 @@ public class LabellingAlgorithm {
         Label startLabel = createStartLabel(objective, employeeWorkShift.getStartTime(), startResource);
         this.nodeExtendInfo = nodeExtendInfo;
         this.syncedNodesStartTime = syncedNodesStartTime;
-        this.endOfShift = employeeWorkShift.getEndTime();
+        this.employeeWorkShift = employeeWorkShift;
         solveLabellingAlgorithm(startLabel);
         return this.bestLabelOnDestination;
     }
@@ -150,12 +149,11 @@ public class LabellingAlgorithm {
             unExtendedLabels.addLabel(newLabel);
     }
 
-    public IObjective extend(IObjective currentObjective, Node toNode, int travelTime, int startOfServiceNextTask, int syncedTaskLatestStartTime,
-                             int endOfShift) {
+    public IObjective extend(IObjective currentObjective, Node toNode, int travelTime, int startOfServiceNextTask, int syncedTaskLatestStartTime) {
         ITask task = toNode.getTask();
         int visitEnd = task != null ? startOfServiceNextTask + task.getDuration() : 0;
         return objectiveFunctions.calculateObjectiveValue(currentObjective, travelTime, task,
-                startOfServiceNextTask, visitEnd, syncedTaskLatestStartTime, endOfShift);
+                startOfServiceNextTask, visitEnd, syncedTaskLatestStartTime, employeeWorkShift.getEndTime());
     }
 
     private Label findNextLabel() {
@@ -192,10 +190,10 @@ public class LabellingAlgorithm {
                                                        int travelTime, boolean nextNodeIsSynced, int newLocation) {
         int syncedTaskLatestStartTime = nextNodeIsSynced ? syncedNodesStartTime[nextNode.getNodeId()] : -1;
         int earliestOfficeReturn = calcEarliestPossibleReturnToOfficeTime(nextNode, newLocation, startOfServiceNextTask);
-        ConstraintInfo constraintInfo = new ConstraintInfo(endOfShift, earliestOfficeReturn, nextNode.getTask(), startOfServiceNextTask, syncedTaskLatestStartTime);
+        ConstraintInfo constraintInfo = new ConstraintInfo(employeeWorkShift, earliestOfficeReturn, nextNode.getTask(), startOfServiceNextTask, syncedTaskLatestStartTime);
         if (!constraints.isFeasible(constraintInfo))
             return null;
-        return extend(thisLabel.getObjective(), nextNode, travelTime, startOfServiceNextTask, syncedTaskLatestStartTime, endOfShift);
+        return extend(thisLabel.getObjective(), nextNode, travelTime, startOfServiceNextTask, syncedTaskLatestStartTime);
     }
 
     private int getTravelTime(Label thisLabel, Node nextNode, int newLocation) {
@@ -263,4 +261,7 @@ public class LabellingAlgorithm {
         return visitCnt;
     }
 
+    public void setEmployeeWorkShift(IShift employeeWorkShift) {
+        this.employeeWorkShift = employeeWorkShift;
+    }
 }

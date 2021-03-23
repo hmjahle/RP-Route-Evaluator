@@ -26,4 +26,11 @@ public interface IShift {
      * @return End time in seconds.
      */
     int getEndTime();
+
+    /**
+     * The unique id of the shift, must be continuously numbered starting from 0.
+     *
+     * @return Id short value.
+     */
+    short getId();
 }

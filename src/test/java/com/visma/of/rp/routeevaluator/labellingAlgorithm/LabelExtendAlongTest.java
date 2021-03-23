@@ -11,6 +11,7 @@ import com.visma.of.rp.routeevaluator.solver.algorithm.LabellingAlgorithm;
 import com.visma.of.rp.routeevaluator.solver.algorithm.SearchGraph;
 import org.junit.Assert;
 import org.junit.Test;
+import testInterfaceImplementationClasses.TestShift;
 import testInterfaceImplementationClasses.TestTravelTimeMatrix;
 import testSupport.JUnitTestAbstract;
 
@@ -33,6 +34,7 @@ public class LabelExtendAlongTest extends JUnitTestAbstract {
 
         Label label = createStartLabel(graph);
         LabellingAlgorithm labellingAlgorithm = new LabellingAlgorithm(graph, new ObjectiveFunctionsIntraRouteHandler(), new ConstraintsIntraRouteHandler());
+        labellingAlgorithm.setEmployeeWorkShift(new TestShift(0, 100));
         Label newLabel = labellingAlgorithm.extendLabelToNextNode(label, new ExtendToInfo(graph.getNode(task), 1));
 
         Assert.assertNotNull(newLabel);

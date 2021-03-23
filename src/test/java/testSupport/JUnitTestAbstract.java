@@ -91,7 +91,7 @@ public abstract class JUnitTestAbstract {
         for (Visit visit : route.getVisitSolution()) {
             System.out.println("Visit no " + (i++) + " " + printVisit(visit));
         }
-    }
+}
 
     protected String printVisit(Visit visit) {
         return "Travel time to: " + visit.getTravelTime() + " start time: " + visit.getStartTime() +

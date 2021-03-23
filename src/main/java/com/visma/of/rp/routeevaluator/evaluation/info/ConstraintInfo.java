@@ -1,5 +1,6 @@
 package com.visma.of.rp.routeevaluator.evaluation.info;
 
+import com.visma.of.rp.routeevaluator.interfaces.IShift;
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
 
 /**
@@ -7,11 +8,13 @@ import com.visma.of.rp.routeevaluator.interfaces.ITask;
  */
 public class ConstraintInfo extends RouteEvaluationInfoAbstract {
 
+    short shiftId;
     long earliestOfficeReturn;
     long startOfServiceNextTask;
 
-    public ConstraintInfo(long endOfWorkShift, long earliestOfficeReturn, ITask task, long startOfServiceNextTask, long syncedTaskLatestStartTime) {
-        super(task, endOfWorkShift, syncedTaskLatestStartTime);
+    public ConstraintInfo(IShift employeeWorkShift, long earliestOfficeReturn, ITask task, long startOfServiceNextTask, long syncedTaskLatestStartTime) {
+        super(task, employeeWorkShift.getEndTime(), syncedTaskLatestStartTime);
+        this.shiftId = employeeWorkShift.getId();
         this.earliestOfficeReturn = earliestOfficeReturn;
         this.startOfServiceNextTask = startOfServiceNextTask;
         this.syncedTaskStartTime = syncedTaskLatestStartTime;
