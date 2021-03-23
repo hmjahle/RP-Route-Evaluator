@@ -30,5 +30,8 @@ public class TestShift implements IShift {
         return endTime;
     }
 
-
+    @Override
+    public short getId() {
+        return 0;
+    }
 }
