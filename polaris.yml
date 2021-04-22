@@ -6,6 +6,7 @@ project:
     date: revision_date
   properties:
     GROUP: group_id_here
+    PSC_ID: a6b5a488-1235-4c31-9e28-fbdaf63e1aa0
 capture:
   fileSystem:
     ears:
