@@ -42,4 +42,10 @@ public class TestTravelTimeMatrix implements ITravelTimeMatrix {
         travelTimes.putIfAbsent(locationA, new HashMap<>());
         travelTimes.get(locationA).put(locationB, distance);
     }
+
+    public void removeDirectedConnection(ILocation locationA, ILocation locationB) {
+        if (travelTimes.containsKey(locationA))
+            travelTimes.get(locationA).remove(locationB);
+
+    }
 }

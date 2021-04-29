@@ -112,10 +112,11 @@ public class LabellingAlgorithm {
         Node nextNode = extendToInfo.getToNode();
         boolean taskRequirePhysicalAppearance = nextNode.getRequirePhysicalAppearance();
         int newLocation = findNewLocation(thisLabel, taskRequirePhysicalAppearance, nextNode);
-        int travelTime = getTravelTime(thisLabel, nextNode, newLocation);
-        boolean nextNodeIsSynced = nextNode.isSynced();
-        int startOfServiceNextTask = calcStartOfServiceNextTask(thisLabel, nextNode, taskRequirePhysicalAppearance, travelTime, nextNodeIsSynced);
-        IObjective objective = evaluateFeasibilityAndObjective(thisLabel, nextNode, startOfServiceNextTask, travelTime, nextNodeIsSynced, newLocation);
+        Integer travelTime = getTravelTime(thisLabel, nextNode, newLocation);
+        if(travelTime == null)
+            return null;
+        int startOfServiceNextTask = calcStartOfServiceNextTask(thisLabel, nextNode, taskRequirePhysicalAppearance, travelTime, nextNode.isSynced());
+        IObjective objective = evaluateFeasibilityAndObjective(thisLabel, nextNode, startOfServiceNextTask, travelTime, nextNode.isSynced(), newLocation);
         if (objective == null)
             return null;
         IResource resources = thisLabel.getResources().extend(extendToInfo);
@@ -196,14 +197,22 @@ public class LabellingAlgorithm {
         return extend(thisLabel.getObjective(), nextNode, travelTime, startOfServiceNextTask, syncedTaskLatestStartTime);
     }
 
-    private int getTravelTime(Label thisLabel, Node nextNode, int newLocation) {
+    /**
+     * Finds the travel time to the next node. Note that if the current location is (-1) it is at the "origin" and interpreted as the first task will become the origin.
+     * Hence, this task will become the origin and therefore the travel time will be 0.
+     *
+     * @param thisLabel
+     * @param nextNode
+     * @param newLocation
+     * @return
+     */
+    private Integer getTravelTime(Label thisLabel, Node nextNode, int newLocation) {
         if (thisLabel.getCurrentLocationId() == -1)
             return 0;
-        Integer travelTime = newLocation == thisLabel.getCurrentLocationId() ? null : graph.getTravelTime(thisLabel.getCurrentLocationId(), nextNode.getLocationId());
-        if (travelTime == null) {
+        if (newLocation == thisLabel.getCurrentLocationId()) {
             return 0;
-        } else
-            return travelTime;
+        }
+        return graph.getTravelTime(thisLabel.getCurrentLocationId(), nextNode.getLocationId());
     }
 
     private int calcEarliestPossibleReturnToOfficeTime(Node nextNode, Integer currentLocation, int startOfServiceNextTask) {

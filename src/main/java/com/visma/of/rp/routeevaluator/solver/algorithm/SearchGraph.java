@@ -81,6 +81,12 @@ public class SearchGraph {
         nodes.add(destination);
     }
 
+    /**
+     * Initialize the origin in the graph. If null the origin will be the first task in the route. This is represented
+     * by a locationId = -1.
+     *
+     * @param originLocation Location of the origin, must be in the travel matrix, or null.
+     */
     private void initializeOrigin(ILocation originLocation) {
         if (originLocation != null) {
             this.origin = new Node(getNewNodeId(), null, getLocationId(originLocation));
@@ -90,6 +96,12 @@ public class SearchGraph {
         }
     }
 
+    /**
+     * Initialize the destination in the graph. If null the destination will be the first task in the route. This is
+     * represented by a locationId = -1.
+     *
+     * @param destinationLocation Location of the destination, must be in the travel matrix, or null.
+     */
     private void initializeDestination(ILocation destinationLocation) {
         if (destinationLocation != null) {
             this.destination = new Node(getNewNodeId(), null, getLocationId(destinationLocation));
