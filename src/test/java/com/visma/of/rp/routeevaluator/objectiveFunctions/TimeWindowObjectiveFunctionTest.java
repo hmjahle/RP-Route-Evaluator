@@ -47,7 +47,6 @@ public class TimeWindowObjectiveFunctionTest extends JUnitTestAbstract {
         allTasks.add(task1);
         travelTimeMatrix.addUndirectedConnection(office, task1.getLocation(), 9);
         RouteEvaluatorResult result = evaluateRouteStandardTimeWindow(allTasks);
-        init();
         RouteEvaluatorResult resultLowHigh = evaluateRouteLowHighTimeWindow(allTasks, 100, 1);
         Assert.assertNotNull("Must be feasible. ", result);
         Assert.assertEquals("Objective value for the standard time window must be.", 0, result.getObjectiveValue(), 1E-6);

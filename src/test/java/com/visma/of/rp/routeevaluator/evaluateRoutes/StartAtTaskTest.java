@@ -50,7 +50,6 @@ public class StartAtTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "4", result.getVisitSolution().get(1).getTask().getId());
 
-
     }
 
 
