@@ -158,9 +158,6 @@ public class NoPhysicalAppearanceOrderTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(office, locations.get(3), 5);
         travelTimeMatrix.addUndirectedConnection(office, locations.get(4), 9);
         travelTimeMatrix.addUndirectedConnection(locations.get(3), locations.get(4), 13);
-
-
-
         return travelTimeMatrix;
     }
 
