@@ -185,6 +185,7 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(office, task2.getLocation(), 10);
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task3.getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(office, task3.getLocation(), 45);
+        travelTimeMatrix.addUndirectedConnection(office, task1.getLocation(), 1000);
 
         RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new SyncedTasksConstraint());
