@@ -67,11 +67,11 @@ public class SearchGraph {
 
     private void populateGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<? extends ITask> tasks, ILocation originLocation,
                                ILocation destinationLocation) {
+        updateTravelTimeInformation(travelTimeMatrixInput);
         initializeOriginDestination(originLocation, destinationLocation);
         addNodesToGraph(tasks);
         sourceId = getNewNodeId();
         sinkId = getNewNodeId();
-        updateTravelTimeInformation(travelTimeMatrixInput);
     }
 
     private void initializeOriginDestination(ILocation originLocation, ILocation destinationLocation) {
@@ -121,7 +121,7 @@ public class SearchGraph {
     }
 
     private void updateTravelTimeInformation(ITravelTimeMatrix travelTimeMatrixInput) {
-        int n = potentialLocations(travelTimeMatrixInput);
+        int n = createLocations(travelTimeMatrixInput);
         this.travelTimeMatrix = new Integer[n][n];
         for (ILocation locationA : travelTimeMatrixInput.getLocations()) {
             for (ILocation locationB : travelTimeMatrixInput.getLocations()) {
@@ -132,24 +132,25 @@ public class SearchGraph {
         }
     }
 
-    private int potentialLocations(ITravelTimeMatrix travelTimeMatrixInput) {
-        int n = locationIdCounter;
-        for (ILocation locationA : travelTimeMatrixInput.getLocations())
-            n += !locationToLocationIds.containsKey(locationA) ? 1 : 0;
-        return n;
+    /**
+     * Create all location ids.
+     *
+     * @param travelTimeMatrixInput Travel matrix to get locations from.
+     * @return Number of locations
+     */
+    private int createLocations(ITravelTimeMatrix travelTimeMatrixInput) {
+        for (ILocation location : travelTimeMatrixInput.getLocations()) {
+            int locationId = getNewLocationId();
+            locationToLocationIds.put(location, locationId);
+        }
+        return travelTimeMatrixInput.getLocations().size();
     }
 
-    private int getLocationId(ILocation location) {
-
-        if (locationToLocationIds.containsKey(location))
-            return locationToLocationIds.get(location);
-        int locationId = getNewLocationId();
-        locationToLocationIds.put(location, locationId);
-        return locationId;
+    public int getLocationId(ILocation location) {
+        return locationToLocationIds.get(location);
     }
 
     private void addTravelTime(ITravelTimeMatrix travelTimeMatrixInput, ILocation fromLocation, ILocation toLocation) {
-
         int fromId = getLocationId(fromLocation);
         int toId = getLocationId(toLocation);
 
