@@ -97,7 +97,7 @@ public class SearchGraph {
     }
 
     /**
-     * Initialize the destination in the graph. If null the destination will be the first task in the route. This is
+     * Initialize the destination in the graph. If null the destination will be the last task in the route. This is
      * represented by a locationId = -1.
      *
      * @param destinationLocation Location of the destination, must be in the travel matrix, or null.
@@ -113,7 +113,7 @@ public class SearchGraph {
 
     private void addNodesToGraph(Collection<? extends ITask> tasks) {
         for (ITask task : tasks) {
-            int locationId = getLocationId(task.getLocation());
+            int locationId = task.getLocation() == null ? -1 : getLocationId(task.getLocation());
             Node node = new Node(getNewNodeId(), task, locationId);
             nodes.add(node);
             taskToNodes.put(task, node);
@@ -146,8 +146,24 @@ public class SearchGraph {
         return travelTimeMatrixInput.getLocations().size();
     }
 
+    /**
+     * Gets the location id of a location in the graph, the graph must contain the location.
+     *
+     * @param location Location to find id for
+     * @return integer location id.
+     */
     public int getLocationId(ILocation location) {
         return locationToLocationIds.get(location);
+    }
+
+    /**
+     * Gets the location id of a task in the graph, the graph must contain the task.
+     *
+     * @param task Task to find location id for.
+     * @return integer location id.
+     */
+    public int getLocationId(ITask task) {
+        return taskToNodes.get(task).getLocationId();
     }
 
     private void addTravelTime(ITravelTimeMatrix travelTimeMatrixInput, ILocation fromLocation, ILocation toLocation) {
