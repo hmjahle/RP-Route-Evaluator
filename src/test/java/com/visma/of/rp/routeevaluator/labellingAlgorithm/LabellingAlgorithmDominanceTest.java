@@ -26,7 +26,7 @@ public class LabellingAlgorithmDominanceTest extends JUnitTestAbstract {
     ILocation office;
     List<ITask> allTasks;
     TestTravelTimeMatrix travelTimeMatrix;
-    RouteEvaluator routeEvaluator;
+    RouteEvaluator<ITask> routeEvaluator;
     IShift shift;
 
     @Before
@@ -55,8 +55,8 @@ public class LabellingAlgorithmDominanceTest extends JUnitTestAbstract {
         travelTimeMatrix.addDirectedConnection(allTasks.get(0).getLocation(), office, 1);
         travelTimeMatrix.addDirectedConnection(allTasks.get(1).getLocation(), office, 5);
 
-        RouteEvaluator routeEvaluator = createRouteEvaluatorTravelTime(allTasks);
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
+        RouteEvaluator<ITask> routeEvaluator = createRouteEvaluatorTravelTime(allTasks);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
 
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "2", result.getVisitSolution().get(0).getTask().getId());
@@ -84,8 +84,8 @@ public class LabellingAlgorithmDominanceTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(allTasks.get(2).getLocation(), allTasks.get(0).getLocation(), 3);
         travelTimeMatrix.addUndirectedConnection(allTasks.get(1).getLocation(), allTasks.get(2).getLocation(), 1);
 
-        RouteEvaluator routeEvaluator = createRouteEvaluatorTravelTime(allTasks);
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
+        RouteEvaluator<ITask> routeEvaluator = createRouteEvaluatorTravelTime(allTasks);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
 
         Assert.assertEquals("Number of visits should be: ", 3, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "3", result.getVisitSolution().get(0).getTask().getId());
@@ -108,13 +108,6 @@ public class LabellingAlgorithmDominanceTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(4));
         tasks.add(allTasks.get(0));
 
-        List<ITask> tasksOpt = new ArrayList<>();
-        tasksOpt.add(allTasks.get(2));
-        tasksOpt.add(allTasks.get(3));
-        tasksOpt.add(allTasks.get(4));
-        tasksOpt.add(allTasks.get(1));
-        tasksOpt.add(allTasks.get(0));
-
         travelTimeMatrix.addDirectedConnection(office, allTasks.get(0).getLocation(), 2);
         travelTimeMatrix.addDirectedConnection(office, allTasks.get(1).getLocation(), 5);
         travelTimeMatrix.addDirectedConnection(allTasks.get(0).getLocation(), office, 1);
@@ -135,8 +128,8 @@ public class LabellingAlgorithmDominanceTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(allTasks.get(4).getLocation(), allTasks.get(2).getLocation(), 1);
         travelTimeMatrix.addUndirectedConnection(allTasks.get(4).getLocation(), allTasks.get(3).getLocation(), 1);
 
-        RouteEvaluator routeEvaluator = createRouteEvaluatorTravelTime(allTasks);
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
+        RouteEvaluator<ITask> routeEvaluator = createRouteEvaluatorTravelTime(allTasks);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
 
         Assert.assertEquals("Number of visits should be: ", 5, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "3", result.getVisitSolution().get(0).getTask().getId());
@@ -177,8 +170,8 @@ public class LabellingAlgorithmDominanceTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(allTasks.get(3).getLocation(), allTasks.get(1).getLocation(), 2);
         travelTimeMatrix.addUndirectedConnection(allTasks.get(3).getLocation(), allTasks.get(2).getLocation(), 1);
 
-        RouteEvaluator routeEvaluator = createRouteEvaluatorTravelTime(allTasks);
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTasks(tasks, tasks2, shift);
+        RouteEvaluator<ITask> routeEvaluator = createRouteEvaluatorTravelTime(allTasks);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTasks(tasks, tasks2, shift);
 
         Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "3", result.getVisitSolution().get(0).getTask().getId());
@@ -217,21 +210,21 @@ public class LabellingAlgorithmDominanceTest extends JUnitTestAbstract {
         return tasks;
     }
 
-    private RouteEvaluator createRouteEvaluator(List<ITask> tasks) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
+    private RouteEvaluator<ITask> createRouteEvaluator(List<ITask> tasks) {
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
         routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
         return routeEvaluator;
     }
 
-    private RouteEvaluator createRouteEvaluatorOverTime(List<ITask> tasks) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
+    private RouteEvaluator<ITask> createRouteEvaluatorOverTime(List<ITask> tasks) {
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         routeEvaluator.addObjectiveIntraShift("OverTime", 1, new OvertimeObjectiveFunction());
         return routeEvaluator;
     }
 
-    private RouteEvaluator createRouteEvaluatorTravelTime(List<ITask> tasks) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
+    private RouteEvaluator<ITask> createRouteEvaluatorTravelTime(List<ITask> tasks) {
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
         return routeEvaluator;
     }

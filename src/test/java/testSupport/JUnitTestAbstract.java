@@ -38,11 +38,11 @@ public abstract class JUnitTestAbstract {
         return new TestLocation(true);
     }
 
-    protected ITask createStandardTask(int duration, int startTime, int endTime) {
+    protected TestTask createStandardTask(int duration, int startTime, int endTime) {
         return new TestTask(duration, startTime, endTime, false, false, true, 0, 0, new TestLocation(false), "x");
     }
 
-    protected ITask createStandardTask(int duration, int startTime, int endTime, String id) {
+    protected TestTask createStandardTask(int duration, int startTime, int endTime, String id) {
         return new TestTask(duration, startTime, endTime, false, false, true, 0, 0, new TestLocation(false), id);
     }
 
@@ -50,15 +50,15 @@ public abstract class JUnitTestAbstract {
         return new TestTask(duration, startTime, endTime, false, true, true, 0, 0, new TestLocation(false), "x");
     }
 
-    protected ITask createSyncedTask(int duration, int startTime, int endTime, String id) {
+    protected TestTask createSyncedTask(int duration, int startTime, int endTime, String id) {
         return new TestTask(duration, startTime, endTime, false, true, true, 0, 0, new TestLocation(false), id);
     }
 
-    protected ITask createSyncedStrictTask(int duration, int startTime, int endTime) {
+    protected TestTask createSyncedStrictTask(int duration, int startTime, int endTime) {
         return new TestTask(duration, startTime, endTime, true, true, true, 0, 0, new TestLocation(false), "x");
     }
 
-    protected ITask createSyncedStrictTask(int duration, int startTime, int endTime, String id) {
+    protected TestTask createSyncedStrictTask(int duration, int startTime, int endTime, String id) {
         return new TestTask(duration, startTime, endTime, true, true, true, 0, 0, new TestLocation(false), id);
     }
 
@@ -66,12 +66,12 @@ public abstract class JUnitTestAbstract {
         return new TestTask(duration, startTime, endTime, true, false, true, 0, 0, new TestLocation(false), "x");
     }
 
-    protected ITask createStrictTask(int duration, int startTime, int endTime, String id) {
+    protected TestTask createStrictTask(int duration, int startTime, int endTime, String id) {
         return new TestTask(duration, startTime, endTime, true, false, true, 0, 0, new TestLocation(false), id);
     }
 
-    protected int getVisitTravelTime(RouteEvaluatorResult result, int visitNo) {
-        Visit visitTask1 = result.getVisitSolution().get(visitNo);
+    protected int getVisitTravelTime(RouteEvaluatorResult<ITask> result, int visitNo) {
+        Visit<ITask> visitTask1 = result.getVisitSolution().get(visitNo);
         return visitTask1.getTravelTime();
     }
 
@@ -86,7 +86,7 @@ public abstract class JUnitTestAbstract {
         System.out.println(printRoute);
     }
 
-    protected void printRoute(Route route) {
+    protected void printRoute(Route<ITask> route) {
         int i = 0;
         for (Visit visit : route.getVisitSolution()) {
             System.out.println("Visit no " + (i++) + " " + printVisit(visit));

@@ -19,7 +19,7 @@ public class TestTravelTimeMatrix implements ITravelTimeMatrix {
         this.travelTimes = new HashMap<>();
     }
 
-    public TestTravelTimeMatrix(Collection<ITask> tasks) {
+    public TestTravelTimeMatrix(Collection<? extends ITask> tasks) {
         this.travelTimes = new HashMap<>();
         for (ITask task : tasks)
             addUndirectedConnection(task.getLocation(), task.getLocation(), 0);

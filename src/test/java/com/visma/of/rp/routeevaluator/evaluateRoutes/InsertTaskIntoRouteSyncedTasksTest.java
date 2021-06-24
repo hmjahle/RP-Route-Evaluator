@@ -24,7 +24,7 @@ public class InsertTaskIntoRouteSyncedTasksTest extends JUnitTestAbstract {
     ILocation office;
     List<ITask> allTasks;
     ITravelTimeMatrix travelTimeMatrix;
-    RouteEvaluator routeEvaluator;
+    RouteEvaluator<ITask> routeEvaluator;
     IShift shift;
     Map<ITask, Integer> syncedTaskStartTimes;
 
@@ -44,7 +44,7 @@ public class InsertTaskIntoRouteSyncedTasksTest extends JUnitTestAbstract {
     @Test
     public void oneTask() {
         List<ITask> tasks = new ArrayList<>(allTasks.subList(3, 4));
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(0), syncedTaskStartTimes, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(0), syncedTaskStartTimes, shift);
 
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
@@ -57,7 +57,7 @@ public class InsertTaskIntoRouteSyncedTasksTest extends JUnitTestAbstract {
     @Test
     public void oneTaskBothSynced() {
         List<ITask> tasks = new ArrayList<>(allTasks.subList(2, 3));
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(0), syncedTaskStartTimes, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(0), syncedTaskStartTimes, shift);
 
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
@@ -70,7 +70,7 @@ public class InsertTaskIntoRouteSyncedTasksTest extends JUnitTestAbstract {
     @Test
     public void allTasksInsertFirst() {
         List<ITask> tasks = new ArrayList<>(allTasks.subList(1, 4));
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(0), syncedTaskStartTimes, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(0), syncedTaskStartTimes, shift);
 
         Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
@@ -88,7 +88,7 @@ public class InsertTaskIntoRouteSyncedTasksTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(3));
         tasks.add(allTasks.get(0));
         tasks.add(allTasks.get(1));
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(2), syncedTaskStartTimes, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(2), syncedTaskStartTimes, shift);
 
         Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "4", result.getVisitSolution().get(0).getTask().getId());
@@ -104,7 +104,7 @@ public class InsertTaskIntoRouteSyncedTasksTest extends JUnitTestAbstract {
     @Test
     public void allTasksInsertLast() {
         List<ITask> tasks = new ArrayList<>(allTasks.subList(0, 3));
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(3), syncedTaskStartTimes, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(3), syncedTaskStartTimes, shift);
 
         Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
@@ -141,8 +141,8 @@ public class InsertTaskIntoRouteSyncedTasksTest extends JUnitTestAbstract {
         return tasks;
     }
 
-    private RouteEvaluator createRouteEvaluator() {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
+    private RouteEvaluator<ITask> createRouteEvaluator() {
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
         return routeEvaluator;
     }
