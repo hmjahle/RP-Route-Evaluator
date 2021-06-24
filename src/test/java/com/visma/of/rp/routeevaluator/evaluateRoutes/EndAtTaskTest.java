@@ -27,7 +27,7 @@ public class EndAtTaskTest extends JUnitTestAbstract {
     ILocation office;
     List<ITask> allTasks;
     TestTravelTimeMatrix travelTimeMatrix;
-    RouteEvaluator routeEvaluator;
+    RouteEvaluator<ITask> routeEvaluator;
     IShift shift;
 
     @Before
@@ -45,18 +45,18 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         List<ITask> tasks = new ArrayList<>(allTasks.subList(3, 4));
         routeEvaluator.useOpenEndedRoutes();
 
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(0), shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(0), shift);
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "4", result.getVisitSolution().get(1).getTask().getId());
 
-        Visit lastVisit = getLastVisit(result);
+        Visit<ITask> lastVisit = getLastVisit(result);
         Assert.assertEquals("Should end route at end time of last task.", result.getTimeOfArrivalAtDestination().intValue(),
                 lastVisit.getStartTime() + lastVisit.getTask().getDuration());
 
     }
 
-    private Visit getLastVisit(RouteEvaluatorResult result) {
+    private Visit<ITask> getLastVisit(RouteEvaluatorResult<ITask> result) {
         return result.getVisitSolution().get(result.getVisitSolution().size() - 1);
     }
 
@@ -66,13 +66,13 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         tasks.add(createStandardTask(10, 90, 100));
         travelTimeMatrix.addUndirectedConnection(office, tasks.get(0).getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(tasks.get(0).getLocation(), tasks.get(0).getLocation(), 0);
-        RouteEvaluator routeEvaluator = createRouteEvaluatorOverTime(tasks);
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        RouteEvaluator<ITask> routeEvaluator = createRouteEvaluatorOverTime(tasks);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
         Assert.assertEquals("Should have overtime. ", 5, result.getObjectiveValue(), 1E-6);
         routeEvaluator.useOpenEndedRoutes();
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
         Assert.assertEquals("Should have no overtime. ", 0, result.getObjectiveValue(), 1E-6);
-        Visit lastVisit = getLastVisit(result);
+        Visit<ITask> lastVisit = getLastVisit(result);
         Assert.assertEquals("Should end route at end time of last task.", result.getTimeOfArrivalAtDestination().intValue(),
                 lastVisit.getStartTime() + lastVisit.getTask().getDuration());
     }
@@ -82,7 +82,7 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         List<ITask> tasks = new ArrayList<>(allTasks.subList(1, 4));
         routeEvaluator.useOpenEndedRoutes();
 
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(0), shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(0), shift);
 
         Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
@@ -90,7 +90,7 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Third task id: ", "3", result.getVisitSolution().get(2).getTask().getId());
         Assert.assertEquals("Fourth task id: ", "4", result.getVisitSolution().get(3).getTask().getId());
 
-        Visit lastVisit = getLastVisit(result);
+        Visit<ITask> lastVisit = getLastVisit(result);
         Assert.assertEquals("Should end route at end time of last task.", result.getTimeOfArrivalAtDestination().intValue(),
                 lastVisit.getStartTime() + lastVisit.getTask().getDuration());
     }
@@ -102,14 +102,14 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(3));
         routeEvaluator.useOpenEndedRoutes();
 
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
 
         Assert.assertEquals("Number of visits should be: ", 3, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "2", result.getVisitSolution().get(1).getTask().getId());
         Assert.assertEquals("Third task id: ", "4", result.getVisitSolution().get(2).getTask().getId());
 
-        Visit lastVisit = getLastVisit(result);
+        Visit<ITask> lastVisit = getLastVisit(result);
         Assert.assertEquals("Should end route at end time of last task.", result.getTimeOfArrivalAtDestination().intValue(),
                 lastVisit.getStartTime() + lastVisit.getTask().getDuration());
     }
@@ -131,8 +131,8 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         travelTimeMatrix.addDirectedConnection(allTasks.get(1).getLocation(), office, 1);
 
 
-        RouteEvaluator routeEvaluator = createRouteEvaluatorTravelTime(allTasks);
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
+        RouteEvaluator<ITask> routeEvaluator = createRouteEvaluatorTravelTime(allTasks);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
 
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
@@ -145,7 +145,7 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("First task id: ", "2", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "1", result.getVisitSolution().get(1).getTask().getId());
 
-        Visit lastVisit = getLastVisit(result);
+        Visit<ITask> lastVisit = getLastVisit(result);
         Assert.assertEquals("Should end route at end time of last task.", result.getTimeOfArrivalAtDestination().intValue(),
                 lastVisit.getStartTime() + lastVisit.getTask().getDuration());
     }
@@ -155,14 +155,14 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         List<ITask> tasks = new ArrayList<>(allTasks.subList(0, 3));
         routeEvaluator.useOpenEndedRoutes();
 
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(3), shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(3), shift);
         Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "2", result.getVisitSolution().get(1).getTask().getId());
         Assert.assertEquals("Third task id: ", "3", result.getVisitSolution().get(2).getTask().getId());
         Assert.assertEquals("Fourth task id: ", "4", result.getVisitSolution().get(3).getTask().getId());
 
-        Visit lastVisit = getLastVisit(result);
+        Visit<ITask> lastVisit = getLastVisit(result);
         Assert.assertEquals("Should end route at end time of last task.", result.getTimeOfArrivalAtDestination().intValue(),
                 lastVisit.getStartTime() + lastVisit.getTask().getDuration());
     }
@@ -176,7 +176,7 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         routeEvaluator = createRouteEvaluator(allTasks);
         routeEvaluator.useOpenEndedRoutes();
 
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(allTasks.subList(0, 1), allTasks.get(1), shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(allTasks.subList(0, 1), allTasks.get(1), shift);
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "5", result.getVisitSolution().get(1).getTask().getId());
@@ -210,21 +210,21 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         return tasks;
     }
 
-    private RouteEvaluator createRouteEvaluator(List<ITask> tasks) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
+    private RouteEvaluator<ITask> createRouteEvaluator(List<ITask> tasks) {
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
         routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
         return routeEvaluator;
     }
 
-    private RouteEvaluator createRouteEvaluatorOverTime(List<ITask> tasks) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
+    private RouteEvaluator<ITask> createRouteEvaluatorOverTime(List<ITask> tasks) {
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         routeEvaluator.addObjectiveIntraShift("OverTime", 1, new OvertimeObjectiveFunction());
         return routeEvaluator;
     }
 
-    private RouteEvaluator createRouteEvaluatorTravelTime(List<ITask> tasks) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
+    private RouteEvaluator<ITask> createRouteEvaluatorTravelTime(List<ITask> tasks) {
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
         return routeEvaluator;
     }

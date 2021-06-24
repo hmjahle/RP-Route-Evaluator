@@ -49,10 +49,10 @@ public class benchmarking extends JUnitTestAbstract {
         TestLocation office = addOffice(locations, officeInteger, officeLat);
         List<ITask> tasks = createTasks(locations);
         List<TestTravelTimeMatrix> travelTimeMatrices = getTestTravelTimeMatrices(locations);
-        RouteEvaluator routeEvaluator1 = new RouteEvaluator(travelTimeMatrices.get(0), tasks, office);
-        RouteEvaluator routeEvaluator2 = new RouteEvaluator(travelTimeMatrices.get(1), tasks, office);
-        RouteEvaluator routeEvaluator3 = new RouteEvaluator(travelTimeMatrices.get(2), tasks, office);
-        RouteEvaluator routeEvaluator4 = new RouteEvaluator(travelTimeMatrices.get(2), tasks, office);
+        RouteEvaluator<ITask> routeEvaluator1 = new RouteEvaluator(travelTimeMatrices.get(0), tasks, office);
+        RouteEvaluator<ITask> routeEvaluator2 = new RouteEvaluator<ITask>(travelTimeMatrices.get(1), tasks, office);
+        RouteEvaluator<ITask> routeEvaluator3 = new RouteEvaluator(travelTimeMatrices.get(2), tasks, office);
+        RouteEvaluator<ITask> routeEvaluator4 = new RouteEvaluator(travelTimeMatrices.get(2), tasks, office);
         List<ITask> newTasks = new ArrayList<>();
         List<ITask> newTasks2 = new ArrayList<>();
         List<ITask> mergeTasks = new ArrayList<>();
@@ -231,7 +231,7 @@ public class benchmarking extends JUnitTestAbstract {
         return office;
     }
 
-    public static void printResult(RouteEvaluatorResult result) {
+    public static void printResult(RouteEvaluatorResult<ITask> result) {
         if (result == null) {
             System.out.println();
             System.out.println("No result!");
@@ -247,7 +247,7 @@ public class benchmarking extends JUnitTestAbstract {
         }
 
         String visitString = "Visits: " + result.getVisitSolution().size() + "\n";
-        for (Visit visit : result.getVisitSolution()) {
+        for (Visit<ITask> visit : result.getVisitSolution()) {
             visitString += "\t" + printVisit(visit, 0);
             visitString += visit.getTask().getLocation() + "\n";
         }

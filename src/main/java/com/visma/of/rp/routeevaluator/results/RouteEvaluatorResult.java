@@ -1,24 +1,25 @@
 package com.visma.of.rp.routeevaluator.results;
 
+import com.visma.of.rp.routeevaluator.interfaces.ITask;
 import com.visma.of.rp.routeevaluator.solver.algorithm.IObjective;
 
 import java.util.List;
 
-public class RouteEvaluatorResult {
+public class RouteEvaluatorResult<T extends ITask> {
 
-    private Route route;
+    private Route<T> route;
     private IObjective objective;
 
-    public RouteEvaluatorResult(IObjective objective,Route route) {
+    public RouteEvaluatorResult(IObjective objective, Route<T> route) {
         this.route = route;
         this.objective = objective;
     }
 
-    public Route getRoute() {
+    public Route<T> getRoute() {
         return route;
     }
 
-    public List<Visit> getVisitSolution() {
+    public List<Visit<T>> getVisitSolution() {
         return route.getVisitSolution();
     }
 

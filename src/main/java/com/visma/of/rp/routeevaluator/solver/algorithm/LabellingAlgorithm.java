@@ -15,14 +15,14 @@ import java.util.Enumeration;
  * The labelling algorithm is a resource constrained shortest path algorithm.
  * It finds the minimum cost path from the office through all tasks in the given order.
  */
-public class LabellingAlgorithm {
+public class LabellingAlgorithm<T extends ITask> {
 
     private SearchGraph graph;
     private ObjectiveFunctionsIntraRouteHandler objectiveFunctions;
     private ConstraintsIntraRouteHandler constraints;
     private LabelQueue unExtendedLabels;
     private Label[] labels;
-    private Visit[] visits;
+    private Visit<T>[] visits;
     private Label bestLabelOnDestination;
     private LabelLists labelLists;
     private IExtendInfo nodeExtendInfo;
@@ -69,7 +69,7 @@ public class LabellingAlgorithm {
      * @param initialObjective     Starting objective.
      * @return RouteEvaluatorResult or null if route is infeasible.
      */
-    public RouteEvaluatorResult solveRouteEvaluatorResult(IObjective initialObjective, IExtendInfo nodeExtendInfo, int[] syncedNodesStartTime, IShift employeeWorkShift) {
+    public RouteEvaluatorResult<T> solveRouteEvaluatorResult(IObjective initialObjective, IExtendInfo nodeExtendInfo, int[] syncedNodesStartTime, IShift employeeWorkShift) {
         Label bestLabel = runAlgorithm(initialObjective, nodeExtendInfo, syncedNodesStartTime, employeeWorkShift);
         if (bestLabel == null)
             return null;

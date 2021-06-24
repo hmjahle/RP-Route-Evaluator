@@ -31,7 +31,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
     List<ITask> allTasks;
     ITravelTimeMatrix travelTimeMatrix;
     IShift shift;
-    RouteEvaluator routeEvaluator;
+    RouteEvaluator<ITask> routeEvaluator;
     Map<ITask, Integer> syncedTasksStartTime;
 
     @Before
@@ -40,7 +40,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
         allTasks = createTasks();
         travelTimeMatrix = createTravelTimeMatrix(office, allTasks);
         shift = new TestShift(0, 100);
-        routeEvaluator = new RouteEvaluator( travelTimeMatrix, allTasks, office);
+        routeEvaluator = new RouteEvaluator<>( travelTimeMatrix, allTasks, office);
         routeEvaluator.addObjectiveIntraShift(new CustomCriteriaObjectiveFunction(
                 RouteEvaluationInfoAbstract::isDestination, x -> (double) x.getStartOfServiceNextTask()));
         syncedTasksStartTime = createSyncedTaskStartTimes();
@@ -52,7 +52,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
     @Test
     public void allTasksNoDifference() {
 
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTasksStartTime, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTasksStartTime, shift);
         assertAllTasks(result);
 
         result = routeEvaluator.evaluateRouteByTheOrderOfReInsertBasedOnCriteriaTasks(
@@ -91,7 +91,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
     public void allTasksCriteriaStrict() {
 
         routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfReInsertBasedOnCriteriaTasks(
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfReInsertBasedOnCriteriaTasks(
                 allTasks, syncedTasksStartTime, shift, ITask::isStrict);
         assertAllStrict(result);
 
@@ -108,7 +108,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
         tasks.add(allTasks.get(2));
         tasks.add(allTasks.get(0));
 
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfReInsertBasedOnCriteriaTasks(
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfReInsertBasedOnCriteriaTasks(
                 tasks, syncedTasksStartTime, shift, ITask::isSynced);
 
         assertTwoTasksSynced(result);
@@ -151,7 +151,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
     }
 
 
-    private void assertStrictTwoTasks(RouteEvaluatorResult result) {
+    private void assertStrictTwoTasks(RouteEvaluatorResult<ITask> result) {
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
 
         Assert.assertEquals("Start time visit 1 should be: ", 20, result.getVisitSolution().get(0).getStartTime());
@@ -164,7 +164,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
     }
 
 
-    private void assertAllStrict(RouteEvaluatorResult result) {
+    private void assertAllStrict(RouteEvaluatorResult<ITask> result) {
         Assert.assertEquals("Number of visits should be: ", 8, result.getVisitSolution().size());
 
         Assert.assertEquals("Start time visit 1 should be: ", 20, result.getVisitSolution().get(0).getStartTime());
@@ -190,7 +190,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
     }
 
 
-    private void assertAllStrictAndSynced(RouteEvaluatorResult result) {
+    private void assertAllStrictAndSynced(RouteEvaluatorResult<ITask> result) {
         Assert.assertEquals("Number of visits should be: ", 8, result.getVisitSolution().size());
 
         Assert.assertEquals("Start time visit 1 should be: ", 20, result.getVisitSolution().get(0).getStartTime());
@@ -219,7 +219,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
     }
 
 
-    private void assertTwoTasksSynced(RouteEvaluatorResult result) {
+    private void assertTwoTasksSynced(RouteEvaluatorResult<ITask> result) {
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
 
         Assert.assertEquals("Start time visit 1 should be: ", 20, result.getVisitSolution().get(0).getStartTime());
@@ -232,7 +232,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
     }
 
 
-    private void assertAllTasks(RouteEvaluatorResult result) {
+    private void assertAllTasks(RouteEvaluatorResult<ITask> result) {
         Assert.assertEquals("Number of visits should be: ", 8, result.getVisitSolution().size());
 
         Assert.assertEquals("Start time should be: ", 20, result.getVisitSolution().get(0).getStartTime());
@@ -260,7 +260,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
     }
 
 
-    private void assertStrictAndSynced(RouteEvaluatorResult result) {
+    private void assertStrictAndSynced(RouteEvaluatorResult<ITask> result) {
         Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
         Assert.assertEquals("Start time visit 1 should be: ", 20, result.getVisitSolution().get(0).getStartTime());
         Assert.assertEquals("Start time visit 2 should be: ", 26, result.getVisitSolution().get(1).getStartTime());
