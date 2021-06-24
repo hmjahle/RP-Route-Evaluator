@@ -152,7 +152,7 @@ public class RemoveTasksFromRouteTest extends JUnitTestAbstract {
 
 
     private ITravelTimeMatrix createTravelTimeMatrix(ILocation office, List<ITask> tasks) {
-        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
+        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix(tasks);
         for (ITask task : tasks) {
             travelTimeMatrix.addUndirectedConnection(office, task.getLocation(), 2);
         }

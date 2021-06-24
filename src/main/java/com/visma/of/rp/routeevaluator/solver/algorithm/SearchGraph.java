@@ -125,9 +125,7 @@ public class SearchGraph {
         this.travelTimeMatrix = new Integer[n][n];
         for (ILocation locationA : travelTimeMatrixInput.getLocations()) {
             for (ILocation locationB : travelTimeMatrixInput.getLocations()) {
-                if (locationA != locationB) {
-                    addTravelTime(travelTimeMatrixInput, locationA, locationB);
-                }
+                addTravelTime(travelTimeMatrixInput, locationA, locationB);
             }
         }
     }

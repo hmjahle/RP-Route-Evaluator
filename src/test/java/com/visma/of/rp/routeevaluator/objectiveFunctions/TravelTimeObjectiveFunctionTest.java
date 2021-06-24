@@ -114,7 +114,7 @@ public class TravelTimeObjectiveFunctionTest extends JUnitTestAbstract {
     }
 
     private TestTravelTimeMatrix createTravelTimeMatrix(ILocation office, Collection<ITask> tasks) {
-        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
+        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix(tasks);
         for (ITask taskA : tasks) {
             travelTimeMatrix.addUndirectedConnection(office, taskA.getLocation(), 2);
             for (ITask taskB : tasks)

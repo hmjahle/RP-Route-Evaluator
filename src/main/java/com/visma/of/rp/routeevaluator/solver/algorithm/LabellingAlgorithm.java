@@ -211,7 +211,7 @@ public class LabellingAlgorithm {
         if (thisLabel.getCurrentLocationId() == -1)
             return 0;
         if (newLocation == thisLabel.getCurrentLocationId()) {
-            return 0;
+            return graph.getTravelTime(thisLabel.getCurrentLocationId(), newLocation);
         }
         return graph.getTravelTime(thisLabel.getCurrentLocationId(), nextNode.getLocationId());
     }

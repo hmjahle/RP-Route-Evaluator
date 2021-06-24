@@ -55,18 +55,13 @@ public class LabellingAlgorithmDominanceTest extends JUnitTestAbstract {
         travelTimeMatrix.addDirectedConnection(allTasks.get(0).getLocation(), office, 1);
         travelTimeMatrix.addDirectedConnection(allTasks.get(1).getLocation(), office, 5);
 
-
         RouteEvaluator routeEvaluator = createRouteEvaluatorTravelTime(allTasks);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
-        print(result);
-        printRoute(result.getRoute());
-
 
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "2", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "1", result.getVisitSolution().get(1).getTask().getId());
         Assert.assertEquals("Objective value should be.", 8, result.getObjectiveValue(), DELTA);
-
     }
 
     /**
@@ -80,11 +75,6 @@ public class LabellingAlgorithmDominanceTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(2));
         tasks.add(allTasks.get(0));
 
-        List<ITask> tasks2 = new ArrayList<>();
-        tasks2.add(allTasks.get(1));
-        tasks2.add(allTasks.get(0));
-        tasks2.add(allTasks.get(2));
-
         travelTimeMatrix.addDirectedConnection(office, allTasks.get(0).getLocation(), 2);
         travelTimeMatrix.addDirectedConnection(office, allTasks.get(1).getLocation(), 5);
         travelTimeMatrix.addDirectedConnection(allTasks.get(0).getLocation(), office, 1);
@@ -94,14 +84,8 @@ public class LabellingAlgorithmDominanceTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(allTasks.get(2).getLocation(), allTasks.get(0).getLocation(), 3);
         travelTimeMatrix.addUndirectedConnection(allTasks.get(1).getLocation(), allTasks.get(2).getLocation(), 1);
 
-
         RouteEvaluator routeEvaluator = createRouteEvaluatorTravelTime(allTasks);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
-        print(result);
-        printRoute(result.getRoute());
-        RouteEvaluatorResult resultA = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks2, shift);
-        print(resultA);
-        printRoute(resultA.getRoute());
 
         Assert.assertEquals("Number of visits should be: ", 3, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "3", result.getVisitSolution().get(0).getTask().getId());
@@ -123,9 +107,6 @@ public class LabellingAlgorithmDominanceTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(3));
         tasks.add(allTasks.get(4));
         tasks.add(allTasks.get(0));
-
-        List<ITask> tasks2 = new ArrayList<>();
-        tasks2.add(allTasks.get(1));
 
         List<ITask> tasksOpt = new ArrayList<>();
         tasksOpt.add(allTasks.get(2));
@@ -156,11 +137,6 @@ public class LabellingAlgorithmDominanceTest extends JUnitTestAbstract {
 
         RouteEvaluator routeEvaluator = createRouteEvaluatorTravelTime(allTasks);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
-        print(result);
-        printRoute(result.getRoute());
-        RouteEvaluatorResult resultA = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasksOpt, shift);
-        print(resultA);
-        printRoute(resultA.getRoute());
 
         Assert.assertEquals("Number of visits should be: ", 5, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "3", result.getVisitSolution().get(0).getTask().getId());
@@ -187,12 +163,6 @@ public class LabellingAlgorithmDominanceTest extends JUnitTestAbstract {
         tasks2.add(allTasks.get(1));
         tasks2.add(allTasks.get(3));
 
-        List<ITask> tasksOpt = new ArrayList<>();
-        tasksOpt.add(allTasks.get(2));
-        tasksOpt.add(allTasks.get(1));
-        tasksOpt.add(allTasks.get(3));
-        tasksOpt.add(allTasks.get(0));
-
         travelTimeMatrix.addDirectedConnection(office, allTasks.get(0).getLocation(), 2);
         travelTimeMatrix.addDirectedConnection(office, allTasks.get(1).getLocation(), 5);
         travelTimeMatrix.addDirectedConnection(allTasks.get(0).getLocation(), office, 1);
@@ -209,11 +179,6 @@ public class LabellingAlgorithmDominanceTest extends JUnitTestAbstract {
 
         RouteEvaluator routeEvaluator = createRouteEvaluatorTravelTime(allTasks);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTasks(tasks, tasks2, shift);
-        print(result);
-        printRoute(result.getRoute());
-        RouteEvaluatorResult resultA = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasksOpt, shift);
-        print(resultA);
-        printRoute(resultA.getRoute());
 
         Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "3", result.getVisitSolution().get(0).getTask().getId());
