@@ -68,12 +68,9 @@ public class StartAtTaskTest extends JUnitTestAbstract {
 
         routeEvaluator.useOpenStartRoutes();
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
-        print(result);
-        printRoute(result.getRoute());
+
         Assert.assertEquals("Number of visits should be: ", 1, result.getVisitSolution().size());
         Assert.assertEquals("First task should be visited at time 0", 0, result.getVisitSolution().get(0).getStartTime());
-
-
     }
 
     @Test
@@ -128,8 +125,6 @@ public class StartAtTaskTest extends JUnitTestAbstract {
 
         RouteEvaluator routeEvaluator = createRouteEvaluatorTravelTime(allTasks);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
-        print(result);
-        printRoute(result.getRoute());
 
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
@@ -137,8 +132,6 @@ public class StartAtTaskTest extends JUnitTestAbstract {
 
         routeEvaluator.useOpenStartRoutes();
         result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
-        print(result);
-        printRoute(result.getRoute());
 
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "2", result.getVisitSolution().get(0).getTask().getId());
@@ -180,8 +173,7 @@ public class StartAtTaskTest extends JUnitTestAbstract {
         routeEvaluator.useOpenStartRoutes();
 
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(allTasks.subList(0, 1), allTasks.get(1), shift);
-        print(result);
-        printRoute(result.getRoute());
+
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "5", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "1", result.getVisitSolution().get(1).getTask().getId());
@@ -198,7 +190,7 @@ public class StartAtTaskTest extends JUnitTestAbstract {
 
 
     private TestTravelTimeMatrix createTravelTimeMatrix(ILocation office, Collection<ITask> tasks) {
-        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
+        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix(tasks);
         for (ITask taskA : tasks) {
             travelTimeMatrix.addUndirectedConnection(office, taskA.getLocation(), 2);
             for (ITask taskB : tasks)

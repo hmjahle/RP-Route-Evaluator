@@ -79,7 +79,7 @@ public class EvaluateSharedLocationsTest extends JUnitTestAbstract {
     }
 
     private ITravelTimeMatrix createTravelTimeMatrix(ILocation origin, ILocation destination, Collection<ILocation> locations) {
-        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
+        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix(locations,origin);
         travelTimeMatrix.addUndirectedConnection(origin, destination, 50);
 
         for (ILocation locationA : locations) {

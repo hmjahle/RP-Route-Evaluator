@@ -65,6 +65,7 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(createStandardTask(10, 90, 100));
         travelTimeMatrix.addUndirectedConnection(office, tasks.get(0).getLocation(), 5);
+        travelTimeMatrix.addUndirectedConnection(tasks.get(0).getLocation(), tasks.get(0).getLocation(), 0);
         RouteEvaluator routeEvaluator = createRouteEvaluatorOverTime(tasks);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
         Assert.assertEquals("Should have overtime. ", 5, result.getObjectiveValue(), 1E-6);
@@ -132,14 +133,14 @@ public class EndAtTaskTest extends JUnitTestAbstract {
 
         RouteEvaluator routeEvaluator = createRouteEvaluatorTravelTime(allTasks);
         RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
-        print(result);
+
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "2", result.getVisitSolution().get(1).getTask().getId());
 
         routeEvaluator.useOpenEndedRoutes();
         result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
-        print(result);
+
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "2", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "1", result.getVisitSolution().get(1).getTask().getId());
@@ -183,12 +184,14 @@ public class EndAtTaskTest extends JUnitTestAbstract {
     }
 
     private TestTravelTimeMatrix createTravelTimeMatrix(ILocation office, Collection<ITask> tasks) {
-        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
+        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix(tasks);
         for (ITask taskA : tasks) {
             travelTimeMatrix.addUndirectedConnection(office, taskA.getLocation(), 2);
             for (ITask taskB : tasks)
                 if (taskA != taskB)
                     travelTimeMatrix.addUndirectedConnection(taskA.getLocation(), taskB.getLocation(), 1);
+
+
         }
         return travelTimeMatrix;
     }

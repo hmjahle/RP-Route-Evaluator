@@ -1,6 +1,7 @@
 package testInterfaceImplementationClasses;
 
 import com.visma.of.rp.routeevaluator.interfaces.ILocation;
+import com.visma.of.rp.routeevaluator.interfaces.ITask;
 import com.visma.of.rp.routeevaluator.interfaces.ITravelTimeMatrix;
 
 import java.util.Collection;
@@ -16,6 +17,20 @@ public class TestTravelTimeMatrix implements ITravelTimeMatrix {
 
     public TestTravelTimeMatrix() {
         this.travelTimes = new HashMap<>();
+    }
+
+    public TestTravelTimeMatrix(Collection<ITask> tasks) {
+        this.travelTimes = new HashMap<>();
+        for (ITask task : tasks)
+            addUndirectedConnection(task.getLocation(), task.getLocation(), 0);
+    }
+
+    public TestTravelTimeMatrix(Collection<ILocation> locations, ILocation office) {
+        this.travelTimes = new HashMap<>();
+        for (ILocation location : locations)
+            addUndirectedConnection(location, location, 0);
+        addUndirectedConnection(office, office, 0);
+
     }
 
     @Override
@@ -39,8 +54,16 @@ public class TestTravelTimeMatrix implements ITravelTimeMatrix {
     }
 
     public void addDirectedConnection(ILocation locationA, ILocation locationB, int distance) {
-        travelTimes.putIfAbsent(locationA, new HashMap<>());
+        checkIfLocationExists(locationA);
+        checkIfLocationExists(locationB);
         travelTimes.get(locationA).put(locationB, distance);
+    }
+
+    private void checkIfLocationExists(ILocation location) {
+        if (!travelTimes.containsKey(location)) {
+            travelTimes.put(location, new HashMap<>());
+            travelTimes.get(location).put(location, 0);
+        }
     }
 
     public void removeDirectedConnection(ILocation locationA, ILocation locationB) {

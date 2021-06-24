@@ -151,7 +151,7 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
     }
     
     private ITravelTimeMatrix createTravelTimeMatrix(ILocation origin, ILocation destination, Collection<ITask> tasks) {
-        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
+        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix(tasks);
         travelTimeMatrix.addUndirectedConnection(origin, destination, 50);
 
         for (ITask taskA : tasks) {

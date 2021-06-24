@@ -146,8 +146,8 @@ public class NoPhysicalAppearanceTravelTimesTest extends JUnitTestAbstract {
     }
 
     private TestTravelTimeMatrix createTravelTimeMatrix(List<ILocation> locations, ILocation office) {
-        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
-        for(ILocation location : locations)
+        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix(locations, office);
+        for (ILocation location : locations)
             travelTimeMatrix.addUndirectedConnection(office, location, 1000);
         travelTimeMatrix.addDirectedConnection(office, locations.get(0), getTime(0, 6, 28));
         travelTimeMatrix.addDirectedConnection(locations.get(0), locations.get(1), getTime(0, 2, 23));

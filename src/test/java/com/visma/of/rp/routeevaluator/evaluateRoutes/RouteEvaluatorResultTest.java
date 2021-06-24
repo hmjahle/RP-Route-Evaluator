@@ -1,5 +1,6 @@
 package com.visma.of.rp.routeevaluator.evaluateRoutes;
 
+import com.visma.of.rp.routeevaluator.evaluation.constraints.OvertimeConstraint;
 import com.visma.of.rp.routeevaluator.interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.interfaces.IShift;
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
@@ -40,6 +41,20 @@ public class RouteEvaluatorResultTest extends JUnitTestAbstract {
 
     @Test
     public void normalTasks() {
+        shift = new TestShift(0, 100);
+        routeEvaluator.addConstraint(new OvertimeConstraint());
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTasksStartTime, shift);
+        List<ITask> routeTasks = result.getRoute().extractEmployeeTasks();
+        Assert.assertEquals("Should be 8 tasks. ", 8, routeTasks.size());
+        for (int i = 0; i < allTasks.size(); i++)
+            Assert.assertEquals("Task should be equal: ",
+                    allTasks.get(i).getId(),
+                    routeTasks.get(i).getId());
+    }
+
+
+    @Test
+    public void arrivalAtDestination() {
         List<ITask> routeTasks = result.getRoute().extractEmployeeTasks();
         Assert.assertEquals("Should be 8 tasks. ", 8, routeTasks.size());
         for (int i = 0; i < allTasks.size(); i++)
@@ -113,7 +128,7 @@ public class RouteEvaluatorResultTest extends JUnitTestAbstract {
     }
 
     private ITravelTimeMatrix createTravelTimeMatrix(ILocation office, Collection<ITask> tasks) {
-        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
+        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix(tasks);
         for (ITask taskA : tasks) {
             travelTimeMatrix.addUndirectedConnection(office, taskA.getLocation(), 2);
             for (ITask taskB : tasks)
