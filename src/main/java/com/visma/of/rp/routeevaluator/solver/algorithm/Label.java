@@ -11,6 +11,7 @@ public class Label implements Comparable<Label> {
     private int travelTime;
     private int canLeaveLocationAtTime;
     private boolean closed;
+    private int shiftStartTime;
 
     public void setCanLeaveLocationAtTime(int canLeaveLocationAtTime) {
         this.canLeaveLocationAtTime = canLeaveLocationAtTime;
@@ -27,6 +28,20 @@ public class Label implements Comparable<Label> {
         this.canLeaveLocationAtTime = currentTime;
         this.travelTime = travelTime;
         this.closed = false;
+        setShiftStartTime();
+    }
+
+    public void setShiftStartTime(){
+        if (previous == null){
+            shiftStartTime = currentTime;
+        }
+        else{
+            shiftStartTime = previous.getShiftStartTime();
+        }
+    }
+
+    public int getShiftStartTime(){
+        return shiftStartTime;
     }
 
     public Label getPrevious() {

@@ -191,8 +191,9 @@ public class LabellingAlgorithm<T extends ITask> {
                                                        int travelTime, boolean nextNodeIsSynced, int newLocation) {
         int syncedTaskLatestStartTime = nextNodeIsSynced ? syncedNodesStartTime[nextNode.getNodeId()] : -1;
         int earliestOfficeReturn = calcEarliestPossibleReturnToOfficeTime(nextNode, newLocation, startOfServiceNextTask);
+        int shiftStartTime = thisLabel.getShiftStartTime();
         ConstraintInfo constraintInfo = new ConstraintInfo(employeeWorkShift, earliestOfficeReturn, nextNode.getTask(),
-                startOfServiceNextTask, syncedTaskLatestStartTime);
+                startOfServiceNextTask, syncedTaskLatestStartTime, shiftStartTime);
         if (!constraints.isFeasible(constraintInfo))
             return null;
         return extend(thisLabel.getObjective(), nextNode, travelTime, startOfServiceNextTask, syncedTaskLatestStartTime);

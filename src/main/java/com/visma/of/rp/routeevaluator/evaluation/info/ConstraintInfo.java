@@ -11,13 +11,15 @@ public class ConstraintInfo extends RouteEvaluationInfoAbstract {
     short shiftId;
     long earliestOfficeReturn;
     long startOfServiceNextTask;
+    long shiftStartTime;
 
-    public ConstraintInfo(IShift employeeWorkShift, long earliestOfficeReturn, ITask task, long startOfServiceNextTask, long syncedTaskLatestStartTime) {
+    public ConstraintInfo(IShift employeeWorkShift, long earliestOfficeReturn, ITask task, long startOfServiceNextTask, long syncedTaskLatestStartTime, long shiftStartTime) {
         super(task, employeeWorkShift.getEndTime(), syncedTaskLatestStartTime);
         this.shiftId = employeeWorkShift.getId();
         this.earliestOfficeReturn = earliestOfficeReturn;
         this.startOfServiceNextTask = startOfServiceNextTask;
         this.syncedTaskStartTime = syncedTaskLatestStartTime;
+        this.shiftStartTime = shiftStartTime;
     }
 
     public long getEarliestOfficeReturn() {
@@ -30,5 +32,9 @@ public class ConstraintInfo extends RouteEvaluationInfoAbstract {
 
     public short getShiftId() {
         return shiftId;
+    }
+
+    public long getShiftStartTime() {
+        return shiftStartTime;
     }
 }
