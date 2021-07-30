@@ -41,6 +41,7 @@ public class LabelExtendAlongTest extends JUnitTestAbstract {
         Assert.assertEquals("Position should be node: ", "2", newLabel.getNode().toString());
         Assert.assertEquals("Current time should be: ", 2, newLabel.getCurrentTime());
         Assert.assertEquals("Cost should be: ", 0.0, newLabel.getObjective().getObjectiveValue(), 1E-6);
+        Assert.assertEquals("Shift start time should be: ", 0, newLabel.getShiftStartTime());
     }
 
     private SearchGraph buildGraph(ILocation office, Collection<ITask> tasks, ITravelTimeMatrix distanceMatrix) {
