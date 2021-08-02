@@ -30,13 +30,14 @@ public class Label implements Comparable<Label> {
         this.closed = false;
         setShiftStartTime();
     }
-
     public void setShiftStartTime(){
-        if (previous == null){
-            shiftStartTime = currentTime;
-        }
-        else{
-            shiftStartTime = previous.getShiftStartTime();
+        if (previous != null){
+            if (previous.getPrevious() == null){
+                shiftStartTime = currentTime - travelTime;
+            }
+            else{
+                shiftStartTime = previous.getShiftStartTime();
+            }
         }
     }
 
