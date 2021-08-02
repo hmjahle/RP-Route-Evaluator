@@ -24,18 +24,27 @@ public class LabelExtendAlongTest extends JUnitTestAbstract {
     public void singleTask() {
         ILocation office = createOffice();
         ITask task = createStandardTask(1, 2, 5);
+        ITask task2 = createStandardTask(1, 2, 5);
 
         Collection<ITask> tasks = new ArrayList<>();
         tasks.add(task);
+        tasks.add(task2);
 
         TestTravelTimeMatrix distanceMatrix = new TestTravelTimeMatrix();
         distanceMatrix.addUndirectedConnection(office, task.getLocation(), 1);
+        distanceMatrix.addUndirectedConnection(office, task2.getLocation(), 1);
+        distanceMatrix.addUndirectedConnection(task.getLocation(), task2.getLocation(), 1);
         SearchGraph graph = buildGraph(office, tasks, distanceMatrix);
 
         Label label = createStartLabel(graph);
         LabellingAlgorithm labellingAlgorithm = new LabellingAlgorithm(graph, new ObjectiveFunctionsIntraRouteHandler(), new ConstraintsIntraRouteHandler());
         labellingAlgorithm.setEmployeeWorkShift(new TestShift(0, 100));
         Label newLabel = labellingAlgorithm.extendLabelToNextNode(label, new ExtendToInfo(graph.getNode(task), 1));
+        Label newLabel2 = labellingAlgorithm.extendLabelToNextNode(label, new ExtendToInfo(graph.getNode(task2), 1));
+        ExtendToInfo extendToInfo = new ExtendToInfo(newLabel.getNode(), 1);
+        ExtendToInfo extendToInfo2 = new ExtendToInfo(newLabel2.getNode(), 1);
+        int shiftStartTime1 = labellingAlgorithm.extendLabelToNextNode(label, extendToInfo).getShiftStartTime();
+        int shiftStartTime2 = labellingAlgorithm.extendLabelToNextNode(label, extendToInfo2).getShiftStartTime();
 
         Assert.assertNotNull(newLabel);
         Assert.assertEquals("Position should be node: ", "2", newLabel.getNode().toString());
@@ -44,6 +53,8 @@ public class LabelExtendAlongTest extends JUnitTestAbstract {
         Assert.assertEquals("Shift start time should be: ", 1, newLabel.getShiftStartTime());
         Assert.assertNotNull(newLabel.getPrevious());
         Assert.assertNull(newLabel.getPrevious().getPrevious());
+        Assert.assertEquals("Shift start time should be 1, since travel time is 1 and start time window is 2.", 1, shiftStartTime1);
+        Assert.assertEquals("Shift start time should be the same.", shiftStartTime1, shiftStartTime2);
     }
 
     private SearchGraph buildGraph(ILocation office, Collection<ITask> tasks, ITravelTimeMatrix distanceMatrix) {
