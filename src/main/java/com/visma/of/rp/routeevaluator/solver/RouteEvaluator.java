@@ -482,8 +482,11 @@ public class RouteEvaluator<T extends ITask> {
         return objectiveFunctions.extractIObjectiveFunctionIntraRoute();
     }
 
-    public List<IConstraintIntraRoute> getIConstraintIntraRoute() {
-        return constraints.getConstraints();
+    public Collection<IConstraintIntraRoute> getActiveConstraintIntraRoute() {
+        return constraints.getActiveConstraints();
     }
 
+    public Collection<IConstraintIntraRoute> getInactiveConstraintIntraRoute() {
+        return constraints.getInactiveConstraints();
+    }
 }

@@ -1,6 +1,6 @@
 package com.visma.of.rp.routeevaluator.constraintFunctions;
 
-import com.visma.of.rp.routeevaluator.evaluation.constraints.StrictTimeWindowConstraint;
+import com.visma.of.rp.routeevaluator.evaluation.constraints.TimeWindowLateArrivalConstraint;
 import com.visma.of.rp.routeevaluator.interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.interfaces.IShift;
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
@@ -20,9 +20,9 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Tests if the strict time window constraint is implemented correctly.
+ * Tests if the max late arrival time window constraint is implemented correctly.
  */
-public class StrictTimeWindowTaskConstraintTest extends JUnitTestAbstract {
+public class TimeWindowLateArrivalConstraintTest extends JUnitTestAbstract {
 
     List<ILocation> locations;
     List<ITask> allTasks;
@@ -37,45 +37,60 @@ public class StrictTimeWindowTaskConstraintTest extends JUnitTestAbstract {
         allTasks = createTasks(locations);
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
         shift = new TestShift(0, 150);
+
     }
 
     @Test
     public void oneStrictTaskFeasible() {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(allTasks.get(0));
-        RouteEvaluatorResult<ITask> result = evaluateRoute(tasks);
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
+        routeEvaluator.addConstraint(new TimeWindowLateArrivalConstraint(0));
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
         Assert.assertNotNull("Must be feasible. ", result);
     }
 
     @Test
-    public void twoStrictTaskInfeasible() {
-        List<ITask> tasks = new ArrayList<>();
-        tasks.add(allTasks.get(2));
-        tasks.add(allTasks.get(0));
-        RouteEvaluatorResult<ITask> result = evaluateRoute(tasks);
+    public void twoTaskInfeasible() {
+        RouteEvaluatorResult<ITask> result = findRoute(34);
         Assert.assertNull("Must be infeasible. ", result);
     }
 
     @Test
-    public void fiveMixedTasksFeasible() {
-        RouteEvaluatorResult<ITask> result = evaluateRoute(allTasks);
+    public void twoTasksFeasible() {
+        RouteEvaluatorResult<ITask> result = findRoute(35);
+        Assert.assertNotNull("Must be feasible. ", result);
+    }
+
+    @Test
+    public void fiveMixedTasksFeasibleNoSlack() {
+        RouteEvaluatorResult<ITask> result = getRoute(10, 0);
+        printRoute(result.getRoute());
+        Assert.assertNotNull("Must be feasible. ", result);
+    }
+
+    @Test
+    public void fiveMixedTasksFeasibleWithDelayAndSlack() {
+        RouteEvaluatorResult<ITask> result = getRoute(20, 10);
         Assert.assertNotNull("Must be feasible. ", result);
     }
 
     @Test
     public void fiveMixedTasksInfeasible() {
-        travelTimeMatrix.addUndirectedConnection(locations.get(1), locations.get(2), 6);
-        RouteEvaluatorResult<ITask> result = evaluateRoute(allTasks);
+        RouteEvaluatorResult<ITask> result = getRoute(20, 5);
         Assert.assertNull("Must be infeasible. ", result);
     }
 
     @Test
-    public void nonStrictTasksBreakTimeWindowsFeasible() {
+    public void feasibleWithDefaultValue() {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(allTasks.get(4));
         tasks.add(allTasks.get(1));
         tasks.add(allTasks.get(3));
-        RouteEvaluatorResult<ITask> result = evaluateRoute(tasks);
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
+        routeEvaluator.addConstraint(new TimeWindowLateArrivalConstraint());
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        printRoute(result.getRoute());
         Assert.assertNotNull("Must be feasible. ", result);
     }
 
@@ -116,9 +131,19 @@ public class StrictTimeWindowTaskConstraintTest extends JUnitTestAbstract {
         return locations;
     }
 
-    private RouteEvaluatorResult<ITask> evaluateRoute(List<ITask> tasks) {
-        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<ITask>(travelTimeMatrix, tasks, office);
-        routeEvaluator.addConstraint(new StrictTimeWindowConstraint());
+    private RouteEvaluatorResult<ITask> findRoute(int maxLateArrival) {
+        List<ITask> tasks = new ArrayList<>();
+        tasks.add(allTasks.get(1));
+        tasks.add(allTasks.get(0));
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
+        routeEvaluator.addConstraint(new TimeWindowLateArrivalConstraint(maxLateArrival));
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+    }
+
+    private RouteEvaluatorResult<ITask> getRoute(int distanceFromOffice, int maximumLateArrival) {
+        travelTimeMatrix.addUndirectedConnection(office, locations.get(0), distanceFromOffice);
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
+        routeEvaluator.addConstraint(new TimeWindowLateArrivalConstraint(maximumLateArrival));
+        return routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
     }
 }

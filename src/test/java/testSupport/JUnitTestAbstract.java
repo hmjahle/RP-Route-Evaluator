@@ -75,7 +75,7 @@ public abstract class JUnitTestAbstract {
         return visitTask1.getTravelTime();
     }
 
-    protected void print(RouteEvaluatorResult result) {
+    protected void print(RouteEvaluatorResult<ITask> result) {
         List<ITask> tasks = result.getRoute().extractEmployeeTasks();
         double objectiveValue = result.getObjectiveValue();
         System.out.println("Objective: " + objectiveValue);
