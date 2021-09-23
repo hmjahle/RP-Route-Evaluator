@@ -73,7 +73,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
         tasks.add(allTasks.get(3));
         tasks.add(allTasks.get(1));
 
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfReInsertBasedOnCriteriaTasks(
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfReInsertBasedOnCriteriaTasks(
                 tasks, syncedTasksStartTime, shift, i -> i.isSynced() || i.isStrict());
         assertStrictAndSynced(result);
 
@@ -127,7 +127,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
         tasks.add(allTasks.get(2));
         tasks.add(allTasks.get(1));
 
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfReInsertBasedOnCriteriaTasks(
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfReInsertBasedOnCriteriaTasks(
                 tasks, syncedTasksStartTime, shift, ITask::isStrict);
         assertStrictTwoTasks(result);
 
@@ -141,7 +141,7 @@ public class EvaluateByOrderOfTaskReInsertBasedOnCriteriaTest extends JUnitTestA
     public void allTasksCriteriaStrictAndSynced() {
         routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
 
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfReInsertBasedOnCriteriaTasks(
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfReInsertBasedOnCriteriaTasks(
                 allTasks, syncedTasksStartTime, shift, i -> i.isSynced() || i.isStrict());
         assertAllStrictAndSynced(result);
 

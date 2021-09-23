@@ -36,7 +36,7 @@ public class IObjectiveTest extends JUnitTestAbstract {
     public void init() {
         office = createOffice();
         locations = createLocations();
-        allTasks = createTasks(locations);
+        allTasks = createTasksTimeWindows(locations);
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
         shift = new TestShift(0, 150);
     }
@@ -55,11 +55,11 @@ public class IObjectiveTest extends JUnitTestAbstract {
         syncedTaskStartTimes.put(allTasks.get(0), 10);
         syncedTaskStartTimes.put(newTask, 35);
 
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
-        RouteEvaluatorResult result = getRouteEvaluatorResult(tasks, syncedTaskStartTimes, routeEvaluator);
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
+        RouteEvaluatorResult<ITask> result = getRouteEvaluatorResult(tasks, syncedTaskStartTimes, routeEvaluator);
         Assert.assertEquals("Unweighted objective value: ", 85, result.getObjectiveValue(), 1E-6);
 
-        routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
+        routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         addWeightedObjectives(routeEvaluator, 0);
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
         Assert.assertEquals("Weighted objective value: ", 3003025, result.getObjectiveValue(), 1E-6);
@@ -76,11 +76,11 @@ public class IObjectiveTest extends JUnitTestAbstract {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(allTasks.get(1));
         tasks.add(allTasks.get(3));
-        RouteEvaluator routeEvaluator = createRouteEvaluator(tasks);
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        RouteEvaluator<ITask> routeEvaluator = createRouteEvaluator(tasks);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
         Assert.assertEquals("Unweighted objective value: ", 25, result.getObjectiveValue(), 1E-6);
 
-        routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
+        routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         addWeightedObjectives(routeEvaluator, 0);
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
         Assert.assertEquals("Weighted objective value: ", 2500, result.getObjectiveValue(), 1E-6);
@@ -101,11 +101,11 @@ public class IObjectiveTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(allTasks.get(0).getLocation(), allTasks.get(2).getLocation(), 31);
 
 
-        RouteEvaluatorResult result = getRouteEvaluatorResult(tasks, syncedTaskStartTimes);
-        RouteEvaluator routeEvaluator;
+        RouteEvaluatorResult<ITask> result = getRouteEvaluatorResult(tasks, syncedTaskStartTimes);
+        RouteEvaluator<ITask> routeEvaluator;
         Assert.assertEquals("Unweighted objective value: ", 53, result.getObjectiveValue(), 1E-6);
 
-        routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
+        routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         addWeightedObjectives(routeEvaluator, 0);
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
         Assert.assertEquals("Weighted objective value: ", 105101, result.getObjectiveValue(), 1E-6);
@@ -126,12 +126,12 @@ public class IObjectiveTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(allTasks.get(0).getLocation(), allTasks.get(1).getLocation(), 7);
         travelTimeMatrix.addUndirectedConnection(allTasks.get(2).getLocation(), allTasks.get(3).getLocation(), 24);
 
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         addObjectives(routeEvaluator, 1);
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
         Assert.assertEquals("Unweighted objective value: ", 84, result.getObjectiveValue(), 1E-6);
 
-        routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
+        routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         addWeightedObjectives(routeEvaluator, 1);
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
         Assert.assertEquals("Weighted objective value: ", 1106607, result.getObjectiveValue(), 1E-6);
@@ -144,7 +144,7 @@ public class IObjectiveTest extends JUnitTestAbstract {
     }
 
 
-    private RouteEvaluatorResult getRouteEvaluatorResult(List<ITask> tasks, Map<ITask, Integer> syncedTaskStartTimes, RouteEvaluator routeEvaluator) {
+    private RouteEvaluatorResult<ITask> getRouteEvaluatorResult(List<ITask> tasks, Map<ITask, Integer> syncedTaskStartTimes, RouteEvaluator<ITask> routeEvaluator) {
         routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction());
         routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
         routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
@@ -152,42 +152,42 @@ public class IObjectiveTest extends JUnitTestAbstract {
     }
 
 
-    private RouteEvaluatorResult getRouteEvaluatorResult(List<ITask> tasks, Map<ITask, Integer> syncedTaskStartTimes) {
-        RouteEvaluator routeEvaluator = createRouteEvaluator(tasks);
+    private RouteEvaluatorResult<ITask> getRouteEvaluatorResult(List<ITask> tasks, Map<ITask, Integer> syncedTaskStartTimes) {
+        RouteEvaluator<ITask> routeEvaluator = createRouteEvaluator(tasks);
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
     }
 
-    private RouteEvaluator createRouteEvaluator(List<ITask> tasks) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
+    private RouteEvaluator<ITask> createRouteEvaluator(List<ITask> tasks) {
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         addObjectives(routeEvaluator, 0);
         return routeEvaluator;
     }
 
-    private WeightedObjectiveWithValues evaluateRouteStoreObjectiveValues(RouteEvaluator routeEvaluator, List<ITask> tasks,
+    private WeightedObjectiveWithValues evaluateRouteStoreObjectiveValues(RouteEvaluator<ITask> routeEvaluator, List<ITask> tasks,
                                                                           Map<ITask, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByOrderOfTasksWithObjectiveValues(tasks,
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByOrderOfTasksWithObjectiveValues(tasks,
                 syncedTasksStartTime, employeeWorkShift);
         return (WeightedObjectiveWithValues) result.getObjective();
     }
 
-    private WeightedObjectiveWithValues evaluateRouteStoreObjectiveValues(RouteEvaluator routeEvaluator, List<ITask> tasks,
+    private WeightedObjectiveWithValues evaluateRouteStoreObjectiveValues(RouteEvaluator<ITask> routeEvaluator, List<ITask> tasks,
                                                                           IShift employeeWorkShift) {
         return evaluateRouteStoreObjectiveValues(routeEvaluator, tasks, null, employeeWorkShift);
     }
 
-    private void addObjectives(RouteEvaluator routeEvaluator, int slack) {
+    private void addObjectives(RouteEvaluator<ITask> routeEvaluator, int slack) {
         routeEvaluator.addObjectiveIntraShift(new SyncedTaskStartTimeObjectiveFunction(slack));
         routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
         routeEvaluator.addObjectiveIntraShift(new TimeWindowObjectiveFunction());
     }
 
-    private void addWeightedObjectives(RouteEvaluator routeEvaluator, int slack) {
+    private void addWeightedObjectives(RouteEvaluator<ITask> routeEvaluator, int slack) {
         routeEvaluator.addObjectiveIntraShift("Sync", 100000, new SyncedTaskStartTimeObjectiveFunction(slack));
         routeEvaluator.addObjectiveIntraShift("TW", 100, new TravelTimeObjectiveFunction());
         routeEvaluator.addObjectiveIntraShift("TT", 1, new TimeWindowObjectiveFunction());
     }
 
-    private List<ITask> createTasks(List<ILocation> locations) {
+    protected List<ITask> createTasksTimeWindows(List<ILocation> locations) {
         TestTask task1 = new TestTask(10, 0, 20, false, true, true, 0, 0, locations.get(0), "1");
         TestTask task2 = new TestTask(10, 20, 40, false, false, true, 0, 0, locations.get(1), "2");
         TestTask task3 = new TestTask(10, 40, 60, false, true, true, 0, 0, locations.get(2), "3");
@@ -205,18 +205,7 @@ public class IObjectiveTest extends JUnitTestAbstract {
         return tasks;
     }
 
-    private TestTravelTimeMatrix createTravelTimeMatrix(Collection<ILocation> locations, ILocation office) {
-        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
-        for (ILocation locationA : locations) {
-            travelTimeMatrix.addUndirectedConnection(office, locationA, 10);
-            for (ILocation locationB : locations)
-                if (locationA != locationB)
-                    travelTimeMatrix.addUndirectedConnection(locationA, locationB, 5);
-        }
-        return travelTimeMatrix;
-    }
-
-    private List<ILocation> createLocations() {
+    protected List<ILocation> createLocations() {
         List<ILocation> locations = new ArrayList<>();
         locations.add(new TestLocation(false));
         locations.add(new TestLocation(false));

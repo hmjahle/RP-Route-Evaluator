@@ -18,7 +18,6 @@ import testInterfaceImplementationClasses.TestTravelTimeMatrix;
 import testSupport.JUnitTestAbstract;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 
@@ -49,7 +48,7 @@ public class TimeWindowCustomCriteriaObjectiveFunctionTest extends JUnitTestAbst
         tasks.add(task1);
         travelTimeMatrix.addUndirectedConnection(office, task1.getLocation(), 10);
 
-        RouteEvaluatorResult result = evaluateRoute(tasks, i -> !i.isDestination() && i.isStrict());
+        RouteEvaluatorResult<ITask> result = evaluateRoute(tasks, i -> !i.isDestination() && i.isStrict());
         Assert.assertEquals("ObjectiveAbstract value must be.", 1, result.getObjectiveValue(), 1E-6);
         task1.setStrict(false);
 
@@ -62,39 +61,39 @@ public class TimeWindowCustomCriteriaObjectiveFunctionTest extends JUnitTestAbst
 
     @Test
     public void allNonPhysicalAppearanceCustomCriteria() {
-        RouteEvaluatorResult result = evaluateRoute(allTasks, i -> !i.isDestination() && !i.getTask().getRequirePhysicalAppearance());
+        RouteEvaluatorResult<ITask> result = evaluateRoute(allTasks, i -> !i.isDestination() && !i.getTask().getRequirePhysicalAppearance());
         Assert.assertEquals("All has physical appearance.", 0, result.getObjectiveValue(), 1E-6);
     }
 
     @Test
     public void allPhysicalAppearanceCustomCriteria() {
-        RouteEvaluatorResult result = evaluateRoute(allTasks, i -> !i.isDestination() && i.getTask().getRequirePhysicalAppearance());
+        RouteEvaluatorResult<ITask> result = evaluateRoute(allTasks, i -> !i.isDestination() && i.getTask().getRequirePhysicalAppearance());
         Assert.assertEquals("Four require physical appearance.", 4, result.getObjectiveValue(), 1E-6);
 
     }
 
     @Test
     public void syncedTaskCustomCriteria() {
-        RouteEvaluatorResult result = evaluateRoute(allTasks, i -> !i.isDestination() && i.isSynced());
+        RouteEvaluatorResult<ITask> result = evaluateRoute(allTasks, i -> !i.isDestination() && i.isSynced());
         Assert.assertEquals("Two is strict.", 2, result.getObjectiveValue(), 1E-6);
     }
 
 
     @Test
     public void strictTaskCustomCriteria() {
-        RouteEvaluatorResult result = evaluateRoute(allTasks, i -> !i.isDestination() && i.isStrict());
+        RouteEvaluatorResult<ITask> result = evaluateRoute(allTasks, i -> !i.isDestination() && i.isStrict());
         Assert.assertEquals("Three is strict.", 3, result.getObjectiveValue(), 1E-6);
     }
 
 
     @Test
     public void durationCustomCriteria() {
-        RouteEvaluatorResult result = evaluateRoute(allTasks, x -> !x.isDestination() && x.getTask().getDuration() > 1);
+        RouteEvaluatorResult<ITask> result = evaluateRoute(allTasks, x -> !x.isDestination() && x.getTask().getDuration() > 1);
         Assert.assertEquals("Three has a duration of more than 1.", 3, result.getObjectiveValue(), 1E-6);
     }
 
 
-    private List<ITask> createTasks() {
+    protected List<ITask> createTasks() {
         TestTask task1 = new TestTask(1, 0, 10, true, false, true, 0, 0, locations.get(0), "1");
         TestTask task2 = new TestTask(5, 0, 20, true, true, true, 0, 0, locations.get(1), "2");
         TestTask task3 = new TestTask(5, 0, 30, true, false, true, 0, 0, locations.get(2), "3");
@@ -107,7 +106,7 @@ public class TimeWindowCustomCriteriaObjectiveFunctionTest extends JUnitTestAbst
         return tasks;
     }
 
-    private List<ILocation> createLocations() {
+    protected List<ILocation> createLocations() {
         List<ILocation> locations = new ArrayList<>();
         locations.add(new TestLocation(false));
         locations.add(new TestLocation(false));
@@ -116,21 +115,10 @@ public class TimeWindowCustomCriteriaObjectiveFunctionTest extends JUnitTestAbst
         return locations;
     }
 
-    private RouteEvaluatorResult evaluateRoute(List<ITask> tasks, Function<RouteEvaluationInfoAbstract, Boolean> criteriaFunction) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
+    private RouteEvaluatorResult<ITask> evaluateRoute(List<ITask> tasks, Function<RouteEvaluationInfoAbstract, Boolean> criteriaFunction) {
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         routeEvaluator.addObjectiveIntraShift(new CustomCriteriaObjectiveFunction(criteriaFunction, objectiveInfo -> Math.max(0.0, objectiveInfo.getVisitEnd() - objectiveInfo.getTask().getEndTime())));
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }
 
-
-    private TestTravelTimeMatrix createTravelTimeMatrix(Collection<ILocation> locations, ILocation office) {
-        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
-        for (ILocation locationA : locations) {
-            travelTimeMatrix.addUndirectedConnection(office, locationA, 10);
-            for (ILocation locationB : locations)
-                if (locationA != locationB)
-                    travelTimeMatrix.addUndirectedConnection(locationA, locationB, 5);
-        }
-        return travelTimeMatrix;
-    }
 }

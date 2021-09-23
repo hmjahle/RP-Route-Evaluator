@@ -35,7 +35,7 @@ public class OvertimeTaskConstraintTest extends JUnitTestAbstract {
     public void init() {
         office = createOffice();
         locations = createLocations();
-        allTasks = createTasks(locations);
+        allTasks = createTasksTimeWindows(locations);
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
         shift = new TestShift(0, 100);
     }
@@ -44,7 +44,7 @@ public class OvertimeTaskConstraintTest extends JUnitTestAbstract {
     public void oneTaskFeasible() {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(allTasks.get(0));
-        RouteEvaluatorResult result = evaluateRoute(tasks);
+        RouteEvaluatorResult<ITask> result = evaluateRoute(tasks);
         Assert.assertNotNull("Must be feasible. ", result);
         Double objective = evaluateObjective(tasks);
         Assert.assertNotNull("Must be feasible. ", objective);
@@ -55,7 +55,7 @@ public class OvertimeTaskConstraintTest extends JUnitTestAbstract {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(createStandardTask(10, 90, 100));
         travelTimeMatrix.addUndirectedConnection(office, tasks.get(0).getLocation(), 5);
-        RouteEvaluatorResult result = evaluateRoute(tasks);
+        RouteEvaluatorResult<ITask> result = evaluateRoute(tasks);
         Assert.assertNull("Must be infeasible. ", result);
         Double objective = evaluateObjective(tasks);
         Assert.assertNull("Must be infeasible. ", objective);
@@ -64,7 +64,7 @@ public class OvertimeTaskConstraintTest extends JUnitTestAbstract {
 
     @Test
     public void fiveTasksFeasible() {
-        RouteEvaluatorResult result = evaluateRoute(allTasks);
+        RouteEvaluatorResult<ITask> result = evaluateRoute(allTasks);
         Assert.assertNotNull("Must be feasible. ", result);
         Double objective = evaluateObjective(allTasks);
         Assert.assertNotNull("Must be feasible. ", objective);
@@ -81,7 +81,7 @@ public class OvertimeTaskConstraintTest extends JUnitTestAbstract {
         tasks.add(task6);
         tasks.addAll(allTasks);
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
-        RouteEvaluatorResult result = evaluateRoute(tasks);
+        RouteEvaluatorResult<ITask> result = evaluateRoute(tasks);
         Assert.assertNull("Must be infeasible. ", result);
         Double objective = evaluateObjective(tasks);
         Assert.assertNull("Must be infeasible. ", objective);
@@ -98,14 +98,14 @@ public class OvertimeTaskConstraintTest extends JUnitTestAbstract {
         tasks.add(task6);
         tasks.addAll(allTasks);
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
-        RouteEvaluatorResult result = evaluateRoute(tasks);
+        RouteEvaluatorResult<ITask> result = evaluateRoute(tasks);
 
         Assert.assertNotNull("Must be feasible. ", result);
         Double objective = evaluateObjective(tasks);
         Assert.assertNotNull("Must be feasible. ", objective);
     }
 
-    private List<ITask> createTasks(List<ILocation> locations) {
+    protected List<ITask> createTasksTimeWindows(List<ILocation> locations) {
         TestTask task1 = new TestTask(10, 0, 100, false, false, true, 0, 0, locations.get(0), "1");
         TestTask task2 = new TestTask(10, 0, 100, false, false, true, 0, 0, locations.get(1), "2");
         TestTask task3 = new TestTask(10, 0, 100, false, false, true, 0, 0, locations.get(2), "3");
@@ -121,7 +121,7 @@ public class OvertimeTaskConstraintTest extends JUnitTestAbstract {
         return tasks;
     }
 
-    private TestTravelTimeMatrix createTravelTimeMatrix(Collection<ILocation> locations, ILocation office) {
+    protected TestTravelTimeMatrix createTravelTimeMatrix(Collection<ILocation> locations, ILocation office) {
         TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
         for (ILocation locationA : locations) {
             travelTimeMatrix.addUndirectedConnection(office, locationA, 2);
@@ -132,7 +132,8 @@ public class OvertimeTaskConstraintTest extends JUnitTestAbstract {
         return travelTimeMatrix;
     }
 
-    private List<ILocation> createLocations() {
+
+    protected List<ILocation> createLocations() {
         List<ILocation> locations = new ArrayList<>();
         locations.add(new TestLocation(false));
         locations.add(new TestLocation(false));
@@ -142,14 +143,14 @@ public class OvertimeTaskConstraintTest extends JUnitTestAbstract {
         return locations;
     }
 
-    private RouteEvaluatorResult evaluateRoute(List<ITask> tasks) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
+    private RouteEvaluatorResult<ITask> evaluateRoute(List<ITask> tasks) {
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         routeEvaluator.addConstraint(new OvertimeConstraint());
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }
 
     private Double evaluateObjective(List<ITask> tasks) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         routeEvaluator.addConstraint(new OvertimeConstraint());
         return routeEvaluator.evaluateRouteObjective(tasks, shift);
     }

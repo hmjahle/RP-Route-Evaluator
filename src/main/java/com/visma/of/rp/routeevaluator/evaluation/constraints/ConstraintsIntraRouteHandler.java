@@ -43,7 +43,7 @@ public class ConstraintsIntraRouteHandler {
      * @return True if variable was activated, otherwise false.
      */
     public boolean activateConstraint(String name) {
-        IConstraintIntraRoute constraintToActivate = inactiveConstraints.getOrDefault(name, null);
+        IConstraintIntraRoute constraintToActivate = inactiveConstraints.remove(name);
         if (constraintToActivate == null)
             return false;
         activeConstraints.put(name, constraintToActivate);
@@ -57,7 +57,7 @@ public class ConstraintsIntraRouteHandler {
      * @return True if variable was deactivated, otherwise false.
      */
     public boolean deactivateConstraint(String name) {
-        IConstraintIntraRoute constraintToActivate = activeConstraints.getOrDefault(name, null);
+        IConstraintIntraRoute constraintToActivate = activeConstraints.remove(name);
         if (constraintToActivate == null)
             return false;
         inactiveConstraints.put(name, constraintToActivate);
