@@ -8,7 +8,10 @@ import com.visma.of.rp.routeevaluator.interfaces.*;
 import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.algorithm.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -168,7 +171,7 @@ public class RouteEvaluator<T extends ITask> {
      * @return A routeEvaluator result for the evaluated route.
      */
     public RouteEvaluatorResult<T> evaluateRouteByTheOrderOfTasks(List<T> tasks, Map<T, Integer> syncedTasksStartTime,
-                                                               IShift employeeWorkShift) {
+                                                                  IShift employeeWorkShift) {
         return calcRouteEvaluatorResult(new WeightedObjective(), tasks, syncedTasksStartTime, employeeWorkShift);
     }
 
@@ -185,7 +188,7 @@ public class RouteEvaluator<T extends ITask> {
      * @return A routeEvaluator result for the evaluated route.
      */
     public RouteEvaluatorResult<T> evaluateRouteByTheOrderOfReInsertBasedOnCriteriaTasks(List<T> tasks, Map<T, Integer> syncedTasksStartTime,
-                                                                                      IShift employeeWorkShift, Predicate<T> criteriaFunction) {
+                                                                                         IShift employeeWorkShift, Predicate<T> criteriaFunction) {
         List<T> fitsCriteria = tasks.stream().filter(criteriaFunction).collect(Collectors.toList());
         List<T> doesNotFitCriteria = new ArrayList<>(tasks);
         doesNotFitCriteria.removeAll(fitsCriteria);
@@ -231,8 +234,8 @@ public class RouteEvaluator<T extends ITask> {
      * @return A routeEvaluator result for the evaluated route.
      */
     public RouteEvaluatorResult<T> evaluateRouteByOrderOfTasksWithObjectiveValues(List<T> tasks,
-                                                                               Map<T, Integer> syncedTasksStartTime,
-                                                                               IShift employeeWorkShift) {
+                                                                                  Map<T, Integer> syncedTasksStartTime,
+                                                                                  IShift employeeWorkShift) {
         return calcRouteEvaluatorResult(new WeightedObjectiveWithValues(), tasks, syncedTasksStartTime, employeeWorkShift);
     }
 
@@ -249,7 +252,7 @@ public class RouteEvaluator<T extends ITask> {
      * @return A routeEvaluator result for the evaluated route.
      */
     public RouteEvaluatorResult<T> evaluateRouteByTheOrderOfTasksInsertTask(List<T> tasks, T insertTask,
-                                                                         Map<T, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
+                                                                            Map<T, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
         return calcRouteEvaluatorResult(new WeightedObjective(), tasks, insertTask, syncedTasksStartTime, employeeWorkShift);
     }
 
@@ -264,7 +267,7 @@ public class RouteEvaluator<T extends ITask> {
      * @return A routeEvaluator result for the evaluated route.
      */
     public RouteEvaluatorResult<T> evaluateRouteByTheOrderOfTasksInsertTask(List<T> tasks, T insertTask,
-                                                                         IShift employeeWorkShift) {
+                                                                            IShift employeeWorkShift) {
         return calcRouteEvaluatorResult(new WeightedObjective(), tasks, insertTask, null, employeeWorkShift);
     }
 
@@ -321,8 +324,8 @@ public class RouteEvaluator<T extends ITask> {
      * @return A routeEvaluator result for the evaluated route.
      */
     public RouteEvaluatorResult<T> evaluateRouteByTheOrderOfTasksInsertTasks(List<T> tasks, List<T> insertTasks,
-                                                                          Map<T, Integer> syncedTasksStartTime,
-                                                                          IShift employeeWorkShift) {
+                                                                             Map<T, Integer> syncedTasksStartTime,
+                                                                             IShift employeeWorkShift) {
         return calcRouteEvaluatorResult(new WeightedObjective(), tasks, insertTasks, syncedTasksStartTime, employeeWorkShift);
     }
 
@@ -337,7 +340,7 @@ public class RouteEvaluator<T extends ITask> {
      * @return A routeEvaluator result for the evaluated route.
      */
     public RouteEvaluatorResult<T> evaluateRouteByTheOrderOfTasksInsertTasks(List<T> tasks, List<T> insertTasks,
-                                                                          IShift employeeWorkShift) {
+                                                                             IShift employeeWorkShift) {
         return calcRouteEvaluatorResult(new WeightedObjective(), tasks, insertTasks, null, employeeWorkShift);
     }
 
@@ -417,7 +420,7 @@ public class RouteEvaluator<T extends ITask> {
      * Used to calculate routes without inserting new tasks.
      */
     private RouteEvaluatorResult<T> calcRouteEvaluatorResult(IObjective objective, List<T> tasks,
-                                                          Map<T, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
+                                                             Map<T, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
         ExtendInfoOneElement nodeExtendInfoOneElement = initializeOneElementEvaluator(tasks, syncedTasksStartTime);
         return algorithm.solveRouteEvaluatorResult(objective, nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
     }
@@ -426,7 +429,7 @@ public class RouteEvaluator<T extends ITask> {
      * Used to calculate routes when inserting one new task
      */
     private RouteEvaluatorResult<T> calcRouteEvaluatorResult(IObjective objective, List<T> tasks, T insertTask,
-                                                          Map<T, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
+                                                             Map<T, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
         setSyncedNodesStartTime(syncedTasksStartTime);
         updateFirstNodeList(tasks);
         updateSecondNodeList(insertTask);
@@ -438,7 +441,7 @@ public class RouteEvaluator<T extends ITask> {
      * Used to calculate routes when inserting multiple new tasks.
      */
     private RouteEvaluatorResult<T> calcRouteEvaluatorResult(IObjective objective, List<T> tasks, List<T> insertTasks,
-                                                          Map<T, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
+                                                             Map<T, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
         setSyncedNodesStartTime(syncedTasksStartTime);
         updateFirstNodeList(tasks);
         updateSecondNodeList(insertTasks);
@@ -482,8 +485,31 @@ public class RouteEvaluator<T extends ITask> {
         return objectiveFunctions.extractIObjectiveFunctionIntraRoute();
     }
 
-    public List<IConstraintIntraRoute> getIConstraintIntraRoute() {
-        return constraints.getConstraints();
+    public Collection<IConstraintIntraRoute> getActiveConstraintIntraRoute() {
+        return constraints.getActiveConstraints();
     }
 
+    public Collection<IConstraintIntraRoute> getInactiveConstraintIntraRoute() {
+        return constraints.getInactiveConstraints();
+    }
+
+    /**
+     * Activates an inactive constraint
+     *
+     * @param name Constraint name to be activated.
+     * @return True if variable was activated, otherwise false.
+     */
+    public boolean activateConstraint(String name) {
+        return constraints.activateConstraint(name);
+    }
+
+    /**
+     * Deactivates an active constraint
+     *
+     * @param name Constraint name to be deactivated.
+     * @return True if variable was deactivated, otherwise false.
+     */
+    public boolean deactivateConstraint(String name) {
+        return constraints.deactivateConstraint(name);
+    }
 }

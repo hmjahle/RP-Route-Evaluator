@@ -33,7 +33,7 @@ public class SyncedTaskConstraintTest extends JUnitTestAbstract {
     public void init() {
         office = createOffice();
         locations = createLocations();
-        allTasks = createTasks(locations);
+        allTasks = createTasksTimeWindows(locations);
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
         shift = new TestShift(0, 150);
     }
@@ -124,7 +124,7 @@ public class SyncedTaskConstraintTest extends JUnitTestAbstract {
         Assert.assertNull("Must be infeasible. ", result);
     }
 
-    private List<ITask> createTasks(List<ILocation> locations) {
+    protected List<ITask> createTasksTimeWindows(List<ILocation> locations) {
         TestTask task1 = new TestTask(10, 0, 20, false, true, true, 0, 0, locations.get(0), "1");
         TestTask task2 = new TestTask(10, 20, 40, false, false, true, 0, 0, locations.get(1), "2");
         TestTask task3 = new TestTask(10, 40, 60, false, true, true, 0, 0, locations.get(2), "3");
@@ -142,18 +142,8 @@ public class SyncedTaskConstraintTest extends JUnitTestAbstract {
         return tasks;
     }
 
-    private TestTravelTimeMatrix createTravelTimeMatrix(Collection<ILocation> locations, ILocation office) {
-        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
-        for (ILocation locationA : locations) {
-            travelTimeMatrix.addUndirectedConnection(office, locationA, 10);
-            for (ILocation locationB : locations)
-                if (locationA != locationB)
-                    travelTimeMatrix.addUndirectedConnection(locationA, locationB, 5);
-        }
-        return travelTimeMatrix;
-    }
 
-    private List<ILocation> createLocations() {
+    protected List<ILocation> createLocations() {
         List<ILocation> locations = new ArrayList<>();
         locations.add(new TestLocation(false));
         locations.add(new TestLocation(false));

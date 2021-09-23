@@ -47,7 +47,7 @@ public class benchmarking extends JUnitTestAbstract {
     private static void test(List<TestLocation> locations, int officeInteger, int officeLat) {
 
         TestLocation office = addOffice(locations, officeInteger, officeLat);
-        List<ITask> tasks = createTasks(locations);
+        List<ITask> tasks = createTasksFromLocations(locations);
         List<TestTravelTimeMatrix> travelTimeMatrices = getTestTravelTimeMatrices(locations);
         RouteEvaluator<ITask> routeEvaluator1 = new RouteEvaluator(travelTimeMatrices.get(0), tasks, office);
         RouteEvaluator<ITask> routeEvaluator2 = new RouteEvaluator<ITask>(travelTimeMatrices.get(1), tasks, office);
@@ -188,7 +188,8 @@ public class benchmarking extends JUnitTestAbstract {
         return locations;
     }
 
-    private static List<ITask> createTasks(List<TestLocation> locations) {
+
+    private static List<ITask> createTasksFromLocations(List<TestLocation> locations) {
         int duration = 10 * 60;
         int startTime;
         int endTime;

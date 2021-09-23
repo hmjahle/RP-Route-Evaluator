@@ -45,7 +45,7 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
     public void oneTaskNoOvertime() {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(allTasks.get(0));
-        RouteEvaluatorResult result = evaluateRoute(tasks);
+        RouteEvaluatorResult<ITask> result = evaluateRoute(tasks);
 
         Assert.assertEquals("No overtime. ", 0, result.getObjectiveValue(), 1E-6);
         WeightedObjectiveWithValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(tasks);
@@ -59,7 +59,7 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
         tasks.add(createStandardTask(10, 90, 100));
         travelTimeMatrix.addUndirectedConnection(office, tasks.get(0).getLocation(), 5);
 
-        RouteEvaluatorResult result = evaluateRoute(tasks);
+        RouteEvaluatorResult<ITask> result = evaluateRoute(tasks);
         Assert.assertEquals("Should have overtime. ", 5, result.getObjectiveValue(), 1E-6);
 
         WeightedObjectiveWithValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(tasks);
@@ -69,7 +69,7 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
 
     @Test
     public void fiveTasksFeasible() {
-        RouteEvaluatorResult result = evaluateRoute(allTasks);
+        RouteEvaluatorResult<ITask> result = evaluateRoute(allTasks);
         Assert.assertEquals("No overtime. ", 0, result.getObjectiveValue(), 1E-6);
 
         WeightedObjectiveWithValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(allTasks);
@@ -88,7 +88,7 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
         tasks.add(task6);
         tasks.addAll(allTasks);
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
-        RouteEvaluatorResult result = evaluateRoute(tasks);
+        RouteEvaluatorResult<ITask> result = evaluateRoute(tasks);
 
         Assert.assertEquals("Should have overtime. ", 1, result.getObjectiveValue(), 1E-6);
         WeightedObjectiveWithValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(tasks);
@@ -107,7 +107,7 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
         tasks.add(task6);
         tasks.addAll(allTasks);
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
-        RouteEvaluatorResult result = evaluateRoute(tasks);
+        RouteEvaluatorResult<ITask> result = evaluateRoute(tasks);
 
         Assert.assertEquals("No overtime. ", 0, result.getObjectiveValue(), 1E-6);
         WeightedObjectiveWithValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(tasks);
@@ -132,7 +132,7 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
         return tasks;
     }
 
-    private TestTravelTimeMatrix createTravelTimeMatrix(Collection<ILocation> locations, ILocation office) {
+    protected TestTravelTimeMatrix createTravelTimeMatrix(Collection<ILocation> locations, ILocation office) {
         TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
         for (ILocation locationA : locations) {
             travelTimeMatrix.addUndirectedConnection(office, locationA, 2);
@@ -143,7 +143,7 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
         return travelTimeMatrix;
     }
 
-    private List<ILocation> createLocations() {
+    protected List<ILocation> createLocations() {
         List<ILocation> locations = new ArrayList<>();
         locations.add(new TestLocation(false));
         locations.add(new TestLocation(false));
@@ -153,19 +153,19 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
         return locations;
     }
 
-    private RouteEvaluatorResult evaluateRoute(List<ITask> tasks) {
-        RouteEvaluator routeEvaluator = getRouteEvaluator(tasks);
+    private RouteEvaluatorResult<ITask> evaluateRoute(List<ITask> tasks) {
+        RouteEvaluator<ITask> routeEvaluator = getRouteEvaluator(tasks);
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }
 
     private WeightedObjectiveWithValues evaluateRouteReturnIndividualObjectiveValues(List<ITask> tasks) {
-        RouteEvaluator routeEvaluator = getRouteEvaluator(tasks);
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByOrderOfTasksWithObjectiveValues(tasks, shift);
+        RouteEvaluator<ITask> routeEvaluator = getRouteEvaluator(tasks);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByOrderOfTasksWithObjectiveValues(tasks, shift);
         return (WeightedObjectiveWithValues) result.getObjective();
     }
 
-    private RouteEvaluator getRouteEvaluator(List<ITask> tasks) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
+    private RouteEvaluator<ITask> getRouteEvaluator(List<ITask> tasks) {
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         routeEvaluator.addObjectiveIntraShift("OverTime", 1, new OvertimeObjectiveFunction());
         return routeEvaluator;
     }

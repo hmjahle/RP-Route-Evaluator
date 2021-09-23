@@ -9,9 +9,7 @@ import com.visma.of.rp.routeevaluator.solver.RouteEvaluator;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import testInterfaceImplementationClasses.TestLocation;
 import testInterfaceImplementationClasses.TestShift;
-import testInterfaceImplementationClasses.TestTask;
 import testInterfaceImplementationClasses.TestTravelTimeMatrix;
 import testSupport.JUnitTestAbstract;
 
@@ -33,7 +31,7 @@ public class NoPhysicalAppearanceOrderTest extends JUnitTestAbstract {
     public void init() {
         office = createOffice();
         locations = createLocations();
-        allTasks = createTasks(locations);
+        allTasks = createTasksEqual(locations);
         travelTimeMatrix = createTravelTimeMatrix(locations, office);
         shift = new TestShift(0, 100);
     }
@@ -47,7 +45,7 @@ public class NoPhysicalAppearanceOrderTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(3));
         tasks.add(allTasks.get(4));
 
-        RouteEvaluatorResult result = evaluateRoute(tasks);
+        RouteEvaluatorResult<ITask> result = evaluateRoute(tasks);
 
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
@@ -66,7 +64,7 @@ public class NoPhysicalAppearanceOrderTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(2));
         tasks.add(allTasks.get(3));
 
-        RouteEvaluatorResult result = evaluateRoute(tasks);
+        RouteEvaluatorResult<ITask> result = evaluateRoute(tasks);
 
         Assert.assertEquals(9, getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
@@ -85,7 +83,7 @@ public class NoPhysicalAppearanceOrderTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(1));
         tasks.add(allTasks.get(2));
 
-        RouteEvaluatorResult result = evaluateRoute(tasks);
+        RouteEvaluatorResult<ITask> result = evaluateRoute(tasks);
 
         Assert.assertEquals(5, getVisitTravelTime(result, 0));
         Assert.assertEquals(13, getVisitTravelTime(result, 1));
@@ -105,7 +103,7 @@ public class NoPhysicalAppearanceOrderTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(3));
         tasks.add(allTasks.get(4));
 
-        RouteEvaluatorResult result = evaluateRoute(tasks);
+        RouteEvaluatorResult<ITask> result = evaluateRoute(tasks);
 
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
@@ -124,7 +122,7 @@ public class NoPhysicalAppearanceOrderTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(4));
         tasks.add(allTasks.get(2));
 
-        RouteEvaluatorResult result = evaluateRoute(tasks);
+        RouteEvaluatorResult<ITask> result = evaluateRoute(tasks);
 
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 0));
         Assert.assertEquals(5, getVisitTravelTime(result, 1));
@@ -134,21 +132,7 @@ public class NoPhysicalAppearanceOrderTest extends JUnitTestAbstract {
         Assert.assertEquals("Must return to office at: ", 77, result.getTimeOfArrivalAtDestination().longValue());
     }
 
-    private List<ITask> createTasks(List<ILocation> locations) {
-        TestTask task1 = new TestTask(10, 0, 100, false, false, false, 0, 0, locations.get(0), "1");
-        TestTask task2 = new TestTask(10, 0, 100, false, false, false, 0, 0, locations.get(1), "2");
-        TestTask task3 = new TestTask(10, 0, 100, false, false, false, 0, 0, locations.get(2), "3");
-        TestTask task4 = new TestTask(10, 0, 100, false, false, true, 0, 0, locations.get(3), "4");
-        TestTask task5 = new TestTask(10, 0, 100, false, false, true, 0, 0, locations.get(4), "5");
 
-        List<ITask> tasks = new ArrayList<>();
-        tasks.add(task1);
-        tasks.add(task2);
-        tasks.add(task3);
-        tasks.add(task4);
-        tasks.add(task5);
-        return tasks;
-    }
 
     private TestTravelTimeMatrix createTravelTimeMatrix(List<ILocation> locations, ILocation office) {
         TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix(locations,office);
@@ -161,18 +145,8 @@ public class NoPhysicalAppearanceOrderTest extends JUnitTestAbstract {
         return travelTimeMatrix;
     }
 
-    private List<ILocation> createLocations() {
-        List<ILocation> locations = new ArrayList<>();
-        locations.add(new TestLocation(false));
-        locations.add(new TestLocation(false));
-        locations.add(new TestLocation(false));
-        locations.add(new TestLocation(false));
-        locations.add(new TestLocation(false));
-        return locations;
-    }
-
-    private RouteEvaluatorResult evaluateRoute(List<ITask> tasks) {
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, tasks, office);
+    private RouteEvaluatorResult<ITask> evaluateRoute(List<ITask> tasks) {
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
     }
 }

@@ -53,10 +53,10 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(office, task1.getLocation(), 10);
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task1.getLocation(), 1);
         travelTimeMatrix.addUndirectedConnection(office, task2.getLocation(), 100);
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new OvertimeConstraint());
 
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
         Assert.assertNotNull("Must be feasible. ", result);
         Assert.assertEquals(10, getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
@@ -73,10 +73,10 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(office, task1.getLocation(), 50);
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task1.getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(office, task2.getLocation(), 20);
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new OvertimeConstraint());
 
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
 
         Assert.assertNull("Must be infeasible. ", result);
     }
@@ -91,9 +91,9 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(office, task1.getLocation(), 20);
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task1.getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(office, task2.getLocation(), 50);
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new StrictTimeWindowConstraint());
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
 
         Assert.assertNull("Must be infeasible. ", result);
     }
@@ -108,10 +108,10 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(office, task1.getLocation(), 20);
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task1.getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(office, task2.getLocation(), 50);
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new StrictTimeWindowConstraint());
 
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
 
         Assert.assertNotNull("Must be feasible. ", result);
         Assert.assertEquals("Must return to office at. ", 42, result.getTimeOfArrivalAtDestination(), DELTA);
@@ -132,13 +132,13 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(task1.getLocation(), task2.getLocation(), 25);
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task3.getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(office, task3.getLocation(), 45);
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new SyncedTasksConstraint());
 
         Map<ITask, Integer> syncedTaskStartTimes = new HashMap<>();
         syncedTaskStartTimes.put(task2, 10);
         syncedTaskStartTimes.put(task3, 50);
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
 
         Assert.assertNotNull("Must be feasible. ", result);
         Assert.assertEquals("Must return to office at. ", 100, result.getTimeOfArrivalAtDestination(), DELTA);
@@ -160,13 +160,13 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(task1.getLocation(), task3.getLocation(), 15);
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task3.getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(office, task3.getLocation(), 20);
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new SyncedTasksConstraint());
 
         Map<ITask, Integer> syncedTaskStartTimes = new HashMap<>();
         syncedTaskStartTimes.put(task1, 10);
         syncedTaskStartTimes.put(task3, 40);
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
         Assert.assertNull("Must be infeasible. ", result);
 
 
@@ -187,13 +187,13 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(office, task3.getLocation(), 45);
         travelTimeMatrix.addUndirectedConnection(office, task1.getLocation(), 1000);
 
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new SyncedTasksConstraint());
         Map<ITask, Integer> syncedTaskStartTimes = new HashMap<>();
         syncedTaskStartTimes.put(task1, 40);
         syncedTaskStartTimes.put(task3, 60);
 
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
         Assert.assertNotNull("Must be feasible. ", result);
         Assert.assertEquals("Must return to office at. ", 110, result.getTimeOfArrivalAtDestination(), DELTA);
 
@@ -215,20 +215,20 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(task1.getLocation(), task2.getLocation(), 25);
         travelTimeMatrix.addUndirectedConnection(task1.getLocation(), task3.getLocation(), 25);
         travelTimeMatrix.addUndirectedConnection(task2.getLocation(), task3.getLocation(), 5);
-        RouteEvaluator routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new SyncedTasksConstraint());
 
         Map<ITask, Integer> syncedTaskStartTimes = new HashMap<>();
         syncedTaskStartTimes.put(task1, 10);
         syncedTaskStartTimes.put(task2, 15);
         syncedTaskStartTimes.put(task3, 20);
-        RouteEvaluatorResult result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTaskStartTimes, shift);
         Assert.assertNotNull("Must be feasible. ", result);
         Assert.assertEquals("Must return to office at. ", 25, result.getTimeOfArrivalAtDestination(), DELTA);
 
     }
 
-    private List<ILocation> createLocations() {
+    protected List<ILocation> createLocations() {
         List<ILocation> locations = new ArrayList<>();
         locations.add(new TestLocation(false));
         locations.add(new TestLocation(false));

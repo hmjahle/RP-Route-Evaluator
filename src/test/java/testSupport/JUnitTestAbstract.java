@@ -11,7 +11,10 @@ import com.visma.of.rp.routeevaluator.solver.algorithm.ResourceOneElement;
 import com.visma.of.rp.routeevaluator.solver.algorithm.SearchGraph;
 import testInterfaceImplementationClasses.TestLocation;
 import testInterfaceImplementationClasses.TestTask;
+import testInterfaceImplementationClasses.TestTravelTimeMatrix;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public abstract class JUnitTestAbstract {
@@ -75,7 +78,7 @@ public abstract class JUnitTestAbstract {
         return visitTask1.getTravelTime();
     }
 
-    protected void print(RouteEvaluatorResult result) {
+    protected void print(RouteEvaluatorResult<ITask> result) {
         List<ITask> tasks = result.getRoute().extractEmployeeTasks();
         double objectiveValue = result.getObjectiveValue();
         System.out.println("Objective: " + objectiveValue);
@@ -88,12 +91,12 @@ public abstract class JUnitTestAbstract {
 
     protected void printRoute(Route<ITask> route) {
         int i = 0;
-        for (Visit visit : route.getVisitSolution()) {
+        for (Visit<ITask> visit : route.getVisitSolution()) {
             System.out.println("Visit no " + (i++) + " " + printVisit(visit));
         }
 }
 
-    protected String printVisit(Visit visit) {
+    protected String printVisit(Visit<ITask> visit) {
         return "Travel time to: " + visit.getTravelTime() + " start time: " + visit.getStartTime() +
                 " \t" + printTask(visit.getTask());
 
@@ -102,5 +105,58 @@ public abstract class JUnitTestAbstract {
 
     protected String printTask(ITask task) {
         return "Task id: " + task.getId();
+    }
+
+    protected List<ITask> createTasksTimeWindows(List<ILocation> locations) {
+        TestTask task1 = new TestTask(10, 0, 20, true, false, true, 0, 0, locations.get(0), "1");
+        TestTask task2 = new TestTask(10, 30, 80, false, false, true, 0, 0, locations.get(1), "2");
+        TestTask task3 = new TestTask(10, 0, 55, true, false, true, 0, 0, locations.get(2), "3");
+        TestTask task4 = new TestTask(10, 70, 100, false, false, true, 0, 0, locations.get(3), "4");
+        TestTask task5 = new TestTask(10, 80, 100, true, false, true, 0, 0, locations.get(4), "5");
+
+        List<ITask> tasks = new ArrayList<>();
+        tasks.add(task1);
+        tasks.add(task2);
+        tasks.add(task3);
+        tasks.add(task4);
+        tasks.add(task5);
+        return tasks;
+    }
+
+    protected List<ITask> createTasksEqual(List<ILocation> locations) {
+        TestTask task1 = new TestTask(10, 0, 100, false, false, false, 0, 0, locations.get(0), "1");
+        TestTask task2 = new TestTask(10, 0, 100, false, false, false, 0, 0, locations.get(1), "2");
+        TestTask task3 = new TestTask(10, 0, 100, false, false, false, 0, 0, locations.get(2), "3");
+        TestTask task4 = new TestTask(10, 0, 100, false, false, true, 0, 0, locations.get(3), "4");
+        TestTask task5 = new TestTask(10, 0, 100, false, false, true, 0, 0, locations.get(4), "5");
+
+        List<ITask> tasks = new ArrayList<>();
+        tasks.add(task1);
+        tasks.add(task2);
+        tasks.add(task3);
+        tasks.add(task4);
+        tasks.add(task5);
+        return tasks;
+    }
+
+    protected TestTravelTimeMatrix createTravelTimeMatrix(Collection<ILocation> locations, ILocation office) {
+        TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix();
+        for (ILocation locationA : locations) {
+            travelTimeMatrix.addUndirectedConnection(office, locationA, 10);
+            for (ILocation locationB : locations)
+                if (locationA != locationB)
+                    travelTimeMatrix.addUndirectedConnection(locationA, locationB, 5);
+        }
+        return travelTimeMatrix;
+    }
+
+    protected List<ILocation> createLocations() {
+        List<ILocation> locations = new ArrayList<>();
+        locations.add(new TestLocation(false));
+        locations.add(new TestLocation(false));
+        locations.add(new TestLocation(false));
+        locations.add(new TestLocation(false));
+        locations.add(new TestLocation(false));
+        return locations;
     }
 }
