@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class Route<T extends ITask> {
 
-    private List<Visit<T>> visitSolution;
+    private final List<Visit> visitSolution;
     private int routeFinishedAtTime;
 
     public Route() {
@@ -18,7 +18,7 @@ public class Route<T extends ITask> {
         this.routeFinishedAtTime = 0;
     }
 
-    public void addVisits(Visit<T>[] visits, int visitsCnt) {
+    public void addVisits(Visit[] visits, int visitsCnt) {
         visitSolution.addAll(Arrays.asList(visits).subList(0, visitsCnt));
     }
 
@@ -30,7 +30,7 @@ public class Route<T extends ITask> {
         return routeFinishedAtTime;
     }
 
-    public List<Visit<T>> getVisitSolution() {
+    public List<Visit> getVisitSolution() {
         return visitSolution;
     }
 
@@ -40,7 +40,7 @@ public class Route<T extends ITask> {
      * @return List of tasks, can be empty.
      */
     public List<T> extractEmployeeTasks() {
-        return this.getVisitSolution().stream().map(Visit::getTask).collect(Collectors.toList());
+        return this.getVisitSolution().stream().map(i -> ((T) i.getTask())).collect(Collectors.toList());
     }
 
     /**
@@ -49,7 +49,7 @@ public class Route<T extends ITask> {
      *
      * @return The set of visits, can be empty.
      */
-    public Set<Visit<T>> extractSyncedVisits() {
+    public Set<Visit> extractSyncedVisits() {
         return this.getVisitSolution().stream().filter(i -> i.getTask().isSynced()).collect(Collectors.toSet());
     }
 
@@ -59,7 +59,7 @@ public class Route<T extends ITask> {
      *
      * @return The set of visits, can be empty.
      */
-    public Set<Visit<T>> extractStrictVisits() {
+    public Set<Visit> extractStrictVisits() {
         return this.getVisitSolution().stream().filter(i -> i.getTask().isStrict()).collect(Collectors.toSet());
     }
 

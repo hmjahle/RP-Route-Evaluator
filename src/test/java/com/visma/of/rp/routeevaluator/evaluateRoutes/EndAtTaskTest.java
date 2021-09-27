@@ -50,13 +50,13 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "4", result.getVisitSolution().get(1).getTask().getId());
 
-        Visit<ITask> lastVisit = getLastVisit(result);
+        Visit lastVisit = getLastVisit(result);
         Assert.assertEquals("Should end route at end time of last task.", result.getTimeOfArrivalAtDestination().intValue(),
                 lastVisit.getStartTime() + lastVisit.getTask().getDuration());
 
     }
 
-    private Visit<ITask> getLastVisit(RouteEvaluatorResult<ITask> result) {
+    private Visit getLastVisit(RouteEvaluatorResult<ITask> result) {
         return result.getVisitSolution().get(result.getVisitSolution().size() - 1);
     }
 
@@ -72,7 +72,7 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         routeEvaluator.useOpenEndedRoutes();
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
         Assert.assertEquals("Should have no overtime. ", 0, result.getObjectiveValue(), 1E-6);
-        Visit<ITask> lastVisit = getLastVisit(result);
+        Visit lastVisit = getLastVisit(result);
         Assert.assertEquals("Should end route at end time of last task.", result.getTimeOfArrivalAtDestination().intValue(),
                 lastVisit.getStartTime() + lastVisit.getTask().getDuration());
     }
@@ -90,7 +90,7 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Third task id: ", "3", result.getVisitSolution().get(2).getTask().getId());
         Assert.assertEquals("Fourth task id: ", "4", result.getVisitSolution().get(3).getTask().getId());
 
-        Visit<ITask> lastVisit = getLastVisit(result);
+        Visit lastVisit = getLastVisit(result);
         Assert.assertEquals("Should end route at end time of last task.", result.getTimeOfArrivalAtDestination().intValue(),
                 lastVisit.getStartTime() + lastVisit.getTask().getDuration());
     }
@@ -109,7 +109,7 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Second task id: ", "2", result.getVisitSolution().get(1).getTask().getId());
         Assert.assertEquals("Third task id: ", "4", result.getVisitSolution().get(2).getTask().getId());
 
-        Visit<ITask> lastVisit = getLastVisit(result);
+        Visit lastVisit = getLastVisit(result);
         Assert.assertEquals("Should end route at end time of last task.", result.getTimeOfArrivalAtDestination().intValue(),
                 lastVisit.getStartTime() + lastVisit.getTask().getDuration());
     }
@@ -145,7 +145,7 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("First task id: ", "2", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "1", result.getVisitSolution().get(1).getTask().getId());
 
-        Visit<ITask> lastVisit = getLastVisit(result);
+        Visit lastVisit = getLastVisit(result);
         Assert.assertEquals("Should end route at end time of last task.", result.getTimeOfArrivalAtDestination().intValue(),
                 lastVisit.getStartTime() + lastVisit.getTask().getDuration());
     }
@@ -162,7 +162,7 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Third task id: ", "3", result.getVisitSolution().get(2).getTask().getId());
         Assert.assertEquals("Fourth task id: ", "4", result.getVisitSolution().get(3).getTask().getId());
 
-        Visit<ITask> lastVisit = getLastVisit(result);
+        Visit lastVisit = getLastVisit(result);
         Assert.assertEquals("Should end route at end time of last task.", result.getTimeOfArrivalAtDestination().intValue(),
                 lastVisit.getStartTime() + lastVisit.getTask().getDuration());
     }

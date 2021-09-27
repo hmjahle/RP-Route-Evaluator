@@ -26,7 +26,7 @@ public class RouteEvaluatorResultTest extends JUnitTestAbstract {
     RouteEvaluatorResult<TestTask> result;
     List<TestTask> allTasks;
     RouteEvaluator<TestTask> routeEvaluator;
-    Map<TestTask, Integer> syncedTasksStartTime;
+    Map<ITask, Integer> syncedTasksStartTime;
     IShift shift;
 
     @Before
@@ -36,7 +36,7 @@ public class RouteEvaluatorResultTest extends JUnitTestAbstract {
         ITravelTimeMatrix travelTimeMatrix = createTravelTimeMatrix(office, allTasks);
         shift = new TestShift(0, 100);
         syncedTasksStartTime = getSyncedStartTime(allTasks);
-        routeEvaluator = new RouteEvaluator<TestTask>(travelTimeMatrix, allTasks, office);
+        routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTasksStartTime, shift);
     }
 
@@ -81,17 +81,17 @@ public class RouteEvaluatorResultTest extends JUnitTestAbstract {
 
     @Test
     public void syncedTasks() {
-        Set<Visit<TestTask>> syncedVisits = result.getRoute().extractSyncedVisits();
+        Set<Visit> syncedVisits = result.getRoute().extractSyncedVisits();
         Assert.assertEquals("Must be 4 synced tasks. ", 4, syncedVisits.size());
         Set<String> taskIds = syncedVisits.stream().map(i -> i.getTask().getId()).collect(Collectors.toSet());
         Assert.assertTrue("All synced tasks must be in the set.", taskIds.containsAll(Arrays.asList("1", "4", "5", "6")));
 
-        for (Visit<TestTask> visit : syncedVisits) {
+        for (Visit visit : syncedVisits) {
             Assert.assertTrue("Task must be synced: ", visit.getTask().isSynced());
-            Assert.assertTrue("Task must be contained: ", allTasks.contains(visit.getTask()));
+            Assert.assertTrue("Task must be contained: ", allTasks.contains((TestTask) visit.getTask()));
         }
 
-        for (Visit<TestTask> visit : result.getVisitSolution()) {
+        for (Visit visit : result.getVisitSolution()) {
             if (visit.getTask().isSynced())
                 Assert.assertTrue("Visit must be in the synced set: ", syncedVisits.contains(visit));
         }
@@ -101,25 +101,25 @@ public class RouteEvaluatorResultTest extends JUnitTestAbstract {
     @Test
     public void strictTasks() {
 
-        Set<Visit<TestTask>> strictVisits = result.getRoute().extractStrictVisits();
+        Set<Visit> strictVisits = result.getRoute().extractStrictVisits();
         Set<String> taskIds = strictVisits.stream().map(i -> i.getTask().getId()).collect(Collectors.toSet());
         Assert.assertTrue("All synced tasks must be in the set.", taskIds.containsAll(Arrays.asList("2", "5", "7")));
 
         Assert.assertEquals("Should be 3 strict tasks. ", 3, strictVisits.size());
-        for (Visit<TestTask> visit : strictVisits) {
+        for (Visit visit : strictVisits) {
             Assert.assertTrue("Task must be strict: ", visit.getTask().isStrict());
-            Assert.assertTrue("Task must be contained: ", allTasks.contains(visit.getTask()));
+            Assert.assertTrue("Task must be contained: ", allTasks.contains((TestTask) visit.getTask()));
         }
 
-        for (Visit<TestTask> visit : result.getVisitSolution()) {
+        for (Visit visit : result.getVisitSolution()) {
             if (visit.getTask().isStrict())
                 Assert.assertTrue("Visit must be in the synced set: ", strictVisits.contains(visit));
         }
     }
 
 
-    private Map<TestTask, Integer> getSyncedStartTime(List<TestTask> allTasks) {
-        Map<TestTask, Integer> syncedTasksStartTime = new HashMap<>();
+    private Map<ITask, Integer> getSyncedStartTime(List<TestTask> allTasks) {
+        Map<ITask, Integer> syncedTasksStartTime = new HashMap<>();
         syncedTasksStartTime.put(allTasks.get(0), 20);
         syncedTasksStartTime.put(allTasks.get(4), 60);
         syncedTasksStartTime.put(allTasks.get(5), 80);

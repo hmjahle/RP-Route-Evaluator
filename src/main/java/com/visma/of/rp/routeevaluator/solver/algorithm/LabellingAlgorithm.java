@@ -17,14 +17,14 @@ import java.util.Enumeration;
  */
 public class LabellingAlgorithm<T extends ITask> {
 
-    private SearchGraph graph;
-    private ObjectiveFunctionsIntraRouteHandler objectiveFunctions;
-    private ConstraintsIntraRouteHandler constraints;
-    private LabelQueue unExtendedLabels;
-    private Label[] labels;
-    private Visit<T>[] visits;
+    private final SearchGraph graph;
+    private final ObjectiveFunctionsIntraRouteHandler objectiveFunctions;
+    private final ConstraintsIntraRouteHandler constraints;
+    private final LabelQueue unExtendedLabels;
+    private final Label[] labels;
+    private final Visit[] visits;
+    private final LabelLists labelLists;
     private Label bestLabelOnDestination;
-    private LabelLists labelLists;
     private IExtendInfo nodeExtendInfo;
     private int[] syncedNodesStartTime;
     private IShift employeeWorkShift;
@@ -82,11 +82,11 @@ public class LabellingAlgorithm<T extends ITask> {
      * @param bestLabel Label representing the best route for the employee work shift.
      * @return Results of the route.
      */
-    private RouteEvaluatorResult buildRouteEvaluatorResult(Label bestLabel) {
-        Route route = new Route();
+    private RouteEvaluatorResult<T> buildRouteEvaluatorResult(Label bestLabel) {
+        Route<T> route = new Route<>();
         route.setRouteFinishedAtTime(bestLabel.getCurrentTime());
         extractVisitsAndSyncedStartTime(bestLabel, route);
-        return new RouteEvaluatorResult(bestLabel.getObjective(), route);
+        return new RouteEvaluatorResult<>(bestLabel.getObjective(), route);
     }
 
     private void solveLabellingAlgorithm(Label startLabel) {
@@ -113,7 +113,7 @@ public class LabellingAlgorithm<T extends ITask> {
         boolean taskRequirePhysicalAppearance = nextNode.getRequirePhysicalAppearance();
         int newLocation = findNewLocation(thisLabel, taskRequirePhysicalAppearance, nextNode);
         Integer travelTime = getTravelTime(thisLabel, nextNode, newLocation);
-        if(travelTime == null)
+        if (travelTime == null)
             return null;
         int startOfServiceNextTask = calcStartOfServiceNextTask(thisLabel, nextNode, taskRequirePhysicalAppearance, travelTime, nextNode.isSynced());
         IObjective objective = evaluateFeasibilityAndObjective(thisLabel, nextNode, startOfServiceNextTask, travelTime, nextNode.isSynced(), newLocation);
@@ -247,7 +247,7 @@ public class LabellingAlgorithm<T extends ITask> {
                 bestLabelOnDestination.getObjective().getObjectiveValue() < currentLabel.getObjective().getObjectiveValue();
     }
 
-    private void extractVisitsAndSyncedStartTime(Label bestLabel, Route route) {
+    private void extractVisitsAndSyncedStartTime(Label bestLabel, Route<T> route) {
         int labelCnt = collectLabels(bestLabel);
         int visitCnt = 0;
         for (int i = labelCnt - 1; i > 0; i--) {
