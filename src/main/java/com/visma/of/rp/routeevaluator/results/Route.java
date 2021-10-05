@@ -3,14 +3,13 @@ package com.visma.of.rp.routeevaluator.results;
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Route<T extends ITask> {
 
-    private final List<Visit> visitSolution;
+    private final List<Visit<T>> visitSolution;
     private int routeFinishedAtTime;
 
     public Route() {
@@ -18,8 +17,8 @@ public class Route<T extends ITask> {
         this.routeFinishedAtTime = 0;
     }
 
-    public void addVisits(Visit[] visits, int visitsCnt) {
-        visitSolution.addAll(Arrays.asList(visits).subList(0, visitsCnt));
+    public void addVisits(List<Visit<T>> visits) {
+        visitSolution.addAll(visits);
     }
 
     public void setRouteFinishedAtTime(int routeFinishedAtTime) {
@@ -30,7 +29,7 @@ public class Route<T extends ITask> {
         return routeFinishedAtTime;
     }
 
-    public List<Visit> getVisitSolution() {
+    public List<Visit<T>> getVisitSolution() {
         return visitSolution;
     }
 
@@ -49,7 +48,7 @@ public class Route<T extends ITask> {
      *
      * @return The set of visits, can be empty.
      */
-    public Set<Visit> extractSyncedVisits() {
+    public Set<Visit<T>> extractSyncedVisits() {
         return this.getVisitSolution().stream().filter(i -> i.getTask().isSynced()).collect(Collectors.toSet());
     }
 
@@ -59,7 +58,7 @@ public class Route<T extends ITask> {
      *
      * @return The set of visits, can be empty.
      */
-    public Set<Visit> extractStrictVisits() {
+    public Set<Visit<T>> extractStrictVisits() {
         return this.getVisitSolution().stream().filter(i -> i.getTask().isStrict()).collect(Collectors.toSet());
     }
 
@@ -69,9 +68,9 @@ public class Route<T extends ITask> {
      * @param task Task to find the position for.
      * @return Integer position, null if the task is not in the route.
      */
-    public Integer findIndexInRoute(ITask task) {
+    public Integer findIndexInRoute(T task) {
         int i = 0;
-        for (Visit visit : visitSolution)
+        for (Visit<T> visit : visitSolution)
             if (visit.getTask() == task)
                 return i;
             else i++;

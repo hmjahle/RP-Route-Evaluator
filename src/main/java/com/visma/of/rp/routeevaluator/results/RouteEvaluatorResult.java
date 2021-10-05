@@ -19,7 +19,7 @@ public class RouteEvaluatorResult<T extends ITask> {
         return route;
     }
 
-    public List<Visit> getVisitSolution() {
+    public List<Visit<T>> getVisitSolution() {
         return route.getVisitSolution();
     }
 

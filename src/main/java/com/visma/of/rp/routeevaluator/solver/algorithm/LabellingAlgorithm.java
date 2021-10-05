@@ -9,7 +9,9 @@ import com.visma.of.rp.routeevaluator.results.Route;
 import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.results.Visit;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 
 /**
  * The labelling algorithm is a resource constrained shortest path algorithm.
@@ -22,7 +24,7 @@ public class LabellingAlgorithm<T extends ITask> {
     private final ConstraintsIntraRouteHandler constraints;
     private final LabelQueue unExtendedLabels;
     private final Label[] labels;
-    private final Visit[] visits;
+    private final List<Visit<T>> visits;
     private final LabelLists labelLists;
     private Label bestLabelOnDestination;
     private IExtendInfo nodeExtendInfo;
@@ -34,7 +36,7 @@ public class LabellingAlgorithm<T extends ITask> {
         this.objectiveFunctions = objectiveFunctions;
         this.constraints = constraints;
         this.labels = new Label[graph.getNodes().size()];
-        this.visits = new Visit[graph.getNodes().size()];
+        this.visits = new ArrayList<>(graph.getNodes().size() * 2 + 1);
         this.labelLists = new LabelLists(graph.getNodes().size(), graph.getNodes().size() * 10);
         this.unExtendedLabels = new LabelQueue();
         this.bestLabelOnDestination = null;
@@ -203,10 +205,11 @@ public class LabellingAlgorithm<T extends ITask> {
      * Finds the travel time to the next node. Note that if the current location is (-1) it is at the "origin" and interpreted as the first task will become the origin.
      * Hence, this task will become the origin and therefore the travel time will be 0.
      *
-     * @param thisLabel
-     * @param nextNode
-     * @param newLocation
-     * @return
+     * @param thisLabel   The current label
+     * @param nextNode    Node to extend the label to
+     * @param newLocation Location the label is extended to, can be different from the location of the node, e.g., if the
+     *                    next does not require physical appearance
+     * @return Travel time or null if travel is not possible.
      */
     private Integer getTravelTime(Label thisLabel, Node nextNode, int newLocation) {
         if (thisLabel.getCurrentLocationId() == -1)
@@ -254,7 +257,7 @@ public class LabellingAlgorithm<T extends ITask> {
             bestLabel = labels[i];
             visitCnt = addVisit(visitCnt, bestLabel);
         }
-        route.addVisits(visits, visitCnt);
+        route.addVisits(visits.subList(0, visitCnt));
     }
 
     private int collectLabels(Label currentLabel) {
@@ -267,8 +270,10 @@ public class LabellingAlgorithm<T extends ITask> {
     }
 
     private int addVisit(int visitCnt, Label currentLabel) {
-        visits[visitCnt++] = new Visit(currentLabel.getNode().getTask(), currentLabel.getCurrentTime(),
-                currentLabel.getTravelTime());
+        @SuppressWarnings("unchecked")
+        T task = ((T) currentLabel.getNode().getTask());
+        visits.set(visitCnt++, new Visit<>(task, currentLabel.getCurrentTime(),
+                currentLabel.getTravelTime()));
         return visitCnt;
     }
 

@@ -91,12 +91,12 @@ public abstract class JUnitTestAbstract {
 
     protected void printRoute(Route<ITask> route) {
         int i = 0;
-        for (Visit visit : route.getVisitSolution()) {
+        for (Visit<ITask> visit : route.getVisitSolution()) {
             System.out.println("Visit no " + (i++) + " " + printVisit(visit));
         }
 }
 
-    protected String printVisit(Visit visit) {
+    protected String printVisit(Visit<ITask> visit) {
         return "Travel time to: " + visit.getTravelTime() + " start time: " + visit.getStartTime() +
                 " \t" + printTask(visit.getTask());
 

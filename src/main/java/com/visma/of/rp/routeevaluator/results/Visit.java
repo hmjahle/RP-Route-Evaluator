@@ -1,20 +1,18 @@
 package com.visma.of.rp.routeevaluator.results;
 
-import com.visma.of.rp.routeevaluator.interfaces.ITask;
+public class Visit<T> {
 
-public class Visit {
-
-    private final ITask task;
+    private final T task;
     private final int startTime;
     private final int travelTime;
 
-    public Visit(ITask task, int startTime, int travelTime) {
+    public Visit(T task, int startTime, int travelTime) {
         this.task = task;
         this.startTime = startTime;
         this.travelTime = travelTime;
     }
 
-    public ITask getTask() {
+    public T getTask() {
         return task;
     }
 

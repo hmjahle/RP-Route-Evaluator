@@ -81,17 +81,17 @@ public class RouteEvaluatorResultTest extends JUnitTestAbstract {
 
     @Test
     public void syncedTasks() {
-        Set<Visit> syncedVisits = result.getRoute().extractSyncedVisits();
+        Set<Visit<TestTask>> syncedVisits = result.getRoute().extractSyncedVisits();
         Assert.assertEquals("Must be 4 synced tasks. ", 4, syncedVisits.size());
         Set<String> taskIds = syncedVisits.stream().map(i -> i.getTask().getId()).collect(Collectors.toSet());
         Assert.assertTrue("All synced tasks must be in the set.", taskIds.containsAll(Arrays.asList("1", "4", "5", "6")));
 
-        for (Visit visit : syncedVisits) {
+        for (Visit<TestTask> visit : syncedVisits) {
             Assert.assertTrue("Task must be synced: ", visit.getTask().isSynced());
-            Assert.assertTrue("Task must be contained: ", allTasks.contains((TestTask) visit.getTask()));
+            Assert.assertTrue("Task must be contained: ", allTasks.contains(visit.getTask()));
         }
 
-        for (Visit visit : result.getVisitSolution()) {
+        for (Visit<TestTask> visit : result.getVisitSolution()) {
             if (visit.getTask().isSynced())
                 Assert.assertTrue("Visit must be in the synced set: ", syncedVisits.contains(visit));
         }
@@ -101,17 +101,17 @@ public class RouteEvaluatorResultTest extends JUnitTestAbstract {
     @Test
     public void strictTasks() {
 
-        Set<Visit> strictVisits = result.getRoute().extractStrictVisits();
+        Set<Visit<TestTask>> strictVisits = result.getRoute().extractStrictVisits();
         Set<String> taskIds = strictVisits.stream().map(i -> i.getTask().getId()).collect(Collectors.toSet());
         Assert.assertTrue("All synced tasks must be in the set.", taskIds.containsAll(Arrays.asList("2", "5", "7")));
 
         Assert.assertEquals("Should be 3 strict tasks. ", 3, strictVisits.size());
-        for (Visit visit : strictVisits) {
+        for (Visit<TestTask> visit : strictVisits) {
             Assert.assertTrue("Task must be strict: ", visit.getTask().isStrict());
-            Assert.assertTrue("Task must be contained: ", allTasks.contains((TestTask) visit.getTask()));
+            Assert.assertTrue("Task must be contained: ", allTasks.contains(visit.getTask()));
         }
 
-        for (Visit visit : result.getVisitSolution()) {
+        for (Visit<TestTask> visit : result.getVisitSolution()) {
             if (visit.getTask().isStrict())
                 Assert.assertTrue("Visit must be in the synced set: ", strictVisits.contains(visit));
         }
