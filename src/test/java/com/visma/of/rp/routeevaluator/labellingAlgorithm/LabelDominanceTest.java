@@ -28,10 +28,7 @@ public class LabelDominanceTest {
         labelD.setCanLeaveLocationAtTime(0);
 
 
-        Assert.assertEquals("1", 0, labelTest(labelA, labelA));
-        Assert.assertEquals("2", 0, labelTest(labelB, labelB));
-        Assert.assertEquals("3", 0, labelTest(labelC, labelC));
-        Assert.assertEquals("4", 0, labelTest(labelD, labelD));
+        assertEquals(labelA, labelB, labelC, labelD);
 
         Assert.assertEquals("5", -1, labelTest(labelA, labelB));
         Assert.assertEquals("6", 1, labelTest(labelB, labelA));
@@ -48,11 +45,6 @@ public class LabelDominanceTest {
         Assert.assertEquals("13", 2, labelTest(labelB, labelC));
         Assert.assertEquals("14", 2, labelTest(labelC, labelB));
 
-        Assert.assertEquals("15", 0, labelTest(labelA, labelA));
-        Assert.assertEquals("16", 0, labelTest(labelB, labelB));
-
-        Assert.assertEquals("17", 0, labelTest(labelC, labelC));
-        Assert.assertEquals("18", 0, labelTest(labelD, labelD));
 
     }
 
@@ -73,21 +65,7 @@ public class LabelDominanceTest {
         Assert.assertEquals("1", 2, labelTest(labelA, labelB));
         Assert.assertEquals("2", 2, labelTest(labelB, labelA));
 
-        Assert.assertEquals("3", -1, labelTest(labelA, labelC));
-        Assert.assertEquals("4", 1, labelTest(labelC, labelA));
-
-        Assert.assertEquals("5", -1, labelTest(labelA, labelD));
-        Assert.assertEquals("6", 1, labelTest(labelD, labelA));
-
-
-        Assert.assertEquals("7", -1, labelTest(labelB, labelC));
-        Assert.assertEquals("8", 1, labelTest(labelC, labelB));
-
-        Assert.assertEquals("9", -1, labelTest(labelB, labelD));
-        Assert.assertEquals("10", 1, labelTest(labelD, labelB));
-
-        Assert.assertEquals("11", -1, labelTest(labelC, labelD));
-        Assert.assertEquals("12", 1, labelTest(labelD, labelC));
+        assertNotEqualA(labelA, labelB, labelC, labelD);
 
         Assert.assertEquals("13", 0, labelTest(labelA, labelA));
         Assert.assertEquals("14", 0, labelTest(labelB, labelB));
@@ -96,6 +74,7 @@ public class LabelDominanceTest {
         Assert.assertEquals("16", 0, labelTest(labelD, labelD));
 
     }
+
 
     @Test
     public void currentTimeAndDrivingTimeAndObjectiveValue() {
@@ -152,17 +131,7 @@ public class LabelDominanceTest {
         Assert.assertEquals("1", -1, labelTest(labelA, labelB));
         Assert.assertEquals("2", 1, labelTest(labelB, labelA));
 
-        Assert.assertEquals("3", 2, labelTest(labelA, labelC));
-        Assert.assertEquals("4", 2, labelTest(labelC, labelA));
-
-        Assert.assertEquals("5", 2, labelTest(labelA, labelD));
-        Assert.assertEquals("6", 2, labelTest(labelD, labelA));
-
-        Assert.assertEquals("7", 2, labelTest(labelB, labelC));
-        Assert.assertEquals("8", 2, labelTest(labelC, labelB));
-
-        Assert.assertEquals("9", 2, labelTest(labelB, labelD));
-        Assert.assertEquals("10", 2, labelTest(labelD, labelB));
+        assertSecondAlwaysDominatesFirst(labelA, labelB, labelC, labelD);
 
         Assert.assertEquals("11", -1, labelTest(labelC, labelD));
         Assert.assertEquals("12", 1, labelTest(labelD, labelC));
@@ -173,6 +142,7 @@ public class LabelDominanceTest {
         Assert.assertEquals("15", 0, labelTest(labelC, labelC));
         Assert.assertEquals("16", 0, labelTest(labelD, labelD));
     }
+
 
     @Test
     public void objectiveValueAndResources() {
@@ -191,14 +161,25 @@ public class LabelDominanceTest {
         labelC.setCanLeaveLocationAtTime(0);
         labelD.setCanLeaveLocationAtTime(0);
 
+        assertNotEqualB(labelA, labelB, labelC, labelD);
+
+        Assert.assertEquals("5", 2, labelTest(labelA, labelD));
+        Assert.assertEquals("6", 2, labelTest(labelD, labelA));
+
+        Assert.assertEquals("13", 0, labelTest(labelA, labelA));
+        Assert.assertEquals("14", 0, labelTest(labelB, labelB));
+
+        Assert.assertEquals("15", 0, labelTest(labelC, labelC));
+        Assert.assertEquals("16", 0, labelTest(labelD, labelD));
+    }
+
+    private void assertNotEqualB(Label labelA, Label labelB, Label labelC, Label labelD) {
         Assert.assertEquals("1", -1, labelTest(labelA, labelB));
         Assert.assertEquals("2", 1, labelTest(labelB, labelA));
 
         Assert.assertEquals("3", 1, labelTest(labelA, labelC));
         Assert.assertEquals("4", -1, labelTest(labelC, labelA));
 
-        Assert.assertEquals("5", 2, labelTest(labelA, labelD));
-        Assert.assertEquals("6", 2, labelTest(labelD, labelA));
 
         Assert.assertEquals("7", 1, labelTest(labelB, labelC));
         Assert.assertEquals("8", -1, labelTest(labelC, labelB));
@@ -208,12 +189,6 @@ public class LabelDominanceTest {
 
         Assert.assertEquals("11", -1, labelTest(labelC, labelD));
         Assert.assertEquals("12", 1, labelTest(labelD, labelC));
-
-        Assert.assertEquals("13", 0, labelTest(labelA, labelA));
-        Assert.assertEquals("14", 0, labelTest(labelB, labelB));
-
-        Assert.assertEquals("15", 0, labelTest(labelC, labelC));
-        Assert.assertEquals("16", 0, labelTest(labelD, labelD));
     }
 
 
@@ -252,6 +227,53 @@ public class LabelDominanceTest {
         Assert.assertEquals("11", 0, labelTest(labelC, labelD));
         Assert.assertEquals("12", 0, labelTest(labelD, labelC));
 
+    }
+
+
+    private void assertNotEqualA(Label labelA, Label labelB, Label labelC, Label labelD) {
+        Assert.assertEquals("3", -1, labelTest(labelA, labelC));
+        Assert.assertEquals("4", 1, labelTest(labelC, labelA));
+
+        Assert.assertEquals("5", -1, labelTest(labelA, labelD));
+        Assert.assertEquals("6", 1, labelTest(labelD, labelA));
+
+
+        Assert.assertEquals("7", -1, labelTest(labelB, labelC));
+        Assert.assertEquals("8", 1, labelTest(labelC, labelB));
+
+        Assert.assertEquals("9", -1, labelTest(labelB, labelD));
+        Assert.assertEquals("10", 1, labelTest(labelD, labelB));
+
+        Assert.assertEquals("11", -1, labelTest(labelC, labelD));
+        Assert.assertEquals("12", 1, labelTest(labelD, labelC));
+    }
+
+
+    private void assertSecondAlwaysDominatesFirst(Label labelA, Label labelB, Label labelC, Label labelD) {
+        Assert.assertEquals("3", 2, labelTest(labelA, labelC));
+        Assert.assertEquals("4", 2, labelTest(labelC, labelA));
+
+        Assert.assertEquals("5", 2, labelTest(labelA, labelD));
+        Assert.assertEquals("6", 2, labelTest(labelD, labelA));
+
+        Assert.assertEquals("7", 2, labelTest(labelB, labelC));
+        Assert.assertEquals("8", 2, labelTest(labelC, labelB));
+
+        Assert.assertEquals("9", 2, labelTest(labelB, labelD));
+        Assert.assertEquals("10", 2, labelTest(labelD, labelB));
+    }
+
+    private void assertEquals(Label labelA, Label labelB, Label labelC, Label labelD) {
+        Assert.assertEquals("1", 0, labelTest(labelA, labelA));
+        Assert.assertEquals("2", 0, labelTest(labelB, labelB));
+        Assert.assertEquals("3", 0, labelTest(labelC, labelC));
+        Assert.assertEquals("4", 0, labelTest(labelD, labelD));
+
+        Assert.assertEquals("15", 0, labelTest(labelA, labelA));
+        Assert.assertEquals("16", 0, labelTest(labelB, labelB));
+
+        Assert.assertEquals("17", 0, labelTest(labelC, labelC));
+        Assert.assertEquals("18", 0, labelTest(labelD, labelD));
     }
 
     public int labelTest(Label labelA, Label labelB) {
