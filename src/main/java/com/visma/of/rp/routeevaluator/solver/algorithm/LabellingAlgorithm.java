@@ -36,7 +36,9 @@ public class LabellingAlgorithm<T extends ITask> {
         this.objectiveFunctions = objectiveFunctions;
         this.constraints = constraints;
         this.labels = new Label[graph.getNodes().size()];
-        this.visits = new ArrayList<>(graph.getNodes().size() * 2 + 1);
+        this.visits = new ArrayList<>();
+        for (int i = 0; i < graph.getNodes().size(); i++) //Ensures that the array can hold the maximum potential entries, i.e, all tasks.
+            visits.add(null);
         this.labelLists = new LabelLists(graph.getNodes().size(), graph.getNodes().size() * 10);
         this.unExtendedLabels = new LabelQueue();
         this.bestLabelOnDestination = null;
