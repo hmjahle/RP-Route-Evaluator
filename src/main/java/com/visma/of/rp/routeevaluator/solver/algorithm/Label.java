@@ -30,18 +30,18 @@ public class Label implements Comparable<Label> {
         this.closed = false;
         setShiftStartTime();
     }
-    public void setShiftStartTime(){
-        if (previous != null){
-            if (previous.getPrevious() == null){
+
+    public void setShiftStartTime() {
+        if (previous != null) {
+            if (previous.getPrevious() == null) {
                 shiftStartTime = currentTime - travelTime;
-            }
-            else{
+            } else {
                 shiftStartTime = previous.getShiftStartTime();
             }
         }
     }
 
-    public int getShiftStartTime(){
+    public int getShiftStartTime() {
         return shiftStartTime;
     }
 
@@ -63,6 +63,7 @@ public class Label implements Comparable<Label> {
 
     /**
      * The start of service of the current task.
+     *
      * @return Time in seconds
      */
     public int getCurrentTime() {
@@ -85,6 +86,7 @@ public class Label implements Comparable<Label> {
      * The time from which it is possible to calculate the travel time from a physical location to the next.
      * E.g. it is the start of service time of a task + duration of all tasks performed at that location
      * or on the way to the next location.
+     *
      * @return Time in seconds
      */
     public int getCanLeaveLocationAtTime() {
@@ -93,6 +95,7 @@ public class Label implements Comparable<Label> {
 
     /**
      * Travel time from the previous location.
+     *
      * @return Time in seconds
      */
     public int getTravelTime() {
@@ -142,9 +145,9 @@ public class Label implements Comparable<Label> {
 
     @Override
     public int hashCode() {
-        int hash = (int) currentTime;
-        hash += ((int) canLeaveLocationAtTime << 2);
-        hash += ((int) travelTime << 4);
+        int hash = currentTime;
+        hash += (canLeaveLocationAtTime << 2);
+        hash += (travelTime << 4);
         hash += node != null ? (node.getNodeId() << 6) : 0;
         hash += node != null ? (node.getLocationId() << 8) : 0;
         hash += objective != null ? ((int) objective.getObjectiveValue() << 10) : 0;
