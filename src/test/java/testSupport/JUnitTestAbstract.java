@@ -74,7 +74,7 @@ public abstract class JUnitTestAbstract {
     }
 
     protected int getVisitTravelTime(RouteEvaluatorResult<ITask> result, int visitNo) {
-        Visit visitTask1 = result.getVisitSolution().get(visitNo);
+        Visit<ITask> visitTask1 = result.getVisitSolution().get(visitNo);
         return visitTask1.getTravelTime();
     }
 
@@ -94,7 +94,7 @@ public abstract class JUnitTestAbstract {
         for (Visit<ITask> visit : route.getVisitSolution()) {
             System.out.println("Visit no " + (i++) + " " + printVisit(visit));
         }
-}
+    }
 
     protected String printVisit(Visit<ITask> visit) {
         return "Travel time to: " + visit.getTravelTime() + " start time: " + visit.getStartTime() +
