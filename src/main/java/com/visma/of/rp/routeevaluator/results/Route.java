@@ -3,14 +3,13 @@ package com.visma.of.rp.routeevaluator.results;
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Route<T extends ITask> {
 
-    private List<Visit<T>> visitSolution;
+    private final List<Visit<T>> visitSolution;
     private int routeFinishedAtTime;
 
     public Route() {
@@ -18,8 +17,8 @@ public class Route<T extends ITask> {
         this.routeFinishedAtTime = 0;
     }
 
-    public void addVisits(Visit<T>[] visits, int visitsCnt) {
-        visitSolution.addAll(Arrays.asList(visits).subList(0, visitsCnt));
+    public void addVisits(List<Visit<T>> visits) {
+        visitSolution.addAll(visits);
     }
 
     public void setRouteFinishedAtTime(int routeFinishedAtTime) {
@@ -69,9 +68,9 @@ public class Route<T extends ITask> {
      * @param task Task to find the position for.
      * @return Integer position, null if the task is not in the route.
      */
-    public Integer findIndexInRoute(ITask task) {
+    public Integer findIndexInRoute(T task) {
         int i = 0;
-        for (Visit visit : visitSolution)
+        for (Visit<T> visit : visitSolution)
             if (visit.getTask() == task)
                 return i;
             else i++;

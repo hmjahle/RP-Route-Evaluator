@@ -9,7 +9,9 @@ import com.visma.of.rp.routeevaluator.results.Route;
 import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.results.Visit;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 
 /**
  * The labelling algorithm is a resource constrained shortest path algorithm.
@@ -17,14 +19,14 @@ import java.util.Enumeration;
  */
 public class LabellingAlgorithm<T extends ITask> {
 
-    private SearchGraph graph;
-    private ObjectiveFunctionsIntraRouteHandler objectiveFunctions;
-    private ConstraintsIntraRouteHandler constraints;
-    private LabelQueue unExtendedLabels;
-    private Label[] labels;
-    private Visit<T>[] visits;
+    private final SearchGraph graph;
+    private final ObjectiveFunctionsIntraRouteHandler objectiveFunctions;
+    private final ConstraintsIntraRouteHandler constraints;
+    private final LabelQueue unExtendedLabels;
+    private final Label[] labels;
+    private final List<Visit<T>> visits;
+    private final LabelLists labelLists;
     private Label bestLabelOnDestination;
-    private LabelLists labelLists;
     private IExtendInfo nodeExtendInfo;
     private int[] syncedNodesStartTime;
     private IShift employeeWorkShift;
@@ -34,7 +36,9 @@ public class LabellingAlgorithm<T extends ITask> {
         this.objectiveFunctions = objectiveFunctions;
         this.constraints = constraints;
         this.labels = new Label[graph.getNodes().size()];
-        this.visits = new Visit[graph.getNodes().size()];
+        this.visits = new ArrayList<>();
+        for (int i = 0; i < graph.getNodes().size(); i++) //Ensures that the array can hold the maximum potential entries, i.e, all tasks.
+            visits.add(null);
         this.labelLists = new LabelLists(graph.getNodes().size(), graph.getNodes().size() * 10);
         this.unExtendedLabels = new LabelQueue();
         this.bestLabelOnDestination = null;
@@ -82,11 +86,11 @@ public class LabellingAlgorithm<T extends ITask> {
      * @param bestLabel Label representing the best route for the employee work shift.
      * @return Results of the route.
      */
-    private RouteEvaluatorResult buildRouteEvaluatorResult(Label bestLabel) {
-        Route route = new Route();
+    private RouteEvaluatorResult<T> buildRouteEvaluatorResult(Label bestLabel) {
+        Route<T> route = new Route<>();
         route.setRouteFinishedAtTime(bestLabel.getCurrentTime());
         extractVisitsAndSyncedStartTime(bestLabel, route);
-        return new RouteEvaluatorResult(bestLabel.getObjective(), route);
+        return new RouteEvaluatorResult<>(bestLabel.getObjective(), route);
     }
 
     private void solveLabellingAlgorithm(Label startLabel) {
@@ -113,7 +117,7 @@ public class LabellingAlgorithm<T extends ITask> {
         boolean taskRequirePhysicalAppearance = nextNode.getRequirePhysicalAppearance();
         int newLocation = findNewLocation(thisLabel, taskRequirePhysicalAppearance, nextNode);
         Integer travelTime = getTravelTime(thisLabel, nextNode, newLocation);
-        if(travelTime == null)
+        if (travelTime == null)
             return null;
         int startOfServiceNextTask = calcStartOfServiceNextTask(thisLabel, nextNode, taskRequirePhysicalAppearance, travelTime, nextNode.isSynced());
         IObjective objective = evaluateFeasibilityAndObjective(thisLabel, nextNode, startOfServiceNextTask, travelTime, nextNode.isSynced(), newLocation);
@@ -203,10 +207,11 @@ public class LabellingAlgorithm<T extends ITask> {
      * Finds the travel time to the next node. Note that if the current location is (-1) it is at the "origin" and interpreted as the first task will become the origin.
      * Hence, this task will become the origin and therefore the travel time will be 0.
      *
-     * @param thisLabel
-     * @param nextNode
-     * @param newLocation
-     * @return
+     * @param thisLabel   The current label
+     * @param nextNode    Node to extend the label to
+     * @param newLocation Location the label is extended to, can be different from the location of the node, e.g., if the
+     *                    next does not require physical appearance
+     * @return Travel time or null if travel is not possible.
      */
     private Integer getTravelTime(Label thisLabel, Node nextNode, int newLocation) {
         if (thisLabel.getCurrentLocationId() == -1)
@@ -247,14 +252,14 @@ public class LabellingAlgorithm<T extends ITask> {
                 bestLabelOnDestination.getObjective().getObjectiveValue() < currentLabel.getObjective().getObjectiveValue();
     }
 
-    private void extractVisitsAndSyncedStartTime(Label bestLabel, Route route) {
+    private void extractVisitsAndSyncedStartTime(Label bestLabel, Route<T> route) {
         int labelCnt = collectLabels(bestLabel);
         int visitCnt = 0;
         for (int i = labelCnt - 1; i > 0; i--) {
             bestLabel = labels[i];
             visitCnt = addVisit(visitCnt, bestLabel);
         }
-        route.addVisits(visits, visitCnt);
+        route.addVisits(visits.subList(0, visitCnt));
     }
 
     private int collectLabels(Label currentLabel) {
@@ -267,8 +272,10 @@ public class LabellingAlgorithm<T extends ITask> {
     }
 
     private int addVisit(int visitCnt, Label currentLabel) {
-        visits[visitCnt++] = new Visit(currentLabel.getNode().getTask(), currentLabel.getCurrentTime(),
-                currentLabel.getTravelTime());
+        @SuppressWarnings("unchecked")
+        T task = ((T) currentLabel.getNode().getTask());
+        visits.set(visitCnt++, new Visit<>(task, currentLabel.getCurrentTime(),
+                currentLabel.getTravelTime()));
         return visitCnt;
     }
 

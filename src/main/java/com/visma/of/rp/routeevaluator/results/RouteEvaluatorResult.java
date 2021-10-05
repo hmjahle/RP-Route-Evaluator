@@ -7,8 +7,8 @@ import java.util.List;
 
 public class RouteEvaluatorResult<T extends ITask> {
 
-    private Route<T> route;
-    private IObjective objective;
+    private final Route<T> route;
+    private final IObjective objective;
 
     public RouteEvaluatorResult(IObjective objective, Route<T> route) {
         this.route = route;
