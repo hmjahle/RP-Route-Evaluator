@@ -39,7 +39,7 @@ public class Route<T extends ITask> {
      * @return List of tasks, can be empty.
      */
     public List<T> extractEmployeeTasks() {
-        return this.getVisitSolution().stream().map(i -> ((T) i.getTask())).collect(Collectors.toList());
+        return this.getVisitSolution().stream().map(Visit::getTask).collect(Collectors.toList());
     }
 
     /**
