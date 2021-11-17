@@ -33,4 +33,6 @@ public interface IShift {
      * @return Id short value.
      */
     short getId();
+
+    int getTransportMode();
 }

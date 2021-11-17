@@ -62,7 +62,6 @@ public class TimeWindowLateArrivalConstraintTest extends JUnitTestAbstract {
     @Test
     public void fiveMixedTasksFeasibleNoSlack() {
         RouteEvaluatorResult<ITask> result = getRoute(10, 0);
-        printRoute(result.getRoute());
         Assert.assertNotNull("Must be feasible. ", result);
     }
 
@@ -87,7 +86,6 @@ public class TimeWindowLateArrivalConstraintTest extends JUnitTestAbstract {
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         routeEvaluator.addConstraint(new TimeWindowLateArrivalConstraint());
         RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
-        printRoute(result.getRoute());
         Assert.assertNotNull("Must be feasible. ", result);
     }
 

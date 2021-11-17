@@ -13,21 +13,19 @@ public class TestTask implements ITask {
     int endTime;
     boolean isStrict;
     boolean isSynced;
-
-    public void setRequirePhysicalAppearance(boolean requirePhysicalAppearance) {
-        this.requirePhysicalAppearance = requirePhysicalAppearance;
-    }
-
     boolean requirePhysicalAppearance;
     int requiredSkillLevel;
     int syncedWithIntervalDiffSeconds;
     ILocation location;
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     String id;
+
+
+
+    public TestTask() {
+        this.requirePhysicalAppearance = true;
+        this.location = new TestLocation(false);
+
+    }
 
     public TestTask(int duration, int startTime, int endTime, boolean isStrict, boolean isSynced, boolean requirePhysicalAppearance, int requiredSkillLevel, int syncedWithIntervalDiffSeconds, ILocation location, String id) {
         this.duration = duration;
@@ -39,6 +37,31 @@ public class TestTask implements ITask {
         this.requiredSkillLevel = requiredSkillLevel;
         this.syncedWithIntervalDiffSeconds = syncedWithIntervalDiffSeconds;
         this.location = location;
+        this.id = id;
+    }
+
+    public TestTask(int startTime, int endTime, int duration, String id) {
+       this();
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.duration = duration;
+        this.id = id;
+    }
+
+
+    public TestTask(int startTime, int endTime, int duration, boolean isSynced) {
+        this();
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.duration = duration;
+        this.isSynced = isSynced;
+    }
+
+    public void setRequirePhysicalAppearance(boolean requirePhysicalAppearance) {
+        this.requirePhysicalAppearance = requirePhysicalAppearance;
+    }
+
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -85,6 +108,10 @@ public class TestTask implements ITask {
     @Override
     public String getId() {
         return id;
+    }
+
+    public void setSynced(boolean synced) {
+        isSynced = synced;
     }
 
     public void setStrict(boolean strict) {
