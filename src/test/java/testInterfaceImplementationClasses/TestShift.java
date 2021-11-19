@@ -9,10 +9,12 @@ public class TestShift implements IShift {
 
     int startTime;
     int endTime;
+    int transportMode;
 
     public TestShift(int startTime, int endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
+        this.transportMode = 1;
     }
 
     @Override
@@ -33,5 +35,10 @@ public class TestShift implements IShift {
     @Override
     public short getId() {
         return 0;
+    }
+
+    @Override
+    public int getTransportMode() {
+        return transportMode;
     }
 }
