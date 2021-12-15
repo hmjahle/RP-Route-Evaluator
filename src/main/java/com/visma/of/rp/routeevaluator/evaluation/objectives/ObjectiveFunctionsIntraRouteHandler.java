@@ -22,6 +22,10 @@ public class ObjectiveFunctionsIntraRouteHandler {
         objectiveFunctions.put(objectiveFunctionId, new WeightObjectivePair(weight, objectiveIntraShift));
     }
 
+    public boolean removeObjective(String name) {
+        return objectiveFunctions.remove(name) != null;
+    }
+
     public IObjective calculateObjectiveValue(IObjective currentObjective, long travelTime, ITask task, long startOfServiceNextTask,
                                               long visitEnd, long syncedTaskLatestStartTime, long endOfShift) {
 

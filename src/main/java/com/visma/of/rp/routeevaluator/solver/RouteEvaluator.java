@@ -512,4 +512,8 @@ public class RouteEvaluator<T extends ITask> {
     public boolean deactivateConstraint(String name) {
         return constraints.deactivateConstraint(name);
     }
+    public boolean removeObjectiveIntraShift(String name) {
+        return objectiveFunctions.removeObjective(name);
+    }
+
 }
