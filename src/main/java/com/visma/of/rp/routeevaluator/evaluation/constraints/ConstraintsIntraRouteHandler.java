@@ -64,6 +64,14 @@ public class ConstraintsIntraRouteHandler {
         return true;
     }
 
+    public Map<String, IConstraintIntraRoute> getActiveConstraintsMap(){
+        return activeConstraints;
+    }
+
+    public Map<String, IConstraintIntraRoute> getInactiveConstraintsMap(){
+        return inactiveConstraints;
+    }
+
     public Collection<IConstraintIntraRoute> getActiveConstraints() {
         return activeConstraints.values();
     }
