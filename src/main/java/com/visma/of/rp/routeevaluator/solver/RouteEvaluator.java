@@ -519,5 +519,4 @@ public class RouteEvaluator<T extends ITask> {
     public boolean removeObjectiveIntraShift(String name) {
         return objectiveFunctions.removeObjective(name);
     }
-
 }
