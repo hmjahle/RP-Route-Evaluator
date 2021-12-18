@@ -493,6 +493,10 @@ public class RouteEvaluator<T extends ITask> {
         return constraints.getInactiveConstraints();
     }
 
+    public ConstraintsIntraRouteHandler getConstraints() {
+        return constraints;
+    }
+
     /**
      * Activates an inactive constraint
      *
