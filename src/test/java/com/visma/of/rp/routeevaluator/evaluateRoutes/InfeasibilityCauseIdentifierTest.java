@@ -37,7 +37,7 @@ public class InfeasibilityCauseIdentifierTest extends JUnitTestAbstract {
     @Test
     public void isFeasibleSingleConsObj() {
         TestShift shift = new TestShift(0, 30);
-        InfeasibilityCauseIdentifier ici = new InfeasibilityCauseIdentifier(tasks, travelTimeMatrices, office);
+        InfeasibilityCauseIdentifier<ITask> ici = new InfeasibilityCauseIdentifier<>(tasks, travelTimeMatrices, office, office);
         String id = "Overtime";
         ici.addInfeasibilityTesterPair(id, new OvertimeObjectiveFunction(), new OvertimeConstraint());
 
@@ -61,7 +61,7 @@ public class InfeasibilityCauseIdentifierTest extends JUnitTestAbstract {
 
         tasks.add(newSyncedTask);
         travelTimeMatrices = createTravelTimeMatrix(tasks, office);
-        InfeasibilityCauseIdentifier ici = new InfeasibilityCauseIdentifier(tasks, travelTimeMatrices, office);
+        InfeasibilityCauseIdentifier<ITask> ici = new InfeasibilityCauseIdentifier<>(tasks, travelTimeMatrices, office, office);
         String overTimeId = "Overtime";
         ici.addInfeasibilityTesterPair(overTimeId, new OvertimeObjectiveFunction(), new OvertimeConstraint());
 
