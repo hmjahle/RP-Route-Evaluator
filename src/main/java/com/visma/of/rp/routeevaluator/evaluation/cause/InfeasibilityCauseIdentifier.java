@@ -14,13 +14,14 @@ import java.util.Map;
  * only "intra route costraints" can be evaluated. It evaluates every constraint or objective individually, which means
  * that all other constraints/objectives will be ignored when evaluating these.
  */
-public class InfeasibilityCauseIdentifier {
+public class InfeasibilityCauseIdentifier<T extends ITask> {
 
-    Map<String, Map<Integer, RouteEvaluator<ITask>>> routeEvaluatorsConstraints;
-    Map<String, Map<Integer, RouteEvaluator<ITask>>> routeEvaluatorsObjectives;
+    Map<String, Map<Integer, RouteEvaluator<T>>> routeEvaluatorsConstraints;
+    Map<String, Map<Integer, RouteEvaluator<T>>> routeEvaluatorsObjectives;
     Map<Integer, ITravelTimeMatrix> distanceMatrixMatrix;
-    Collection<ITask> tasks;
-    ILocation officeLocation;
+    Collection<T> tasks;
+    ILocation startLocation;
+    ILocation endLocation;
 
     /**
      * The set of tasks MUST include all tasks that will later have to be evaluated. Hence, evaluating a route containing
@@ -28,14 +29,16 @@ public class InfeasibilityCauseIdentifier {
      *
      * @param tasks                The tasks is to be supported in the evaluator
      * @param distanceMatrixMatrix A distance matrix, all travel modes to be evaluated must be present here.
-     * @param officeLocation       Location of the office if an office is to be used. Must be in the distance matrix.
+     * @param startLocation        Location of the office if an office is to be used. Must be in the distance matrix.
      */
-    public InfeasibilityCauseIdentifier(Collection<ITask> tasks, Map<Integer, ITravelTimeMatrix> distanceMatrixMatrix, ILocation officeLocation) {
+    public InfeasibilityCauseIdentifier(Collection<T> tasks, Map<Integer, ITravelTimeMatrix> distanceMatrixMatrix,
+                                        ILocation startLocation, ILocation endLocation) {
         this.routeEvaluatorsObjectives = new HashMap<>();
         this.routeEvaluatorsConstraints = new HashMap<>();
         this.tasks = tasks;
         this.distanceMatrixMatrix = distanceMatrixMatrix;
-        this.officeLocation = officeLocation;
+        this.startLocation = startLocation;
+        this.endLocation = endLocation;
     }
 
     /**
@@ -50,16 +53,16 @@ public class InfeasibilityCauseIdentifier {
      *                           about the id will be returned when calling the isFeasible function.
      */
     public void addInfeasibilityTesterPair(String id, IObjectiveFunctionIntraRoute objectiveFunction, IConstraintIntraRoute constraintFunction) {
-        Map<Integer, RouteEvaluator<ITask>> routeEvaluatorObjectives = new HashMap<>();
-        Map<Integer, RouteEvaluator<ITask>> routeEvaluatorConstraints = new HashMap<>();
+        Map<Integer, RouteEvaluator<T>> routeEvaluatorObjectives = new HashMap<>();
+        Map<Integer, RouteEvaluator<T>> routeEvaluatorConstraints = new HashMap<>();
         for (Map.Entry<Integer, ITravelTimeMatrix> kvp : distanceMatrixMatrix.entrySet()) {
             if (objectiveFunction != null) {
-                RouteEvaluator<ITask> reObj = new RouteEvaluator<>(kvp.getValue(), tasks, officeLocation);
+                RouteEvaluator<T> reObj = new RouteEvaluator<>(kvp.getValue(), tasks, startLocation, endLocation);
                 reObj.addObjectiveIntraShift(objectiveFunction);
                 routeEvaluatorObjectives.put(kvp.getKey(), reObj);
             }
             if (constraintFunction != null) {
-                RouteEvaluator<ITask> reCons = new RouteEvaluator<>(kvp.getValue(), tasks, officeLocation);
+                RouteEvaluator<T> reCons = new RouteEvaluator<>(kvp.getValue(), tasks, startLocation, endLocation);
                 reCons.addConstraint(constraintFunction);
                 routeEvaluatorConstraints.put(kvp.getKey(), reCons);
             }
@@ -79,9 +82,9 @@ public class InfeasibilityCauseIdentifier {
      * @param employeeWorkShift    Work shift for which the route is to be evaluated for.
      * @return Map with whether route is feasible for the given function id. Return null if there is no constraints
      */
-    public Map<String, Boolean> isFeasible(List<ITask> tasks, Map<ITask, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
+    public Map<String, Boolean> isFeasible(List<T> tasks, Map<ITask, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
         Map<String, Boolean> feasibility = new HashMap<>();
-        for (Map.Entry<String, Map<Integer, RouteEvaluator<ITask>>> kvp : routeEvaluatorsConstraints.entrySet()) {
+        for (Map.Entry<String, Map<Integer, RouteEvaluator<T>>> kvp : routeEvaluatorsConstraints.entrySet()) {
             boolean feasible = kvp.getValue().get(employeeWorkShift.getTransportMode()).evaluateRouteByTheOrderOfTasks(tasks, syncedTasksStartTime, employeeWorkShift) != null;
             feasibility.put(kvp.getKey(), feasible);
         }
@@ -99,10 +102,10 @@ public class InfeasibilityCauseIdentifier {
      * @return Map with objective values for the given function id. Return null if there is no objectives to evaluate or
      * the route is infeasible.
      */
-    public Map<String, Double> objective(List<ITask> tasks, Map<ITask, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
+    public Map<String, Double> objective(List<T> tasks, Map<ITask, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
         Map<String, Double> objectives = new HashMap<>();
-        for (Map.Entry<String, Map<Integer, RouteEvaluator<ITask>>> kvp : routeEvaluatorsObjectives.entrySet()) {
-            RouteEvaluatorResult<ITask> result = kvp.getValue().get(employeeWorkShift.getTransportMode()).evaluateRouteByTheOrderOfTasks(tasks, syncedTasksStartTime, employeeWorkShift);
+        for (Map.Entry<String, Map<Integer, RouteEvaluator<T>>> kvp : routeEvaluatorsObjectives.entrySet()) {
+            RouteEvaluatorResult<T> result = kvp.getValue().get(employeeWorkShift.getTransportMode()).evaluateRouteByTheOrderOfTasks(tasks, syncedTasksStartTime, employeeWorkShift);
             if (result == null)
                 return null;
             objectives.put(kvp.getKey(), result.getObjectiveValue());
