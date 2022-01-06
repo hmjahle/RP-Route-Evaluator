@@ -52,6 +52,31 @@ public class InfeasibilityCauseIdentifierTest extends JUnitTestAbstract {
     }
 
     @Test
+    public void isFeasibleSingleConstraintNoObjective() {
+        TestShift shift = new TestShift(0, 30);
+        InfeasibilityCauseIdentifier<ITask> ici = new InfeasibilityCauseIdentifier<>(tasks, travelTimeMatrices, office, office);
+        String id = "Overtime";
+        ici.addInfeasibilityTesterPair(id, new OvertimeConstraint());
+
+        Map<String, Boolean> feasible = ici.isFeasible(tasks.subList(0, 2), null, shift);
+        Assert.assertTrue(feasible.get(id));
+
+        feasible = ici.isFeasible(tasks, null, shift);
+        Assert.assertFalse(feasible.get(id));
+    }
+
+    @Test
+    public void isFeasibleSingleObjectiveNoConstraint() {
+        TestShift shift = new TestShift(0, 30);
+        InfeasibilityCauseIdentifier<ITask> ici = new InfeasibilityCauseIdentifier<>(tasks, travelTimeMatrices, office, office);
+        String id = "Overtime";
+        ici.addInfeasibilityTesterPair(id, new OvertimeObjectiveFunction());
+
+        Assert.assertEquals(0, ici.objective(tasks.subList(0, 2), null, shift).get(id), DELTA);
+        Assert.assertEquals(17, ici.objective(tasks, null, shift).get(id), DELTA);
+    }
+
+    @Test
     public void isFeasibleMultipleConsObj() {
         TestShift shift = new TestShift(0, 30);
         TestTask newSyncedTask = new TestTask(10, 100, 10, "5");
