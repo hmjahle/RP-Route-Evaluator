@@ -10,9 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The class is used to find the cause for infeasibility when evaluating what happens when creating a route. Hence,
- * only "intra route costraints" can be evaluated. It evaluates every constraint or objective individually, which means
- * that all other constraints/objectives will be ignored when evaluating these.
+ * The class is used to find the cause for infeasibility when evaluating why a route is feasible. Hence,
+ * only "intra route constraints" can be evaluated. It evaluates every constraint or objective individually, which means
+ * that all other constraints/objectives will be ignored when evaluating these. Hence it can only check one constraint at the time
+ * and not the consequence of having two or more constraints active at the same time.
  */
 public class InfeasibilityCauseIdentifier<T extends ITask> {
 
@@ -42,13 +43,34 @@ public class InfeasibilityCauseIdentifier<T extends ITask> {
     }
 
     /**
-     * Adds an objective and a constraint to be evaluated as a pair. Therefore it is important that they evaluate in the
-     * right same way.
+     * Adds an objective function to be evaluated. This can be used to evaluate the objective independently, so one
+     * can see the value of just that objective.
+     *
+     * @param id                Id of the objective function.
+     * @param objectiveFunction Objective function to be evaluated if one wants to check the potential objective value,
+     *
+     */
+    public void addInfeasibilityTesterPair(String id, IObjectiveFunctionIntraRoute objectiveFunction) {
+        addInfeasibilityTesterPair(id, objectiveFunction, null);
+    }
+
+    /**
+     * Adds a constraint to be evaluated. Here the feasibility of this constraint can be evaluated
+     *
+     * @param id                 Id of the constraint.
+     * @param constraintFunction Constraint function to check for feasibility.
+     */
+    public void addInfeasibilityTesterPair(String id, IConstraintIntraRoute constraintFunction) {
+        addInfeasibilityTesterPair(id, null, constraintFunction);
+    }
+
+    /**
+     * Adds an objective and a constraint to be evaluated as a pair.Therefore it is important that they evaluate in the
+     * same way. If not the objective value will not necessarily represent the objective of breaking the constraint.
      *
      * @param id                 Id of the constraint.
      * @param objectiveFunction  Objective function to be if one wants to evaluate the potential objective value of the
-     *                           paired constraint. If null, no information for the id will be returned when using the
-     *                           evaluate objective function.
+     *                           paired constraint.
      * @param constraintFunction Constraint function to check for feasibility with. Can be null but then no information
      *                           about the id will be returned when calling the isFeasible function.
      */
@@ -93,7 +115,7 @@ public class InfeasibilityCauseIdentifier<T extends ITask> {
 
     /**
      * Evaluate the objective function for each objective and return the objective values in a map with the id and the
-     * objective value. If a route is infeasible for whatever reason it returns null.
+     * corresponding objective value. If a route is infeasible for whatever reason it returns null.
      *
      * @param tasks                The route to be evaluated.
      * @param syncedTasksStartTime Start times for potential synced tasks in the route. Can be null if it does not
