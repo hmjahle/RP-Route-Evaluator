@@ -36,7 +36,9 @@ public class SearchGraph {
      * @param originLocation The the location where the route should start.
      */
     public void updateOrigin(ILocation originLocation) {
-        if ((destination instanceof VirtualNode)) {
+        if (originLocation == null) {
+            useOpenStartRoutes();
+        } else if (origin instanceof VirtualNode) {
             this.origin = new Node(sourceId, null, getLocationId(originLocation));
         } else
             origin.setLocationId(locationToLocationIds.get(originLocation));
@@ -49,7 +51,9 @@ public class SearchGraph {
      * @param destinationLocation The the location where the route should end.
      */
     public void updateDestination(ILocation destinationLocation) {
-        if ((destination instanceof VirtualNode)) {
+        if (destinationLocation == null) {
+            useOpenEndedRoutes();
+        } else if ((destination instanceof VirtualNode)) {
             this.destination = new Node(sinkId, null, getLocationId(destinationLocation));
         } else
             destination.setLocationId(locationToLocationIds.get(destinationLocation));

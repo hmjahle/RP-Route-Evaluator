@@ -69,7 +69,15 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
         routeEvaluator.updateDestination(destination);
 
         assertOneTask(tasks, routeEvaluator, 41);
+
+        routeEvaluator.updateOrigin(null);
+        routeEvaluator.updateDestination(null);
+
+        assertOneTask(tasks, routeEvaluator, 31);
+
     }
+
+
 
     @Test
     public void multipleTasks() {
