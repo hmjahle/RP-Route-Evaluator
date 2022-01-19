@@ -1,5 +1,6 @@
 package testInterfaceImplementationClasses;
 
+import com.visma.of.rp.routeevaluator.interfaces.ILocation;
 import com.visma.of.rp.routeevaluator.interfaces.IShift;
 
 /**
@@ -10,11 +11,27 @@ public class TestShift implements IShift {
     int startTime;
     int endTime;
     int transportMode;
+    private ILocation startLocation;
+    private ILocation endLocation;
 
     public TestShift(int startTime, int endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.transportMode = 1;
+    }
+
+    public TestShift(int startTime, int endTime, ILocation startLocation, ILocation endLocation) {
+        this(startTime, endTime);
+        this.startLocation = startLocation;
+        this.endLocation = endLocation;
+    }
+
+    public ILocation getStartLocation() {
+        return startLocation;
+    }
+
+    public ILocation getEndLocation() {
+        return endLocation;
     }
 
     @Override

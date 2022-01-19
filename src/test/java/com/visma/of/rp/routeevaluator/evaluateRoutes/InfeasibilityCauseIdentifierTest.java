@@ -35,6 +35,21 @@ public class InfeasibilityCauseIdentifierTest extends JUnitTestAbstract {
     }
 
     @Test
+    public void isFeasibleStartLocationNull() {
+        TestShift shift = new TestShift(0, 30, null, null);
+        InfeasibilityCauseIdentifier<ITask> ici = new InfeasibilityCauseIdentifier<>(tasks, travelTimeMatrices, shift.getStartLocation(), shift.getEndLocation());
+
+        String id = "Overtime";
+        ici.addInfeasibilityTesterPair(id, new OvertimeObjectiveFunction(), new OvertimeConstraint());
+
+        Map<String, Boolean> feasible = ici.isFeasible(tasks.subList(0, 1), null, shift);
+        Assert.assertTrue(feasible.get(id));
+
+        feasible = ici.isFeasible(tasks, null, shift);
+        Assert.assertFalse(feasible.get(id));
+    }
+
+    @Test
     public void isFeasibleSingleConsObj() {
         TestShift shift = new TestShift(0, 30);
         InfeasibilityCauseIdentifier<ITask> ici = new InfeasibilityCauseIdentifier<>(tasks, travelTimeMatrices, office, office);

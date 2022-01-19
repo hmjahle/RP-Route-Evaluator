@@ -36,7 +36,12 @@ public class SearchGraph {
      * @param originLocation The the location where the route should start.
      */
     public void updateOrigin(ILocation originLocation) {
-        origin.setLocationId(locationToLocationIds.get(originLocation));
+        if (originLocation == null) {
+            useOpenStartRoutes();
+        } else if (origin instanceof VirtualNode) {
+            this.origin = new Node(sourceId, null, getLocationId(originLocation));
+        } else
+            origin.setLocationId(locationToLocationIds.get(originLocation));
     }
 
     /**
@@ -46,7 +51,12 @@ public class SearchGraph {
      * @param destinationLocation The the location where the route should end.
      */
     public void updateDestination(ILocation destinationLocation) {
-        destination.setLocationId(locationToLocationIds.get(destinationLocation));
+        if (destinationLocation == null) {
+            useOpenEndedRoutes();
+        } else if ((destination instanceof VirtualNode)) {
+            this.destination = new Node(sinkId, null, getLocationId(destinationLocation));
+        } else
+            destination.setLocationId(locationToLocationIds.get(destinationLocation));
     }
 
     public List<Node> getNodes() {
@@ -65,16 +75,17 @@ public class SearchGraph {
         return locationIdCounter++;
     }
 
-    private void populateGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<? extends ITask> tasks, ILocation originLocation,
+    private void populateGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<? extends
+            ITask> tasks, ILocation originLocation,
                                ILocation destinationLocation) {
         updateTravelTimeInformation(travelTimeMatrixInput);
         initializeOriginDestination(originLocation, destinationLocation);
         addNodesToGraph(tasks);
-        sourceId = getNewNodeId();
-        sinkId = getNewNodeId();
     }
 
     private void initializeOriginDestination(ILocation originLocation, ILocation destinationLocation) {
+        sourceId = getNewNodeId();
+        sinkId = getNewNodeId();
         initializeOrigin(originLocation);
         initializeDestination(destinationLocation);
         nodes.add(origin);
@@ -89,10 +100,10 @@ public class SearchGraph {
      */
     private void initializeOrigin(ILocation originLocation) {
         if (originLocation != null) {
-            this.origin = new Node(getNewNodeId(), null, getLocationId(originLocation));
+            this.origin = new Node(sourceId, null, getLocationId(originLocation));
             locationToLocationIds.put(originLocation, origin.getLocationId());
         } else {
-            this.origin = new Node(getNewNodeId(), null, -1);
+            this.origin = new VirtualNode(sourceId);
         }
     }
 
@@ -104,10 +115,11 @@ public class SearchGraph {
      */
     private void initializeDestination(ILocation destinationLocation) {
         if (destinationLocation != null) {
-            this.destination = new Node(getNewNodeId(), null, getLocationId(destinationLocation));
+            this.destination = new Node(sinkId, null, getLocationId(destinationLocation));
             locationToLocationIds.put(destinationLocation, destination.getLocationId());
         } else {
-            this.destination = new Node(getNewNodeId(), null, -1);
+            this.destination = new VirtualNode(sinkId);
+
         }
     }
 
@@ -164,7 +176,8 @@ public class SearchGraph {
         return taskToNodes.get(task).getLocationId();
     }
 
-    private void addTravelTime(ITravelTimeMatrix travelTimeMatrixInput, ILocation fromLocation, ILocation toLocation) {
+    private void addTravelTime(ITravelTimeMatrix travelTimeMatrixInput, ILocation fromLocation, ILocation
+            toLocation) {
         int fromId = getLocationId(fromLocation);
         int toId = getLocationId(toLocation);
 
