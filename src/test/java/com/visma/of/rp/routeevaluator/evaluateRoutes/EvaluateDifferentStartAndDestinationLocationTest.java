@@ -75,10 +75,18 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
     }
 
     @Test
-    public void multipleTasksNoStartDestination() {
-        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks);
+    public void multipleTasksSetStartEndDestinationPostInitialization() {
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, null, null);
         routeEvaluator.updateOrigin(origin);
         routeEvaluator.updateDestination(destination);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        assertMultipleTasks(result);
+    }
+
+
+    @Test
+    public void multipleTasksNullStartEndDestination() {
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, null, null);
         RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
         assertMultipleTasks(result);
     }
@@ -149,7 +157,7 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
         Assert.assertEquals("Office return should be: ", 51, result.getTimeOfArrivalAtDestination().longValue());
         Assert.assertEquals("Cost should be: ", 0.0, result.getObjectiveValue(), 1E-6);
     }
-    
+
     private ITravelTimeMatrix createTravelTimeMatrix(ILocation origin, ILocation destination, Collection<ITask> tasks) {
         TestTravelTimeMatrix travelTimeMatrix = new TestTravelTimeMatrix(tasks);
         travelTimeMatrix.addUndirectedConnection(origin, destination, 50);
