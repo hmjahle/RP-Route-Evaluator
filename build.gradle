@@ -26,10 +26,11 @@ plugins {
 
 group 'com.visma.of'
 mainClassName = 'Main'
-sourceCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
 
 task incrementVersion {
-    doLast{
+    doLast {
         Properties props = new Properties()
         File propsFile = new File('gradle.properties')
         props.load(propsFile.newDataInputStream())
@@ -124,7 +125,7 @@ publishing {
             artifactId = "rp-route-evaluator"
             version = "${version}"
             from components.java
-            artifact (sourcesJar) {
+            artifact(sourcesJar) {
                 classifier = 'sources'
             }
         }
