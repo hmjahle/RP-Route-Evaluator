@@ -1,15 +1,15 @@
 package com.visma.of.rp.routeevaluator.evaluation.info;
 
+import com.visma.of.rp.routeevaluator.interfaces.IShift;
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
 
 public class ObjectiveInfo extends RouteEvaluationInfoAbstract {
-    private long travelTime;
-    private long visitEnd;
-    private long startOfServiceNextTask;
+    private final long travelTime;
+    private final long visitEnd;
+    private final long startOfServiceNextTask;
 
-    public ObjectiveInfo(long travelTime, ITask task, long visitEnd, long startOfServiceNextTask,
-                         long syncedTaskStartTime, long endOfWorkShift) {
-        super(task, endOfWorkShift, syncedTaskStartTime);
+    public ObjectiveInfo(long travelTime, ITask task, long visitEnd, long startOfServiceNextTask, long syncedTaskStartTime, IShift employeeWorkShift) {
+        super(task, employeeWorkShift, syncedTaskStartTime);
         this.travelTime = travelTime;
         this.visitEnd = visitEnd;
         this.startOfServiceNextTask = startOfServiceNextTask;
@@ -32,4 +32,7 @@ public class ObjectiveInfo extends RouteEvaluationInfoAbstract {
         return startOfServiceNextTask;
     }
 
+    public short getEmployeeWorkShiftId() {
+        return shiftId;
+    }
 }

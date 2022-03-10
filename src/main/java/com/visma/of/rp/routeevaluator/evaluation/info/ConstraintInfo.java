@@ -7,15 +7,12 @@ import com.visma.of.rp.routeevaluator.interfaces.ITask;
  * Class that contain the necessary info to evaluate the constraints.
  */
 public class ConstraintInfo extends RouteEvaluationInfoAbstract {
-
-    short shiftId;
     long earliestOfficeReturn;
     long startOfServiceNextTask;
     long shiftStartTime;
 
     public ConstraintInfo(IShift employeeWorkShift, long earliestOfficeReturn, ITask task, long startOfServiceNextTask, long syncedTaskLatestStartTime, long shiftStartTime) {
-        super(task, employeeWorkShift.getEndTime(), syncedTaskLatestStartTime);
-        this.shiftId = employeeWorkShift.getId();
+        super(task, employeeWorkShift, syncedTaskLatestStartTime);
         this.earliestOfficeReturn = earliestOfficeReturn;
         this.startOfServiceNextTask = startOfServiceNextTask;
         this.syncedTaskStartTime = syncedTaskLatestStartTime;
