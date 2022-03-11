@@ -1,5 +1,6 @@
 package com.visma.of.rp.routeevaluator.evaluation.info;
 
+import com.visma.of.rp.routeevaluator.interfaces.IShift;
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
 
 /**
@@ -8,13 +9,15 @@ import com.visma.of.rp.routeevaluator.interfaces.ITask;
 public class RouteEvaluationInfoAbstract {
 
     protected ITask task;
+    protected short shiftId;
     protected long endOfWorkShift;
     protected long syncedTaskStartTime;
 
-    public RouteEvaluationInfoAbstract(ITask task, long endOfWorkShift, long syncedTaskStartTime) {
+    public RouteEvaluationInfoAbstract(ITask task, IShift employeeWorkShift, long syncedTaskStartTime) {
         this.task = task;
-        this.endOfWorkShift = endOfWorkShift;
+        this.shiftId = employeeWorkShift.getId();
         this.syncedTaskStartTime = syncedTaskStartTime;
+        this.endOfWorkShift = employeeWorkShift.getEndTime();
     }
 
     public long getSyncedTaskStartTime() {

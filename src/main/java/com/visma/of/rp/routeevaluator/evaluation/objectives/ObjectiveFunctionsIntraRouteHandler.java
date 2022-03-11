@@ -2,6 +2,7 @@ package com.visma.of.rp.routeevaluator.evaluation.objectives;
 
 import com.visma.of.rp.routeevaluator.evaluation.info.ObjectiveInfo;
 import com.visma.of.rp.routeevaluator.interfaces.IObjectiveFunctionIntraRoute;
+import com.visma.of.rp.routeevaluator.interfaces.IShift;
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
 import com.visma.of.rp.routeevaluator.solver.algorithm.IObjective;
 
@@ -27,11 +28,11 @@ public class ObjectiveFunctionsIntraRouteHandler {
     }
 
     public IObjective calculateObjectiveValue(IObjective currentObjective, long travelTime, ITask task, long startOfServiceNextTask,
-                                              long visitEnd, long syncedTaskLatestStartTime, long endOfShift) {
+                                              long visitEnd, long syncedTaskLatestStartTime, IShift employeeWorkShift) {
 
         IObjective newObjective = currentObjective.initializeNewObjective();
         ObjectiveInfo objectiveInfo = new ObjectiveInfo(travelTime, task, visitEnd, startOfServiceNextTask,
-                syncedTaskLatestStartTime, endOfShift);
+                syncedTaskLatestStartTime, employeeWorkShift);
 
         for (Map.Entry<String, WeightObjectivePair> kvp : objectiveFunctions.entrySet()) {
             WeightObjectivePair objectivePair = kvp.getValue();

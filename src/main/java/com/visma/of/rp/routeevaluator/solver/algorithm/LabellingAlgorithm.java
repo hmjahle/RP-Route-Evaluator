@@ -158,7 +158,7 @@ public class LabellingAlgorithm<T extends ITask> {
         ITask task = toNode.getTask();
         int visitEnd = task != null ? startOfServiceNextTask + task.getDuration() : 0;
         return objectiveFunctions.calculateObjectiveValue(currentObjective, travelTime, task,
-                startOfServiceNextTask, visitEnd, syncedTaskLatestStartTime, employeeWorkShift.getEndTime());
+                startOfServiceNextTask, visitEnd, syncedTaskLatestStartTime, employeeWorkShift);
     }
 
     private Label findNextLabel() {
