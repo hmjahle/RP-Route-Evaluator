@@ -5,7 +5,7 @@ import com.visma.of.rp.routeevaluator.evaluation.info.ObjectiveInfo;
 /**
  * Interface for objectives that is solely evaluated within the route.
  */
-public interface IObjectiveFunctionIntraRoute {
+public interface IObjectiveFunctionIntraRoute extends IObjectiveFunctionRoute {
 
     /**
      * The function calculates the objective value of the objective for a part of the route.
@@ -16,4 +16,7 @@ public interface IObjectiveFunctionIntraRoute {
      * @return The change in objective value for this part of the route.
      */
     double calculateIncrementalObjectiveValueFor(ObjectiveInfo objectiveInfo);
+
+
+
 }

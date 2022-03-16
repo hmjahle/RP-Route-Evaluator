@@ -1,11 +1,11 @@
 package com.visma.of.rp.routeevaluator.evaluation.objectives;
 
-import com.visma.of.rp.routeevaluator.solver.algorithm.IObjective;
+import com.visma.of.rp.routeevaluator.solver.algorithm.IRouteEvaluatorObjective;
 
 /**
  * A weighted objective calculates the objectives value by adding the sum of weights multiplied by the values of the objectives.
  */
-public class WeightedObjective implements IObjective {
+public class WeightedObjective implements IRouteEvaluatorObjective {
 
     double objectiveValue;
 
@@ -29,7 +29,7 @@ public class WeightedObjective implements IObjective {
     }
 
     @Override
-    public IObjective initializeNewObjective() {
+    public IRouteEvaluatorObjective initializeNewObjective() {
         return new WeightedObjective(objectiveValue);
     }
 
@@ -39,7 +39,7 @@ public class WeightedObjective implements IObjective {
     }
 
     @Override
-    public int dominates(IObjective other) {
+    public int dominates(IRouteEvaluatorObjective other) {
         return Double.compare(this.objectiveValue, other.getObjectiveValue());
     }
 

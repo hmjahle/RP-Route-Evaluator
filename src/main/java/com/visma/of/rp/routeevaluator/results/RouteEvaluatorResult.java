@@ -1,16 +1,16 @@
 package com.visma.of.rp.routeevaluator.results;
 
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
-import com.visma.of.rp.routeevaluator.solver.algorithm.IObjective;
+import com.visma.of.rp.routeevaluator.solver.algorithm.IRouteEvaluatorObjective;
 
 import java.util.List;
 
 public class RouteEvaluatorResult<T extends ITask> {
 
     private final Route<T> route;
-    private final IObjective objective;
+    private final IRouteEvaluatorObjective objective;
 
-    public RouteEvaluatorResult(IObjective objective, Route<T> route) {
+    public RouteEvaluatorResult(IRouteEvaluatorObjective objective, Route<T> route) {
         this.route = route;
         this.objective = objective;
     }
@@ -31,7 +31,7 @@ public class RouteEvaluatorResult<T extends ITask> {
         return route.getRouteFinishedAtTime();
     }
 
-    public IObjective getObjective() {
+    public IRouteEvaluatorObjective getObjective() {
         return objective;
     }
 }

@@ -419,7 +419,7 @@ public class RouteEvaluator<T extends ITask> {
     /**
      * Used to calculate routes without inserting new tasks.
      */
-    private RouteEvaluatorResult<T> calcRouteEvaluatorResult(IObjective objective, List<T> tasks,
+    private RouteEvaluatorResult<T> calcRouteEvaluatorResult(IRouteEvaluatorObjective objective, List<T> tasks,
                                                              Map<ITask, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
         ExtendInfoOneElement nodeExtendInfoOneElement = initializeOneElementEvaluator(tasks, syncedTasksStartTime);
         return algorithm.solveRouteEvaluatorResult(objective, nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
@@ -428,7 +428,7 @@ public class RouteEvaluator<T extends ITask> {
     /**
      * Used to calculate routes when inserting one new task
      */
-    private RouteEvaluatorResult<T> calcRouteEvaluatorResult(IObjective objective, List<T> tasks, T insertTask,
+    private RouteEvaluatorResult<T> calcRouteEvaluatorResult(IRouteEvaluatorObjective objective, List<T> tasks, T insertTask,
                                                              Map<ITask, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
         setSyncedNodesStartTime(syncedTasksStartTime);
         updateFirstNodeList(tasks);
@@ -440,7 +440,7 @@ public class RouteEvaluator<T extends ITask> {
     /**
      * Used to calculate routes when inserting multiple new tasks.
      */
-    private RouteEvaluatorResult<T> calcRouteEvaluatorResult(IObjective objective, List<T> tasks, List<T> insertTasks,
+    private RouteEvaluatorResult<T> calcRouteEvaluatorResult(IRouteEvaluatorObjective objective, List<T> tasks, List<T> insertTasks,
                                                              Map<ITask, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
         setSyncedNodesStartTime(syncedTasksStartTime);
         updateFirstNodeList(tasks);
@@ -481,8 +481,12 @@ public class RouteEvaluator<T extends ITask> {
         syncedNodesStartTime[node.getNodeId()] = startTime;
     }
 
-    public List<IObjectiveFunctionIntraRoute> extractIObjectiveFunctionIntraRoute() {
+    public List<IObjectiveFunctionIntraRoute> extractIRouteEvaluatorObjectiveFunctionIntraRoute() {
         return objectiveFunctions.extractIObjectiveFunctionIntraRoute();
+    }
+
+    public ObjectiveFunctionsIntraRouteHandler getObjectiveFunctions() {
+        return objectiveFunctions;
     }
 
     public Collection<IConstraintIntraRoute> getActiveConstraintIntraRoute() {
