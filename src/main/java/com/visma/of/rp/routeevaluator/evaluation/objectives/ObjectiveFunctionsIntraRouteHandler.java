@@ -33,6 +33,34 @@ public class ObjectiveFunctionsIntraRouteHandler {
         alignInactiveOrActiveObjectives(other.inactiveObjectiveFunctions, this.activeObjectiveFunctions);
     }
 
+    /**
+     * Activates an inactive Objective
+     *
+     * @param name Name to be activated.
+     * @return True if variable was activated, otherwise false.
+     */
+    public boolean activateObjective(String name) {
+        WeightObjectivePair<IObjectiveFunctionIntraRoute> constraintToActivate = inactiveObjectiveFunctions.remove(name);
+        if (constraintToActivate == null)
+            return false;
+        activeObjectiveFunctions.put(name, constraintToActivate);
+        return true;
+    }
+
+    /**
+     * Deactivates an active Objective
+     *
+     * @param name Name to be deactivated.
+     * @return True if variable was deactivated, otherwise false.
+     */
+    public boolean deactivateObjective(String name) {
+        WeightObjectivePair<IObjectiveFunctionIntraRoute> constraintToActivate = activeObjectiveFunctions.remove(name);
+        if (constraintToActivate == null)
+            return false;
+        inactiveObjectiveFunctions.put(name, constraintToActivate);
+        return true;
+    }
+
     private void alignInactiveOrActiveObjectives(Map<String, WeightObjectivePair<IObjectiveFunctionIntraRoute>> activeObjectiveFunctions, Map<String, WeightObjectivePair<IObjectiveFunctionIntraRoute>> inactiveObjectiveFunctions) {
         for (String name : activeObjectiveFunctions.keySet()) {
             if (inactiveObjectiveFunctions.containsKey(name)) {
