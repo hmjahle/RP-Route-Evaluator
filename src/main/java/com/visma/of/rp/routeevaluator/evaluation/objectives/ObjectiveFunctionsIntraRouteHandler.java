@@ -6,9 +6,7 @@ import com.visma.of.rp.routeevaluator.interfaces.IShift;
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
 import com.visma.of.rp.routeevaluator.solver.algorithm.IRouteEvaluatorObjective;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ObjectiveFunctionsIntraRouteHandler {
@@ -55,6 +53,11 @@ public class ObjectiveFunctionsIntraRouteHandler {
 
     }
 
+    public WeightObjectivePair<IObjectiveFunctionIntraRoute> getWeightObjectivePair(String name) {
+        return activeObjectiveFunctions.getOrDefault(name, inactiveObjectiveFunctions.get(name));
+
+    }
+
     public void updateObjectiveWeight(String name, double newWeight) {
         WeightObjectivePair<IObjectiveFunctionIntraRoute> obj = activeObjectiveFunctions.getOrDefault(name, inactiveObjectiveFunctions.get(name));
         obj.setWeight(newWeight);
@@ -74,12 +77,6 @@ public class ObjectiveFunctionsIntraRouteHandler {
         return newObjective;
     }
 
-    public List<IObjectiveFunctionIntraRoute> extractIObjectiveFunctionIntraRoute() {
-        List<IObjectiveFunctionIntraRoute> objectiveFunctionIntraRoutes = new ArrayList<>();
-        for (WeightObjectivePair<IObjectiveFunctionIntraRoute> weightObjectivePair : activeObjectiveFunctions.values())
-            objectiveFunctionIntraRoutes.add(weightObjectivePair.getObjectiveFunction());
-        return objectiveFunctionIntraRoutes;
-    }
 
     public Map<String, WeightObjectivePair<IObjectiveFunctionIntraRoute>> getActiveObjectiveFunctions() {
         return activeObjectiveFunctions;
