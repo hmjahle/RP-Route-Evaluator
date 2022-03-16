@@ -4,7 +4,7 @@ package com.visma.of.rp.routeevaluator.solver.algorithm;
 public class Label implements Comparable<Label> {
     private Label previous;
     private Node node;
-    private IObjective objective;
+    private IRouteEvaluatorObjective objective;
     private IResource resources;
     private int currentLocationId;
     private int currentTime;
@@ -17,7 +17,7 @@ public class Label implements Comparable<Label> {
         this.canLeaveLocationAtTime = canLeaveLocationAtTime;
     }
 
-    public Label(Label previous, Node currentNode, int currentLocationId, IObjective objective,
+    public Label(Label previous, Node currentNode, int currentLocationId, IRouteEvaluatorObjective objective,
                  IResource resources, int currentTime, int travelTime) {
         this.previous = previous;
         this.node = currentNode;
@@ -57,7 +57,7 @@ public class Label implements Comparable<Label> {
         return closed;
     }
 
-    public IObjective getObjective() {
+    public IRouteEvaluatorObjective getObjective() {
         return objective;
     }
 

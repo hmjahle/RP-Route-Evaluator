@@ -1,6 +1,6 @@
 package com.visma.of.rp.routeevaluator.evaluation.objectives;
 
-import com.visma.of.rp.routeevaluator.solver.algorithm.IObjective;
+import com.visma.of.rp.routeevaluator.solver.algorithm.IRouteEvaluatorObjective;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +45,7 @@ public class WeightedObjectiveWithValues extends WeightedObjective {
     }
 
     @Override
-    public IObjective initializeNewObjective() {
+    public IRouteEvaluatorObjective initializeNewObjective() {
         return new WeightedObjectiveWithValues(this);
     }
 

@@ -5,7 +5,7 @@ package com.visma.of.rp.routeevaluator.solver.algorithm;
  * It does this by incrementing the objective. Which is for every step in the route, i.e., task to be performed.
  * The objective value is a single double value representing the value of the objective.
  */
-public interface IObjective {
+public interface IRouteEvaluatorObjective {
 
     /**
      * Value representing the objective.
@@ -20,7 +20,7 @@ public interface IObjective {
      * @param other Objective which is compared.
      * @return -1 if this is strictly better, 1 if the other is strictly better or 0 if they are equal or neither dominates.
      */
-    int dominates(IObjective other);
+    int dominates(IRouteEvaluatorObjective other);
 
     /**
      * Increments the value of the objective providing information about the, objective function, weight and value.
@@ -35,5 +35,5 @@ public interface IObjective {
      * Creates a copy of the current objective.
      * @return An IObjective, cannot be null.
      */
-    IObjective initializeNewObjective();
+    IRouteEvaluatorObjective initializeNewObjective();
 }

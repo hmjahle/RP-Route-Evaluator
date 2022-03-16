@@ -4,7 +4,7 @@ import com.visma.of.rp.routeevaluator.evaluation.info.ObjectiveInfo;
 import com.visma.of.rp.routeevaluator.interfaces.IObjectiveFunctionIntraRoute;
 import com.visma.of.rp.routeevaluator.interfaces.IShift;
 import com.visma.of.rp.routeevaluator.interfaces.ITask;
-import com.visma.of.rp.routeevaluator.solver.algorithm.IObjective;
+import com.visma.of.rp.routeevaluator.solver.algorithm.IRouteEvaluatorObjective;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,57 +13,42 @@ import java.util.Map;
 
 public class ObjectiveFunctionsIntraRouteHandler {
 
-    private Map<String, WeightObjectivePair> objectiveFunctions;
+    private final Map<String, WeightObjectivePair<IObjectiveFunctionIntraRoute>> objectiveFunctions;
 
     public ObjectiveFunctionsIntraRouteHandler() {
         objectiveFunctions = new HashMap<>();
     }
 
     public void addIntraShiftObjectiveFunction(String objectiveFunctionId, double weight, IObjectiveFunctionIntraRoute objectiveIntraShift) {
-        objectiveFunctions.put(objectiveFunctionId, new WeightObjectivePair(weight, objectiveIntraShift));
+        objectiveFunctions.put(objectiveFunctionId, new WeightObjectivePair<>(weight, objectiveIntraShift));
     }
 
     public boolean removeObjective(String name) {
         return objectiveFunctions.remove(name) != null;
     }
 
-    public IObjective calculateObjectiveValue(IObjective currentObjective, long travelTime, ITask task, long startOfServiceNextTask,
-                                              long visitEnd, long syncedTaskLatestStartTime, IShift employeeWorkShift) {
+    public void updateObjectiveWeight(String name, double newWeight){
+        objectiveFunctions.get(name).setWeight(newWeight);
+    }
 
-        IObjective newObjective = currentObjective.initializeNewObjective();
+    public IRouteEvaluatorObjective calculateObjectiveValue(IRouteEvaluatorObjective currentObjective, long travelTime, ITask task, long startOfServiceNextTask,
+                                                            long visitEnd, long syncedTaskLatestStartTime, IShift employeeWorkShift) {
+
+        IRouteEvaluatorObjective newObjective = currentObjective.initializeNewObjective();
         ObjectiveInfo objectiveInfo = new ObjectiveInfo(travelTime, task, visitEnd, startOfServiceNextTask,
                 syncedTaskLatestStartTime, employeeWorkShift);
 
-        for (Map.Entry<String, WeightObjectivePair> kvp : objectiveFunctions.entrySet()) {
-            WeightObjectivePair objectivePair = kvp.getValue();
-            newObjective.incrementObjective(kvp.getKey(), objectivePair.getWeight(), objectivePair.calcObjectiveValue(objectiveInfo));
+        for (Map.Entry<String, WeightObjectivePair<IObjectiveFunctionIntraRoute>> objectivePair : objectiveFunctions.entrySet()) {
+            newObjective.incrementObjective(objectivePair.getKey(), objectivePair.getValue().getWeight(),
+                    objectivePair.getValue().getObjectiveFunction().calculateIncrementalObjectiveValueFor(objectiveInfo));
         }
         return newObjective;
     }
 
-    private static class WeightObjectivePair {
-
-        private final double weight;
-        private final IObjectiveFunctionIntraRoute objectiveFunction;
-
-        private WeightObjectivePair(double weight, IObjectiveFunctionIntraRoute objectiveFunction) {
-            this.weight = weight;
-            this.objectiveFunction = objectiveFunction;
-        }
-
-        private double getWeight() {
-            return weight;
-        }
-
-        private double calcObjectiveValue(ObjectiveInfo objectiveInfo) {
-            return objectiveFunction.calculateIncrementalObjectiveValueFor(objectiveInfo);
-        }
-    }
-
     public List<IObjectiveFunctionIntraRoute> extractIObjectiveFunctionIntraRoute() {
         List<IObjectiveFunctionIntraRoute> objectiveFunctionIntraRoutes = new ArrayList<>();
-        for (WeightObjectivePair weightObjectivePair : objectiveFunctions.values())
-            objectiveFunctionIntraRoutes.add(weightObjectivePair.objectiveFunction);
+        for (WeightObjectivePair<IObjectiveFunctionIntraRoute> weightObjectivePair : objectiveFunctions.values())
+            objectiveFunctionIntraRoutes.add(weightObjectivePair.getObjectiveFunction());
         return objectiveFunctionIntraRoutes;
     }
 }

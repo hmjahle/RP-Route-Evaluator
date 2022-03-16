@@ -53,7 +53,7 @@ public class LabellingAlgorithm<T extends ITask> {
      * @param objective            Starting objective.
      * @return Total fitness value, null if infeasible.
      */
-    public Label runAlgorithm(IObjective objective, IExtendInfo nodeExtendInfo, int[] syncedNodesStartTime, IShift employeeWorkShift) {
+    public Label runAlgorithm(IRouteEvaluatorObjective objective, IExtendInfo nodeExtendInfo, int[] syncedNodesStartTime, IShift employeeWorkShift) {
         this.labelLists.clear();
         IResource startResource = nodeExtendInfo.createEmptyResource();
         Label startLabel = createStartLabel(objective, employeeWorkShift.getStartTime(), startResource);
@@ -73,7 +73,7 @@ public class LabellingAlgorithm<T extends ITask> {
      * @param initialObjective     Starting objective.
      * @return RouteEvaluatorResult or null if route is infeasible.
      */
-    public RouteEvaluatorResult<T> solveRouteEvaluatorResult(IObjective initialObjective, IExtendInfo nodeExtendInfo, int[] syncedNodesStartTime, IShift employeeWorkShift) {
+    public RouteEvaluatorResult<T> solveRouteEvaluatorResult(IRouteEvaluatorObjective initialObjective, IExtendInfo nodeExtendInfo, int[] syncedNodesStartTime, IShift employeeWorkShift) {
         Label bestLabel = runAlgorithm(initialObjective, nodeExtendInfo, syncedNodesStartTime, employeeWorkShift);
         if (bestLabel == null)
             return null;
@@ -120,7 +120,7 @@ public class LabellingAlgorithm<T extends ITask> {
         if (travelTime == null)
             return null;
         int startOfServiceNextTask = calcStartOfServiceNextTask(thisLabel, nextNode, taskRequirePhysicalAppearance, travelTime, nextNode.isSynced());
-        IObjective objective = evaluateFeasibilityAndObjective(thisLabel, nextNode, startOfServiceNextTask, travelTime, nextNode.isSynced(), newLocation);
+        IRouteEvaluatorObjective objective = evaluateFeasibilityAndObjective(thisLabel, nextNode, startOfServiceNextTask, travelTime, nextNode.isSynced(), newLocation);
         if (objective == null)
             return null;
         IResource resources = thisLabel.getResources().extend(extendToInfo);
@@ -154,7 +154,7 @@ public class LabellingAlgorithm<T extends ITask> {
             unExtendedLabels.addLabel(newLabel);
     }
 
-    public IObjective extend(IObjective currentObjective, Node toNode, int travelTime, int startOfServiceNextTask, int syncedTaskLatestStartTime) {
+    public IRouteEvaluatorObjective extend(IRouteEvaluatorObjective currentObjective, Node toNode, int travelTime, int startOfServiceNextTask, int syncedTaskLatestStartTime) {
         ITask task = toNode.getTask();
         int visitEnd = task != null ? startOfServiceNextTask + task.getDuration() : 0;
         return objectiveFunctions.calculateObjectiveValue(currentObjective, travelTime, task,
@@ -168,7 +168,7 @@ public class LabellingAlgorithm<T extends ITask> {
         return currentLabel;
     }
 
-    private Label createStartLabel(IObjective objective, int startTime, IResource emptyResource) {
+    private Label createStartLabel(IRouteEvaluatorObjective objective, int startTime, IResource emptyResource) {
         return new Label(null, graph.getOrigin(), graph.getOrigin().getLocationId(),
                 objective, emptyResource, startTime, 0);
     }
@@ -191,7 +191,7 @@ public class LabellingAlgorithm<T extends ITask> {
         return Math.max(arrivalTimeNextTask, earliestStartTimeNextTask);
     }
 
-    private IObjective evaluateFeasibilityAndObjective(Label thisLabel, Node nextNode, int startOfServiceNextTask,
+    private IRouteEvaluatorObjective evaluateFeasibilityAndObjective(Label thisLabel, Node nextNode, int startOfServiceNextTask,
                                                        int travelTime, boolean nextNodeIsSynced, int newLocation) {
         int syncedTaskLatestStartTime = nextNodeIsSynced ? syncedNodesStartTime[nextNode.getNodeId()] : -1;
         int earliestOfficeReturn = calcEarliestPossibleReturnToOfficeTime(nextNode, newLocation, startOfServiceNextTask);

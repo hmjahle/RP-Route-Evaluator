@@ -104,5 +104,49 @@ public class ActivateAndDeactivateConstraintsTest extends JUnitTestAbstract {
         Assert.assertNull("Must be infeasible due to overtime constraint. ", result);
     }
 
+    @Test
+    public void mustBecomeInfeasibleddAfterActivating() {
+        List<ITask> tasks = new ArrayList<>();
+        tasks.add(allTasks.get(4));
+        tasks.add(allTasks.get(1));
+        tasks.add(allTasks.get(3));
+        RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
+
+        boolean feasible = routeEvaluator.evaluateRouteFeasibilityForAllConstraints(tasks, null, shift);
+        Assert.assertTrue("Must be feasible with no constraints. ", feasible);
+        routeEvaluator.addConstraint(new TimeWindowLateArrivalConstraint());
+        feasible = routeEvaluator.evaluateRouteFeasibilityForAllConstraints(tasks, null, shift);
+        Assert.assertTrue("Must be feasible with only timeWindowLateArrivalConstraint active. ", feasible);
+
+        routeEvaluator.addConstraint(new OvertimeConstraint());
+        feasible = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift) != null;
+        Assert.assertFalse("Must be infeasible due both constraints active. ", feasible);
+        feasible = routeEvaluator.evaluateRouteFeasibilityForAllConstraints(tasks, null, shift);
+        Assert.assertFalse("Must be infeasible due both constraints active. ", feasible);
+
+        Assert.assertTrue("Must successfully deactivate.", routeEvaluator.deactivateConstraint(TimeWindowLateArrivalConstraint.class.getSimpleName()));
+        feasible = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift) != null;
+        Assert.assertFalse("Must be infeasible due  overtime is infeasible. ", feasible);
+        feasible = routeEvaluator.evaluateRouteFeasibilityForAllConstraints(tasks, null, shift);
+        Assert.assertFalse("Must be infeasible due both constraints. ", feasible);
+
+        Assert.assertTrue("Must successfully deactivate.", routeEvaluator.deactivateConstraint(OvertimeConstraint.class.getSimpleName()));
+        feasible = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift) != null;
+        Assert.assertTrue("Must be feasible due to both constraints are deactivated. ", feasible);
+        feasible = routeEvaluator.evaluateRouteFeasibilityForAllConstraints(tasks, null, shift);
+        Assert.assertFalse("Must be infeasible due both constraints. ", feasible);
+
+        Assert.assertTrue("Must successfully activate.", routeEvaluator.activateConstraint(TimeWindowLateArrivalConstraint.class.getSimpleName()));
+        feasible = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift) != null;
+        Assert.assertTrue("Must be feasible as overtime constraint is deactivated. ", feasible);
+        feasible = routeEvaluator.evaluateRouteFeasibilityForAllConstraints(tasks, null, shift);
+        Assert.assertFalse("Must be infeasible due both constraints. ", feasible);
+
+        Assert.assertTrue("Must successfully activate.", routeEvaluator.activateConstraint(OvertimeConstraint.class.getSimpleName()));
+        feasible = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift) != null;
+        Assert.assertFalse("Must be infeasible due both constraints active. ", feasible);
+        feasible = routeEvaluator.evaluateRouteFeasibilityForAllConstraints(tasks, null, shift);
+        Assert.assertFalse("Must be infeasible due both constraints active. ", feasible);
+    }
 
 }

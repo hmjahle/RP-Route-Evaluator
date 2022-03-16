@@ -87,6 +87,24 @@ public class RouteEvaluator<T extends ITask> {
     }
 
     /**
+     * Evaluates whether the route is feasible when all constraints are activated (including inactive constraints)
+     * The route evaluated is given by the tasks input, the order of the tasks is the order of the route.
+     * Only returns whether the route is feasible, no route details is returned.
+     *
+     * @param tasks                The route to be evaluated, the order of the list is the order of the route.
+     * @param syncedTasksStartTime Map of ALL synced tasks in the route and their start times. Should not contain tasks
+     * @param employeeWorkShift    Employee the route applies to.
+     * @return A bool value representing the feasibility of the route.
+     */
+    public boolean evaluateRouteFeasibilityForAllConstraints(List<T> tasks, Map<ITask, Integer> syncedTasksStartTime,
+                                                             IShift employeeWorkShift) {
+        constraints.activateCheckAllActiveAndInactiveConstraints();
+        boolean feasible = evaluateRouteObjective(tasks, syncedTasksStartTime, employeeWorkShift) != null;
+        constraints.deActivateCheckAllActiveAndInactiveConstraints();
+        return feasible;
+    }
+
+    /**
      * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
      * At the same time it finds the optimal position in the route to insert the new task.
      * Only returns objective value, no route details is returned.
@@ -419,7 +437,7 @@ public class RouteEvaluator<T extends ITask> {
     /**
      * Used to calculate routes without inserting new tasks.
      */
-    private RouteEvaluatorResult<T> calcRouteEvaluatorResult(IObjective objective, List<T> tasks,
+    private RouteEvaluatorResult<T> calcRouteEvaluatorResult(IRouteEvaluatorObjective objective, List<T> tasks,
                                                              Map<ITask, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
         ExtendInfoOneElement nodeExtendInfoOneElement = initializeOneElementEvaluator(tasks, syncedTasksStartTime);
         return algorithm.solveRouteEvaluatorResult(objective, nodeExtendInfoOneElement, syncedNodesStartTime, employeeWorkShift);
@@ -428,7 +446,7 @@ public class RouteEvaluator<T extends ITask> {
     /**
      * Used to calculate routes when inserting one new task
      */
-    private RouteEvaluatorResult<T> calcRouteEvaluatorResult(IObjective objective, List<T> tasks, T insertTask,
+    private RouteEvaluatorResult<T> calcRouteEvaluatorResult(IRouteEvaluatorObjective objective, List<T> tasks, T insertTask,
                                                              Map<ITask, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
         setSyncedNodesStartTime(syncedTasksStartTime);
         updateFirstNodeList(tasks);
@@ -440,7 +458,7 @@ public class RouteEvaluator<T extends ITask> {
     /**
      * Used to calculate routes when inserting multiple new tasks.
      */
-    private RouteEvaluatorResult<T> calcRouteEvaluatorResult(IObjective objective, List<T> tasks, List<T> insertTasks,
+    private RouteEvaluatorResult<T> calcRouteEvaluatorResult(IRouteEvaluatorObjective objective, List<T> tasks, List<T> insertTasks,
                                                              Map<ITask, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
         setSyncedNodesStartTime(syncedTasksStartTime);
         updateFirstNodeList(tasks);
@@ -481,8 +499,12 @@ public class RouteEvaluator<T extends ITask> {
         syncedNodesStartTime[node.getNodeId()] = startTime;
     }
 
-    public List<IObjectiveFunctionIntraRoute> extractIObjectiveFunctionIntraRoute() {
+    public List<IObjectiveFunctionIntraRoute> extractIRouteEvaluatorObjectiveFunctionIntraRoute() {
         return objectiveFunctions.extractIObjectiveFunctionIntraRoute();
+    }
+
+    public ObjectiveFunctionsIntraRouteHandler getObjectiveFunctions() {
+        return objectiveFunctions;
     }
 
     public Collection<IConstraintIntraRoute> getActiveConstraintIntraRoute() {
@@ -516,6 +538,7 @@ public class RouteEvaluator<T extends ITask> {
     public boolean deactivateConstraint(String name) {
         return constraints.deactivateConstraint(name);
     }
+
     public boolean removeObjectiveIntraShift(String name) {
         return objectiveFunctions.removeObjective(name);
     }
