@@ -13,14 +13,36 @@ public class ConstraintsIntraRouteHandler {
 
     private final Map<String, IConstraintIntraRoute> activeConstraints;
     private final Map<String, IConstraintIntraRoute> inactiveConstraints;
+    private boolean checkAllConstraints;
 
     public ConstraintsIntraRouteHandler() {
         activeConstraints = new HashMap<>();
         inactiveConstraints = new HashMap<>();
     }
 
+    public void activateCheckAllActiveAndInactiveConstraints() {
+        checkAllConstraints = true;
+    }
+
+    public void deActivateCheckAllActiveAndInactiveConstraints() {
+        checkAllConstraints = false;
+    }
+
+
     public boolean isFeasible(ConstraintInfo constraintInfo) {
         for (IConstraintIntraRoute constraint : activeConstraints.values()) {
+            if (!constraint.constraintIsFeasible(constraintInfo)) {
+                return false;
+            }
+        }
+        if (checkAllConstraints) {
+            return relaxedConstraintsAreFeasible(constraintInfo);
+        }
+        return true;
+    }
+
+    private boolean relaxedConstraintsAreFeasible(ConstraintInfo constraintInfo) {
+        for (IConstraintIntraRoute constraint : inactiveConstraints.values()) {
             if (!constraint.constraintIsFeasible(constraintInfo)) {
                 return false;
             }
@@ -64,11 +86,11 @@ public class ConstraintsIntraRouteHandler {
         return true;
     }
 
-    public Map<String, IConstraintIntraRoute> getActiveConstraintsMap(){
+    public Map<String, IConstraintIntraRoute> getActiveConstraintsMap() {
         return activeConstraints;
     }
 
-    public Map<String, IConstraintIntraRoute> getInactiveConstraintsMap(){
+    public Map<String, IConstraintIntraRoute> getInactiveConstraintsMap() {
         return inactiveConstraints;
     }
 

@@ -49,7 +49,7 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
 
         Assert.assertEquals("No overtime. ", 0, result.getObjectiveValue(), 1E-6);
         WeightedObjectiveWithValues objectiveStoreValues = evaluateRouteReturnIndividualObjectiveValues(tasks);
-        Assert.assertEquals("Should have overtime. ", 0, objectiveStoreValues.getObjectiveFunctionValue("OverTime"), 1E-6);
+        Assert.assertEquals("Should have no overtime. ", 0, objectiveStoreValues.getObjectiveFunctionValue("OverTime"), 1E-6);
 
     }
 

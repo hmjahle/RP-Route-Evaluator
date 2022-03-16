@@ -45,7 +45,6 @@ public class ObjectiveFunctionsIntraRouteHandler {
         return newObjective;
     }
 
-
     public List<IObjectiveFunctionIntraRoute> extractIObjectiveFunctionIntraRoute() {
         List<IObjectiveFunctionIntraRoute> objectiveFunctionIntraRoutes = new ArrayList<>();
         for (WeightObjectivePair<IObjectiveFunctionIntraRoute> weightObjectivePair : objectiveFunctions.values())

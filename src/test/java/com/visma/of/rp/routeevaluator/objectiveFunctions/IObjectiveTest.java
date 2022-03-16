@@ -64,6 +64,11 @@ public class IObjectiveTest extends JUnitTestAbstract {
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
         Assert.assertEquals("Weighted objective value: ", 3003025, result.getObjectiveValue(), 1E-6);
 
+        routeEvaluator.getObjectiveFunctions().updateObjectiveWeight("Sync", 1);
+        routeEvaluator.getObjectiveFunctions().updateObjectiveWeight("TW", 1);
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTaskStartTimes, shift);
+        Assert.assertEquals("Weighted objective value after adjusting weights: ", 85, result.getObjectiveValue(), 1E-6);
+
         WeightedObjectiveWithValues obj = evaluateRouteStoreObjectiveValues(routeEvaluator, tasks, syncedTaskStartTimes, shift);
         Assert.assertEquals("Synced objective value: ", 30, obj.getObjectiveFunctionValue("Sync"), 1E-6);
         Assert.assertEquals("Time window objective value: ", 30, obj.getObjectiveFunctionValue("TW"), 1E-6);
