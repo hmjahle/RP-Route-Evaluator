@@ -17,7 +17,7 @@ public class SearchGraph {
     private int sourceId;
     private int sinkId;
     private int locationIdCounter;
-    private Map<ILocation, Integer> locationToLocationIds;
+    private final Map<ILocation, Integer> locationToLocationIds;
 
     public SearchGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<? extends ITask> tasks,
                        ILocation originLocation, ILocation destinationLocation) {
@@ -27,6 +27,36 @@ public class SearchGraph {
         this.nodeIdCounter = 0;
         this.locationIdCounter = 0;
         this.populateGraph(travelTimeMatrixInput, tasks, originLocation, destinationLocation);
+    }
+
+    public SearchGraph(SearchGraph other) {
+        this.nodeIdCounter = other.nodeIdCounter;
+        this.locationIdCounter = other.locationIdCounter;
+        this.sourceId = other.sourceId;
+        this.sinkId = other.sinkId;
+        this.nodes = new ArrayList<>();
+        this.taskToNodes = new HashMap<>();
+        for (Node node : other.nodes) {
+            Node newNode = new Node(node);
+            this.nodes.add(newNode);
+            this.taskToNodes.put(node.getTask(), newNode);
+        }
+        this.travelTimeMatrix = new Integer[other.travelTimeMatrix.length][other.travelTimeMatrix.length];
+        for (int i = 0; i < travelTimeMatrix.length; i++) {
+            System.arraycopy(other.travelTimeMatrix[i], 0, this.travelTimeMatrix[i], 0, other.travelTimeMatrix[i].length);
+        }
+        this.locationToLocationIds = new HashMap<>();
+        for (Map.Entry<ILocation, Integer> iLocationIntegerMap : other.locationToLocationIds.entrySet()) {
+            this.locationToLocationIds.put(iLocationIntegerMap.getKey(), iLocationIntegerMap.getValue());
+        }
+        this.origin = findNode(other.origin.nodeId);
+        this.destination = findNode(other.destination.nodeId);
+    }
+
+    private Node findNode(int otherId) {
+        Optional<Node> node = nodes.stream().filter(i -> i.nodeId == otherId).findFirst();
+        assert node.isPresent();
+        return node.get();
     }
 
     /**

@@ -18,6 +18,13 @@ public class Node {
         this.locationId = locationId;
     }
 
+    public Node(Node other) {
+        this.nodeId = other.nodeId;
+        this.task = other.task;
+        this.locationId = other.locationId;
+    }
+
+
     public int getLocationId() {
         return locationId;
     }
