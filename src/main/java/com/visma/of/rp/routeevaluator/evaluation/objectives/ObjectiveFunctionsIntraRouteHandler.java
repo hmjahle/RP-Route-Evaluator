@@ -11,8 +11,8 @@ import java.util.Map;
 
 public class ObjectiveFunctionsIntraRouteHandler {
 
-    private Map<String, WeightObjectivePair<IObjectiveFunctionIntraRoute>> activeObjectiveFunctions;
-    private Map<String, WeightObjectivePair<IObjectiveFunctionIntraRoute>> inactiveObjectiveFunctions;
+    private final Map<String, WeightObjectivePair<IObjectiveFunctionIntraRoute>> activeObjectiveFunctions;
+    private final Map<String, WeightObjectivePair<IObjectiveFunctionIntraRoute>> inactiveObjectiveFunctions;
 
     public ObjectiveFunctionsIntraRouteHandler() {
         activeObjectiveFunctions = new HashMap<>();
@@ -28,9 +28,24 @@ public class ObjectiveFunctionsIntraRouteHandler {
             this.inactiveObjectiveFunctions.put(kvp.getKey(), kvp.getValue());
     }
 
+    /**
+     * Objective functions that are active in other is set to active in this and inactive in other are set inactive in this.
+     *
+     * @param other Other objective to adapt to.
+     */
     public void update(ObjectiveFunctionsIntraRouteHandler other) {
-        alignInactiveOrActiveObjectives(other.activeObjectiveFunctions, this.inactiveObjectiveFunctions);
-        alignInactiveOrActiveObjectives(other.inactiveObjectiveFunctions, this.activeObjectiveFunctions);
+        for (String name : other.activeObjectiveFunctions.keySet()) {
+            if (this.inactiveObjectiveFunctions.containsKey(name)) {
+                WeightObjectivePair<IObjectiveFunctionIntraRoute> objectivePair = this.inactiveObjectiveFunctions.remove(name);
+                this.activeObjectiveFunctions.put(name, objectivePair);
+            }
+        }
+        for (String name : other.inactiveObjectiveFunctions.keySet()) {
+            if (this.activeObjectiveFunctions.containsKey(name)) {
+                WeightObjectivePair<IObjectiveFunctionIntraRoute> objectivePair = this.activeObjectiveFunctions.remove(name);
+                this.inactiveObjectiveFunctions.put(name, objectivePair);
+            }
+        }
     }
 
     /**
@@ -61,14 +76,6 @@ public class ObjectiveFunctionsIntraRouteHandler {
         return true;
     }
 
-    private void alignInactiveOrActiveObjectives(Map<String, WeightObjectivePair<IObjectiveFunctionIntraRoute>> activeObjectiveFunctions, Map<String, WeightObjectivePair<IObjectiveFunctionIntraRoute>> inactiveObjectiveFunctions) {
-        for (String name : activeObjectiveFunctions.keySet()) {
-            if (inactiveObjectiveFunctions.containsKey(name)) {
-                WeightObjectivePair<IObjectiveFunctionIntraRoute> objectivePair = inactiveObjectiveFunctions.remove(name);
-                activeObjectiveFunctions.put(name, objectivePair);
-            }
-        }
-    }
 
     public void addIntraShiftObjectiveFunction(String objectiveFunctionId, double weight, IObjectiveFunctionIntraRoute objectiveIntraShift) {
         activeObjectiveFunctions.put(objectiveFunctionId, new WeightObjectivePair<>(weight, objectiveIntraShift));
