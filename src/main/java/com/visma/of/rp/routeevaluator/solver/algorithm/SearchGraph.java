@@ -10,8 +10,8 @@ public class SearchGraph {
 
     private Node origin;
     private Node destination;
-    private List<Node> nodes;
-    private Map<ITask, Node> taskToNodes;
+    private final List<Node> nodes;
+    private final Map<ITask, Node> taskToNodes;
     private Integer[][] travelTimeMatrix;
     private int nodeIdCounter;
     private int sourceId;
@@ -36,28 +36,43 @@ public class SearchGraph {
         this.sinkId = other.sinkId;
         this.nodes = new ArrayList<>();
         this.taskToNodes = new HashMap<>();
-        for (Node node : other.nodes) {
-            Node newNode = new Node(node);
-            this.nodes.add(newNode);
-            this.taskToNodes.put(node.getTask(), newNode);
-        }
+        copyNodes(other);
         this.travelTimeMatrix = new Integer[other.travelTimeMatrix.length][other.travelTimeMatrix.length];
         for (int i = 0; i < travelTimeMatrix.length; i++) {
             System.arraycopy(other.travelTimeMatrix[i], 0, this.travelTimeMatrix[i], 0, other.travelTimeMatrix[i].length);
         }
         this.locationToLocationIds = new HashMap<>();
-        for (Map.Entry<ILocation, Integer> iLocationIntegerMap : other.locationToLocationIds.entrySet()) {
-            this.locationToLocationIds.put(iLocationIntegerMap.getKey(), iLocationIntegerMap.getValue());
-        }
-        this.origin = findNode(other.origin.nodeId);
-        this.destination = findNode(other.destination.nodeId);
+        this.locationToLocationIds.putAll(other.locationToLocationIds);
+        this.origin = findEndpointNode(other.origin);
+        this.destination = findEndpointNode(other.destination);
     }
 
-    private Node findNode(int otherId) {
-        Optional<Node> node = nodes.stream().filter(i -> i.nodeId == otherId).findFirst();
-        assert node.isPresent();
-        return node.get();
+    private void copyNodes(SearchGraph other) {
+        for (Node node : other.nodes) {
+            Node newNode;
+            if (node instanceof VirtualNode) {
+                newNode = new VirtualNode(node.getNodeId());
+            } else {
+                newNode = new Node(node);
+                this.taskToNodes.put(node.getTask(), newNode);
+            }
+            this.nodes.add(newNode);
+        }
     }
+
+    private Node findEndpointNode(Node other) {
+        for (Node node : this.nodes) {
+            if (node.nodeId == other.nodeId) {
+                if (node instanceof VirtualNode && !(other instanceof VirtualNode)) {
+                    return new Node(other);
+                }
+                return node;
+            }
+        }
+
+        throw new RuntimeException("No destination endpoint found!");
+    }
+
 
     /**
      * Location must be present in the route evaluator, i.e.,

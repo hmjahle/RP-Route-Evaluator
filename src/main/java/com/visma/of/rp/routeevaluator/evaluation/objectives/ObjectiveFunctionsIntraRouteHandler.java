@@ -21,11 +21,9 @@ public class ObjectiveFunctionsIntraRouteHandler {
 
     public ObjectiveFunctionsIntraRouteHandler(ObjectiveFunctionsIntraRouteHandler other) {
         this.activeObjectiveFunctions = new HashMap<>();
-        for (Map.Entry<String, WeightObjectivePair<IObjectiveFunctionIntraRoute>> kvp : other.activeObjectiveFunctions.entrySet())
-            this.activeObjectiveFunctions.put(kvp.getKey(), kvp.getValue());
+        this.activeObjectiveFunctions.putAll(other.activeObjectiveFunctions);
         this.inactiveObjectiveFunctions = new HashMap<>();
-        for (Map.Entry<String, WeightObjectivePair<IObjectiveFunctionIntraRoute>> kvp : other.inactiveObjectiveFunctions.entrySet())
-            this.inactiveObjectiveFunctions.put(kvp.getKey(), kvp.getValue());
+        this.inactiveObjectiveFunctions.putAll(other.inactiveObjectiveFunctions);
     }
 
     /**
