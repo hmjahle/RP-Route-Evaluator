@@ -8,10 +8,7 @@ import com.visma.of.rp.routeevaluator.interfaces.*;
 import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.solver.algorithm.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -44,6 +41,16 @@ public class RouteEvaluator<T extends ITask> {
         this(distanceMatrixMatrix, tasks, officePosition, officePosition);
     }
 
+    public RouteEvaluator(RouteEvaluator<T> other) {
+        this.graph = new SearchGraph(other.graph);
+        this.objectiveFunctions = new ObjectiveFunctionsIntraRouteHandler(other.objectiveFunctions);
+        this.constraints = new ConstraintsIntraRouteHandler(other.constraints);
+        this.algorithm = new LabellingAlgorithm<>(graph, objectiveFunctions, constraints);
+        this.firstNodeList = new NodeList(graph.getNodes().size());
+        this.secondNodeList = new NodeList(graph.getNodes().size());
+        this.syncedNodesStartTime = Arrays.copyOf(other.syncedNodesStartTime, other.syncedNodesStartTime.length);
+    }
+
     public RouteEvaluator(ITravelTimeMatrix distanceMatrixMatrix, Collection<T> tasks,
                           ILocation origin, ILocation destination) {
         this.graph = new SearchGraph(distanceMatrixMatrix, tasks, origin, destination);
@@ -53,6 +60,14 @@ public class RouteEvaluator<T extends ITask> {
         this.firstNodeList = new NodeList(graph.getNodes().size());
         this.secondNodeList = new NodeList(graph.getNodes().size());
         this.syncedNodesStartTime = new int[graph.getNodes().size()];
+    }
+
+    /**
+     * Updates the active and inactive constraints and objectives
+     */
+    public void update(RouteEvaluator<T> other) {
+        this.objectiveFunctions.update(other.objectiveFunctions);
+        this.constraints.update(other.constraints);
     }
 
     /**
@@ -499,20 +514,8 @@ public class RouteEvaluator<T extends ITask> {
         syncedNodesStartTime[node.getNodeId()] = startTime;
     }
 
-    public List<IObjectiveFunctionIntraRoute> extractIRouteEvaluatorObjectiveFunctionIntraRoute() {
-        return objectiveFunctions.extractIObjectiveFunctionIntraRoute();
-    }
-
     public ObjectiveFunctionsIntraRouteHandler getObjectiveFunctions() {
         return objectiveFunctions;
-    }
-
-    public Collection<IConstraintIntraRoute> getActiveConstraintIntraRoute() {
-        return constraints.getActiveConstraints();
-    }
-
-    public Collection<IConstraintIntraRoute> getInactiveConstraintIntraRoute() {
-        return constraints.getInactiveConstraints();
     }
 
     public ConstraintsIntraRouteHandler getConstraints() {

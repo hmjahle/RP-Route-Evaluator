@@ -20,6 +20,31 @@ public class ConstraintsIntraRouteHandler {
         inactiveConstraints = new HashMap<>();
     }
 
+
+    public ConstraintsIntraRouteHandler(ConstraintsIntraRouteHandler other) {
+        this.checkAllConstraints = other.checkAllConstraints;
+        this.activeConstraints = new HashMap<>();
+        this.activeConstraints.putAll(other.activeConstraints);
+        this.inactiveConstraints = new HashMap<>();
+        this.inactiveConstraints.putAll(other.inactiveConstraints);
+    }
+
+    public void update(ConstraintsIntraRouteHandler other) {
+        this.checkAllConstraints = other.checkAllConstraints;
+        for (String name : other.activeConstraints.keySet()) {
+            if (this.inactiveConstraints.containsKey(name)) {
+                IConstraintIntraRoute cons = this.inactiveConstraints.remove(name);
+                this.activeConstraints.put(name, cons);
+            }
+        }
+        for (String name : other.inactiveConstraints.keySet()) {
+            if (this.activeConstraints.containsKey(name)) {
+                IConstraintIntraRoute cons = this.activeConstraints.remove(name);
+                this.inactiveConstraints.put(name, cons);
+            }
+        }
+    }
+
     public void activateCheckAllActiveAndInactiveConstraints() {
         checkAllConstraints = true;
     }

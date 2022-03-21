@@ -10,14 +10,14 @@ public class SearchGraph {
 
     private Node origin;
     private Node destination;
-    private List<Node> nodes;
-    private Map<ITask, Node> taskToNodes;
+    private final List<Node> nodes;
+    private final Map<ITask, Node> taskToNodes;
     private Integer[][] travelTimeMatrix;
     private int nodeIdCounter;
     private int sourceId;
     private int sinkId;
     private int locationIdCounter;
-    private Map<ILocation, Integer> locationToLocationIds;
+    private final Map<ILocation, Integer> locationToLocationIds;
 
     public SearchGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<? extends ITask> tasks,
                        ILocation originLocation, ILocation destinationLocation) {
@@ -28,6 +28,51 @@ public class SearchGraph {
         this.locationIdCounter = 0;
         this.populateGraph(travelTimeMatrixInput, tasks, originLocation, destinationLocation);
     }
+
+    public SearchGraph(SearchGraph other) {
+        this.nodeIdCounter = other.nodeIdCounter;
+        this.locationIdCounter = other.locationIdCounter;
+        this.sourceId = other.sourceId;
+        this.sinkId = other.sinkId;
+        this.nodes = new ArrayList<>();
+        this.taskToNodes = new HashMap<>();
+        copyNodes(other);
+        this.travelTimeMatrix = new Integer[other.travelTimeMatrix.length][other.travelTimeMatrix.length];
+        for (var i = 0; i < travelTimeMatrix.length; i++) {
+            System.arraycopy(other.travelTimeMatrix[i], 0, this.travelTimeMatrix[i], 0, other.travelTimeMatrix[i].length);
+        }
+        this.locationToLocationIds = new HashMap<>();
+        this.locationToLocationIds.putAll(other.locationToLocationIds);
+        this.origin = findEndpointNode(other.origin);
+        this.destination = findEndpointNode(other.destination);
+    }
+
+    private void copyNodes(SearchGraph other) {
+        for (Node node : other.nodes) {
+            Node newNode;
+            if (node instanceof VirtualNode) {
+                newNode = new VirtualNode(node.getNodeId());
+            } else {
+                newNode = new Node(node);
+                taskToNodes.put(node.getTask(), newNode);
+            }
+            nodes.add(newNode);
+        }
+    }
+
+    private Node findEndpointNode(Node other) {
+        for (Node node : nodes) {
+            if (node.nodeId == other.nodeId) {
+                if (node instanceof VirtualNode && !(other instanceof VirtualNode)) {
+                    return new Node(other);
+                }
+                return node;
+            }
+        }
+
+        throw new IllegalStateException("No destination endpoint found!");
+    }
+
 
     /**
      * Location must be present in the route evaluator, i.e.,
@@ -119,7 +164,6 @@ public class SearchGraph {
             locationToLocationIds.put(destinationLocation, destination.getLocationId());
         } else {
             this.destination = new VirtualNode(sinkId);
-
         }
     }
 
