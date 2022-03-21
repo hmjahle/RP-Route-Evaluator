@@ -53,6 +53,21 @@ public class RouteEvaluatorResultTest extends JUnitTestAbstract {
                     routeTasks.get(i).getId());
     }
 
+    @Test
+    public void normalTasksRouteEvaluatorCopy() {
+        shift = new TestShift(0, 100);
+        routeEvaluator.addConstraint(new OvertimeConstraint());
+
+        RouteEvaluator<TestTask> copy = new RouteEvaluator<>(routeEvaluator);
+        result = copy.evaluateRouteByTheOrderOfTasks(allTasks, syncedTasksStartTime, shift);
+        List<TestTask> routeTasks = result.getRoute().extractEmployeeTasks();
+        Assert.assertEquals("Should be 8 tasks. ", 8, routeTasks.size());
+        for (int i = 0; i < allTasks.size(); i++)
+            Assert.assertEquals("Task should be equal: ",
+                    allTasks.get(i).getId(),
+                    routeTasks.get(i).getId());
+    }
+
 
     @Test
     public void arrivalAtDestination() {
@@ -69,6 +84,23 @@ public class RouteEvaluatorResultTest extends JUnitTestAbstract {
         List<TestTask> tasks = new ArrayList<>(allTasks);
         tasks.remove(2);
         result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTasksStartTime, shift);
+        Route<TestTask> route = result.getRoute();
+
+        Assert.assertNull("Should not be able to find null task: ", route.findIndexInRoute(null));
+        Assert.assertNull("Task 3 is not in the route: ", route.findIndexInRoute(allTasks.get(2)));
+        Assert.assertEquals("Task 0 must be in index 0: ", 0, route.findIndexInRoute(allTasks.get(0)).intValue());
+        Assert.assertEquals("Task 1 must be in index 1: ", 1, route.findIndexInRoute(allTasks.get(1)).intValue());
+        Assert.assertEquals("Task 3 must be in index 2: ", 2, route.findIndexInRoute(allTasks.get(3)).intValue());
+        Assert.assertEquals("Task 7 must be in index 6: ", 6, route.findIndexInRoute(allTasks.get(7)).intValue());
+    }
+
+
+    @Test
+    public void findIndexRouteEvaluatorCopy() {
+        List<TestTask> tasks = new ArrayList<>(allTasks);
+        tasks.remove(2);
+        RouteEvaluator<TestTask> copy = new RouteEvaluator<>(routeEvaluator);
+        result = copy.evaluateRouteByTheOrderOfTasks(tasks, syncedTasksStartTime, shift);
         Route<TestTask> route = result.getRoute();
 
         Assert.assertNull("Should not be able to find null task: ", route.findIndexInRoute(null));
