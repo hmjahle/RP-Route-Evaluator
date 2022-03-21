@@ -5,7 +5,7 @@ import com.visma.of.rp.routeevaluator.interfaces.ITask;
 import java.util.List;
 
 public class NodeList {
-    private Node[] nodes;
+    private final Node[] nodes;
     private int nodesCnt;
 
     public NodeList(int size) {
