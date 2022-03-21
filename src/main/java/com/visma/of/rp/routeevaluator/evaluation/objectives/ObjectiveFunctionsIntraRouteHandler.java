@@ -27,8 +27,12 @@ public class ObjectiveFunctionsIntraRouteHandler {
         return objectiveFunctions.remove(name) != null;
     }
 
-    public void updateObjectiveWeight(String name, double newWeight){
+    public void updateObjectiveWeight(String name, double newWeight) {
         objectiveFunctions.get(name).setWeight(newWeight);
+    }
+
+    public boolean hasObjective(String name) {
+        return objectiveFunctions.containsKey(name);
     }
 
     public IRouteEvaluatorObjective calculateObjectiveValue(IRouteEvaluatorObjective currentObjective, long travelTime, ITask task, long startOfServiceNextTask,
