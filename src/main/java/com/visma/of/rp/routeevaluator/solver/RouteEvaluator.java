@@ -509,6 +509,10 @@ public class RouteEvaluator<T extends ITask> {
             }
     }
 
+    public boolean hasObjective(String name) {
+        return objectiveFunctions.hasObjective(name);
+    }
+
     private void setStartTime(ITask task, int startTime) {
         Node node = graph.getNode(task);
         syncedNodesStartTime[node.getNodeId()] = startTime;

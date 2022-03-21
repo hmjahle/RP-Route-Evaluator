@@ -96,6 +96,15 @@ public class ObjectiveFunctionsIntraRouteHandler {
         obj.setWeight(newWeight);
     }
 
+    /**
+     * Check if an objective exists, either active or inactive.
+     * @param name
+     * @return
+     */
+    public boolean hasObjective(String name) {
+        return activeObjectiveFunctions.containsKey(name) || inactiveObjectiveFunctions.containsKey(name);
+    }
+
     public IRouteEvaluatorObjective calculateObjectiveValue(IRouteEvaluatorObjective currentObjective, long travelTime, ITask task, long startOfServiceNextTask,
                                                             long visitEnd, long syncedTaskLatestStartTime, IShift employeeWorkShift) {
 
