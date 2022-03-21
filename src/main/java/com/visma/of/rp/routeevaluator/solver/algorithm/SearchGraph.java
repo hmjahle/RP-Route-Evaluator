@@ -54,14 +54,14 @@ public class SearchGraph {
                 newNode = new VirtualNode(node.getNodeId());
             } else {
                 newNode = new Node(node);
-                this.taskToNodes.put(node.getTask(), newNode);
+                taskToNodes.put(node.getTask(), newNode);
             }
-            this.nodes.add(newNode);
+            nodes.add(newNode);
         }
     }
 
     private Node findEndpointNode(Node other) {
-        for (Node node : this.nodes) {
+        for (Node node : nodes) {
             if (node.nodeId == other.nodeId) {
                 if (node instanceof VirtualNode && !(other instanceof VirtualNode)) {
                     return new Node(other);
@@ -164,7 +164,6 @@ public class SearchGraph {
             locationToLocationIds.put(destinationLocation, destination.getLocationId());
         } else {
             this.destination = new VirtualNode(sinkId);
-
         }
     }
 

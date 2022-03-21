@@ -24,11 +24,9 @@ public class ConstraintsIntraRouteHandler {
     public ConstraintsIntraRouteHandler(ConstraintsIntraRouteHandler other) {
         this.checkAllConstraints = other.checkAllConstraints;
         this.activeConstraints = new HashMap<>();
-        for (Map.Entry<String, IConstraintIntraRoute> kvp : other.activeConstraints.entrySet())
-            this.activeConstraints.put(kvp.getKey(), kvp.getValue());
+        this.activeConstraints.putAll(other.activeConstraints);
         this.inactiveConstraints = new HashMap<>();
-        for (Map.Entry<String, IConstraintIntraRoute> kvp : other.inactiveConstraints.entrySet())
-            this.inactiveConstraints.put(kvp.getKey(), kvp.getValue());
+        this.inactiveConstraints.putAll(other.inactiveConstraints);
     }
 
     public void update(ConstraintsIntraRouteHandler other) {
