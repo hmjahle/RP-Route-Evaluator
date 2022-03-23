@@ -19,6 +19,7 @@ import testSupport.JUnitTestAbstract;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -155,12 +156,12 @@ public class OvertimeObjectiveFunctionTest extends JUnitTestAbstract {
 
     private RouteEvaluatorResult<ITask> evaluateRoute(List<ITask> tasks) {
         RouteEvaluator<ITask> routeEvaluator = getRouteEvaluator(tasks);
-        return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, new HashMap<>(), shift);
     }
 
     private WeightedObjectiveWithValues evaluateRouteReturnIndividualObjectiveValues(List<ITask> tasks) {
         RouteEvaluator<ITask> routeEvaluator = getRouteEvaluator(tasks);
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByOrderOfTasksWithObjectiveValues(tasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByOrderOfTasksWithObjectiveValues(tasks, new HashMap<>(), shift);
         return (WeightedObjectiveWithValues) result.getObjective();
     }
 

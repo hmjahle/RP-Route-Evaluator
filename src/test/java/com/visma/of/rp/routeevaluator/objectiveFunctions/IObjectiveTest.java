@@ -19,7 +19,10 @@ import testInterfaceImplementationClasses.TestTask;
 import testInterfaceImplementationClasses.TestTravelTimeMatrix;
 import testSupport.JUnitTestAbstract;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Tests if the synced task objective is implemented correctly.
@@ -82,12 +85,12 @@ public class IObjectiveTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(1));
         tasks.add(allTasks.get(3));
         RouteEvaluator<ITask> routeEvaluator = createRouteEvaluator(tasks);
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, new HashMap<>(), shift);
         Assert.assertEquals("Unweighted objective value: ", 25, result.getObjectiveValue(), 1E-6);
 
         routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         addWeightedObjectives(routeEvaluator, 0);
-        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, new HashMap<>(), shift);
         Assert.assertEquals("Weighted objective value: ", 2500, result.getObjectiveValue(), 1E-6);
 
         WeightedObjectiveWithValues obj = evaluateRouteStoreObjectiveValues(routeEvaluator, tasks, shift);

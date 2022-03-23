@@ -13,9 +13,7 @@ import testInterfaceImplementationClasses.TestLocation;
 import testInterfaceImplementationClasses.TestTask;
 import testInterfaceImplementationClasses.TestTravelTimeMatrix;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public abstract class JUnitTestAbstract {
 
@@ -158,5 +156,14 @@ public abstract class JUnitTestAbstract {
         locations.add(new TestLocation(false));
         locations.add(new TestLocation(false));
         return locations;
+    }
+
+    protected Map<ITask, Integer> getSyncedStartTimes(Collection<ITask> tasks) {
+        Map<ITask, Integer> syncedTasksStartTime = new HashMap<>();
+        for (ITask task : tasks) {
+            if (task.isSynced())
+                syncedTasksStartTime.put(task, task.getStartTime());
+        }
+        return syncedTasksStartTime;
     }
 }

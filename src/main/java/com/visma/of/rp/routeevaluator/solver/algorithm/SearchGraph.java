@@ -120,8 +120,8 @@ public class SearchGraph {
         return locationIdCounter++;
     }
 
-    private void populateGraph(ITravelTimeMatrix travelTimeMatrixInput, Collection<? extends
-            ITask> tasks, ILocation originLocation,
+    private void populateGraph(ITravelTimeMatrix travelTimeMatrixInput,
+                               Collection<? extends ITask> tasks, ILocation originLocation,
                                ILocation destinationLocation) {
         updateTravelTimeInformation(travelTimeMatrixInput);
         initializeOriginDestination(originLocation, destinationLocation);
@@ -220,8 +220,7 @@ public class SearchGraph {
         return taskToNodes.get(task).getLocationId();
     }
 
-    private void addTravelTime(ITravelTimeMatrix travelTimeMatrixInput, ILocation fromLocation, ILocation
-            toLocation) {
+    private void addTravelTime(ITravelTimeMatrix travelTimeMatrixInput, ILocation fromLocation, ILocation toLocation) {
         int fromId = getLocationId(fromLocation);
         int toId = getLocationId(toLocation);
 

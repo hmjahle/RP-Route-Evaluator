@@ -18,6 +18,7 @@ import testSupport.JUnitTestAbstract;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -146,7 +147,7 @@ public class OvertimeTaskConstraintTest extends JUnitTestAbstract {
     private RouteEvaluatorResult<ITask> evaluateRoute(List<ITask> tasks) {
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         routeEvaluator.addConstraint(new OvertimeConstraint());
-        return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, new HashMap<>(), shift);
     }
 
     private Double evaluateObjective(List<ITask> tasks) {

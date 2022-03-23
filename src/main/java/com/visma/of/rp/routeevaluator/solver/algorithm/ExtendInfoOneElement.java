@@ -23,7 +23,7 @@ public class ExtendInfoOneElement implements IExtendInfo {
      */
     @Override
     public Enumeration<ExtendToInfo> extend(Label label) {
-        node = nodeListOne.getNode(((ResourceOneElement) label.getResources()).getElementOneCount());
+        node = nodeListOne.getNode(label.getResources().getElementOneCount());
         return new ExtendInfoOneElementEnumerator();
     }
 

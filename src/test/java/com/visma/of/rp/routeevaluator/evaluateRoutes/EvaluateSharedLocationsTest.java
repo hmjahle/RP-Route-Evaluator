@@ -17,6 +17,7 @@ import testSupport.JUnitTestAbstract;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public class EvaluateSharedLocationsTest extends JUnitTestAbstract {
@@ -41,7 +42,7 @@ public class EvaluateSharedLocationsTest extends JUnitTestAbstract {
         List<ITask> tasks = createTasksTwoWithSame();
 
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, origin, destination);
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, new HashMap<>(), shift);
 
         Assert.assertEquals("Start time should be: ", 2, result.getVisitSolution().get(0).getTravelTime());
         Assert.assertEquals("Start time should be: ", 1, result.getVisitSolution().get(1).getTravelTime());
@@ -55,7 +56,7 @@ public class EvaluateSharedLocationsTest extends JUnitTestAbstract {
         List<ITask> tasks = createTasksAllSame();
 
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, origin, destination);
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, new HashMap<>(), shift);
 
         Assert.assertEquals("Start time should be: ", 2, result.getVisitSolution().get(0).getTravelTime());
         Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(1).getTravelTime());
@@ -69,7 +70,7 @@ public class EvaluateSharedLocationsTest extends JUnitTestAbstract {
         List<ITask> tasks = createTasksAllSame();
 
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, locations.get(0), locations.get(0));
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, new HashMap<>(), shift);
 
         Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(0).getTravelTime());
         Assert.assertEquals("Start time should be: ", 0, result.getVisitSolution().get(1).getTravelTime());

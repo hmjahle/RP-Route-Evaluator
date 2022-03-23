@@ -222,8 +222,8 @@ public class LabellingAlgorithm<T extends ITask> {
         return graph.getTravelTime(thisLabel.getCurrentLocationId(), nextNode.getLocationId());
     }
 
-    private int calcEarliestPossibleReturnToOfficeTime(Node nextNode, Integer currentLocation, int startOfServiceNextTask) {
-        return startOfServiceNextTask + nextNode.getDurationSeconds() + getTravelTimeToDestination(currentLocation);
+    private int calcEarliestPossibleReturnToOfficeTime(Node nextNode, Integer newLocation, int startOfServiceNextTask) {
+        return startOfServiceNextTask + nextNode.getDurationSeconds() + getTravelTimeToDestination(newLocation);
     }
 
     private int getTravelTimeToDestination(Integer currentLocation) {
