@@ -56,7 +56,7 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new OvertimeConstraint());
 
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, new HashMap<>(), shift);
         Assert.assertNotNull("Must be feasible. ", result);
         Assert.assertEquals(10, getVisitTravelTime(result, 0));
         Assert.assertEquals("No physical appearance should have no travel time.", 0, getVisitTravelTime(result, 1));
@@ -76,7 +76,7 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new OvertimeConstraint());
 
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, new HashMap<>(), shift);
 
         Assert.assertNull("Must be infeasible. ", result);
     }
@@ -93,7 +93,7 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(office, task2.getLocation(), 50);
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new StrictTimeWindowConstraint());
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, new HashMap<>(), shift);
 
         Assert.assertNull("Must be infeasible. ", result);
     }
@@ -111,7 +111,7 @@ public class NoPhysicalAppearanceAndConstraintsTest extends JUnitTestAbstract {
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new StrictTimeWindowConstraint());
 
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, new HashMap<>(), shift);
 
         Assert.assertNotNull("Must be feasible. ", result);
         Assert.assertEquals("Must return to office at. ", 42, result.getTimeOfArrivalAtDestination(), DELTA);

@@ -112,7 +112,13 @@ public class benchmarking extends JUnitTestAbstract {
         routeEvaluator4.addConstraint(new StrictTimeWindowConstraint());
 
         Map<ITask, Integer> syncedTasksAllStartTime = new HashMap<>();
+        for (ITask task : newTasks)
+            syncedTasksAllStartTime.put(task, task.getStartTime());
+
         Map<ITask, Integer> syncedTasksNewStartTime = new HashMap<>();
+        for (ITask task : newTasks)
+            syncedTasksNewStartTime.put(task, task.getStartTime());
+
         syncedTasksNewStartTime.put(tasks.get(120), (3 * 60) * 60);
         syncedTasksNewStartTime.put(tasks.get(160), 15 * 60);
         for (ITask task : newTasks)
@@ -124,7 +130,7 @@ public class benchmarking extends JUnitTestAbstract {
                 syncedTasksAllStartTime.put(task, task.getStartTime());
 
         IShift shift = new TestShift(0, 3600 * 10);
-        for (int i = 0; i < 20000; i++) {
+        for (int i = 0; i < 5000; i++) {
             for (int j = 0; j < 100; j++) {
                 routeEvaluator1.evaluateRouteObjective(newTasks, syncedTasksNewStartTime, shift);
 

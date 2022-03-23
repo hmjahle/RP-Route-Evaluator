@@ -14,6 +14,7 @@ import testInterfaceImplementationClasses.TestTravelTimeMatrix;
 import testSupport.JUnitTestAbstract;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public class TimeWindowLateArrivalConstraintTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(0));
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         routeEvaluator.addConstraint(new TimeWindowLateArrivalConstraint(0));
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, new HashMap<>(), shift);
         Assert.assertNotNull("Must be feasible. ", result);
     }
 
@@ -85,7 +86,7 @@ public class TimeWindowLateArrivalConstraintTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(3));
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         routeEvaluator.addConstraint(new TimeWindowLateArrivalConstraint());
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, new HashMap<>(), shift);
         Assert.assertNotNull("Must be feasible. ", result);
     }
 
@@ -95,13 +96,13 @@ public class TimeWindowLateArrivalConstraintTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(0));
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         routeEvaluator.addConstraint(new TimeWindowLateArrivalConstraint(maxLateArrival));
-        return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        return routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, new HashMap<>(), shift);
     }
 
     private RouteEvaluatorResult<ITask> getRoute(int distanceFromOffice, int maximumLateArrival) {
         travelTimeMatrix.addUndirectedConnection(office, locations.get(0), distanceFromOffice);
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         routeEvaluator.addConstraint(new TimeWindowLateArrivalConstraint(maximumLateArrival));
-        return routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        return routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, new HashMap<>(), shift);
     }
 }

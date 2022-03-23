@@ -16,6 +16,7 @@ import testSupport.JUnitTestAbstract;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestAbstract {
@@ -42,7 +43,7 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
 
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, origin, destination);
         routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, new HashMap<>(), shift);
 
         Assert.assertEquals("There should be no visits in the solution: ", 0, result.getVisitSolution().size());
         Assert.assertEquals("Must return at correct time!", 100, result.getTimeOfArrivalAtDestination().longValue());
@@ -78,11 +79,10 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
     }
 
 
-
     @Test
     public void multipleTasks() {
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, origin, destination);
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, new HashMap<>(), shift);
         assertMultipleTasks(result, 51);
     }
 
@@ -91,7 +91,7 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, null, null);
         routeEvaluator.updateOrigin(origin);
         routeEvaluator.updateDestination(destination);
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, new HashMap<>(), shift);
         assertMultipleTasks(result, 51);
     }
 
@@ -99,7 +99,7 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
     @Test
     public void multipleTasksNullStartEndDestination() {
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, null, null);
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, new HashMap<>(), shift);
         assertMultipleTasks(result, 41);
     }
 
@@ -109,51 +109,51 @@ public class EvaluateDifferentStartAndDestinationLocationTest extends JUnitTestA
         travelTimeMatrix = createTravelTimeMatrix(origin, destination, allTasks);
 
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, origin, destination);
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, new HashMap<>(), shift);
         Assert.assertEquals("Office return should be: ", 19, result.getTimeOfArrivalAtDestination().longValue());
 
         routeEvaluator.updateOrigin(destination);
-        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, new HashMap<>(), shift);
         Assert.assertEquals("When starting at the destination office return should be: ", 27, result.getTimeOfArrivalAtDestination().longValue());
 
         routeEvaluator.updateOrigin(allTasks.get(0).getLocation());
-        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, new HashMap<>(), shift);
         Assert.assertEquals("When starting at the first node office return should be: ", 17, result.getTimeOfArrivalAtDestination().longValue());
 
         routeEvaluator.updateOrigin(allTasks.get(2).getLocation());
-        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, new HashMap<>(), shift);
         Assert.assertEquals("When starting at another node office return should be: ", 18, result.getTimeOfArrivalAtDestination().longValue());
 
         routeEvaluator.updateOrigin(origin);
-        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, new HashMap<>(), shift);
         Assert.assertEquals("When starting at the destination office return should be: ", 19, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     @Test
     public void multipleTasksUpdateDestination() {
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, origin, destination);
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, new HashMap<>(), shift);
         Assert.assertEquals("Office return should be: ", 51, result.getTimeOfArrivalAtDestination().longValue());
 
         routeEvaluator.updateDestination(origin);
-        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, new HashMap<>(), shift);
         Assert.assertEquals("When returning to origin office return should be: ", 43, result.getTimeOfArrivalAtDestination().longValue());
 
         routeEvaluator.updateDestination(allTasks.get(1).getLocation());
-        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, new HashMap<>(), shift);
         Assert.assertEquals("When returning to another node office return should be: ", 42, result.getTimeOfArrivalAtDestination().longValue());
 
         routeEvaluator.updateDestination(allTasks.get(3).getLocation());
-        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, new HashMap<>(), shift);
         Assert.assertEquals("When returning to the previous node office return should be: ", 41, result.getTimeOfArrivalAtDestination().longValue());
 
         routeEvaluator.updateDestination(destination);
-        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, shift);
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, new HashMap<>(), shift);
         Assert.assertEquals("When returning to destination office return should be: ", 51, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     private void assertOneTask(List<ITask> tasks, RouteEvaluator<ITask> routeEvaluator, long expectedRouteFinish) {
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, new HashMap<>(), shift);
         Assert.assertEquals("Number of visits should be: ", 1, result.getVisitSolution().size());
         Assert.assertEquals("Start time should be: ", 30, result.getVisitSolution().get(0).getStartTime());
         Assert.assertEquals("Office return should be: ", expectedRouteFinish, result.getTimeOfArrivalAtDestination().longValue());

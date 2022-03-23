@@ -31,12 +31,6 @@ public class IResourceTest {
         Assert.assertEquals("Second has higher number of elements, must dominate, i.e., plus one.", 1, resourceA.dominates(resourceB));
     }
 
-    @Test
-    public void resourceOneElementSecondNullDominate() {
-        ResourceOneElement resourceA = new ResourceOneElement(1);
-        ResourceOneElement resourceB = null;
-        Assert.assertEquals("Second is null, cannot determine must return three", 3, resourceA.dominates(resourceB));
-    }
 
     @Test
     public void resourceTwoElementsEqual() {
@@ -68,10 +62,4 @@ public class IResourceTest {
                 "cannot dominate each other must return two", 2, resourceA.dominates(resourceB));
     }
 
-    @Test
-    public void resourceTwoElementsSecondNullDominate() {
-        ResourceTwoElements resourceA = new ResourceTwoElements(1, 2);
-        ResourceTwoElements resourceB = null;
-        Assert.assertEquals("Second is null, cannot determine must return three", 3, resourceA.dominates(resourceB));
-    }
 }

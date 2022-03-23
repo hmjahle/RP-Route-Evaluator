@@ -33,34 +33,30 @@ public class ResourceTwoElements implements IResource {
 
     /**
      * Implements the dominates function see the IResource.
-     * @param resourceInterface Resource to check domination towards.
+     * @param other Resource to check domination towards.
      * @return  See the interface documentation for the return values.
      */
     @Override
-    public int dominates(IResource resourceInterface) {
-        ResourceTwoElements other = (ResourceTwoElements) resourceInterface;
-        //Not proper resource type
-        if (other == null) {
-            return 3;
-        }
+    public int dominates(IResource other) {
+
         //Equals
-        if (this.elementOneCount == other.elementOneCount && this.elementTwoCount == other.elementTwoCount) {
+        if (this.elementOneCount == other.getElementOneCount() && this.elementTwoCount == other.getElementTwoCount()) {
             return 0;
         }
         //Other dominates
-        else if (this.isEqualOrBetterOnBothElements(other)) {
+        else if (isEqualOrBetterOnBothElements(this,other)) {
             return 1;
         }
         //This dominates other
-        if (other.isEqualOrBetterOnBothElements(this)) {
+        if (isEqualOrBetterOnBothElements(other,this)) {
             return -1;
         }
         //Neither dominates
         return 2;
     }
 
-    private boolean isEqualOrBetterOnBothElements(ResourceTwoElements other) {
-        return other.elementOneCount >= this.elementOneCount && other.elementTwoCount >= this.elementTwoCount;
+    private boolean isEqualOrBetterOnBothElements(IResource me,IResource other) {
+        return other.getElementOneCount() >= me.getElementOneCount() && other.getElementTwoCount() >= me.getElementTwoCount();
     }
 
     @Override

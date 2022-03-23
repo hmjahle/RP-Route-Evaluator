@@ -19,6 +19,7 @@ import testSupport.JUnitTestAbstract;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,7 +58,7 @@ public class StartAtTaskTest extends JUnitTestAbstract {
     public void emptyRoute() {
         List<ITask> tasks = new ArrayList<>();
         routeEvaluator.useOpenStartRoutes();
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, new HashMap<>(), shift);
         Assert.assertEquals("Number of visits should be: ", 0, result.getVisitSolution().size());
     }
 
@@ -67,7 +68,7 @@ public class StartAtTaskTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(0));
 
         routeEvaluator.useOpenStartRoutes();
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, new HashMap<>(), shift);
 
         Assert.assertEquals("Number of visits should be: ", 1, result.getVisitSolution().size());
         Assert.assertEquals("First task should be visited at time 0", 0, result.getVisitSolution().get(0).getStartTime());

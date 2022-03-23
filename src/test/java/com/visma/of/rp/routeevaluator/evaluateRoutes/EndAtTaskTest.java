@@ -20,6 +20,7 @@ import testSupport.JUnitTestAbstract;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public class EndAtTaskTest extends JUnitTestAbstract {
@@ -67,10 +68,10 @@ public class EndAtTaskTest extends JUnitTestAbstract {
         travelTimeMatrix.addUndirectedConnection(office, tasks.get(0).getLocation(), 5);
         travelTimeMatrix.addUndirectedConnection(tasks.get(0).getLocation(), tasks.get(0).getLocation(), 0);
         RouteEvaluator<ITask> routeEvaluator = createRouteEvaluatorOverTime(tasks);
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, new HashMap<>(), shift);
         Assert.assertEquals("Should have overtime. ", 5, result.getObjectiveValue(), 1E-6);
         routeEvaluator.useOpenEndedRoutes();
-        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, new HashMap<>(), shift);
         Assert.assertEquals("Should have no overtime. ", 0, result.getObjectiveValue(), 1E-6);
         Visit<ITask> lastVisit = getLastVisit(result);
         Assert.assertEquals("Should end route at end time of last task.", result.getTimeOfArrivalAtDestination().intValue(),

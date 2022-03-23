@@ -17,8 +17,13 @@ public interface IResource {
 
     /**
      * Returns a new resource based on the extend info, that holds information on which nodeSet it belongs to.
+     *
      * @param extendToInfo The information needed to generate the new resource.
      * @return New resource.
      */
     IResource extend(ExtendToInfo extendToInfo);
+
+    int getElementOneCount();
+
+    int getElementTwoCount();
 }

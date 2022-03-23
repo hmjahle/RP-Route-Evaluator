@@ -22,11 +22,14 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
     List<ITask> allTasks;
     ITravelTimeMatrix travelTimeMatrix;
     IShift shift;
+    Map<ITask, Integer> syncedTasksStartTime;
+
 
     @Before
     public void initialize() {
         office = createOffice();
         allTasks = createTasks();
+        syncedTasksStartTime = getSyncedStartTimes(allTasks);
         travelTimeMatrix = createTravelTimeMatrix(office, allTasks);
         shift = new TestShift(0, 100);
     }
@@ -35,11 +38,10 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
     public void returnToOffice() {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(allTasks.get(0));
-
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTasksStartTime, shift);
 
-        Assert.assertEquals("Must return at correct time!", 5, result.getTimeOfArrivalAtDestination().longValue());
+        Assert.assertEquals("Must return at correct time!", 13, result.getTimeOfArrivalAtDestination().longValue());
     }
 
     @Test
@@ -48,7 +50,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(2));
 
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTasksStartTime, shift);
 
         Assert.assertEquals("Number of visits should be: ", 1, result.getVisitSolution().size());
         Assert.assertEquals("Start time should be: ", 30, result.getVisitSolution().get(0).getStartTime());
@@ -63,7 +65,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
         List<ITask> tasks = allTasks.stream().filter(i -> !i.isSynced()).collect(Collectors.toList());
 
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTasksStartTime, shift);
 
         Assert.assertEquals("Number of visits should be: ", 5, result.getVisitSolution().size());
         Assert.assertEquals("Start time should be: ", 20, result.getVisitSolution().get(0).getStartTime());
@@ -84,7 +86,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(4));
         tasks.add(allTasks.get(5));
 
-        Map<ITask, Integer> syncedTasksStartTime = getSyncedStartTime();
+        updateSyncedStartTime();
 
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(tasks, syncedTasksStartTime, shift);
@@ -102,7 +104,7 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
 
     @Test
     public void allTasks() {
-        Map<ITask, Integer> syncedTasksStartTime = getSyncedStartTime();
+        updateSyncedStartTime();
 
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasks(allTasks, syncedTasksStartTime, shift);
@@ -122,12 +124,10 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
         Assert.assertEquals("Cost should be equal when evaluated alone: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
-    private Map<ITask, Integer> getSyncedStartTime() {
-        Map<ITask, Integer> syncedTasksStartTime = new HashMap<>();
+    private void updateSyncedStartTime() {
         syncedTasksStartTime.put(allTasks.get(0), 20);
         syncedTasksStartTime.put(allTasks.get(4), 60);
         syncedTasksStartTime.put(allTasks.get(5), 80);
-        return syncedTasksStartTime;
     }
 
     private ITravelTimeMatrix createTravelTimeMatrix(ILocation office, Collection<ITask> tasks) {
@@ -162,4 +162,6 @@ public class EvaluateByOrderOfTaskTest extends JUnitTestAbstract {
         tasks.add(taskH);
         return tasks;
     }
+
+
 }
