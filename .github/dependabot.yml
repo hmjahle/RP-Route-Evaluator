@@ -1,0 +1,24 @@
+version: 2
+
+registries:
+  jfrog-maven:
+    type: maven-repository
+    url: https://vismaartifactory.jfrog.io/artifactory/optimization-maven-virtual-repository
+    username: optimization-ci
+    password: ${{secrets.JFROG_ACCESS_KEY}}
+
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/"
+    registries:
+      - jfrog-maven
+    schedule:
+      interval: "daily"
+      time: "07:30"
+      timezone: "Europe/Oslo"
+    pull-request-branch-name:
+      separator: "-"
+    open-pull-requests-limit: 5
+    target-branch: "master"
+    reviewers:
+      - "Optimization-Technologies/route-planning"
