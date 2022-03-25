@@ -81,6 +81,21 @@ public class LabellingAlgorithm<T extends ITask> {
     }
 
     /**
+     * Solves the labelling algorithm and returns the route simulator result.
+     *
+     * @param nodeExtendInfo       Information on how to extend labels and which resources to use.
+     * @param syncedNodesStartTime Intended start time of synced tasks.
+     * @param employeeWorkShift    Employee to simulate route for.
+     * @param initialObjective     Starting objective.
+     * @return Objective value or null if route is infeasible.
+     */
+    public Double solveRouteEvaluatorObjective(IRouteEvaluatorObjective initialObjective, IExtendInfo nodeExtendInfo, int[] syncedNodesStartTime, IShift employeeWorkShift) {
+        Label bestLabel = runAlgorithm(initialObjective, nodeExtendInfo, syncedNodesStartTime, employeeWorkShift);
+        return bestLabel.getObjective().getObjectiveValue();
+    }
+
+
+    /**
      * Extract the solution from the labels and builds the route evaluator results and the visits with the respective information.
      *
      * @param bestLabel Label representing the best route for the employee work shift.
@@ -192,7 +207,7 @@ public class LabellingAlgorithm<T extends ITask> {
     }
 
     private IRouteEvaluatorObjective evaluateFeasibilityAndObjective(Label thisLabel, Node nextNode, int startOfServiceNextTask,
-                                                       int travelTime, boolean nextNodeIsSynced, int newLocation) {
+                                                                     int travelTime, boolean nextNodeIsSynced, int newLocation) {
         int syncedTaskLatestStartTime = nextNodeIsSynced ? syncedNodesStartTime[nextNode.getNodeId()] : -1;
         int earliestOfficeReturn = calcEarliestPossibleReturnToOfficeTime(nextNode, newLocation, startOfServiceNextTask);
         int shiftStartTime = thisLabel.getPrevious() == null ? nextNode.getStartTime() - travelTime : thisLabel.getShiftStartTime();
