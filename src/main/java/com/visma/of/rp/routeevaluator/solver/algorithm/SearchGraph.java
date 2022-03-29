@@ -38,7 +38,7 @@ public class SearchGraph {
         this.taskToNodes = new HashMap<>();
         copyNodes(other);
         this.travelTimeMatrix = new Integer[other.travelTimeMatrix.length][other.travelTimeMatrix.length];
-        for (var i = 0; i < travelTimeMatrix.length; i++) {
+        for (int i = 0; i < travelTimeMatrix.length; i++) {
             System.arraycopy(other.travelTimeMatrix[i], 0, this.travelTimeMatrix[i], 0, other.travelTimeMatrix[i].length);
         }
         this.locationToLocationIds = new HashMap<>();

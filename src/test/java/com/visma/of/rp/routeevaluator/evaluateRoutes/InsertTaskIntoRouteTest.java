@@ -42,19 +42,19 @@ public class InsertTaskIntoRouteTest extends JUnitTestAbstract {
     @Test
     public void oneTask() {
         List<ITask> tasks = new ArrayList<>(allTasks.subList(3, 4));
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(0), shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(0), null, shift);
         Assert.assertEquals("Number of visits should be: ", 2, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "4", result.getVisitSolution().get(1).getTask().getId());
 
-        Double objective = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTaskObjective(tasks, allTasks.get(0), shift);
+        Double objective = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTaskObjective(tasks, allTasks.get(0), null, shift);
         Assert.assertEquals("Objectives must be equal: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
     @Test
     public void allTasksInsertFirst() {
         List<ITask> tasks = new ArrayList<>(allTasks.subList(1, 4));
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(0), shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(0), null, shift);
 
         Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
@@ -62,7 +62,7 @@ public class InsertTaskIntoRouteTest extends JUnitTestAbstract {
         Assert.assertEquals("Third task id: ", "3", result.getVisitSolution().get(2).getTask().getId());
         Assert.assertEquals("Fourth task id: ", "4", result.getVisitSolution().get(3).getTask().getId());
 
-        Double objective = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTaskObjective(tasks, allTasks.get(0), shift);
+        Double objective = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTaskObjective(tasks, allTasks.get(0), null, shift);
         Assert.assertEquals("Objectives must be equal: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
@@ -71,21 +71,21 @@ public class InsertTaskIntoRouteTest extends JUnitTestAbstract {
         List<ITask> tasks = new ArrayList<>();
         tasks.add(allTasks.get(0));
         tasks.add(allTasks.get(3));
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(1), null, shift);
 
         Assert.assertEquals("Number of visits should be: ", 3, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
         Assert.assertEquals("Second task id: ", "2", result.getVisitSolution().get(1).getTask().getId());
         Assert.assertEquals("Third task id: ", "4", result.getVisitSolution().get(2).getTask().getId());
 
-        Double objective = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTaskObjective(tasks, allTasks.get(1), shift);
+        Double objective = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTaskObjective(tasks, allTasks.get(1), null, shift);
         Assert.assertEquals("Objectives must be equal: ", result.getObjectiveValue(), objective, 1E-6);
     }
 
     @Test
     public void allTasksInsertLast() {
         List<ITask> tasks = new ArrayList<>(allTasks.subList(0, 3));
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(3), shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(3), null, shift);
 
         Assert.assertEquals("Number of visits should be: ", 4, result.getVisitSolution().size());
         Assert.assertEquals("First task id: ", "1", result.getVisitSolution().get(0).getTask().getId());
@@ -93,7 +93,7 @@ public class InsertTaskIntoRouteTest extends JUnitTestAbstract {
         Assert.assertEquals("Third task id: ", "3", result.getVisitSolution().get(2).getTask().getId());
         Assert.assertEquals("Fourth task id: ", "4", result.getVisitSolution().get(3).getTask().getId());
 
-        Double objective = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTaskObjective(tasks, allTasks.get(3), shift);
+        Double objective = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTaskObjective(tasks, allTasks.get(3), null, shift);
         Assert.assertEquals("Objectives must be equal: ", result.getObjectiveValue(), objective, 1E-6);
     }
 

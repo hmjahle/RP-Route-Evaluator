@@ -26,7 +26,7 @@ public class RemoveTasksFromRouteTest extends JUnitTestAbstract {
     ILocation office;
     List<ITask> allTasks;
     ITravelTimeMatrix travelTimeMatrix;
-    RouteEvaluator routeEvaluator;
+    RouteEvaluator<ITask> routeEvaluator;
     IShift shift;
 
     @Before
@@ -35,7 +35,7 @@ public class RemoveTasksFromRouteTest extends JUnitTestAbstract {
         allTasks = createTasks();
         travelTimeMatrix = createTravelTimeMatrix(office, allTasks);
         shift = new TestShift(0, 100);
-        routeEvaluator = new RouteEvaluator(travelTimeMatrix, allTasks, office);
+        routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
         routeEvaluator.addObjectiveIntraShift(new TravelTimeObjectiveFunction());
     }
 
@@ -58,7 +58,7 @@ public class RemoveTasksFromRouteTest extends JUnitTestAbstract {
         List<ITask> task1 = new ArrayList<>(allTasks.subList(1, 2));
         List<ITask> tasks2 = new ArrayList<>(allTasks.subList(0, 2));
 
-        Double objective1 = routeEvaluator.evaluateRouteObjective(task1, shift);
+        Double objective1 = routeEvaluator.evaluateRouteObjective(task1, null, shift);
         Double objective2 = routeEvaluator.evaluateRouteByTheOrderOfTasksRemoveTaskObjective(tasks2, 0, null, shift);
 
         Assert.assertEquals("Objective must be equal travel time 4.", 4, objective1, 1E-6);
@@ -73,7 +73,7 @@ public class RemoveTasksFromRouteTest extends JUnitTestAbstract {
         List<ITask> task1 = new ArrayList<>(allTasks.subList(0, 1));
         List<ITask> tasks2 = new ArrayList<>(allTasks.subList(0, 2));
 
-        Double objective1 = routeEvaluator.evaluateRouteObjective(task1, shift);
+        Double objective1 = routeEvaluator.evaluateRouteObjective(task1, null, shift);
         Double objective2 = routeEvaluator.evaluateRouteByTheOrderOfTasksRemoveTaskObjective(tasks2, 1, null, shift);
 
         Assert.assertEquals("Objective must be equal travel time 4.", 4, objective1, 1E-6);
@@ -90,7 +90,7 @@ public class RemoveTasksFromRouteTest extends JUnitTestAbstract {
         tasks1.add(allTasks.get(2));
         List<ITask> tasks2 = new ArrayList<>(allTasks.subList(0, 3));
 
-        Double objective1 = routeEvaluator.evaluateRouteObjective(tasks1, shift);
+        Double objective1 = routeEvaluator.evaluateRouteObjective(tasks1, null, shift);
         Double objective2 = routeEvaluator.evaluateRouteByTheOrderOfTasksRemoveTaskObjective(tasks2, 1, null, shift);
 
         Assert.assertEquals("Objective must be equal travel time 14.", 14, objective1, 1E-6);
@@ -142,8 +142,8 @@ public class RemoveTasksFromRouteTest extends JUnitTestAbstract {
         List<Integer> skipIndices = new ArrayList<>();
         skipIndices.add(0);
         skipIndices.add(2);
-        
-        Double objective1 = routeEvaluator.evaluateRouteObjective(tasks1, shift);
+
+        Double objective1 = routeEvaluator.evaluateRouteObjective(tasks1, null, shift);
         Double objective2 = routeEvaluator.evaluateRouteByTheOrderOfTasksRemoveTaskObjective(tasks2, skipIndices, null, shift);
 
         Assert.assertEquals("Objective must be 4.", 4, objective2, 1E-6);

@@ -89,19 +89,6 @@ public class RouteEvaluator<T extends ITask> {
     }
 
     /**
-     * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
-     * Only returns objective value, no route details is returned.
-     * For routes with no synced tasks.
-     *
-     * @param tasks             The route to be evaluated, the order of the list is the order of the route.
-     * @param employeeWorkShift Employee the route applies to.
-     * @return A double value representing the objective value of the route.
-     */
-    public Double evaluateRouteObjective(List<T> tasks, IShift employeeWorkShift) {
-        return evaluateRouteObjective(tasks, null, employeeWorkShift);
-    }
-
-    /**
      * Evaluates whether the route is feasible when all constraints are activated (including inactive constraints)
      * The route evaluated is given by the tasks input, the order of the tasks is the order of the route.
      * Only returns whether the route is feasible, no route details is returned.
@@ -117,22 +104,6 @@ public class RouteEvaluator<T extends ITask> {
         boolean feasible = evaluateRouteObjective(tasks, syncedTasksStartTime, employeeWorkShift) != null;
         constraints.deActivateCheckAllActiveAndInactiveConstraints();
         return feasible;
-    }
-
-    /**
-     * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
-     * At the same time it finds the optimal position in the route to insert the new task.
-     * Only returns objective value, no route details is returned.
-     * For routes with no synced tasks.
-     *
-     * @param tasks             The route to be evaluated, the order of the list is the order of the route.
-     * @param insertTask        The task to be inserted into the route.
-     * @param employeeWorkShift Employee the route applies to.
-     * @return A double value representing the objective value of the route.
-     */
-    public Double evaluateRouteByTheOrderOfTasksInsertTaskObjective(List<T> tasks, T insertTask,
-                                                                    IShift employeeWorkShift) {
-        return calcObjectiveInsertTask(tasks, insertTask, null, employeeWorkShift);
     }
 
     /**
@@ -264,21 +235,6 @@ public class RouteEvaluator<T extends ITask> {
     }
 
     /**
-     * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
-     * At the same time it finds the optimal position in the route to insert the new task.
-     * For routes with no synced tasks, the new task to be inserted cannot be synced either.
-     *
-     * @param tasks             The route to be evaluated, the order of the list is the order of the route.
-     * @param insertTask        The task to be inserted into the route.
-     * @param employeeWorkShift Employee the route applies to.
-     * @return A routeEvaluator result for the evaluated route.
-     */
-    public RouteEvaluatorResult<T> evaluateRouteByTheOrderOfTasksInsertTask(List<T> tasks, T insertTask,
-                                                                            IShift employeeWorkShift) {
-        return calcRouteEvaluatorResult(new WeightedObjective(), tasks, insertTask, null, employeeWorkShift);
-    }
-
-    /**
      * Used to calculate objective of routes when inserting one new task
      */
     private Double calcObjectiveInsertTask(List<T> tasks, T insertTask,
@@ -320,8 +276,6 @@ public class RouteEvaluator<T extends ITask> {
     }
 
 
-
-
     /**
      * Evaluates the route given by the tasks input, the order of the tasks will keep the same order in the final route.
      * This also applies to the tasks to insert. However the two lists can be merged in any possible way while adhering
@@ -361,21 +315,6 @@ public class RouteEvaluator<T extends ITask> {
                                                                      Map<ITask, Integer> syncedTasksStartTime,
                                                                      IShift employeeWorkShift) {
         return calcRouteEvaluatorObjective(new WeightedObjective(), tasks, insertTasks, syncedTasksStartTime, employeeWorkShift);
-    }
-
-    /**
-     * Evaluates the route given by the tasks input, the order of the tasks is the order of the route.
-     * At the same time it finds the optimal position in the route to insert the new tasks provided.
-     * For routes with no synced tasks, the new task to be inserted cannot be synced either.
-     *
-     * @param tasks             The route to be evaluated, the order of the list is the order of the route.
-     * @param insertTasks       The list of tasks to be inserted into the route.
-     * @param employeeWorkShift Employee the route applies to.
-     * @return A routeEvaluator result for the evaluated route.
-     */
-    public RouteEvaluatorResult<T> evaluateRouteByTheOrderOfTasksInsertTasks(List<T> tasks, List<T> insertTasks,
-                                                                             IShift employeeWorkShift) {
-        return calcRouteEvaluatorResult(new WeightedObjective(), tasks, insertTasks, null, employeeWorkShift);
     }
 
     /**
@@ -489,7 +428,7 @@ public class RouteEvaluator<T extends ITask> {
      * Used to calculate routes when inserting multiple new tasks.
      */
     private Double calcRouteEvaluatorObjective(IRouteEvaluatorObjective objective, List<T> tasks, List<T> insertTasks,
-                                                             Map<ITask, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
+                                               Map<ITask, Integer> syncedTasksStartTime, IShift employeeWorkShift) {
         setSyncedNodesStartTimes(syncedTasksStartTime, tasks);
         setSyncedNodesStartTimes(syncedTasksStartTime, insertTasks);
         updateFirstNodeList(tasks);
