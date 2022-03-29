@@ -91,7 +91,7 @@ public class WalkingWithConnectionsRemovedTest extends JUnitTestAbstract {
         travelTimeMatrix.removeDirectedConnection(allTasks.get(1).getLocation(), allTasks.get(3).getLocation());
         travelTimeMatrix.removeDirectedConnection(allTasks.get(2).getLocation(), allTasks.get(3).getLocation());
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(3), shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(3), null, shift);
 
         Assert.assertFalse("Tasks should not be connected.", travelTimeMatrix.connected(allTasks.get(1).getLocation(), allTasks.get(3).getLocation()));
         Assert.assertFalse("Tasks should not be connected.", travelTimeMatrix.connected(allTasks.get(2).getLocation(), allTasks.get(3).getLocation()));
@@ -109,7 +109,7 @@ public class WalkingWithConnectionsRemovedTest extends JUnitTestAbstract {
         tasks.add(allTasks.get(2));
         travelTimeMatrix.removeDirectedConnection(allTasks.get(3).getLocation(), office);
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, allTasks, office);
-        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(3), shift);
+        RouteEvaluatorResult<ITask> result = routeEvaluator.evaluateRouteByTheOrderOfTasksInsertTask(tasks, allTasks.get(3), null, shift);
 
         Assert.assertFalse("Should not be connected back to office.", travelTimeMatrix.connected(allTasks.get(3).getLocation(), office));
         Assert.assertNotNull("Should be feasible.", result);

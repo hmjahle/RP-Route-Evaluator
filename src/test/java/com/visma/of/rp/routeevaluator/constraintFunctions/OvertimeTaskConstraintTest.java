@@ -153,6 +153,6 @@ public class OvertimeTaskConstraintTest extends JUnitTestAbstract {
     private Double evaluateObjective(List<ITask> tasks) {
         RouteEvaluator<ITask> routeEvaluator = new RouteEvaluator<>(travelTimeMatrix, tasks, office);
         routeEvaluator.addConstraint(new OvertimeConstraint());
-        return routeEvaluator.evaluateRouteObjective(tasks, shift);
+        return routeEvaluator.evaluateRouteObjective(tasks, null, shift);
     }
 }
