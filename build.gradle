@@ -139,8 +139,16 @@ publishing {
 artifactoryPublish {
     dependsOn jar
 }
-
+sonarqube {
+    properties {
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.projectName", "rp-route-evaluator"
+        property "sonar.projectKey", "RP-Route-Evaluator"
+        property "sonar.projectBaseDir", "$rootDir"
+    }
+}
 tasks['sonarqube'].dependsOn test
+
 jacocoTestReport {
     reports {
         xml.enabled true
