@@ -85,17 +85,17 @@ public class LabelListsTest {
 
         list.addLabelOnNode(node, labelC);
         Assert.assertEquals("List length wrong", 3, list.size(node));
-        Assert.assertEquals("List capacity wrong", 8, list.getLabelCapacity(node));
+        Assert.assertEquals("List capacity wrong", 4, list.getLabelCapacity(node));
         list.addLabelOnNode(node, labelD);
         list.addLabelOnNode(node, labelE);
         Assert.assertEquals("List length wrong", 5, list.size(node));
-        Assert.assertEquals("List capacity wrong", 16, list.getLabelCapacity(node));
+        Assert.assertEquals("List capacity wrong", 12, list.getLabelCapacity(node));
 
         list.addLabelOnNode(node, labelF);
         list.addLabelOnNode(node, labelG);
         list.addLabelOnNode(node, labelH);
         Assert.assertEquals("List length wrong", 8, list.size(node));
-        Assert.assertEquals("List capacity wrong", 16, list.getLabelCapacity(node));
+        Assert.assertEquals("List capacity wrong", 12, list.getLabelCapacity(node));
 
         list.addLabelOnNode(node, labelA);
         list.addLabelOnNode(node, labelB);
@@ -106,7 +106,7 @@ public class LabelListsTest {
         list.addLabelOnNode(node, labelG);
         list.addLabelOnNode(node, labelH);
         Assert.assertEquals("List length wrong", 8, list.size(node));
-        Assert.assertEquals("List capacity wrong", 16, list.getLabelCapacity(node));
+        Assert.assertEquals("List capacity wrong", 12, list.getLabelCapacity(node));
     }
 
     private Label createLabel(WeightedObjective cost1, ResourceTwoElements resourcesA) {

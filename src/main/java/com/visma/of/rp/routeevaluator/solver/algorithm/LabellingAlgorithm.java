@@ -12,6 +12,7 @@ import com.visma.of.rp.routeevaluator.results.Visit;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * The labelling algorithm is a resource constrained shortest path algorithm.
@@ -22,7 +23,7 @@ public class LabellingAlgorithm<T extends ITask> {
     private final SearchGraph graph;
     private final ObjectiveFunctionsIntraRouteHandler objectiveFunctions;
     private final ConstraintsIntraRouteHandler constraints;
-    private final LabelQueue unExtendedLabels;
+    private final PriorityQueue<Label> unExtendedLabels;
     private final Label[] labels;
     private final List<Visit<T>> visits;
     private final LabelLists labelLists;
@@ -37,10 +38,10 @@ public class LabellingAlgorithm<T extends ITask> {
         this.constraints = constraints;
         this.labels = new Label[graph.getNodes().size()];
         this.visits = new ArrayList<>();
-        for (int i = 0; i < graph.getNodes().size(); i++) //Ensures that the array can hold the maximum potential entries, i.e, all tasks.
+        for (int i = 0; i < graph.getNodes().size(); i++) // Ensures that the array can hold the maximum potential entries, i.e, all tasks.
             visits.add(null);
-        this.labelLists = new LabelLists(graph.getNodes().size(), graph.getNodes().size() * 10);
-        this.unExtendedLabels = new LabelQueue();
+        this.labelLists = new LabelLists(graph.getNodes().size());
+        this.unExtendedLabels = new PriorityQueue<>();
         this.bestLabelOnDestination = null;
     }
 
@@ -165,8 +166,9 @@ public class LabellingAlgorithm<T extends ITask> {
 
     private void extendLabel(Label label, ExtendToInfo extendToInfo) {
         Label newLabel = extendLabelToNextNode(label, extendToInfo);
-        if (newLabel != null && labelLists.addLabelOnNode(newLabel.getNode(), newLabel))
-            unExtendedLabels.addLabel(newLabel);
+        if (newLabel != null && labelLists.addLabelOnNode(newLabel.getNode(), newLabel)) {
+            unExtendedLabels.add(newLabel);
+        }
     }
 
     public IRouteEvaluatorObjective extend(IRouteEvaluatorObjective currentObjective, Node toNode, int travelTime, int startOfServiceNextTask, int syncedTaskLatestStartTime) {

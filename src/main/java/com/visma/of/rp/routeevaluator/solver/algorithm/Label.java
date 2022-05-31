@@ -2,13 +2,13 @@ package com.visma.of.rp.routeevaluator.solver.algorithm;
 
 
 public class Label implements Comparable<Label> {
-    private Label previous;
-    private Node node;
-    private IRouteEvaluatorObjective objective;
-    private IResource resources;
-    private int currentLocationId;
-    private int currentTime;
-    private int travelTime;
+    private final Label previous;
+    private final Node node;
+    private final IRouteEvaluatorObjective objective;
+    private final IResource resources;
+    private final int currentLocationId;
+    private final int currentTime;
+    private final int travelTime;
     private int canLeaveLocationAtTime;
     private boolean closed;
     private int shiftStartTime;
