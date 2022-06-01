@@ -5,7 +5,7 @@ import com.visma.of.rp.routeevaluator.evaluation.info.ConstraintInfo;
 import com.visma.of.rp.routeevaluator.interfaces.IConstraintIntraRoute;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -16,16 +16,15 @@ public class ConstraintsIntraRouteHandler {
     private boolean checkAllConstraints;
 
     public ConstraintsIntraRouteHandler() {
-        activeConstraints = new HashMap<>();
-        inactiveConstraints = new HashMap<>();
+        activeConstraints = new LinkedHashMap<>();
+        inactiveConstraints = new LinkedHashMap<>();
     }
-
 
     public ConstraintsIntraRouteHandler(ConstraintsIntraRouteHandler other) {
         this.checkAllConstraints = other.checkAllConstraints;
-        this.activeConstraints = new HashMap<>();
+        this.activeConstraints = new LinkedHashMap<>();
         this.activeConstraints.putAll(other.activeConstraints);
-        this.inactiveConstraints = new HashMap<>();
+        this.inactiveConstraints = new LinkedHashMap<>();
         this.inactiveConstraints.putAll(other.inactiveConstraints);
     }
 
@@ -52,7 +51,6 @@ public class ConstraintsIntraRouteHandler {
     public void deActivateCheckAllActiveAndInactiveConstraints() {
         checkAllConstraints = false;
     }
-
 
     public boolean isFeasible(ConstraintInfo constraintInfo) {
         for (IConstraintIntraRoute constraint : activeConstraints.values()) {
