@@ -9,10 +9,7 @@ import com.visma.of.rp.routeevaluator.results.Route;
 import com.visma.of.rp.routeevaluator.results.RouteEvaluatorResult;
 import com.visma.of.rp.routeevaluator.results.Visit;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * The labelling algorithm is a resource constrained shortest path algorithm.
@@ -23,7 +20,7 @@ public class LabellingAlgorithm<T extends ITask> {
     private final SearchGraph graph;
     private final ObjectiveFunctionsIntraRouteHandler objectiveFunctions;
     private final ConstraintsIntraRouteHandler constraints;
-    private final PriorityQueue<Label> unExtendedLabels;
+    private final Queue<Label> unExtendedLabels;
     private final Label[] labels;
     private final List<Visit<T>> visits;
     private final LabelLists labelLists;
@@ -41,7 +38,7 @@ public class LabellingAlgorithm<T extends ITask> {
         for (int i = 0; i < graph.getNodes().size(); i++) // Ensures that the array can hold the maximum potential entries, i.e, all tasks.
             visits.add(null);
         this.labelLists = new LabelLists(graph.getNodes().size());
-        this.unExtendedLabels = new PriorityQueue<>();
+        this.unExtendedLabels = new PriorityQueue<>(Label::compareTo);
         this.bestLabelOnDestination = null;
     }
 
@@ -233,10 +230,9 @@ public class LabellingAlgorithm<T extends ITask> {
     private Integer getTravelTime(Label thisLabel, Node nextNode, int newLocation) {
         if (thisLabel.getCurrentLocationId() == -1)
             return 0;
-        if (newLocation == thisLabel.getCurrentLocationId()) {
-            return graph.getTravelTime(thisLabel.getCurrentLocationId(), newLocation);
-        }
-        return graph.getTravelTime(thisLabel.getCurrentLocationId(), nextNode.getLocationId());
+
+        var locationB = newLocation == thisLabel.getCurrentLocationId() ? newLocation : nextNode.getLocationId();
+        return graph.getTravelTime(thisLabel.getCurrentLocationId(), locationB);
     }
 
     private int calcEarliestPossibleReturnToOfficeTime(Node nextNode, Integer newLocation, int startOfServiceNextTask) {
@@ -244,10 +240,9 @@ public class LabellingAlgorithm<T extends ITask> {
     }
 
     private int getTravelTimeToDestination(Integer currentLocation) {
-        if (currentLocation == -1)
+        if (currentLocation == -1 || currentLocation == graph.getDestination().getLocationId() || graph.getDestination() instanceof VirtualNode) {
             return 0;
-        if (currentLocation == graph.getDestination().getLocationId() || graph.getDestination() instanceof VirtualNode)
-            return 0;
+        }
         Integer travelTime = graph.getTravelTime(currentLocation, graph.getDestination().getLocationId());
         return travelTime == null ? 0 : travelTime;
     }
