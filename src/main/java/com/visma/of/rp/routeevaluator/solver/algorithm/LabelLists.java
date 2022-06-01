@@ -10,14 +10,16 @@ import java.util.List;
  * If they dominate other labels those labels are removed from the list.
  */
 public class LabelLists {
+    private static final int DEFAULT_CAPACITY = 10;
 
-    private Label[][] elements;
-    private int[] elementCnt;
-    private int[] labelCapacity;
+    private final Label[][] elements;
+    private final int[] elementCnt;
+
+    public LabelLists(int nodes) {
+        this(nodes, DEFAULT_CAPACITY);
+    }
 
     public LabelLists(int nodes, int labelCapacity) {
-        this.labelCapacity = new int[nodes];
-        Arrays.fill(this.labelCapacity, labelCapacity);
         this.elements = new Label[nodes][labelCapacity];
         this.elementCnt = new int[nodes];
     }
@@ -32,10 +34,14 @@ public class LabelLists {
      */
     public boolean addLabelOnNode(Node node, Label label) {
         int nodeId = node.getNodeId();
-        if (!canBeAdded(label, nodeId))
+        if (canNotBeAdded(label, nodeId)) {
             return false;
+        }
+
         updateArrayLength(nodeId);
-        elements[nodeId][elementCnt[nodeId]++] = label;
+        elements[nodeId][elementCnt[nodeId]] = label;
+        elementCnt[nodeId]++;
+
         return true;
     }
 
@@ -47,25 +53,31 @@ public class LabelLists {
      * @param nodeId Node to add the label to.
      * @return True if the label can be added to the node, otherwise false.
      */
-    private boolean canBeAdded(Label label, int nodeId) {
+    private boolean canNotBeAdded(Label label, int nodeId) {
         int labelCnt = elementCnt[nodeId];
+        Label[] labelsOnNode = elements[nodeId];
+
         int i = 0;
-        Label currentLabel = elements[nodeId][i];
         while (i < labelCnt) {
-            int dominates = currentLabel.dominates(label);
-            if (dominates <= 0)
-                return false;
-            if (dominates == 1) {
-                currentLabel.close();
-                currentLabel = elements[nodeId][labelCnt - 1];
-                elements[nodeId][i] = currentLabel;
-                labelCnt--;
-            } else {
-                currentLabel = ++i < labelCnt ? elements[nodeId][i] : null;
+            int dominates = labelsOnNode[i].dominates(label);
+            if (dominates <= 0) {
+                // not possible to add as it is dominated
+                return true;
             }
+
+            if (dominates == 1) {
+                // remove dominated label
+                labelsOnNode[i].close();
+                labelsOnNode[i] = labelsOnNode[labelCnt - 1];
+                labelsOnNode[labelCnt - 1] = null;
+                labelCnt--;
+                continue;
+            }
+
+            i++;
         }
         elementCnt[nodeId] = labelCnt;
-        return true;
+        return false;
     }
 
     /**
@@ -75,12 +87,13 @@ public class LabelLists {
      * @param nodeId Node to check.
      */
     private void updateArrayLength(int nodeId) {
-        if (elementCnt[nodeId] >= labelCapacity[nodeId] / 2) {
-            labelCapacity[nodeId] *= 2;
-            Label[] labels = elements[nodeId];
-            elements[nodeId] = new Label[labelCapacity[nodeId]];
-            System.arraycopy(labels, 0, elements[nodeId], 0, labels.length);
+        if (elementCnt[nodeId] + 1 >= elements[nodeId].length) {
+            elements[nodeId] = Arrays.copyOf(elements[nodeId], increasedCapacity(elements[nodeId].length));
         }
+    }
+
+    private int increasedCapacity(int oldCapacity) {
+        return oldCapacity + (oldCapacity << 1);
     }
 
     public List<Label> findLabels(Node node) {
@@ -92,11 +105,15 @@ public class LabelLists {
     }
 
     public void clear() {
-        Arrays.fill(elementCnt, 0);
+        for (int i = 0; i < elementCnt.length; i++) {
+            for (int j = 0; j < elementCnt[i]; j++) {
+                elements[i][j] = null;
+            }
+            elementCnt[i] = 0;
+        }
     }
 
     public int getLabelCapacity(Node node) {
-        return labelCapacity[node.getNodeId()];
+        return elements[node.getNodeId()].length;
     }
-
 }
