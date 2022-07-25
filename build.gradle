@@ -18,7 +18,7 @@ buildscript {
 plugins {
     id 'java'
     id 'application'
-    id "com.jfrog.artifactory" version "4.28.4"
+    id "com.jfrog.artifactory" version "4.29.0"
     id 'maven-publish'
     id "org.sonarqube" version "3.4.0.2513"
     id 'jacoco'
